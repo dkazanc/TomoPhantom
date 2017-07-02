@@ -1,7 +1,7 @@
 # TomoPhantom (ver 0.1)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Software to generate simple analytical phantoms for image processing 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 This software is ideally suitable for various image processing tasks
 that require numerical testing: image reconstruction, denoising, 
 deblurring, etc. The popular Shepp-Logan phantom is not always suitable 
