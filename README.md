@@ -1,4 +1,4 @@
-# TomoPhantom (ver 0.1)
+# TomoPhantom (ver 1.0)
 ****************
 Software to generate simple analytical phantoms for image processing (reconstruction, denoising, deblurring...)
 ****************
