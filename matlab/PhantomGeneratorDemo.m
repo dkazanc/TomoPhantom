@@ -7,13 +7,13 @@ close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/'); 
 
-ModelNo = 41; % Select a model (0 - 42)
+ModelNo = 43; % Select a model (0 - 42  )
 % Define phantom dimension
-N = 512; % x-y size (squared image)
+N = 400; % x-y size (squared image)
 
 % generate the 2D phantom:
 [G] = buildPhantom(ModelNo,N);
-figure; imshow(G, []);
+figure(1); imshow(G, []);
 
 %%
 % perform deformation according to the tranform proposed in paper [1] (see readme)
