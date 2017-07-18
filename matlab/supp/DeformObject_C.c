@@ -8,12 +8,12 @@
 
 #define M_PI 3.14159265358979323846
 
-/* C-OMP function to perform forward/inverse deformation
+/* C-OMP function to perform forward/inverse deformation according to [1]
  *
  * Input Parameters:
- * 1. A - image to deform
- * 2. RFP - propotional to focal point distance
- * 3. angle - deformation angle in degrees
+ * 1. A - image to deform (N x N )
+ * 2. RFP - propotional to the focal point distance
+ * 3. AngleTransform - deformation angle in degrees
  * 4. DeformType - deformation type, 0 - forward, 1 - inverse
  *
  * Output:
@@ -26,17 +26,15 @@
  */
 
 double Deform_func(double *A, double *B, double *Tomorange_X_Ar, double H_x, double RFP, double angleRad, int DeformType, int dimX, int dimY);
-double pad_crop(double *A, double *Ap, int OldSizeX, int OldSizeY, int NewSizeX, int NewSizeY, int padXY, int switchpad_crop);
 
 void mexFunction(
         int nlhs, mxArray *plhs[],
         int nrhs, const mxArray *prhs[])
         
 {
-    int number_of_dims, dimX, dimY, newsizeX, newsizeY, DeformType, i, padXY;
+    int number_of_dims, dimX, dimY, DeformType, i;
     const int  *dim_array;
-    double *A, *Ap, *B, *Tomorange_X_Ar=NULL, RFP, angle, angleRad, Tomorange_Xmin, Tomorange_Xmax, H_x;
-    int N_dims2D[2];
+    double *A, *B, *Tomorange_X_Ar=NULL, RFP, angle, angleRad, Tomorange_Xmin, Tomorange_Xmax, H_x;;
     
     number_of_dims = mxGetNumberOfDimensions(prhs[0]);
     dim_array = mxGetDimensions(prhs[0]);
@@ -52,36 +50,21 @@ void mexFunction(
     /*Handling Matlab output data*/
     dimX = dim_array[0]; dimY = dim_array[1];
     
-    padXY = 150;
-    if (DeformType == 0) {    
-    newsizeX = dimX + 2*(padXY); /* the X size of the padded array */
-    newsizeY = dimY + 2*(padXY); /* the Y size of the padded array */      
-    N_dims2D[0] = newsizeX; N_dims2D[1] = newsizeY ;  }
-    else {
-    newsizeX = dimX;
-    newsizeY = dimY;
-    dimX = newsizeX - 2*(padXY);
-    dimY = newsizeY - 2*(padXY);            
-    N_dims2D[0] = dimX; N_dims2D[1] = dimY;  }     
-    
     if (number_of_dims == 2) {
         
-        B = (double*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims2D, mxDOUBLE_CLASS, mxREAL));
-        Ap = (double*)mxGetPr(mxCreateNumericArray(2, N_dims2D, mxDOUBLE_CLASS, mxREAL));
+        B = (double*)mxGetPr(plhs[0] = mxCreateNumericArray(2, dim_array, mxDOUBLE_CLASS, mxREAL));
         
-        Tomorange_X_Ar = malloc(newsizeX*sizeof(double));
+        Tomorange_X_Ar = malloc(dimX*sizeof(double));
         
         angleRad = angle*(M_PI/180.0f);
         Tomorange_Xmin = -1.0f;
         Tomorange_Xmax = 1.0f;
-        H_x = (Tomorange_Xmax - Tomorange_Xmin)/(newsizeX);
-        for(i=0; i<newsizeX; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (double)i*H_x;}
-        
-        /* do image padding */        
-        pad_crop(A, Ap, dimX, dimY, newsizeX, newsizeY, padXY, DeformType);
-        
+        H_x = (Tomorange_Xmax - Tomorange_Xmin)/(dimX);
+        for(i=0; i<dimX; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (double)i*H_x;}
+                
         /* perform deformation */
-        Deform_func(Ap, B, Tomorange_X_Ar, H_x, RFP, angleRad, DeformType, newsizeX, newsizeY);
+        Deform_func(A, B, Tomorange_X_Ar, H_x, RFP, angleRad, DeformType, dimX, dimY); 
+    
         free(Tomorange_X_Ar);
     }
 }
@@ -140,18 +123,4 @@ double Deform_func(double *A, double *B, double *Tomorange_X_Ar, double H_x, dou
             
         }}
     return *B;
-}
-
-double pad_crop(double *A, double *Ap, int OldSizeX, int OldSizeY, int NewSizeX, int NewSizeY, int padXY, int switchpad_crop)
-{
-    /* padding-cropping function */
-    int i, j;
-    for (i=0; i < NewSizeX; i++) {
-        for (j=0; j < NewSizeY; j++) {
-                if (((i >= padXY) && (i < NewSizeX-padXY)) &&  ((j >= padXY) && (j < NewSizeY-padXY))) {
-                    if (switchpad_crop == 0)  Ap[i*NewSizeY+j] = A[(i-padXY)*OldSizeY+(j-padXY)];
-                    else  Ap[(i-padXY)*OldSizeY+(j-padXY)] = A[i*NewSizeY+j];
-                }
-            }}
-return *Ap;
 }
