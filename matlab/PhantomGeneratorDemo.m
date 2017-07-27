@@ -7,7 +7,7 @@ close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/'); 
 
-ModelNo = 42; % Select a model (0 - 43  )
+ModelNo = 43; % Select a model (0 - 43  )
 % Define phantom dimension
 N = 512; % x-y size (squared image)
 
@@ -15,6 +15,20 @@ N = 512; % x-y size (squared image)
 [G] = buildPhantom(ModelNo,N);
 figure(1); imshow(G, []);
 
+
+%%
+% generate the 2D analytical parallel beam sinogram
+max_anlges = round(sqrt(2)*N);
+angles = linspace(0,180,max_anlges); % projection angles
+[F_a] = buildSino(ModelNo,729,angles);
+figure(2); imshow(F_a, []);
+
+% using matlab's radon function
+[F_d,xp] = radon(G,angles);
+
+% Reconstructing using iradon
+G_FBP = iradon(F_d,angles,N);
+figure(3); imshow(G_FBP, []);
 %%
 % run this once to compile
 cd supp
