@@ -7,7 +7,7 @@ close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/'); 
 
-ModelNo = 43; % Select a model (0 - 43  )
+ModelNo = 3; % Select a model (0 - 43  )
 % Define phantom dimension
 N = 512; % x-y size (squared image)
 
@@ -15,20 +15,34 @@ N = 512; % x-y size (squared image)
 [G] = buildPhantom(ModelNo,N);
 figure(1); imshow(G, []);
 
-
 %%
-% generate the 2D analytical parallel beam sinogram
+fprintf('%s \n', 'Generating sinogram analytically and numerically...');
+% generate angles
 max_anlges = round(sqrt(2)*N);
 angles = linspace(0,180,max_anlges); % projection angles
-[F_a] = buildSino(ModelNo,729,angles);
-figure(2); imshow(F_a, []);
 
-% using matlab's radon function
-[F_d,xp] = radon(G,angles);
+% first lets use matlab's radon function
+tic;
+[F_d,xp] = radon(G,angles); % descrete sinogram
+toc;
+P = size(F_d,1); %detectors dimension
 
-% Reconstructing using iradon
-G_FBP = iradon(F_d,angles,N);
-figure(3); imshow(G_FBP, []);
+% generate the 2D analytical parallel beam sinogram
+tic;
+[F_a] = buildSino(ModelNo,G,P,angles);
+toc;
+F_a = F_a.*(N/2); % scaling
+
+figure(2); 
+subplot(1,2,1); imshow(F_a, []); title('Analytical Sinogram');
+subplot(1,2,2); imshow(F_d, []); title('Numerical Sinogram');
+
+% reconstructing with FBP (iradon)
+FBP_F_a = iradon(F_a,angles,N);
+FBP_F_d = iradon(F_d,angles,N);
+figure(3); 
+subplot(1,2,1); imshow(FBP_F_a, []); title('Analytical Sinogram Reconstruction');
+subplot(1,2,2); imshow(FBP_F_d, []); title('Numerical Sinogram Reconstruction');
 %%
 % run this once to compile
 cd supp

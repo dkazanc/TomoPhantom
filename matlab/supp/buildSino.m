@@ -1,9 +1,10 @@
-function [F] = buildSino(ModelNo,P,angles)
+function [F] = buildSino(ModelNo,G,P,angles)
 % this function provides analytical sinograms to phantoms
 % it uses parallel beam geometry
 
 % input includes:
 % 1. model number
+%
 % 2. detector dimension
 % 3. projection angles
 
@@ -59,47 +60,64 @@ else
     error('File PhantomLibrary.dat is NOT found');
 end
 
-Sinorange_Pmin = -1;
-Sinorange_Pmax = 1;
-H_p = (Sinorange_Pmax - Sinorange_Pmin)/(P); % step for p-detectors
-Sinorange_P_Ar = linspace(Sinorange_Pmin, Sinorange_Pmax-H_p, P);
+N = size(G,1);
+Sinorange_Pmin = -P/(N);
+Sinorange_Pmax = P/(N);
+% H_p = (Sinorange_Pmax - Sinorange_Pmin)/(P); % step for p-detectors
+% Sinorange_P_Ar = linspace(Sinorange_Pmin, Sinorange_Pmax-H_p, P);
+Sinorange_P_Ar = linspace(Sinorange_Pmin, Sinorange_Pmax, P+1);
+% Sinorange_P_Ar = linspace(Sinorange_Pmin,Sinorange_Pmax,P);
 C1 = -4 *log(2);
 AnglesTot = length(angles);
 AnglesRad = angles*(pi/180);
 
 F = zeros(P,AnglesTot);
 for i = 1:CompNo   %number of models loop
-    a22=(a(i))^2;
+    a1 = a(i);
+    b1 = b(i);
+    a22=(a1)^2;
     a2=1/a22;
-    b22=(b(i))^2;
+    b22=(b1)^2;
     b2=1/b22;
     C00 = C0(i);
     mod = IN(i);
-    phi_rot_radian = (phi_rot(i)+210)*(pi/180);
+    phi_rot_radian = (phi_rot(i))*(pi/180);
+    
 
     if (mod == 1)
         % gaussian
-        AA5 = ((C0(i)*a(i)*b(i))/2.0)*sqrt(pi/log(2));
+        AA5 = ((C0(i)*a1*b1)/2.0)*sqrt((pi)/log(2));
         for ll = 1:AnglesTot
-            cos_2 = (cos((AnglesRad(ll)) - phi_rot_radian)).^2;
-            sin_2 = (sin((AnglesRad(ll)) - phi_rot_radian)).^2;
-            delta1 = 1.0/(a22*sin_2+b22*cos_2);
+            sin_2 = (sin((AnglesRad(ll)) + phi_rot_radian)).^2;
+            cos_2 = (cos((AnglesRad(ll)) + phi_rot_radian)).^2;
+            delta1 = 1.0/(a22*cos_2+b22*sin_2);
             delta_sq = sqrt(delta1);
             first_dr = AA5*delta_sq;
-            AA2 = -x0(i)*sin(AnglesRad(ll))+y0(i)*cos(AnglesRad(ll)); %p0
-            for j = 1:P
+            AA2 = -x0(i)*cos(AnglesRad(ll))+y0(i)*sin(AnglesRad(ll)); %p0
+            for j = 1:P-1
                 AA3 = (Sinorange_P_Ar(j) - AA2)^2; %(p-p0)^2
                 under_exp = (C1*AA3)*delta1;
-                F(j,ll) = F(j,ll) + first_dr*exp(under_exp);  % sinogramm computing                
+                F(P-j,ll) = F(P-j,ll) + first_dr*exp(under_exp);  % sinogramm computing                
             end
-        end       
-        
+        end               
     elseif (mod == 2)
         % the object is a parabola Lambda = 1/2
-        T = (a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2);
-        T(T <= 1) = C00.*sqrt(1.0 - T(T <= 1));
-        T(T>1) = 0;
-        G = G + T;
+        AA5 = ((pi/2.0)*C0(i)*a(i)*b(i));
+        for ll = 1:AnglesTot
+            sin_2 = (sin((AnglesRad(ll)) + phi_rot_radian)).^2;
+            cos_2 = (cos((AnglesRad(ll)) + phi_rot_radian)).^2;
+            delta1 = 1.0/(a22*cos_2+b22*sin_2);
+            delta_sq = sqrt(delta1);
+            first_dr = AA5*delta_sq;
+            AA2 = -x0(i)*cos(AnglesRad(ll))+y0(i)*sin(AnglesRad(ll)); %p0
+            for j = 1:P-1
+                AA3 = (Sinorange_P_Ar(j) - AA2)^2; %(p-p0)^2
+                AA6 = (AA3)*delta1;
+                if (AA6 < 1)
+                 F(P-j,ll) = F(P-j,ll) + first_dr*(1. - AA6);  % sinogramm computing
+                end                
+            end
+        end            
     elseif (mod == 3)
         % the object is an elliptical disk
         T = (a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2);
