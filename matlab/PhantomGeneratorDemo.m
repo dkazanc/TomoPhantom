@@ -1,13 +1,12 @@
-% Script to generate analytical phantoms that can be used to test
-% reconstruction algorithms.
+% Script to generate analytical phantoms and sinograms (parallel beam)
+% that can be used to test reconstruction algorithms without Inverse Crime
 % If one needs to modify/add phantoms just edit PhantomLibrary.dat
-% ver 0.1, 1.07.17
 
 close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/'); 
 
-ModelNo = 3; % Select a model (0 - 43  )
+ModelNo = 42; % Select a model (0 - 43  )
 % Define phantom dimension
 N = 512; % x-y size (squared image)
 
@@ -19,11 +18,11 @@ figure(1); imshow(G, []);
 fprintf('%s \n', 'Generating sinogram analytically and numerically...');
 % generate angles
 max_anlges = round(sqrt(2)*N);
-angles = linspace(0,180,max_anlges); % projection angles
+angles = linspace(0,179.9,max_anlges); % projection angles
 
-% first lets use matlab's radon function
+% lets use Matlab's radon function
 tic;
-[F_d,xp] = radon(G,angles); % descrete sinogram
+[F_d,xp] = radon(G,angles); % discrete sinogram
 toc;
 P = size(F_d,1); %detectors dimension
 
@@ -36,6 +35,7 @@ F_a = F_a.*(N/2); % scaling
 figure(2); 
 subplot(1,2,1); imshow(F_a, []); title('Analytical Sinogram');
 subplot(1,2,2); imshow(F_d, []); title('Numerical Sinogram');
+
 
 % reconstructing with FBP (iradon)
 FBP_F_a = iradon(F_a,angles,N);
