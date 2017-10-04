@@ -5,11 +5,11 @@ close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/');
 
-ModelNo = 01; % Select a model
+ModelNo = 03; % Select a model
 % Define phantom dimensions
-N = 512; % x-y-z size (cubic image)
+N = 256; % x-y-z size (cubic image)
 
-% generate the 3D phantom:
+% generate 3D phantom:
 [G] = buildPhantom3D(ModelNo,N);
 
 % check the cenral slice

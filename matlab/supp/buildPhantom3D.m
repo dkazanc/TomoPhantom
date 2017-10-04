@@ -80,14 +80,18 @@ for i = 1:CompNo   %number of models loop
     Xdel = Tomorange_X_Ar - x0(i);
     Ydel = Tomorange_Y_Ar - y0(i);
     Zdel = Tomorange_Z_Ar - z0(i);
+    if (mod == 18)
+    [X,Y] = meshgrid(Xdel,Ydel); 
+    else
     [X,Y,Z] = meshgrid(Xdel,Ydel,Zdel); 
+    end
     
     if (mod == 1)
         % gaussian
-        G = G + C00*exp(C1*(a2*(X*cos_phi+Y*sin_phi).^2+b2*(-X*sin_phi+Y*cos_phi).^2));
+        G = G + C00*exp(C1*(a2*(X*cos_phi+Y*sin_phi).^2+b2*(-X*sin_phi+Y*cos_phi).^2 + c2*(Z).^2));
     elseif (mod == 2)
         % the object is a parabola Lambda = 1/2
-        T = (a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2);
+        T = a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2 + c2*(Z).^2;
         T(T <= 1) = C00.*sqrt(1.0 - T(T <= 1));
         T(T>1) = 0;
         G = G + T;
@@ -108,17 +112,21 @@ for i = 1:CompNo   %number of models loop
         G = G + T;
     elseif (mod == 13)
         % the object is a cone
-        T = a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2;
+        T = a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2 + c2*(Z).^2;
         T(T <= 1) = C00.*(1.0 - sqrt(T(T <= 1)));
         T(T>1) = 0;
         G = G + T;
     elseif (mod == 14)
         % the object is a parabola Lambda = 3/2
-        T = (a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2);
+        T = a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2 + c2*(Z).^2;
         T(T <= 1) = C00.*((1.0 - T(T <= 1)).^1.5);
         T(T>1) = 0;
         G = G + T;
     elseif (mod == 18)
+        c2=c(i)*0.5;
+        
+        for lll = 1:N
+            if (abs(Zdel(lll)) < c2)
         % a rectangle
         x0r=x0(i)*cos(0) + y0(i)*sin(0);
         y0r=-x0(i)*sin(0) + y0(i)*cos(0);
@@ -128,14 +136,18 @@ for i = 1:CompNo   %number of models loop
             cos_phi=cos(phi_rot_radian);
         end
         a2=a(i)*0.5;
-        b2=b(i)*0.5;
+        b2=b(i)*0.5;       
         
         T = zeros(N,N);
         HX = abs((X-x0r)*cos_phi + (Y-y0r)*sin_phi);
         HY = zeros(N,N);
         HY(HX <= a2) = abs((Y(HX <= a2) - y0r)*cos_phi -(X(HX <= a2) - x0r)*sin_phi);
         T((HY <= b2) & (HX <= a2)) = C00;
-        G = G + T;
+        
+        G(:,:,lll) = G(:,:,lll) + T;
+            end
+        end
+        
     end
 end
 
