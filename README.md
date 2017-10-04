@@ -1,13 +1,33 @@
-# TomoPhantom (ver 1.1)
-****************
-Software to generate simple analytical phantoms for image processing (reconstruction, denoising, deblurring...)
-****************
-This software is recommended for various image processing tasks that require numerical testing: image reconstruction, denoising, deblurring, etc. The popular Shepp-Logan phantom is not always fit for testing due to its piecewise-constant nature. This package provides a modular approach to build customisable phantoms consisting of piecewise constant and smooth analytical objects, such as: gaussians,  parabolas, ellipses, cones, rectangulars, etc. Additionally, due to analytical approach of calculating phantoms there is no loss of the spatial resolution due to the absence of the interpolation.
+<div align="center">
+  <img src="docs/img/TomoPhantomLogo.jpg" height="350"><br>
+</div>
 
-Package contents: PhantomGeneratorDemo.m - demo to run; PhantomLibrary.dat - editable text file with models parameters; buildPhantom.m - function to build phantoms; DeformObject - mex wrapped C function to deform objects according to nonlinear geometrical transformation proposed in [1]; buildSino.m - function to build analytical sinograms or Radon transforms of phantoms, can be used to test reconstruction algorithms without the 'Inverse Crime'; SpectralPhantomDemo generate spectral phantom with 4 dedicated materials.
+****************
+**TomoPhantom** is a toolbox to generate customisable analytical 2D and 3D phantoms for various image processing tasks (reconstruction, denoising, deblurring, etc.).
+****************
 
-Please refer to:
+### Detailed description:
+
+**TomoPhantom** is recommended for various image processing tasks that require numerical testing: image reconstruction, denoising, deblurring, etc. 
+The software is focussed mainly on tomographic image reconstruction (TIR) case. For algorithms testing in TIR, the popular Shepp-Logan phantom is not always a 
+good choice due to the piecewise-constant nature. This toolbox provides a simple modular approach to build customisable 2D and 3D phantoms consisting of 
+piecewise-constant and also smooth analytical objects. The objects incliude: gaussians, parabolas, ellipses, cones, rectangulars, etc. The exact Radon
+Transform in parallel beam geometry of a phantom can be obtained therefore producing an analytical sinogram. Those sinograms can be used for testing
+without so-called the 'Inverse Crime'. Additionally, the code for geometric transformation following the paper [1] has been added to generate fan-beam sinograms
+by non-linear deformation of a phantom. 
+
+### Package contents:
+
+Currently **TomoPhantom** is for MATLAB, however a Python version is expected
+- **PhantomGeneratorDemo.m** and **Phantom3DGeneratorDemo.m** are main demo scripts;
+- **SpectralPhantomDemo.m** a script to generate spectral phantom with 4 dedicated materials;
+- **PhantomLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with models parameters;
+- **buildPhantom.m ** and **buildPhantom3D.m ** are functions to build 2D and 3D phantoms, respectively;
+- **buildSino.m ** and **buildSino3D.m ** are functions to build 2D and 3D analytical sinograms, respectively;
+- **DeformObject.c **  mex wrapped C function to deform objects according to nonlinear geometrical transformation [1]; 
+
+### If **TomoPhantom** is used, please refer the paper:
+
 [1] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/582/8704/GP_IPSE.pdf)
+For any questions, please e-mail daniil.kazantsev@manchester.ac.uk 
 
-Future plans: add python support; 3D version (required?)
-If any questions, please e-mail daniil.kazantsev@manchester.ac.uk 
