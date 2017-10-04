@@ -1,0 +1,23 @@
+# 3D Phantom library, please use the following notations to define geometrical figures:
+# 1-gaussian, 2-parabola1/2, 3-ellipse, 12-parabola1, 13-cone, 14-parabola3/2, 18-rectangle
+# No.01 - 9 components: 1 ellipse and 8 parabolas
+Model No.01	9 components 
+3
+1.00e00  0.0 0.0 0.0 0.3 0.3 0.3 00
+12
+1.00e00  0.45 0.45 0.35 0.5 0.5 0.5 00
+12
+1.00e00  -0.45 0.45 0.35 0.5 0.5 0.5 00
+12
+1.00e00  -0.45 -0.45 0.35 0.5 0.5 0.5 00
+12
+1.00e00  0.45 -0.45 0.35 0.5 0.5 0.5 00
+12
+1.00e00  0.45 0.45 -0.35 0.5 0.5 0.5 00
+12
+1.00e00  -0.45 0.45 -0.35 0.5 0.5 0.5 00
+12
+1.00e00  -0.45 -0.45 -0.35 0.5 0.5 0.5 00
+12
+1.00e00  0.45 -0.45 -0.35 0.5 0.5 0.5 00
+#-------------------------------

@@ -6,11 +6,11 @@ close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/'); 
 
-ModelNo = 42; % Select a model (0 - 43  )
-% Define phantom dimension
+ModelNo = 39; % Select a model (0 - 43  )
+% Define phantom dimensions
 N = 512; % x-y size (squared image)
 
-% generate the 2D phantom:
+% generate 2D phantom:
 [G] = buildPhantom(ModelNo,N);
 figure(1); imshow(G, []);
 
