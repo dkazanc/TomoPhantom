@@ -53,7 +53,7 @@ if (exist(name,'file') == 2)
     end %if error
     fclose(fid);
 else
-    error('File PhantomLibrary.dat is NOT found');
+    error('File Phantom3DLibrary3D.dat is NOT found');
 end
 
 Tomorange_Xmin = -1;
@@ -80,8 +80,10 @@ for i = 1:CompNo   %number of models loop
     Xdel = Tomorange_X_Ar - x0(i);
     Ydel = Tomorange_Y_Ar - y0(i);
     Zdel = Tomorange_Z_Ar - z0(i);
-    if (mod == 18)
-    [X,Y] = meshgrid(Xdel,Ydel); 
+    Zdel2 = c2.*Zdel.^2;
+    Zdel3 = (1 - Zdel2);
+    if ((mod == 18) || (mod == 3))
+    [X,Y] = meshgrid(Xdel,Ydel);     
     else
     [X,Y,Z] = meshgrid(Xdel,Ydel,Zdel); 
     end
@@ -95,12 +97,20 @@ for i = 1:CompNo   %number of models loop
         T(T <= 1) = C00.*sqrt(1.0 - T(T <= 1));
         T(T>1) = 0;
         G = G + T;
-    elseif (mod == 3)
+    elseif (mod == 3) 
         % the object is an elliptical disk
-        T = a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2  + c2*(Z).^2;
-        T(T <= 1) = C00;
-        T(T>1) = 0;
-        G = G + T;
+        for lll = 1:N        
+            if (Zdel2(lll) <= 1)
+            a22=(a(i)*Zdel3(lll))^2;
+            a2=1/a22;
+            b22=(b(i)*Zdel3(lll))^2;    
+            b2=1/b22;                    
+            T = a2*(X*cos_phi+Y*sin_phi).^2 + b2*(-X*sin_phi+Y*cos_phi).^2;
+            T(T <= 1) = C00;
+            T(T>1) = 0;
+            G(:,:,lll) = G(:,:,lll) + T;
+            end
+        end
     elseif (mod == 12)
         % the object is a parabola Lambda = 1
         a2x=4.*a2;    

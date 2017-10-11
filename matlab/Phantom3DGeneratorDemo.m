@@ -5,7 +5,7 @@ close all;clc;clear all;
 % adding paths
 addpath('../models/'); addpath('supp/');
 
-ModelNo = 03; % Select a model
+ModelNo = 04; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -38,4 +38,14 @@ for i = 1:N
 %     imwrite(IM,filename_save,'tiff');
 %     counter = counter + 1;
 end
+%%
+% generate angles
+max_anlges = 300;
+angles = linspace(0,179.9,max_anlges); % projection angles
+P = 367;
+% generate the 3D analytical parallel beam sinogram
+tic;
+[F_a] = buildSino3D(ModelNo,G,P,angles);
+toc;
+figure; imshow(F_a(:,:,105), []);
 %%
