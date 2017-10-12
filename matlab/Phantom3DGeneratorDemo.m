@@ -3,14 +3,17 @@
 
 close all;clc;clear all;
 % adding paths
-addpath('../models/'); addpath('supp/');
+addpath('../functions/'); addpath('../functions/models/');
 
-ModelNo = 04; % Select a model
+
+ModelNo = 01; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
 % generate 3D phantom:
+cd ../functions/
 [G] = buildPhantom3D(ModelNo,N);
+cd ../matlab/
 
 % check the cenral slice
 figure(1); imshow(G(:,:,round(0.5*N)), []);
@@ -38,14 +41,15 @@ for i = 1:N
 %     imwrite(IM,filename_save,'tiff');
 %     counter = counter + 1;
 end
+close (figure(2));
 %%
 % generate angles
-max_anlges = 300;
-angles = linspace(0,179.9,max_anlges); % projection angles
-P = 367;
-% generate the 3D analytical parallel beam sinogram
-tic;
-[F_a] = buildSino3D(ModelNo,G,P,angles);
-toc;
-figure; imshow(F_a(:,:,105), []);
+% max_anlges = 300;
+% angles = linspace(0,179.9,max_anlges); % projection angles
+% P = 367;
+% % generate the 3D analytical parallel beam sinogram
+% tic;
+% [F_a] = buildSino3D(ModelNo,G,P,angles);
+% toc;
+% figure; imshow(F_a(:,:,105), []);
 %%

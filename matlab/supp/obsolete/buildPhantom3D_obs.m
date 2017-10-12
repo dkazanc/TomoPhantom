@@ -1,4 +1,4 @@
-function [G] = buildPhantom3D(ModelNo,N)
+function [G] = buildPhantom3D_obs(ModelNo,N)
 
 name = 'Phantom3DLibrary.dat';
 
