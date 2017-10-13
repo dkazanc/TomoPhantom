@@ -1,0 +1,337 @@
+# Phantom library, please use the following notations to define geometrical figures:
+# 1-gaussian, 2-parabola1/2, 3-ellipse, 12-parabola1, 13-cone, 14-parabola3/2, 18-rectangle
+#  6 phantoms  
+#-------------------------------
+# No.00	- 1 components : 1 gaussian;
+Model No.00	1 components
+1     ! gaussian  (70)                       
+1.0 0.1 -0.1  0.1 0.2   30.               PR(1 - 6)
+#-------------------------------
+# No.01	- 1 components : 1 gaussians;
+Model No.01	1 components
+1     ! gaussian  (70)                       
+1.0 0.2 -0.2  0.1 0.3   75.               PR(1 - 6)
+#-------------------------------
+# No.02 - 2 components: 1gaussian+parabola;
+Model No.02	2 components 
+1     ! 
+1.0 0.0e00  0.2  0.30e00 0.15e00  30.e00
+12
+1.00e00  -0.3  -0.2  0.20e00 0.25e00 45.e00
+#-------------------------------
+# No.03 - 2 components: 1gaussian+parabola2;
+Model No.03	2 components 
+1     ! gaussian  (70) 
+1.0 -0.2 0  0.1 0.2   30.               
+2
+0.5 0.4 0.3 0.2 0.3   0.
+#-------------------------------
+# No.04 - 2 components: 2parabola2;
+Model No.04	2 components 
+12
+1.0 0.2 0  0.2 0.4   0.          
+14
+1.00e00  -0.3  -0.2  0.40e00 0.25e00 45.e00
+#-------------------------------
+# No.05 - 2 components: 2parabola2;
+Model No.05	2 components 
+2
+1.0       0.0   0.0    0.2     0.4     0.0          
+2
+1.00e00   0.3   0.2  0.40e00 0.25e00 45.e00
+#-------------------------------
+# No.06 - 2 components: 2parabola2;
+Model No.06	1 components 
+2
+1.00e00  -0.3  -0.2  0.40e00 0.25e00 45.e00  
+#-------------------------------
+# No.07 - 2 components: 2parabola2;
+Model No.07	1 components 
+14
+1.00e00  -0.1  -0.2  0.40e00 0.25e00 45.e00      
+#-------------------------------
+# No.08 - 1 components: 
+Model No.08	1 components 
+13
+1.00e00  -0.3  -0.2  0.40e00 0.25e00 45.e00                               
+#-------------------------------
+# No.09 - 1 components: 1rect
+Model No.09	1 components 
+18
+1.00e00  -0.1  -0.2  0.40e00 0.25e00 30.e00
+#-------------------------------
+# No.10 - 1 components: 1ellipse
+Model No.10	1 components 
+3
+1.00e00  -0.2  0.1  0.40e00 0.5e00 45.e00                                 
+#-------------------------------
+# No.11 - 1 components: 1ellipse
+Model No.11	1 components 
+3
+1.00e00  -0.0  0 1.8e00 1.8e00 0.e00                                 
+#-------------------------------
+# No.12 - 1 components: 1ellipse
+Model No.12	1 components 
+2
+1.00e00  -0.2  0.2  0.45e00 0.45e00 0.e00                                 
+#-------------------------------
+# No.13 - 1 components: 1ellipse
+Model No.13	1 components 
+12
+1.00e00  0.3  0.3  0.40e00 0.25e00 45.e00
+#-------------------------------
+# No.14 - 1 components: gaussian(axisymmetric,centered)
+Model No.14	1 components 
+1
+1.00e00  0.0  0.0  0.2 0.2 0
+#-------------------------------
+# No.15 - 1 components: gaussian(axisymmetric)
+Model No.15	1 components
+1     ! gaussian  (70)                       
+1.0 0.1 -0.1  0.2 0.2   00.
+#-------------------------------
+# No.16 - 1 components: parabola
+Model No.16	1 components
+12     ! parabola  (70)                       
+1.0 0.1 -0.1  0.2 0.4   30. 
+#-------------------------------
+# No.17 - 6 components: gaussians
+Model No.17	6 components
+1
+1.00e00 0.0e00  0.7e00  0.15e00 0.15e00  00.e00           
+1
+1.00e00 -.6e00   .35e00  0.15e00 0.15e00  00.e00
+1
+1.00e00 -.6e00  -.35e00  0.15e00 0.15e00  00.e00
+1
+1.00e00 0.0e00  -.7e00  0.15e00 0.15e00  00.e00
+1
+1.00e00  .6e00  -.35e00  0.15e00 0.15e00  00.e00
+1
+1.00e00  .6e00   .35e00  0.15e00 0.15e00  00.e00
+#-------------------------------
+# No.18 - 1 components: parabola
+Model No.18	1 components
+12     ! parabola  (70)                       
+1.0 0. 0.1  0.2 0.2   00. 
+#-------------------------------
+# No.19 - 2 components: gaussians
+Model No.19	2 components
+1
+1.00e00 0.0e00  0.7e00  0.15e00 0.15e00  00.e00           
+1
+1.00e00 0.0e00  -.7e00  0.15e00 0.15e00  00.e00
+#-------------------------------
+# No.20	- 1 components : 1 gaussians;
+Model No.20	1 components
+  1     ! gaussian  (70)                       
+1.0 0.2 -0.3  0.1 0.3   30.               PR(1 - 6)
+#-------------------------------
+# No.21 - 1 components: gaussian(axisymmetric
+Model No.21	1 components
+1     ! gaussian  (70)                       
+1.0 0.2 0.1 0.4 0.4   00.
+#-------------------------------
+# No.22 - 1 components: gaussian(axisymmetric,centered)
+Model No.22	1 components 
+1
+1.00e00  0.0  0.0  0.25 0.25 0
+#-------------------------------
+# No.23 - 1 components: gaussian(axisymmetric)
+Model No.23	1 components 
+1
+1.00e00  0.2  0.2  0.5 0.3 0
+#-------------------------------
+# No.24 - 1 components: gaussian
+Model No.24	1 components 
+1
+1.00e00  0.1  0.2  0.3 0.2 30
+#-------------------------------
+# No.25 - 1 components: rectangle
+Model No.25	1 components 
+18
+1.00e00  -0.1  -0.2  0.50e00 0.3e00 30.e00
+#-------------------------------
+# No.26 - 2 components: parabola & Gaussian
+Model No.26	2 components
+12     ! parabola  (70)                       
+1.0 0.1 0.2  0.3 0.4   30. 
+1     ! gaussian                      
+1.0 -0.1 -0.2  0.1 0.2   30. 
+#-------------------------------
+# No.27 - 2 components: gaussians
+Model No.27	2 components
+1
+1.00e00 0.0e00  0.3e00  0.15e00 0.25e00  30.e00           
+12
+1.00e00 0.2e00  -.4e00  0.25e00 0.45e00  60.e00
+#-------------------------------
+# No.28 - 2 components: gaussian
+Model No.28	2 components 
+1
+1.00e00  0.3  -0.3  0.4 0.2 30
+2
+1.00e00  -0.3  0.3  0.6 0.4 00
+#-------------------------------
+# No.29 - 5 components: gaussian & rect
+Model No.29	5 components 
+18
+1.00e00  0.0  0.0  0.50e00 0.3e00 00.e00
+1
+1.00e00  0.4  0.15  0.1 0.1 00
+1
+1.00e00  -0.4  0.15  0.1 0.1 00
+1
+1.00e00  0.4  -0.15  0.1 0.1 00
+1
+1.00e00  -0.4  -0.15  0.1 0.1 00
+#-------------------------------
+# No.30 - 1 components: parabola
+Model No.30	1 components 
+12
+1.00e00  0.1  0.2  0.6 0.4 30
+#-------------------------------
+# No.31 - 1 components: parabola
+Model No.31	1 components 
+12
+1.00e00  0.1  0.2  0.9 0.7 30
+#-------------------------------
+# No.32 - 1 components: parabola
+Model No.32	1 components 
+12
+1.00e00  0.1  0.2  1.1 0.9 30
+#-------------------------------
+# No.33 - 3 components: parabola
+Model No.33	3 components 
+3
+0.100e00  0.0  0.0  2 2 00
+18
+0.90e00  -0.4 0.0 0.6 1.2 00
+3
+0.90e00   0.4  0.0  0.8 0.8 00
+#-------------------------------
+# No.34 - 1 components: gaussian
+Model No.34	1 components 
+1
+1.00e00  0.1  0.2  0.6 0.4 30
+#-------------------------------
+# No.35 - 2 components: parabola
+Model No.35	2 components 
+18
+0.90e00  -0.4 0.0 0.6 1. 0
+3
+0.90e00   0.4  0.0  0.8 0.8 00
+#-------------------------------
+# No.36 - 1 components: centered circle
+Model No.36	1 components 
+3
+0.90e00 0.0  0.0  0.8 0.8 00
+#-------------------------------
+# No.37 - 1 components: gaussian(axisymmetric,centered)
+Model No.37	1 components 
+1
+1.00e00  0.0  0.0  0.5 0.3 0
+#-------------------------------
+# No.38 - 1 components: const ellipse
+Model No.38	1 components 
+3
+1.00e00  0.1  0.2  1.2 0.8 30
+#-------------------------------
+# No.39 - 1 components: const parabola
+Model No.39	1 components 
+12
+1.00e00  0.1  0.2  1.2 0.8 30
+#-------------------------------
+# No.40 - 5 components: gaussian & rect & parabola
+Model No.40	5 components 
+18
+1.00e00  0.0  0.0  0.50e00 0.3e00 00.e00
+1
+1.00e00  0.6  0.0  0.15 0.15 00
+1
+1.00e00  -0.6  0.0  0.15 0.15 00
+12
+1.00e00  0.0  -0.55  0.4 0.4 00
+12
+1.00e00  0.0  0.55  0.4 0.4 00
+#-------------------------------
+# No.41 - 5 components: gaussian & rotated gauss & rect & parabola - higher order TV tests
+Model No.41	5 components 
+18
+1.00e00  0.0  0.0  0.32 0.32 00.e00
+1
+1.00e00  0.5  0.0  0.17 0.17 00
+12
+1.00e00  -0.5  0.0  0.4 0.4 00
+14
+1.00e00  0.0  -0.55  0.3 0.3 00
+13
+1.00e00  0.0  0.55  0.3 0.3 00
+#-------------------------------
+# No.42 - 6 components: gaussians
+Model No.42	6 components
+1
+1.000e00 -.2e00  .35e00  0.23e00 0.23e00  00.e00           
+1
+1.000e00 -.4e00   .0e00  0.23e00 0.23e00  00.e00
+1
+1.000e00 -.2e00  -.35e00  0.23e00 0.23e00  00.e00
+1
+1.000e00  .2e00  -.35e00  0.23e00 0.23e00  00.e00
+1
+1.000e00  .4e00  .0e00  0.23e00 0.23e00  00.e00
+1
+1.000e00  0.2e00  .35e00  0.23e00 0.23e00  00.e00
+#-------------------------------
+# No.43 - 25 components: circles+rect+ellips
+Model No.43	25 components
+3
+.3e00 0e00  0.0e00  .9500 .95e00  00.e00 
+3
+.5e00 0.0e00  0.7e00  0.2e00 0.2e00  00.e00           
+3
+.500e00 -.6e00   .35e00  0.2e00 0.2e00  00.e00
+3
+.500e00 -.6e00  -.35e00  0.2e00 0.2e00  00.e00
+3
+.500e00 0.0e00  -.7e00  0.2e00 0.2e00  00.e00
+3
+.500e00  .6e00  -.35e00  0.2e00 0.2e00  00.e00
+3
+.500e00  .6e00   .35e00  0.2e00 0.2e00  00.e00
+3
+.500e00 -.2e00  .35e00  0.1e00 0.1e00  00.e00           
+3
+.500e00 -.4e00   .0e00  0.1e00 0.1e00  00.e00
+3
+.500e00 -.2e00  -.35e00  0.1e00 0.1e00  00.e00
+3
+.500e00  .2e00  -.35e00  0.1e00 0.1e00  00.e00
+3
+.500e00  .4e00  .0e00  0.1e00 0.1e00  00.e00
+3
+.500e00  0.2e00  .35e00  0.1e00 0.1e00  00.e00
+18
+.500e00  0.0e00   0.085e00  0.1e00 0.1e00  00.e00
+18
+.500e00  0.085e00   0.00e00  0.1e00 0.1e00  00.e00
+18
+.500e00  -0.085e00   0.0e00  0.1e00 0.1e00  00.e00
+18
+.500e00  0.0e00   -0.085e00  0.1e00 0.1e00  00.e00
+3
+.5e00   0.0e00   0.0e00  0.02e00 0.11e00  45.e00
+3
+.5e00   0.0e00   0.0e00  0.02e00 0.11e00  -45.e00
+3
+.800e00  .7e00  .0e00  0.01e00 0.01e00  00.e00 
+3
+.80e00  -.38e00   -.65e00  0.01e00 0.01e00  00.e00           
+3
+.90e00 -.38e00   .65e00  0.01e00 0.01e00  00.e00
+3
+.90e00  .0e00  -.35e00  0.01e00 0.01e00  00.e00 
+3
+.900e00  .32e00   .18e00  0.01e00 0.01e00  00.e00           
+3
+.800e00 -.32e00   .18e00  0.01e00 0.01e00  00.e00
