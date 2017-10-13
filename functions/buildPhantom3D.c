@@ -42,6 +42,6 @@ void mexFunction(
     int N_dims[] = {N, N, N};
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL));   
     
-    buildPhantom3D_core(A, ModelSelected, N);
+    buildPhantom3D_core(A, ModelSelected, N, "models/Phantom3DLibrary.dat");
 }
 

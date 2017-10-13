@@ -20,7 +20,7 @@
  * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
  */
 
-float buildPhantom3D_core(float *A, int ModelSelected, int N)
+float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
 {
     int i, ii, j, k;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, C00, a22, a2, b22, b2, c22, c2, phi_rot_radian, sin_phi, cos_phi;
@@ -32,11 +32,18 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N)
     for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
     C1 = -4.0f*log(2.0f);
     
-    FILE *in_file = fopen("models/Phantom3DLibrary.dat", "r"); // read parameters file
-    
+    FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
+
     if (! in_file )
     {
-        printf("%s\n", "Parameters file does not exist or cannot be read!");
+        printf("%s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
+		printf("Trying models/Phantom3DLibrary.dat");
+		in_file = fopen("models/Phantom3DLibrary.dat","r");
+		if(! in_file)
+		{
+			printf("models/Phantom3DLibrary.dat is not found");
+			return 0;
+		}
     }
     
     char tmpstr1[16];
