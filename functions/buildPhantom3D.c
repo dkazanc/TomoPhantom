@@ -11,16 +11,17 @@
 #define M_PI 3.14159265358979323846
 
 /* Function to read from a file the required parameters to build 3D analytical model, see Phantom3DLibrary.dat to modify parameters
+ * (MATLAB wrapper)
  *
  * Input Parameters:
- * ModelNo - the model number from Phantom3DLibrary file
- * DimensionSize (N) - chose the desired dimension
+ * 1. ModelNo - the model number from Phantom3DLibrary file
+ * 2. VolumeSize in voxels (N x N x N)
  *
  * Output:
- * The analytical phantom size of [N x N x N]
+ * 1. The analytical phantom size of [N x N x N]
  *
- * to compile with OMP support: mex buildPhantom3D.c buildPhantom3D_core.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
- * D. Kazantsev, 2016-17
+ * License: Version 2.0
+ * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
  */
 
 void mexFunction(

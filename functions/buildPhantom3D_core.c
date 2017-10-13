@@ -10,19 +10,28 @@
 /* Function to read from a file the required parameters to build 3D analytical model, see Phantom3DLibrary.dat to modify parameters
  *
  * Input Parameters:
- * ModelNo - the model number from Phantom3DLibrary file
- * DimensionSize (N) - chose the desired dimension
+ * 1. ModelNo - the model number from Phantom3DLibrary file
+ * 2. VolumeSize in voxels (N x N x N)
  *
  * Output:
- * The analytical phantom size of [N x N x N]
+ * 1. The analytical phantom size of [N x N x N]
  *
- * to compile with OMP support: mex buildPhantom3D.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
- * D. Kazantsev, 2016-17
+ * License: Version 2.0
+ * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
  */
 
 float buildPhantom3D_core(float *A, int ModelSelected, int N)
 {
     int i, ii, j, k;
+    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, C00, a22, a2, b22, b2, c22, c2, phi_rot_radian, sin_phi, cos_phi;
+    float *Xdel = NULL, *Ydel = NULL, *Zdel = NULL, *Zdel2 = NULL, T;
+    Tomorange_X_Ar = malloc(N*sizeof(float));
+    Tomorange_Xmin = -1.0f;
+    Tomorange_Xmax = 1.0f;
+    H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
+    for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
+    C1 = -4.0f*log(2.0f);
+    
     FILE *in_file = fopen("models/Phantom3DLibrary.dat", "r"); // read parameters file
     
     if (! in_file )
@@ -69,7 +78,10 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N)
                 }
                 else {
                     printf("%s\n", "The number of components is unknown!");
+                    return 0;
                 }
+                
+                
                 /* loop over all components */
                 for(ii=0; ii<Components; ii++) {
                     
@@ -90,15 +102,6 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N)
                     }
                     /* parameters of an object have been extracted, now run the building module */
                     /************************************************/
-                    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, C00, a22, a2, b22, b2, c22, c2, phi_rot_radian, sin_phi, cos_phi;
-                    float *Xdel = NULL, *Ydel = NULL, *Zdel = NULL, *Zdel2 = NULL, T;
-                    
-                    Tomorange_X_Ar = malloc(N*sizeof(float));
-                    Tomorange_Xmin = -1.0f;
-                    Tomorange_Xmax = 1.0f;
-                    H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
-                    for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
-                    C1 = -4.0f*log(2.0f);
                     c22 = c*c;
                     c2 = 1.0f/c22;
                     if (Object == 4) c2 =4.0f*c2;
@@ -281,7 +284,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N)
                         printf("%s\n", "No such object exist!");
                         return 0;
                     }
-                    free(Tomorange_X_Ar); free(Xdel); free(Ydel); free(Zdel); free(Zdel2);                  
+                    free(Tomorange_X_Ar); free(Xdel); free(Ydel); free(Zdel); free(Zdel2);
                     /************************************************/
                 }
                 break;
