@@ -1,4 +1,4 @@
-function [F] = buildSino3D(ModelNo,G,P,angles)
+function [F] = buildSino3D_obs(ModelNo,G,P,angles)
 % this function provides analytical 3D sinograms to 3D phantoms
 % (parallel beam geometry)
 
