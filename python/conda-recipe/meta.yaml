@@ -1,0 +1,25 @@
+package:
+  name: tomophantom
+  version: 1.0
+
+
+build:
+  preserve_egg_dir: False
+#  number: 0
+  
+requirements:
+  build:
+    - python
+    - numpy
+    - setuptools
+    - cython
+
+  run:
+    - python
+    - numpy
+
+	
+about:
+  home: https://github.com/dkazanc/TomoPhantom
+  license:  Apache 2.0 license
+  summary: 'Tomography Phantom Data generator'

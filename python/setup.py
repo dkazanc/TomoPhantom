@@ -39,6 +39,7 @@ setup(
                             libraries = extra_libraries,
                             extra_link_args = extra_link_args)]),
     zip_safe = False,
-    package_data={'models':['tomophantom/models/*.dat']},
+    include_package_data=True,
+    package_data={'tomophantom':['*.dat','models/*.dat']},
     packages = {'tomophantom'}
 )
