@@ -6,7 +6,7 @@ close all;clc;clear all;
 addpath('../functions/'); addpath('../functions/models/');
 
 
-ModelNo = 01; % Select a model
+ModelNo = 04; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 

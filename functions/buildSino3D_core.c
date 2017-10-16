@@ -5,6 +5,7 @@
 #include "omp.h"
 
 #define M_PI 3.14159265358979323846
+#define EPS 0.0000001
 
 /* Function to create 3D analytical sinograms (parallel beam geometry) to 3D phantoms using Phantom3DLibrary.dat
  *
@@ -25,8 +26,8 @@
 float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {
     int i, ii, j, k;
-    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, a2, b22, b2, c22, c2, phi_rot_radian, sin_phi, cos_phi;
-    float *Xdel = NULL, *Ydel = NULL, *Zdel = NULL, *Zdel2 = NULL, *Sinorange_P_Ar=NULL, *AnglesRad=NULL, T;
+    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, b22, c22, c2, phi_rot_radian;
+    float *Zdel = NULL, *Zdel2 = NULL, *Sinorange_P_Ar=NULL, *AnglesRad=NULL;
     float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp;
     
     Sinorange_Pmax = (float)(P)/(float)(N);
@@ -129,7 +130,6 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                     c2 = 1.0f/c22;
                     if (Object == 4) c2 =4.0f*c2;
                     phi_rot_radian = (phi_rot)*(M_PI/180.0f);
-                    sin_phi=sin(phi_rot_radian); cos_phi=cos(phi_rot_radian);
                     
                     Zdel = malloc(N*sizeof(float));
                     Zdel2 = malloc(N*sizeof(float));
@@ -144,12 +144,12 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                         for(k=0; k<N; k++) {
                             if (Zdel2[k] <= 1) {
                                 a1 = a*pow((1.0f - Zdel2[k]),2);
-                                if (a1 == 0.0f) a1 = 0.000001f;
+                                if (a1 == 0.0f) a1 = EPS;
                                 b1 = b*pow((1.0f - Zdel2[k]),2);
-                                if (b1 == 0.0f) b1 = 0.000001f;
+                                if (b1 == 0.0f) b1 = EPS;
                                 //C00 = C0*((exp(pow((1.0f - Zdel2[k]),1/2)))/2.7183f);
                                 C00 = C0*(pow((1.0f - Zdel2[k]),2));
-                                if (C00 == 0.0f) C00 = 0.000001f;
+                                if (C00 == 0.0f) C00 = EPS;
                                 
                                 AA5 = (N/2.0f)*(C00*sqrt(a1)*sqrt(b1)/2.0f)*sqrt(M_PI/log(2.0f));
                                 for(i=0; i<AngTot; i++) {
@@ -255,33 +255,88 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                             }
                         } /*k-loop*/
                     }
-                    else if (Object == 7) {
+                    else if (Object == 5) {
                         /* the object is a rectangle (18) */
-                        float x0r, y0r, HX, HY;
-                        a2 = 0.5f*a;
-                        b2 = 0.5f*b;
-                        c2 = 0.5f*c;
-                        x0r=x0*cos(0.0f) + y0*sin(0.0f);
-                        y0r=-x0*sin(0.0f) + y0*cos(0.0f);
-                        if (phi_rot_radian < 0.0f) {
-                            phi_rot_radian = M_PI + phi_rot_radian;
-                            sin_phi=sin(phi_rot_radian);
-                            cos_phi=cos(phi_rot_radian);
-                        }
+                        // Rectang2DSino(Sinorange_P_Ar(j),AnglesRad(AnglesTot-ll+1),C00,-2*y0(i)-H_x,2*x0(i)+H_x,phi_rot_radian,b(i),a(i));
+                        float x00, y00,xwid,ywid,p00,ksi00,ksi1;
+                        float PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS;
+                        x00 = -2.0f*y0-H_x;
+                        y00 = 2.0f*x0+H_x;
+                        xwid = b;
+                        ywid = a;
+                        if (phi_rot_radian < 0)  {ksi1 = M_PI + phi_rot_radian;}
+                        else ksi1 = phi_rot_radian;
                         
-#pragma omp parallel for shared(A,Zdel) private(k,i,j,HX,HY,T)
+// #pragma omp parallel for shared(A,Zdel) private(k,i,j,HX,HY,T)
                         for(k=0; k<N; k++) {
-                            if  (fabs(Zdel[k]) < c2) {
-                                
-                                for(i=0; i<N; i++) {
-                                    for(j=0; j<N; j++) {
-                                        HX = fabs((Xdel[i] - x0r)*cos_phi + (Ydel[j] - y0r)*sin_phi);
-                                        T = 0.0f;
-                                        if (HX <= a2) {
-                                            HY = fabs((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
-                                            if (HY <= b2) {T = C0;}
+                            if (Zdel2[k] <= 1) {
+                                for(i=0; i<AngTot; i++) {
+                                    ksi00 = AnglesRad[AngTot-i];
+                                    for(j=0; j<P; j++) {
+                                        p00 = Sinorange_P_Ar[j];
+                                        
+                                        PI2 = M_PI*0.5f;
+                                        p = p00;
+                                        ksi=ksi00;
+                                        
+                                        if (ksi > M_PI) {
+                                            ksi = ksi - M_PI;
+                                            p = -p00; }
+                                        
+                                        C = cos(ksi); S = sin(ksi);
+                                        XSYC = -x00*S + y00*C;
+                                        A2 = xwid*0.5f;
+                                        B2 = ywid*0.5f;
+                                        
+                                        if ((ksi - ksi1) < 0.0f)  FI = M_PI + ksi - ksi1;
+                                        else FI = ksi - ksi1;
+                                        
+                                        if (FI > PI2) FI = M_PI - FI;
+                                        
+                                        CF = cos(FI);
+                                        SF = sin(FI);
+                                        P0 = abs(p-XSYC);
+                                        
+                                        SS = xwid/CF*C0;
+                                        
+                                        if (abs(CF) <= EPS) {
+                                            if ((P0 - A2) > EPS) {
+                                                SS=0.0f;
+                                                break;
+                                            }
+                                            SS = ywid*C0;
+                                            break;
+                                        }                                   
+                                        if (abs(SF) <= EPS) {
+                                            if ((P0 - B2) > EPS) {
+                                                SS=0.0f;
+                                                break;
+                                            }
+                                            SS = xwid*C0;
+                                            break;
                                         }
-                                        A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
+                                        
+                                        TF = SF/CF;
+                                        PC = P0/CF;
+                                        QP = B2+A2*TF;
+                                        
+                                        if (PC >= QP) {
+                                            SS=0.0f;
+                                            break;
+                                        }
+                                        
+                                        QM = QP+PC;
+                                        if (QM > ywid) {
+                                            DEL = P0+B2*CF;
+                                            if (DEL > (A2*SF)) {
+                                                SS = (QP-PC)/SF*C0;
+                                                break;
+                                            }
+                                            
+                                            SS = ywid/SF*C0;
+                                            break;
+                                        }                                        
+                                        A[(k)*P*AngTot + (j)*AngTot + (i)] = A[(k)*P*AngTot + (j)*AngTot + (i)] + SS;
                                     }}
                             }
                         } /*k-loop*/
