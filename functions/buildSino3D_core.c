@@ -22,7 +22,7 @@
  * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
  */
 
-float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn)
+float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {
     int i, ii, j, k;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, a2, b22, b2, c22, c2, phi_rot_radian, sin_phi, cos_phi;
@@ -45,7 +45,7 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
     for(i=0; i<AngTot; i++)  AnglesRad[i] = (Th[i])*(M_PI/180.0f);
     
     C1 = -4.0f*log(2.0f);
-    FILE *in_file = fopen("models/Phantom3DLibrary.dat", "r"); // read parameters file
+    FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
     
     if (! in_file )
     {

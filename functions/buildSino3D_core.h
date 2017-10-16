@@ -9,4 +9,4 @@
 * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
 */
 
-float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn);
+float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn,char* ModelParametersFilename);
