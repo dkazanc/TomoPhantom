@@ -13,7 +13,7 @@ cimport numpy as np
 cdef extern float buildPhantom3D_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
 cdef extern float buildPhantom3D_core_single(float *A, int N,  int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
-
+cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 	
 cdef packed struct object_3d:
 	np.int_t Obj
@@ -98,3 +98,28 @@ def build_sinogram_phantom_3d(str model_parameters_filename, int model_id, int v
 	cdef int AngTot = angles.shape[0]
 	ret_val = buildSino3D_core(&sinogram[0,0,0], model_id, volume_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
 	return sinogram	
+	
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def build_sinogram_phantom_3d_params(int volume_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, int CenTypeIn, object_3d[:] obj_params):
+	"""
+	build_sinogram_phantom_3d (model_parameters_filename, model_id, volume_size, detector_size, angles)
+	
+	Takes in as input model parameters list, volume_size, detector_size and projection angles and return a 3D sinogram corresponding to the model id.
+	
+
+	param: volume_size -- a phantom size in each dimension.
+	param: detector_size -- int detector size.
+	param: angles -- a numpy array of float values with angles in radians
+	param: CenTypeIn -- 1 as default [0: radon, 1:astra]
+	param: obj_params -- object parameters list
+	returns: numpy float32 phantom sinograms array.
+	
+	"""
+	cdef Py_ssize_t i	
+	cdef np.ndarray[np.float32_t, ndim=3, mode="c"] sinogram = np.zeros([angles.shape[0], detector_size, volume_size], dtype='float32')
+	cdef float ret_val 
+	cdef int AngTot = angles.shape[0]
+	for i in range(obj_params.shape[0]):
+		ret_val = buildSino3D_core_single(&sinogram[0,0,0], volume_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].z0, obj_params[i].a, obj_params[i].b, obj_params[i].c, obj_params[i].phi_rot)
+	return sinogram		
