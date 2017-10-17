@@ -58,7 +58,7 @@ Model No.08	1 components
 # No.09 - 1 components: 1rect
 Model No.09	1 components 
 18
-1.00e00  -0.1  -0.2  0.40e00 0.25e00 30.e00
+1.00e00  0.1  0.2  0.40e00 0.25e00 45.e00
 #-------------------------------
 # No.10 - 1 components: 1ellipse
 Model No.10	1 components 

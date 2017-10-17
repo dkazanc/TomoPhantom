@@ -6,7 +6,7 @@ close all;clc;clear all;
 addpath('../functions/'); addpath('../functions/models/');
 
 
-ModelNo = 04; % Select a model
+ModelNo = 03; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -53,6 +53,7 @@ cd ../matlab/
 toc;
 %%
 % obtaining 3D parallel-beam sinogram of a phantom using ASTRA-toolbox
+% [G] = buildPhantom3D(ModelNo,N);
 proj_geom = astra_create_proj_geom('parallel', 1, det, (angles*pi/180));
 vol_geom = astra_create_vol_geom(N,N);
 sino_astra3D = zeros(length(angles),det,N,'single');
