@@ -41,6 +41,6 @@ setup(
                             extra_link_args = extra_link_args)]),
     zip_safe = False,
     include_package_data=True,
-    package_data={'tomophantom':['*.dat','models/*.dat']},
+    package_data={'tomophantom':['*.dat','../../functions/models/*.dat']},
     packages = {'tomophantom'}
 )
