@@ -8,8 +8,6 @@
 #define EPS 0.000000001
 
 
-
-
 float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 {
     int i, j, k;
@@ -85,7 +83,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 					for(j=0; j<P; j++) {
 						AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
 						under_exp = (C1*AA3)*delta1;
-						A[(k)*P*AngTot + (j)*AngTot + (i)] = A[(k)*P*AngTot + (j)*AngTot + (i)] + first_dr*expf(under_exp);
+						A[(k)*P*AngTot + (i)*P + (j)] = A[(k)*P*AngTot + (i)*P + (j)] + first_dr*expf(under_exp);
 					}}
 			}
 		} /*k-loop*/
@@ -113,7 +111,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 						AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
 						AA6 = AA3*delta1;
 						if (AA6 < 1.0f) {
-							A[(k)*P*AngTot + (j)*AngTot + (i)] = A[(k)*P*AngTot + (j)*AngTot + (i)] + first_dr*(1.0f - AA6);
+							A[(k)*P*AngTot + (i)*P + (j)] = A[(k)*P*AngTot + (i)*P + (j)] + first_dr*(1.0f - AA6);
 						}
 					}}
 			}
@@ -144,7 +142,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 						AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
 						AA6 = (AA3)*delta1;
 						if (AA6 < 1.0f) {
-							A[(k)*P*AngTot + (j)*AngTot + (i)] = A[(k)*P*AngTot + (j)*AngTot + (i)] + first_dr*sqrtf(1.0f - AA6);
+							A[(k)*P*AngTot + (i)*P + (j)] = A[(k)*P*AngTot + (i)*P + (j)] + first_dr*sqrtf(1.0f - AA6);
 						}
 					}}
 			}
@@ -172,7 +170,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 						AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
 						AA6 = AA3*delta1;
 						if (AA6 < 1.0f) {
-							A[(k)*P*AngTot + (j)*AngTot + (i)] = A[(k)*P*AngTot + (j)*AngTot + (i)] + first_dr*(1.0f - AA6);
+							A[(k)*P*AngTot + (i)*P + (j)] = A[(k)*P*AngTot + (i)*P + (j)] + first_dr*(1.0f - AA6);
 						}
 					}}
 			}
@@ -257,7 +255,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 								SS = (QP-PC)/SF*C0;								
 							}}
                         if (PC >= QP) SS=0.0f;	                     
-						A[(k)*P*AngTot + (j)*AngTot + (i)] = A[(k)*P*AngTot + (j)*AngTot + (i)] + (N/2.0f)*SS;
+						A[(k)*P*AngTot + (i)*P + (j)] = A[(k)*P*AngTot + (i)*P + (j)] + (N/2.0f)*SS;
 					}}
 			}
 		} /*k-loop*/
