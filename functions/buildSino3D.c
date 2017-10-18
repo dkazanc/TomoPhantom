@@ -55,7 +55,7 @@ void mexFunction(
     NStructElems = mxGetNumberOfElements(prhs[3]);
     
     /*Handling Matlab output data*/
-    int N_dims[] = {NStructElems, P, N};
+    int N_dims[] = {P, NStructElems, N}; /*format: detectors, angles dim, Z-dim*/
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL));    
         
     buildSino3D_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, "models/Phantom3DLibrary.dat");

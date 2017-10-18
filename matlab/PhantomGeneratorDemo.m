@@ -4,9 +4,9 @@
 
 close all;clc;clear all;
 % adding paths
-addpath('../models/'); addpath('supp/'); 
+addpath('../functions/models/'); addpath('supp/'); 
 
-ModelNo = 40; % Select a model (0 - 43  )
+ModelNo = 9; % Select a model (0 - 43  )
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 

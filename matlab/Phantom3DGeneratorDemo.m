@@ -53,14 +53,15 @@ cd ../matlab/
 toc;
 %%
 % obtaining 3D parallel-beam sinogram of a phantom using ASTRA-toolbox
+% [G] = buildPhantom3D(ModelNo,N);
 proj_geom = astra_create_proj_geom('parallel', 1, det, (angles*pi/180));
 vol_geom = astra_create_vol_geom(N,N);
-sino_astra3D = zeros(length(angles),det,N,'single');
+sino_astra3D = zeros(det,length(angles),N,'single');
 
 tic;
 for i = 1:N
 [sinogram_id, sino_astra] = astra_create_sino_cuda(G(:,:,i), proj_geom, vol_geom);
-sino_astra3D(:,:,i) = single(sino_astra);
+sino_astra3D(:,:,i) = single(sino_astra');
 astra_mex_data2d('delete', sinogram_id);
 end
 toc;
@@ -69,8 +70,8 @@ toc;
 err_diff = norm(sino_tomophan3D(:) - sino_astra3D(:))./norm(sino_astra3D(:));
 fprintf('%s %.4f\n', 'NRMSE for sino residuals:', err_diff);
 figure; 
-subplot(1,2,1); imshow(sino_tomophan3D(:,:,128), []); colormap hot; colorbar; title('Exact sinogram');
-subplot(1,2,2); imshow(sino_astra3D(:,:,128), []); colormap hot;colorbar; title('Discrete sinogram');
+subplot(1,2,1); imshow(sino_tomophan3D(:,:,128)', []); colormap hot; colorbar; title('Exact sinogram');
+subplot(1,2,2); imshow(sino_astra3D(:,:,128)', []); colormap hot;colorbar; title('Discrete sinogram');
 %%
 % Reconstruction using ASTRA-toolbox (FBP)
 % Create a data object for the reconstruction
@@ -82,7 +83,7 @@ FBP3D = zeros(N,N,N,'single');
 % choose which sinogram to substitute
 for i = 1:N
 rec_id = astra_mex_data2d('create', '-vol', vol_geom);
-sinogram_id = astra_mex_data2d('create', '-sino', proj_geom, sino_tomophan3D(:,:,i));
+sinogram_id = astra_mex_data2d('create', '-sino', proj_geom, sino_tomophan3D(:,:,i)');
 cfg.ReconstructionDataId = rec_id;
 cfg.ProjectionDataId = sinogram_id;
 
