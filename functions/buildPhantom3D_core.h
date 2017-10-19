@@ -6,7 +6,7 @@
 #include "omp.h"
 
 /*
-* License: Version 2.0
+* License: Apache Version 2.0
 * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
 */
 

@@ -6,7 +6,7 @@
 
 #define M_PI 3.14159265358979323846
 
-/* Function to read from a file the required parameters to build 3D analytical model, see Phantom3DLibrary.dat to modify parameters
+/* Function to read from the file Phantom3DLibrary.dat the required parameters to build 3D analytical models
  *
  * Input Parameters:
  * 1. ModelNo - the model number from Phantom3DLibrary file
@@ -24,7 +24,7 @@
  * Output:
  * 1. The analytical phantom size of [N x N x N]
  *
- * License: Version 2.0
+ * License: Apache Version 2.0
  * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
  */
 

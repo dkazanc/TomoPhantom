@@ -277,9 +277,10 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
  * 1. Model number (see Phantom3DLibrary.dat) [required]
  * 2. VolumeSize in voxels (N x N x N) [required]
  * 3. Detector array size P (in pixels) [required]
- * 4. Projection angles Th (in degrees) [required]
- * 5. VolumeCentring, choose 'radon' or 'astra' (default) [optional]
- *
+ * 4. Projection angles Th (in degrees) [required] 
+ * 5. An absolute path to the file Phantom3DLibrary.dat (see OS-specific differences in synthaxis) [required]
+ * 6. VolumeCentring, choose 'radon' or 'astra' (default) [optional]
+ * 
  * Output:
  * 1. 3D sinogram size of [P, length(Th), N]
  *

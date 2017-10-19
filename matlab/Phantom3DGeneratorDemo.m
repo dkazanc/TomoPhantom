@@ -10,10 +10,9 @@ ModelNo = 04; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
-% generate 3D phantom:
-cd ../functions/
-[G] = buildPhantom3D(ModelNo,N);
-cd ../matlab/
+% generate 3D phantom (modify your PATH bellow):
+pathTP = '/home/algol/Documents/MATLAB/TomoPhantom/functions/models/Phantom3DLibrary.dat'; % path to TomoPhantom parameters file
+[G] = buildPhantom3D(ModelNo,N,pathTP);
 
 % check the cenral slice
 figure(1); imshow(G(:,:,round(0.5*N)), []);
@@ -47,9 +46,7 @@ figure(1); imshow(G(:,:,round(0.5*N)), []);
 angles = 1:0.5:180;
 det = round(sqrt(2)*N);
 tic; 
-cd ../functions/
-sino_tomophan3D = buildSino3D(ModelNo, N, det, single(angles)); 
-cd ../matlab/
+sino_tomophan3D = buildSino3D(ModelNo, N, det, single(angles), pathTP); 
 toc;
 %%
 % obtaining 3D parallel-beam sinogram of a phantom using ASTRA-toolbox

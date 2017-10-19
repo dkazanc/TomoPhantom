@@ -10,17 +10,18 @@
 
 #define M_PI 3.14159265358979323846
 
-/* Function to read from a file the required parameters to build 3D analytical model, see Phantom3DLibrary.dat to modify parameters
- * (MATLAB wrapper)
+/* Function to read from the file Phantom3DLibrary.dat the required parameters to build 3D analytical models
+ * (MATLAB mex-wrapper)
  *
  * Input Parameters:
- * 1. ModelNo - the model number from Phantom3DLibrary file
+ * 1. ModelNo - a model number from Phantom3DLibrary file
  * 2. VolumeSize in voxels (N x N x N)
+ * 3. An absolute path to the file Phantom3DLibrary.dat (see OS-specific differences in synthaxis)
  *
  * Output:
  * 1. The analytical phantom size of [N x N x N]
  *
- * License: Version 2.0
+ * License: Apache Version 2.0
  * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
  */
 
@@ -31,17 +32,21 @@ void mexFunction(
 {
     int ModelSelected, N;
     float *A;
+    char *ModelParameters_PATH;
     
     /*Handling Matlab input data*/
-    if (nrhs != 2) mexErrMsgTxt("Input of 2 parameters is required: model and dimension");
+    if (nrhs != 3) mexErrMsgTxt("Input of 3 parameters is required: model, dimension, PATH");
     
     ModelSelected  = (int) mxGetScalar(prhs[0]); /* selected model */
     N  = (int) mxGetScalar(prhs[1]); /* choosen dimension (N x N x N) */
+    ModelParameters_PATH = mxArrayToString(prhs[2]); /* provide an absolute path to the file */      
     
     /*Handling Matlab output data*/
     int N_dims[] = {N, N, N};
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL));   
     
-    buildPhantom3D_core(A, ModelSelected, N, "models/Phantom3DLibrary.dat");
+    buildPhantom3D_core(A, ModelSelected, N, ModelParameters_PATH);
+    
+    mxFree(ModelParameters_PATH);
 }
 
