@@ -15,12 +15,12 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     float *Zdel = NULL, *Zdel2 = NULL, *Sinorange_P_Ar=NULL, *AnglesRad=NULL;
     float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00;
     
-    Sinorange_Pmax = (float)(P)/(float)(N);
+    Sinorange_Pmax = (float)(P)/(float)(N+1);
     Sinorange_Pmin = -Sinorange_Pmax;
     
     Sinorange_P_Ar = malloc(P*sizeof(float));
     H_p = (Sinorange_Pmax - Sinorange_Pmin)/(P-1);
-    for(i=0; i<P; i++) {Sinorange_P_Ar[i] = Sinorange_Pmax - (float)i*H_p;}
+    for(i=0; i<P; i++) {Sinorange_P_Ar[i] = (Sinorange_Pmax) - (float)i*H_p;}
     
     Tomorange_X_Ar = malloc(N*sizeof(float));
     Tomorange_Xmin = -1.0f;
@@ -41,10 +41,8 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 		/* astra-toolbox settings */
 		/*2D parallel beam*/		
         x00 = x0 + 0.5f*H_x;
-		y00 = y0 + 0.5f*H_x;
-        
-	}
-	
+ 		y00 = y0 + 0.5f*H_x;
+	}    
 	/* parameters of an object have been extracted, now run the building module */
 	/************************************************/
 	c22 = c*c;
@@ -63,7 +61,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 		/* The object is a volumetric gaussian */
 #pragma omp parallel for shared(A,Zdel2) private(k,i,j,a1,b1,C00,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3,AA5)
 		for(k=0; k<N; k++) {
-			if (Zdel2[k] <= 1) {
+			if (Zdel2[k] <= 1) {                
 				a1 = a*powf((1.0f - Zdel2[k]),2);
 				if (a1 == 0.0f) a1 = (float)EPS;
 				b1 = b*powf((1.0f - Zdel2[k]),2);
@@ -118,7 +116,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 		} /*k-loop*/
 	}
 	else if (Object == 3) {
-		/* the object is an elliptical disk */
+ 		/* the object is an elliptical disk */
 		a22 = a*a;
 		b22 = b*b;
 		AA5 = (N*C0*a*b);
