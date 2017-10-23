@@ -1,7 +1,7 @@
 % Script to generate 3D analytical phantoms
 % If one needs to modify/add phantoms just edit Phantom3DLibrary.dat
 
-close all;clc;clear all;
+close all;clc;clear;
 % adding paths
 addpath('../functions/'); addpath('../functions/models/');
 
@@ -67,8 +67,8 @@ toc;
 err_diff = norm(sino_tomophan3D(:) - sino_astra3D(:))./norm(sino_astra3D(:));
 fprintf('%s %.4f\n', 'NRMSE for sino residuals:', err_diff);
 figure; 
-subplot(1,2,1); imshow(sino_tomophan3D(:,:,128)', []); colormap hot; colorbar; title('Exact sinogram');
-subplot(1,2,2); imshow(sino_astra3D(:,:,128)', []); colormap hot;colorbar; title('Discrete sinogram');
+subplot(1,2,1); imagesc(sino_tomophan3D(:,:,128)', [0 70]); colormap hot; colorbar; daspect([1 1 1]); title('Exact sinogram');
+subplot(1,2,2); imagesc(sino_astra3D(:,:,128)', [0 70]); colormap hot; colorbar; daspect([1 1 1]); title('Discrete sinogram');
 %%
 % Reconstruction using ASTRA-toolbox (FBP)
 % Create a data object for the reconstruction
