@@ -85,7 +85,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                 for(i=0; i<N; i++) {
                     for(j=0; j<N; j++) {
                         T = C1*(a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2));
-                        A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + C00*expf(T);
+                        A[(k)*N*N + (i)*N + (j)] += C00*expf(T);
                     }}
             }
         } /*k-loop*/
@@ -106,7 +106,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C00*sqrtf(1.0f - T);
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
+                        A[(k)*N*N + (i)*N + (j)] += T;
                     }}
             }
         } /*k-loop*/
@@ -131,7 +131,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
+                        A[(k)*N*N + (i)*N + (j)] += T;
                     }}
             }
         } /*k-loop*/
@@ -152,56 +152,35 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                         T = (4.0f*a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (4.0f*b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C00*sqrtf(1.0f - T);
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
+                        A[(k)*N*N + (i)*N + (j)] += T;
                     }}
             }
         } /*k-loop*/
 
     }
-//     else if (Object == 5) {
-//         /*the object is a cone (13)*/
-// #pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
-//         for(k=0; k<N; k++) {
-//             if (Zdel2[k] <= 1) {
-//                 a22 = a*powf((1.0f - Zdel2[k]),2);
-//                 a2 = 1.0f/a22;
-//                 b22 = b*powf((1.0f - Zdel2[k]),2);
-//                 b2 = 1.0f/b22;
-//                 C00 = C0*(powf((1.0f - Zdel2[k]),2));
-//                 
-//                 for(i=0; i<N; i++) {
-//                     for(j=0; j<N; j++) {
-//                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-//                         if (T <= 1) T = C00*(1.0f - sqrtf(T));
-//                         else T = 0.0f;
-//                         A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
-//                     }}
-//             }
-//         } /*k-loop*/
-//     }
-//     else if (Object == 6) {
-//         /* the object is a parabola Lambda = 3/2 (14)*/
-// #pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
-//         for(k=0; k<N; k++) {
-//             if (Zdel2[k] <= 1) {
-//                 a22 = a*powf((1.0f - Zdel2[k]),2);
-//                 a2 = 1.0f/a22;
-//                 b22 = b*powf((1.0f - Zdel2[k]),2);
-//                 b2 = 1.0f/b22;
-//                 C00 = C0*(powf((1.0f - Zdel2[k]),2));
-//                 
-//                 for(i=0; i<N; i++) {
-//                     for(j=0; j<N; j++) {
-//                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-//                         if (T <= 1) T = C00*(powf((1.0f - T), 1.5f));
-//                         else T = 0.0f;
-//                         A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
-//                     }}
-//             }
-//         } /*k-loop*/
-//     }
     else if (Object == 5) {
-        /* the object is a rectangle (18) */
+        /*the object is a cone*/
+#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
+        for(k=0; k<N; k++) {
+            if (Zdel2[k] <= 1) {
+                a22 = a*powf((1.0f - Zdel2[k]),2);
+                a2 = 1.0f/a22;
+                b22 = b*powf((1.0f - Zdel2[k]),2);
+                b2 = 1.0f/b22;
+                C00 = C0*(powf((1.0f - Zdel2[k]),2));
+                
+                for(i=0; i<N; i++) {
+                    for(j=0; j<N; j++) {
+                        T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
+                        if (T <= 1) T = C00*(1.0f - sqrtf(T));
+                        else T = 0.0f;
+                        A[(k)*N*N + (i)*N + (j)] += T;
+                    }}
+            }
+        } /*k-loop*/
+    }
+    else if (Object == 6) {
+        /* the object is a rectangle */
         float x0r, y0r, HX, HY;
         a2 = 0.5f*a;
         b2 = 0.5f*b;
@@ -226,7 +205,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                             HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
                             if (HY <= b2) {T = C0;}
                         }
-                        A[(k)*N*N + (i)*N + (j)] = A[(k)*N*N + (i)*N + (j)] + T;
+                        A[(k)*N*N + (i)*N + (j)] += T;
                     }
                 }
             }

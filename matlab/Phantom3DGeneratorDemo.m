@@ -1,12 +1,13 @@
-% Script to generate 3D analytical phantoms
+% Script to generate 3D analytical phantoms and their sinograms
 % If one needs to modify/add phantoms just edit Phantom3DLibrary.dat
+% >>>> Requirements: ASTRA toolbox if one needs to do reconstruction <<<<<
 
 close all;clc;clear;
 % adding paths
 addpath('../functions/'); addpath('../functions/models/');
 
 
-ModelNo = 04; % Select a model
+ModelNo = 05; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -15,17 +16,17 @@ pathTP = '/home/algol/Documents/MATLAB/TomoPhantom/functions/models/Phantom3DLib
 [G] = buildPhantom3D(ModelNo,N,pathTP);
 
 % check the cenral slice
-figure(1); imshow(G(:,:,round(0.5*N)), []);
+figure; imagesc(G(:,:,round(0.5*N)), [0 1]); daspect([1 1 1]); colormap hot;
 
-% see the whole 3D Phantom
-% figure(2);
+% visualise/save the whole 3D Phantom
+% % figure(2);
 % filename = strcat('ModelNo',num2str(ModelNo));
 % counter = 1;
 % for i = 1:N
 %     imshow(G(:,:,i), [0 1]);
 %     pause(0.01);
-    
-    % write tiff images
+%     
+% % % % %     write tiff images
 %     IM = im2uint16(G(:,:,i));
 %     setStrNo = num2str(counter);
 %     if (counter < 10)
@@ -42,15 +43,12 @@ figure(1); imshow(G(:,:,round(0.5*N)), []);
 % end
 % close (figure(2));
 %%
-% obtaining 3D parallel-beam exact sinogram using TomoPhantom
-angles = 1:0.5:180;
+fprintf('%s \n', 'Calculating 3D parallel-beam exact sinogram using TomoPhantom...');
+angles = linspace(0,180,N); % projection angles
 det = round(sqrt(2)*N);
-tic; 
-sino_tomophan3D = buildSino3D(ModelNo, N, det, single(angles), pathTP); 
-toc;
+sino_tomophan3D = buildSino3D(ModelNo, N, det, single(angles), pathTP, 'astra'); 
 %%
-% obtaining 3D parallel-beam sinogram of a phantom using ASTRA-toolbox
-% [G] = buildPhantom3D(ModelNo,N);
+fprintf('%s \n', 'Calculating 3D parallel-beam sinogram of a phantom using ASTRA-toolbox...');
 proj_geom = astra_create_proj_geom('parallel', 1, det, (angles*pi/180));
 vol_geom = astra_create_vol_geom(N,N);
 sino_astra3D = zeros(det,length(angles),N,'single');
@@ -70,7 +68,7 @@ figure;
 subplot(1,2,1); imagesc(sino_tomophan3D(:,:,128)', [0 70]); colormap hot; colorbar; daspect([1 1 1]); title('Exact sinogram');
 subplot(1,2,2); imagesc(sino_astra3D(:,:,128)', [0 70]); colormap hot; colorbar; daspect([1 1 1]); title('Discrete sinogram');
 %%
-% Reconstruction using ASTRA-toolbox (FBP)
+fprintf('%s \n', 'Reconstruction using ASTRA-toolbox (FBP)...');
 % Create a data object for the reconstruction
 cfg = astra_struct('FBP_CUDA');
 cfg.FilterType = 'Ram-Lak';
@@ -97,22 +95,5 @@ astra_mex_data2d('delete', sinogram_id);
 astra_mex_data2d('delete', rec_id);
 FBP3D(:,:,i) = single(rec);
 end
-figure(4); imshow(FBP3D(:,:,round(0.5*N)), []);
-
+figure; imagesc(FBP3D(:,:,round(0.5*N)), [0 1]); daspect([1 1 1]); colormap hot;
 %%
-% angles = 1:0.5:180;
-% sino = radon(G(:,:,128), angles);
-% det = 367;
-% recon_size = 256;
-% 
-% cd ../functions/
-% F = buildSino3D(01, recon_size, det, single(angles));
-% cd ../matlab/
-% 
-% figure(3); imshow(sino, []);
-% figure(4); imshow(F(:,:,128)', []);
-% 
-% 
-% FBP_analyt = iradon(F(:,:,128)',angles,recon_size);
-% FBP_discr = iradon(sino,angles,recon_size);
-% %%

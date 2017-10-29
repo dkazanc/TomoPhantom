@@ -13,18 +13,21 @@ The software is focused mainly on tomographic image reconstruction (TIR) case. F
 good choice due to the piecewise-constant nature. This toolbox provides a simple modular approach to build customisable 2D and 3D phantoms consisting of 
 piecewise-constant and also smooth analytical objects. The objects include: gaussians, parabolas, ellipses, cones, rectangulars, etc. The exact Radon
 Transform in parallel beam geometry of a phantom can be obtained, therefore producing an analytical sinogram. Those sinograms can be used for testing purposes
-without so-called the ['Inverse Crime'](http://www.sciencedirect.com/science/article/pii/S0377042705007296). Additionally, the code for geometric transformation 
+without so-called the ['Inverse Crime'](http://www.sciencedirect.com/science/article/pii/S0377042705007296). TomoPhantom is compatable with 
+['ASTRA-toolbox'](http://www.astra-toolbox.com/) and therefore the data can be directly reconstructed using ASTRA (see examples). Additionally, the code for geometric transformation 
 introduced  in the paper [1] has been added to generate fan-beam sinograms by non-linear deformation of a phantom. 
 
 ### Package contents:
 
-Currently **TomoPhantom** is for MATLAB, however a Python version is expected
-- **PhantomGeneratorDemo.m** and **Phantom3DGeneratorDemo.m** are main demo scripts;
+**TomoPhantom** is available for MATLAB and Python (all main functions written in C-OMP)
+- **Phantom2DGeneratorDemo.m** and **Phantom3DGeneratorDemo.m** are demo scripts;
 - **SpectralPhantomDemo.m** a script to generate spectral phantom with 4 dedicated materials;
-- **PhantomLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with models parameters;
-- **buildPhantom.m** and **buildPhantom3D.m** are functions to build 2D and 3D phantoms, respectively;
-- **buildSino.m** and **buildSino3D.m** are functions to build 2D and 3D analytical sinograms, respectively;
-- **DeformObject.c**  mex wrapped C function to deform objects according to nonlinear geometrical transformation [1]; 
+- **Phantom2DDeformationDemo.m** a script demonstrating nonlinear geometrical transformation [1]; 
+- **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with models parameters;
+
+### Installation:
+- For MATLAB run **compile_mex.m** to compiled mexed C functions
+- For Python see ReadMe in python 'directory'
 
 ### If software is used, please cite the paper:
 

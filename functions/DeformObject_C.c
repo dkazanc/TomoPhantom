@@ -33,7 +33,7 @@ void mexFunction(
         
 {
     int number_of_dims, dimX, dimY, DeformType, i;
-    const int  *dim_array;
+    const mwSize  *dim_array;
     double *A, *B, *Tomorange_X_Ar=NULL, RFP, angle, angleRad, Tomorange_Xmin, Tomorange_Xmax, H_x;;
     
     number_of_dims = mxGetNumberOfDimensions(prhs[0]);
