@@ -14,7 +14,7 @@ good choice due to the piecewise-constant nature. This toolbox provides a simple
 piecewise-constant and also smooth analytical objects. The objects include: gaussians, parabolas, ellipses, cones, rectangulars, etc. The exact Radon
 Transform in parallel beam geometry of a phantom can be obtained, therefore producing an analytical sinogram. Those sinograms can be used for testing purposes
 without so-called the ['Inverse Crime'](http://www.sciencedirect.com/science/article/pii/S0377042705007296). TomoPhantom is compatable with 
-['ASTRA-toolbox'](http://www.astra-toolbox.com/) and therefore the data can be directly reconstructed using ASTRA (see examples). Additionally, the code for geometric transformation 
+['ASTRA-toolbox'](http://www.astra-toolbox.com/) and therefore the generated data can be directly reconstructed using ASTRA (see examples). Additionally, the code for geometric transformation 
 introduced  in the paper [1] has been added to generate fan-beam sinograms by non-linear deformation of a phantom. 
 
 ### Package contents:
@@ -26,7 +26,7 @@ introduced  in the paper [1] has been added to generate fan-beam sinograms by no
 - **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with models parameters;
 
 ### Installation:
-- For MATLAB run **compile_mex.m** to compiled mexed C functions
+- For MATLAB run **compile_mex.m** to compile mexed C functions
 - For Python see ReadMe in python 'directory'
 
 ### If software is used, please cite the paper:
