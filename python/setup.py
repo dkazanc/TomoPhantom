@@ -22,7 +22,7 @@ if platform.system() == 'Windows':
     extra_compile_args += ['/DWIN32', '/openmp']
 else:
     extra_compile_args += ['-fopenmp', '-O2', '-Wall', '-std=c99']
-    extra_libraries += ['m']
+    extra_libraries += ['m','gomp']
     
 setup(
     name='tomophantom',
