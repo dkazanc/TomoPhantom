@@ -29,6 +29,10 @@ introduced  in the paper [1] has been added to generate fan-beam sinograms by no
 - For MATLAB run **compile_mex.m** to compile mexed C functions
 - For Python see ReadMe in python 'directory'
 
+### License:
+- The project uses Apache License v.2, but some demo files where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) employed are of GPLv3 license
+
+
 ### If software is used, please cite the paper:
 
 [1] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/582/8704/GP_IPSE.pdf)
