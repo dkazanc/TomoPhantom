@@ -7,7 +7,7 @@
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('install/'); 
+addpath('../functions/models/'); addpath('compiled/'); 
 
 ModelNo = 06; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions

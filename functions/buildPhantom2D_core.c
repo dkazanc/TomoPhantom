@@ -17,6 +17,7 @@ limitations under the License.
 #include <memory.h>
 #include <stdio.h>
 #include "omp.h"
+#include "utils.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -160,7 +161,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
 float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
-    int ii;
+    int ii, func_val;
     if (! in_file )
     {
         printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
@@ -222,14 +223,21 @@ float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParamet
                     if  (strcmp(tmpstr1,"Object") == 0) {
                         Object = atoi(tmpstr2); /* analytical model */
                         C0 = (float)atof(tmpstr3); /* intensity */
-                        x0 = (float)atof(tmpstr4); /* x0 position */
-                        y0 = (float)atof(tmpstr5); /* y0 position */
+                        y0 = (float)atof(tmpstr4); /* x0 position */
+                        x0 = (float)atof(tmpstr5); /* y0 position */
                         a = (float)atof(tmpstr6); /* a - size object */
                         b = (float)atof(tmpstr7); /* b - size object */
                         phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
                         /*printf("\nObject : %i \nC0 : %f \nx0 : %f \nc : %f \n", Object, C0, x0, c);*/
                     }
-                    buildPhantom2D_core_single(A, N, Object, C0, x0, y0, a, b, phi_rot);
+                    
+                     /*  check that the parameters are reasonable  */
+                    func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
+                    
+                    /* build phantom */
+                    if (func_val == 0) buildPhantom2D_core_single(A, N, Object, C0, x0, y0, a, b, phi_rot);
+                    else printf("\nFunction prematurely terminated, not all objects included");         
+                    
                 }
             }
             

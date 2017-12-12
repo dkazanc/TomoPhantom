@@ -6,7 +6,7 @@
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('install/'); 
+addpath('../functions/models/'); addpath('compiled/'); 
 
 ModelNo = 7; % Select a model (0 - 43  )
 % Define phantom dimensions
