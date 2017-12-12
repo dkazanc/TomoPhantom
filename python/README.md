@@ -20,7 +20,7 @@ tomophantom.phantom3d.build_volume_phantom_3d('<model parameters files>', <model
 ```
 
 ```python
-from tomophantom import phanton3d
+from tomophantom import phantom3d
 #This will generate 256x256x256 phantom
 data = phantom3d.build_volume_phantom_3d('models/Phantom3DLibrary.dat', 1, 256)
 ```
@@ -32,7 +32,7 @@ tomophantom.phantom3d.build_sinogram_phantom_3d('<model parameters files>', <mod
 ```
 
 ```python
-from tomophantom import phanton3d
+from tomophantom import phantom3d
 #This will generate 64x256x256 phantom with astra centering
 data = phantom3d.build_sinogram_phantom_3d('models/Phantom3DLibrary.dat', 1, 256, 256, numpy.linspace(0,180,64,dtype='float32'), 1)
 ```

@@ -1,3 +1,17 @@
+/*
+Copyright 2017 Daniil Kazantsev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 #include "mex.h"
 #include <matrix.h>
 #include <math.h>
@@ -8,7 +22,7 @@
 
 #define M_PI 3.14159265358979323846
 
-/* C-OMP function to perform forward/inverse deformation according to [1]
+/* C-OMP Mex-function to perform forward/inverse deformation according to [1]
  *
  * Input Parameters:
  * 1. A - image to deform (N x N )
@@ -22,7 +36,6 @@
  * to compile with OMP support: mex DeformObject_C.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
  * References:
  * [1] D. Kazantsev & V. Pickalov, "New iterative reconstruction methods for fan-beam tomography" IPSE, 2017
- * D. Kazantsev, 2016-17
  */
 
 double Deform_func(double *A, double *B, double *Tomorange_X_Ar, double H_x, double RFP, double angleRad, int DeformType, int dimX, int dimY);

@@ -1,17 +1,22 @@
+% GPLv3 license (ASTRA toolbox)
+% note that TomoPhantom package released under Apache License, Version 2.0
+
 % Script to generate 2D analytical phantoms and sinograms (parallel beam)
 % that can be used to test reconstruction algorithms without Inverse Crime
 % If one needs to modify/add phantoms just edit Phantom2DLibrary.dat
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('supp/'); 
+addpath('../functions/models/'); addpath('install/'); 
 
 ModelNo = 06; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
-% generate 2D phantom:
-pathTP = '/home/algol/Documents/MATLAB/TomoPhantom/functions/models/Phantom2DLibrary.dat'; % path to TomoPhantom parameters file
+% Generate 2D phantom:
+curDir   = pwd;
+mainDir  = fileparts(curDir);
+pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
 [G] = buildPhantom2D(ModelNo,N,pathTP);
 figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
 %%

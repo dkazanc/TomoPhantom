@@ -1,18 +1,23 @@
+% GPLv3 license (ASTRA toolbox)
+% note that TomoPhantom package released under Apache License, Version 2.0
+
 % Script to generate 3D analytical phantoms and their sinograms
 % If one needs to modify/add phantoms just edit Phantom3DLibrary.dat
 % >>>> Requirements: ASTRA toolbox if one needs to do reconstruction <<<<<
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/'); addpath('../functions/models/');
+addpath('../functions/models/'); addpath('install/'); 
 
 
-ModelNo = 05; % Select a model
+ModelNo = 02; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
 % generate 3D phantom (modify your PATH bellow):
-pathTP = '/home/algol/Documents/MATLAB/TomoPhantom/functions/models/Phantom3DLibrary.dat'; % path to TomoPhantom parameters file
+curDir   = pwd;
+mainDir  = fileparts(curDir);
+pathTP = strcat(mainDir,'/functions/models/Phantom3DLibrary.dat'); % path to TomoPhantom parameters file
 [G] = buildPhantom3D(ModelNo,N,pathTP);
 
 % check the cenral slice

@@ -1,3 +1,17 @@
+/*
+Copyright 2017 Daniil Kazantsev
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 #include <math.h>
 #include <stdlib.h>
 #include <memory.h>
@@ -7,6 +21,20 @@
 #define M_PI 3.14159265358979323846
 #define EPS 0.000000001
 
+
+/* Function to create 2D analytical sinograms (parallel beam geometry) to 2D phantoms using Phantom2DLibrary.dat
+ *
+ * Input Parameters:
+ * 1. Model number (see Phantom2DLibrary.dat) [required]
+ * 2. VolumeSize in voxels (N x N ) [required]
+ * 3. Detector array size P (in pixels) [required]
+ * 4. Projection angles Th (in degrees) [required]
+ * 5. An absolute path to the file Phantom2DLibrary.dat (see OS-specific syntax-differences) [required]
+ * 6. VolumeCentring, choose 'radon' or 'astra' (default) [optional]
+ *
+ * Output:
+ * 1. 2D sinogram size of [P, length(Th)]
+ */
 
 float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float a, float b, float phi_rot)
 {
@@ -244,24 +272,6 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     free(Tomorange_X_Ar); free(Sinorange_P_Ar); free(AnglesRad);
     return *A;
 }
-
-
-/* Function to create 2D analytical sinograms (parallel beam geometry) to 2D phantoms using Phantom2DLibrary.dat
- *
- * Input Parameters:
- * 1. Model number (see Phantom2DLibrary.dat) [required]
- * 2. VolumeSize in voxels (N x N ) [required]
- * 3. Detector array size P (in pixels) [required]
- * 4. Projection angles Th (in degrees) [required]
- * 5. An absolute path to the file Phantom2DLibrary.dat (see OS-specific syntax-differences) [required]
- * 6. VolumeCentring, choose 'radon' or 'astra' (default) [optional]
- *
- * Output:
- * 1. 2D sinogram size of [P, length(Th)]
- *
- * License: Apache Version 2.0
- * Copyright {2017} {Daniil Kazantsev, The University of Manchester}
- */
 
 float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {

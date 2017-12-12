@@ -1,15 +1,19 @@
+% note that TomoPhantom package released under Apache License, Version 2.0
+
 % generating material-specific spectral phantom
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('supp/'); 
+addpath('../functions/models/'); addpath('install/'); 
 
 ModelNo = 11; 
 % Define phantom dimension
 N = 512; % x-y size (squared image)
 
 % generate the 2D phantom:
-pathTP = '/home/algol/Documents/MATLAB/TomoPhantom/functions/models/Phantom2DLibrary.dat'; % path to TomoPhantom parameters file
+curDir   = pwd;
+mainDir  = fileparts(curDir);
+pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
 [G] = buildPhantom2D(ModelNo,N,pathTP);
 figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
 
