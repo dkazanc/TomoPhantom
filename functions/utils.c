@@ -38,6 +38,7 @@ float parameters_check2D(float C0, float x0, float y0, float a, float b, float p
     return 0;
 }
 
+
 float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 {
     if (C0 <= 0) {
@@ -69,3 +70,4 @@ float parameters_check3D(float C0, float x0, float y0, float z0, float a, float 
     }
     return 0;
 }
+
