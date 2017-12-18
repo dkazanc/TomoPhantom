@@ -5,7 +5,7 @@
 % If one needs to modify/add phantoms just edit Phantom3DLibrary.dat
 % >>>> Requirements: ASTRA toolbox if one needs to do reconstruction <<<<<
 
-close all;clc;clear;
+% close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); 
 
@@ -20,17 +20,20 @@ mainDir  = fileparts(curDir);
 pathTP = strcat(mainDir,'/functions/models/Phantom3DLibrary.dat'); % path to TomoPhantom parameters file
 [G] = buildPhantom3D(ModelNo,N,pathTP);
 
-% check the cenral slice
-figure; imagesc(G(:,:,round(0.5*N)), [0 1]); daspect([1 1 1]); colormap hot;
+% check all 3 projections
+figure; 
+subplot(1,3,1); imagesc(G(:,:,round(0.5*N)), [0 1]); daspect([1 1 1]); colormap hot;
+subplot(1,3,2); imagesc(squeeze(G(:,round(0.5*N),:)), [0 1]); daspect([1 1 1]); colormap hot;
+subplot(1,3,3); imagesc(squeeze(G(round(0.5*N),:,:)), [0 1]); daspect([1 1 1]); colormap hot;
 
 % visualise/save the whole 3D Phantom
 % % figure(2);
 % filename = strcat('ModelNo',num2str(ModelNo));
 % counter = 1;
 % for i = 1:N
-%     imshow(G(:,:,i), [0 1]);
-%     pause(0.01);
-%     
+% %     imshow(G(:,:,i), [0 1]);
+% %     pause(0.01);
+% %     
 % % % % %     write tiff images
 %     IM = im2uint16(G(:,:,i));
 %     setStrNo = num2str(counter);

@@ -1,6 +1,6 @@
-# 2D Phantom library, please use the following notations to define geometrical figures:
+# 2D Phantom library, please use the following notations to define 2D geometrical objects:
 # 1-gaussian, 2-parabola1/2, 3-ellipse, 4-parabola1, 5-cone, 6-rectangle
-# Synth : Object : object no, C0, x0, y0, a, b, angle
+# syntax for object decription -- Object : object no, C0, x0, y0, a, b, angle
 #----------------------------------------------------
 # 1 gaussian
 Model : 01;
