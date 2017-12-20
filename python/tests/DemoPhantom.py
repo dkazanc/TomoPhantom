@@ -14,7 +14,7 @@ model = 8
 N_size = 256
 path = '/home/algol/Documents/MATLAB/TomoPhantom/functions/models/Phantom3DLibrary.dat'
 #This will generate a N_size x N_size x N_size phantom (3D)
-phantom_tm = phantom3d.build_volume_phantom_3d(path, model, N_size)
+phantom_tm = phantom3d.buildPhantom3D(model, N_size, path)
 
 pylab.figure(1) 
 pylab.subplot(211)

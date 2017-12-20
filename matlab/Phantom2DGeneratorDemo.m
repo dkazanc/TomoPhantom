@@ -9,7 +9,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); 
 
-ModelNo = 06; % Select a model from Phantom2DLibrary.dat
+ModelNo = 11; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 

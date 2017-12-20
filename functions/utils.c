@@ -43,7 +43,7 @@ float parameters_check2D(float C0, float x0, float y0, float a, float b, float p
 }
 
 
-float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
+float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c)
 {
     if (C0 <= 0) {
         printf("%s %f\n", "C0 (intensity) cannot be negative or equal to zero, the given value is", C0);
@@ -78,14 +78,14 @@ float parameters_check3D(float C0, float x0, float y0, float z0, float a, float 
 float su3(float *A, float psi1, float psi2, float psi3)
 {
     A[0] = cosf(psi1)*cosf(psi2)*cosf(psi3)-sinf(psi1)*sinf(psi3);
-    A[1] =sinf(psi1)*cosf(psi2)*cosf(psi3)+cosf(psi1)*sinf(psi3);
-    A[2]=-sinf(psi2)*cosf(psi3);
-    A[3]=-cosf(psi1)*cosf(psi2)*sinf(psi3)-sinf(psi1)*cosf(psi3);
-    A[4]=-sinf(psi1)*cosf(psi2)*sinf(psi3)+cosf(psi1)*cosf(psi3);
-    A[5]=sinf(psi2)*sinf(psi3);
-    A[6]=cosf(psi1)*sinf(psi2);
-    A[7]=sinf(psi1)*sinf(psi2);
-    A[8]=cosf(psi2);
+    A[1] = sinf(psi1)*cosf(psi2)*cosf(psi3)+cosf(psi1)*sinf(psi3);
+    A[2] = -sinf(psi2)*cosf(psi3);
+    A[3] = -cosf(psi1)*cosf(psi2)*sinf(psi3)-sinf(psi1)*cosf(psi3);
+    A[4] = -sinf(psi1)*cosf(psi2)*sinf(psi3)+cosf(psi1)*cosf(psi3);
+    A[5] = sinf(psi2)*sinf(psi3);
+    A[6] = cosf(psi1)*sinf(psi2);
+    A[7] = sinf(psi1)*sinf(psi2);
+    A[8] = cosf(psi2);
     
     return *A;
 }

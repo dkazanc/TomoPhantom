@@ -36,10 +36,10 @@ limitations under the License.
  * 1. 3D sinogram size of [P, length(Th), N]
  */
 
-float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
+float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi_gr1, float psi_gr2, float psi_gr3)
 {
     int i, j, k;
-    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, b22, c22, c2, phi_rot_radian;
+    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, b22, c2, phi_rot_radian, phi, theta;
     float *Zdel = NULL, *Zdel2 = NULL, *Sinorange_P_Ar=NULL, *AnglesRad=NULL;
     float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00;
     
@@ -73,10 +73,15 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     }
     /* parameters of an object have been extracted, now run the building module */
     /************************************************/
-    c22 = c*c;
-    c2 = 1.0f/c22;
+    a2 = 1.0f/(a*a);
+    b2 = 1.0f/(b*b);    
+    c2 = 1.0f/(c*c);  
+    
     if (Object == 4) c2 =4.0f*c2;
-    phi_rot_radian = (phi_rot)*((float)M_PI/180.0f);
+    phi_rot_radian = (psi_gr1)*((float)M_PI/180.0f);
+    
+    phi = (psi_gr1)*((float)M_PI/180.0f);
+    theta = (psi_gr2)*((float)M_PI/180.0f);    
     
     Zdel = malloc(N*sizeof(float));
     Zdel2 = malloc(N*sizeof(float));
@@ -85,20 +90,16 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     }
     for(i=0; i<N; i++)  {Zdel2[i] = c2*powf(Zdel[i],2);}
     
+    float A_multip, D_multip, E_multip, F_multip, u0, v0, lam1, lam2, lam3;
+    lam1 = fabs(C1)*a2; lam2 = fabs(C1)*b2; lam3 = fabs(C1)*c2;
+    
+    
     if (Object == 1) {
         /* The object is a volumetric gaussian */
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a1,b1,C00,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3,AA5)
-        for(k=0; k<N; k++) {
-            if (Zdel2[k] <= 1) {
-                a1 = a*powf((1.0f - Zdel2[k]),2);
-                if (a1 == 0.0f) a1 = (float)EPS;
-                b1 = b*powf((1.0f - Zdel2[k]),2);
-                if (b1 == 0.0f) b1 = (float)EPS;
-                //C00 = C0*((exp(pow((1.0f - Zdel2[k]),1/2)))/2.7183f);
-                C00 = C0*(powf((1.0f - Zdel2[k]),2));
-                if (C00 == 0.0f) C00 = (float)EPS;
+// #pragma omp parallel for shared(A,Zdel2) private(k,i,j,a1,b1,C00,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3,AA5)
+        for(k=0; k<N; k++) {                            
+                AA5 = (N/2.0f)*(C0*sqrtf(a1)*sqrtf(b1)/2.0f)*sqrtf((float)M_PI/logf(2.0f));
                 
-                AA5 = (N/2.0f)*(C00*sqrtf(a1)*sqrtf(b1)/2.0f)*sqrtf((float)M_PI/logf(2.0f));
                 for(i=0; i<AngTot; i++) {
                     sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
                     cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
@@ -110,9 +111,7 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                         AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                         under_exp = (C1*AA3)*delta1;
                         A[(k)*P*AngTot + (i)*P + (j)] += first_dr*expf(under_exp);
-                    }}
-            }
-        } /*k-loop*/
+                    }}} /*k-loop*/
     }
     else if (Object == 2) {
         /* the object is a parabola Lambda = 1/2 */
@@ -364,14 +363,16 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
     char tmpstr8[16];
     char tmpstr9[16];
     char tmpstr10[16];
+    char tmpstr11[16];
+    char tmpstr12[16];
     
     int Model = 0, Components = 0, Object = 0;
-    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, phi_rot = 0.0f;
+    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
     
-    char tempbuff[100];
+    char tempbuff[200];
     while(!feof(in_file))
     {
-        if (fgets(tempbuff,100,in_file)) {
+        if (fgets(tempbuff,200,in_file)) {
             
             if(tempbuff[0] == '#') continue;
             
@@ -386,7 +387,7 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
             if (ModelSelected == Model) {
                 /* read the model parameters */
                 printf("\nThe selected Model : %i \n", Model);
-                if (fgets(tempbuff,100,in_file)) {
+                if (fgets(tempbuff,200,in_file)) {
                     sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2); }
                 if  (strcmp(tmpstr1,"Components") == 0) {
                     Components = atoi(tmpstr2);
@@ -399,8 +400,8 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                 /* loop over all components */
                 for(ii=0; ii<Components; ii++) {
                     
-                    if (fgets(tempbuff,100,in_file)) {
-                        sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10);
+                    if (fgets(tempbuff,200,in_file)) {
+                        sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10, tmpstr11, tmpstr12);
                     }
                     if  (strcmp(tmpstr1,"Object") == 0) {
                         Object = atoi(tmpstr2); /* analytical model */
@@ -411,14 +412,16 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                         a = (float)atof(tmpstr7); /* a - size object */
                         b = (float)atof(tmpstr8); /* b - size object */
                         c = (float)atof(tmpstr9); /* c - size object */
-                        phi_rot = (float)atof(tmpstr10); /* phi - rotation angle */
-                        /*printf("\nObject : %i \nC0 : %f \nx0 : %f \nc : %f \n", Object, C0, x0, c);*/
+                        psi_gr1 = (float)atof(tmpstr10); /* rotation angle 1*/
+                        psi_gr2 = (float)atof(tmpstr11); /* rotation angle 2*/
+                        psi_gr3 = (float)atof(tmpstr12); /* rotation angle 3*/
+                        printf("\nObject : %i \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \nPhi1 : %f \nPhi2 : %f \nPhi3 : %f\n", Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
                         
                         /*  check that the parameters are reasonable  */
                         func_val = parameters_check3D(C0, x0, y0, z0, a, b, c);
                     
                         /* build phantom */
-                        if (func_val == 0)  buildSino3D_core_single(A, N, P, Th, AngTot, CenTypeIn, Object, C0, x0,y0,z0,a,b,c,phi_rot);
+                        if (func_val == 0)  buildSino3D_core_single(A, N, P, Th, AngTot, CenTypeIn, Object, C0, x0,y0,z0,a,b,c,psi_gr1,psi_gr2,psi_gr3);
                         else printf("\nFunction prematurely terminated, not all objects included");
                     }
                 }

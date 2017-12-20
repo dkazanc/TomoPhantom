@@ -5,12 +5,12 @@
 % If one needs to modify/add phantoms just edit Phantom3DLibrary.dat
 % >>>> Requirements: ASTRA toolbox if one needs to do reconstruction <<<<<
 
-% close all;clc;clear;
+close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); 
 
 
-ModelNo = 07; % Select a model
+ModelNo = 01; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -22,17 +22,19 @@ pathTP = strcat(mainDir,'/functions/models/Phantom3DLibrary.dat'); % path to Tom
 
 % check all 3 projections
 figure; 
-subplot(1,3,1); imagesc(G(:,:,round(0.5*N)), [0 1]); daspect([1 1 1]); colormap hot;
-subplot(1,3,2); imagesc(squeeze(G(:,round(0.5*N),:)), [0 1]); daspect([1 1 1]); colormap hot;
-subplot(1,3,3); imagesc(squeeze(G(round(0.5*N),:,:)), [0 1]); daspect([1 1 1]); colormap hot;
+%slice = round(0.5*N);
+slice = 128;
+subplot(1,3,1); imagesc(G(:,:,slice), [0 1]); daspect([1 1 1]); colormap hot; title('Axial Slice');
+subplot(1,3,2); imagesc(squeeze(G(:,slice,:)), [0 1]); daspect([1 1 1]); colormap hot; title('Y-Slice');
+subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colormap hot; title('X-Slice');
 
 % visualise/save the whole 3D Phantom
 % % figure(2);
 % filename = strcat('ModelNo',num2str(ModelNo));
 % counter = 1;
 % for i = 1:N
-% %     imshow(G(:,:,i), [0 1]);
-% %     pause(0.01);
+%     imshow(G(:,:,i), [0 1]);
+%     pause(0.01);
 % %     
 % % % % %     write tiff images
 %     IM = im2uint16(G(:,:,i));

@@ -34,7 +34,9 @@
  * 8. a  - size object
  * 9. b  - size object
  * 10. c - size object
- * 11. phi_rot - rotation angle
+ * 11. psi_gr1 - rotation angle1
+ * 12. psi_gr2 - rotation angle2
+ * 12. psi_gr3 - rotation angle3
  *
  * Output:
  * 1. The analytical phantom size of [N x N x N]
@@ -48,11 +50,13 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
         float a , /* a - size object */
         float b , /* b - size object */
         float c , /* c - size object */
-        float phi_rot /* phi - rotation angle */)
+        float psi_gr1, /* rotation angle1 */
+        float psi_gr2, /* rotation angle2 */
+        float psi_gr3 /* rotation angle3 */)
 {
     int i, j, k;
-    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, C00, a22, a2, b22, b2, c22, c2, phi_rot_radian, sin_phi, cos_phi;
-    float *Xdel = NULL, *Ydel = NULL, *Zdel = NULL, *Zdel2 = NULL, T;
+    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3;
+    float *Xdel = NULL, *Ydel = NULL, *Zdel = NULL, T;
     Tomorange_X_Ar = malloc(N*sizeof(float));
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
@@ -60,139 +64,86 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
     for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
     C1 = -4.0f*logf(2.0f);
     
-    /* parameters of an object have been extracted, now run the building module */
-    /************************************************/
-    c22 = c*c;
-    c2 = 1.0f/c22;
-    if (Object == 4) c2 =4.0f*c2;
-    
-    phi_rot_radian = phi_rot*((float)M_PI/180.0f);
+    /* parameters of a model have been extracted, now run the building module */
+    /************************************************/   
+    phi_rot_radian = psi_gr1*((float)M_PI/180.0f);
     sin_phi=sinf(phi_rot_radian); cos_phi=cosf(phi_rot_radian);
     
     Xdel = malloc(N*sizeof(float));
     Ydel = malloc(N*sizeof(float));
     Zdel = malloc(N*sizeof(float));
-    Zdel2 = malloc(N*sizeof(float));
     for(i=0; i<N; i++)  {
         Xdel[i] = Tomorange_X_Ar[i] - x0;
         Ydel[i] = Tomorange_X_Ar[i] - y0;
         Zdel[i] = Tomorange_X_Ar[i] - z0;
     }
-    for(i=0; i<N; i++)  {Zdel2[i] = c2*powf(Zdel[i],1);}
     
-    if (Object == 1) {
-        /* The object is a volumetric gaussian */
-//#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
-
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,T)
+    psi1 = psi_gr1*((float)M_PI/180.0f);
+    psi2 = psi_gr2*((float)M_PI/180.0f);
+    psi3 = psi_gr3*((float)M_PI/180.0f);
+    
+    float *bs, *xh, *xh1, *xh2;
+    bs = malloc(9*sizeof(float));
+    xh = malloc(3*sizeof(float));
+    xh1 = malloc(3*sizeof(float));
+    
+    a2 = 1.0f/(a*a);
+    b2 = 1.0f/(b*b);    
+    c2 = 1.0f/(c*c);  
+    su3(bs,psi1,psi2,psi3); /*call subroutine (rotation 3x3 matrix) */
+    
+    xh1[0] = x0; xh1[1] = y0; xh1[2] = z0;
+    mmtvc(bs,xh1,xh);  /*call subroutine */
+    free(xh1);
+    
+    if ((Object == 1) || (Object == 2) || (Object == 3) || (Object == 4)) {
+        
+#pragma omp parallel for shared(A) private(k,i,j,T,aa,bb,cc,xh2,xh1)
         for(k=0; k<N; k++) {
-//             if (Zdel2[k] <= 1) {
-                //a22 = (a)*powf((1.0f - Zdel2[k]),2);
-                //if (a22 == 0.0f) a22 = 0.000001f;
-                //a2 = 1.0f/a22;
-                //b22 = (b)*powf((1.0f - Zdel2[k]),2);
-                //if (b22 == 0.0f) b22 = 0.000001f;
-                //b2 = 1.0f/b22;
-                // C00 = C0*((exp(pow((1.0f - Zdel2[k]),2)))/2.7183f);
-                // C00 = C0*(powf((1.0f - Zdel2[k]),2));
-                
-                for(i=0; i<N; i++) {
-                    for(j=0; j<N; j++) {
-                        // T = C1*(a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2));
+            for(i=0; i<N; i++) {
+                for(j=0; j<N; j++) {
+                    if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
                         
-                        T = C1*(powf(Xdel[i]/a,2) + powf(Ydel[j]/b,2) + powf(Zdel[k]/c,2));                        
-                        //aa=alg2*((xx-xg(i))/alg(i))**2
-						//bb=alg2*((yy-yg(i))/btg(i))**2
-						//cc=alg2*((zz-zg(i))/gmg(i))**2                        
-                        A[(k)*N*N + (i)*N + (j)] += C0*expf(T);
-                    }}
-//             }
-        } /*k-loop*/
-    }
-    else if (Object == 2) {
-        /* the object is a parabola Lambda = 1/2 */
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
-        for(k=0; k<N; k++) {
-            if (Zdel2[k] <= 1) {
-                a22 = a*powf((1.0f - Zdel2[k]),2);
-                a2 = 1.0f/a22;
-                b22 = b*powf((1.0f - Zdel2[k]),2);
-                b2 = 1.0f/b22;
-                C00 = C0*(powf((1.0f - Zdel2[k]),2));
-                
-                for(i=0; i<N; i++) {
-                    for(j=0; j<N; j++) {
-                        T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                        if (T <= 1) T = C00*sqrtf(1.0f - T);
+                        xh1 = malloc(3*sizeof(float));
+                        xh2 = malloc(3*sizeof(float));
+                        xh1[0]=Tomorange_X_Ar[i];
+                        xh1[1]=Tomorange_X_Ar[j];
+                        xh1[2]=Tomorange_X_Ar[k];
+                        mmtvc(bs,xh1,xh2);
+                        aa = a2*powf((xh2[0]-xh[0]),2);
+                        bb = b2*powf((xh2[1]-xh[1]),2);
+                        cc = c2*powf((xh2[2]-xh[2]),2);
+                        free(xh1); free(xh2);
+                    }
+                    else {
+                        aa = a2*powf(Xdel[i],2);
+                        bb = b2*powf(Ydel[j],2);
+                        cc = c2*powf(Zdel[k],2);
+                    }
+                    T = (aa + bb + cc);
+                    if (Object == 1) {
+                        /* The object is a volumetric gaussian */
+                        T = C0*expf(C1*T);
+                    }
+                    if (Object == 2) {
+                        /* the object is a parabola Lambda = 1/2 */
+                        if (T <= 1.0f) T = C0*sqrtf(1.0f - T);
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] += T;
-                    }}
-            }
-        } /*k-loop*/
-    }
-    else if (Object == 3) {
-        /* the object is an elliptical disk extended into 3D */
-        a22 = a*a;
-        a2 = 1.0f/a22;
-        b22 = b*b;
-        b2 = 1.0f/b22;
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,T)
-        for(k=0; k<N; k++) {
-            if (Zdel2[k] <= 1) {
-                for(i=0; i<N; i++) {
-                    for(j=0; j<N; j++) {
-                        T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                        if (T <= 1) T = C0;
+                    }
+                    if (Object == 3) {
+                        /* the object is en ellipsoid */
+                        if (T <= 1.0f) T = C0;
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] += T;
-                    }}
-            }
-        } /*k-loop*/
-    }
-    else if (Object == 4) {
-        /* the object is a parabaloid Lambda = 1 (12)*/
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
-        for(k=0; k<N; k++) {
-            if (Zdel2[k] <= 1) {
-                a22 = a*powf((1.0f - Zdel2[k]),2);
-                a2 = 1.0f/a22;
-                b22 = b*powf((1.0f - Zdel2[k]),2);
-                b2 = 1.0f/b22;
-                C00 = C0*(powf((1.0f - Zdel2[k]),2));
-                
-                for(i=0; i<N; i++) {
-                    for(j=0; j<N; j++) {
-                        T = (4.0f*a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (4.0f*b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                        if (T <= 1) T = C00*sqrtf(1.0f - T);
+                    }
+                    if (Object == 4) {
+                         /* the object is a cone */
+                        if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] += T;
-                    }}
-            }
-        } /*k-loop*/
-
+                    }
+                    A[(k)*N*N + (i)*N + (j)] += T;
+                }}}
     }
-    else if (Object == 5) {
-        /*the object is a cone*/
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T,C00)
-        for(k=0; k<N; k++) {
-            if (Zdel2[k] <= 1) {
-                a22 = a*powf((1.0f - Zdel2[k]),2);
-                a2 = 1.0f/a22;
-                b22 = b*powf((1.0f - Zdel2[k]),2);
-                b2 = 1.0f/b22;
-                C00 = C0*(powf((1.0f - Zdel2[k]),2));
-                
-                for(i=0; i<N; i++) {
-                    for(j=0; j<N; j++) {
-                        T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                        if (T <= 1) T = C00*(1.0f - sqrtf(T));
-                        else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] += T;
-                    }}
-            }
-        } /*k-loop*/
-    }
-    else if (Object == 6) {
+    if (Object == 5) {
         /* the object is a cube */
         float x0r, y0r, HX, HY;
         a2 = 0.5f*a;
@@ -204,8 +155,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
             phi_rot_radian = (float)M_PI + phi_rot_radian;
             sin_phi=sinf(phi_rot_radian);
             cos_phi=cosf(phi_rot_radian);
-        }
-        
+        }        
 #pragma omp parallel for shared(A,Zdel) private(k,i,j,HX,HY,T)
         for(k=0; k<N; k++) {
             if  (fabs(Zdel[k]) < c2) {
@@ -224,30 +174,22 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
             }
         }
     }
-    else if (Object == 7) {
-        /* the object is en ellipsoid */
-#pragma omp parallel for shared(A,Zdel2) private(k,i,j,a22,a2,b22,b2,T)
+    if (Object == 6) {
+        /* the object is an elliptical disk (2D) extended into 3D  */
+#pragma omp parallel for shared(A) private(k,i,j,T)
         for(k=0; k<N; k++) {
-            if (Zdel2[k] <= 1) {                
-                 a22 = a*pow((1.0f - Zdel2[k]),2);
-                 a2 = 12.0f/a22;
-                 b22 = b*pow((1.0f - Zdel2[k]),2);
-                 b2 = 12.0f/b22;                    
-                 for(i=0; i<N; i++) {
+            if  (fabs(Zdel[k]) < c) {
+                for(i=0; i<N; i++) {
                     for(j=0; j<N; j++) {
-                        T = (a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
+                        T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
                         A[(k)*N*N + (i)*N + (j)] += T;
                     }}
             }
         } /*k-loop*/
-    }   
-    else {
-        printf("%s\n", "No such object exist!");
-        return 0;
-    }
-    free(Xdel); free(Ydel); free(Zdel); free(Zdel2);
+    }    
+    free(Xdel); free(Ydel); free(Zdel); free(bs); free(xh);
     /************************************************/
     free(Tomorange_X_Ar);
     return *A;
@@ -268,7 +210,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
             return 0;
         }
     }
-    char tempbuff[100];
+    char tempbuff[200];
     while(!feof(in_file))
     {
         
@@ -282,8 +224,10 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
         char tmpstr8[16];
         char tmpstr9[16];
         char tmpstr10[16];
+        char tmpstr11[16];
+        char tmpstr12[16];
         
-        if (fgets(tempbuff,100,in_file)) {
+        if (fgets(tempbuff,200,in_file)) {
             
             if(tempbuff[0] == '#') continue;
             
@@ -299,7 +243,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
             if (ModelSelected == Model) {
                 /* read the model parameters */
                 printf("\nThe selected Model : %i \n", Model);
-                if (fgets(tempbuff,100,in_file)) {
+                if (fgets(tempbuff,200,in_file)) {
                     sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2); }
                 if  (strcmp(tmpstr1,"Components") == 0) {
                     Components = atoi(tmpstr2);
@@ -312,10 +256,10 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                 /* loop over all components */
                 for(ii=0; ii<Components; ii++) {
                     int Object = 0;
-                    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, phi_rot = 0.0f;
+                    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
                     
-                    if (fgets(tempbuff,100,in_file)) {
-                        sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10);
+                    if (fgets(tempbuff,200,in_file)) {
+                        sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10, tmpstr11, tmpstr12);
                     }
                     if  (strcmp(tmpstr1,"Object") == 0) {
                         Object = atoi(tmpstr2); /* analytical model */
@@ -326,14 +270,16 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                         a = (float)atof(tmpstr7); /* a - size object */
                         b = (float)atof(tmpstr8); /* b - size object */
                         c = (float)atof(tmpstr9); /* c - size object */
-                        phi_rot = (float)atof(tmpstr10); /* phi - rotation angle */
-                        /*printf("\nObject : %i \nC0 : %f \nx0 : %f \nc : %f \n", Object, C0, x0, c);*/
+                        psi_gr1 = (float)atof(tmpstr10); /* rotation angle 1*/
+                        psi_gr2 = (float)atof(tmpstr11); /* rotation angle 2*/
+                        psi_gr3 = (float)atof(tmpstr12); /* rotation angle 3*/
+                        printf("\nObject : %i \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \nPhi1 : %f \nPhi2 : %f \nPhi3 : %f\n", Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
                     }
                     /*  check that the parameters are reasonable  */
-                    func_val = parameters_check3D(C0, x0, y0, z0, a, b, c, phi_rot);
+                    func_val = parameters_check3D(C0, x0, y0, z0, a, b, c);
                     
                     /* build phantom */
-                    if (func_val == 0) buildPhantom3D_core_single(A, N, Object, C0, x0, y0, z0, a, b, c, phi_rot);
+                    if (func_val == 0) buildPhantom3D_core_single(A, N, Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
                     else printf("\nFunction prematurely terminated, not all objects included");
                 }
             }

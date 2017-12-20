@@ -20,7 +20,7 @@ limitations under the License.
 extern "C" {
 #endif
 float parameters_check2D(float C0, float x0, float y0, float a, float b, float phi_rot);
-float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot);
+float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c);
 float su3(float *A, float psi1, float psi2, float psi3);
 float mmtvc(float *A, float *V1, float *V2);
 #ifdef __cplusplus
