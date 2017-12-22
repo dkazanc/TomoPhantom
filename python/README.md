@@ -22,7 +22,7 @@ tomophantom.phantom3d.build_volume_phantom_3d('<model parameters files>', <model
 ```python
 from tomophantom import phantom3d
 #This will generate 256x256x256 phantom
-data = phantom3d.build_volume_phantom_3d('models/Phantom3DLibrary.dat', 1, 256)
+data = phantom3d.build_volume_phantom_3d(1, 256,'models/Phantom3DLibrary.dat')
 ```
 
 

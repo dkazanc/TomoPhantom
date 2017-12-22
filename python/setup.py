@@ -45,3 +45,24 @@ setup(
     package_data={'tomophantom':['*.dat','../../functions/models/*.dat']},
     packages = {'tomophantom'}
 )
+
+setup(
+    name='tomophantom',
+    description='This is to generate phantom datasets for tomography experiments',
+    version = version,
+    cmdclass = {'build_ext': build_ext},
+    ext_modules = cythonize([ Extension("tomophantom.phantom2d",
+                            sources = [ "src/phantom2d.pyx",
+                                        "../functions/buildPhantom2D_core.c",                                        
+                                        "../functions/utils.c"
+                                      ],
+                            include_dirs = extra_include_dirs,
+                            library_dirs = extra_library_dirs,
+                            extra_compile_args = extra_compile_args,
+                            libraries = extra_libraries,
+                            extra_link_args = extra_link_args)]),
+    zip_safe = False,
+    include_package_data=True,
+    package_data={'tomophantom':['*.dat','../../functions/models/*.dat']},
+    packages = {'tomophantom'}
+)
