@@ -40,7 +40,7 @@ def build_volume_phantom_2d_params(int phantom_size, object_2d[:] obj_params):
 	
 	"""
 	cdef Py_ssize_t i
-	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.empty([phantom_size, phantom_size], dtype='float32')
+	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
 	cdef float ret_val
 	for i in range(obj_params.shape[0]):
 		ret_val = buildPhantom2D_core_single(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot)
@@ -62,7 +62,7 @@ def buildPhantom2D(int model_id, int phantom_size, str model_parameters_filename
 	
 	"""
 	
-	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.empty([phantom_size, phantom_size], dtype='float32')
+	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
 	cdef float ret_val
 	py_byte_string = model_parameters_filename.encode('UTF-8')
 	cdef char* c_string = py_byte_string
