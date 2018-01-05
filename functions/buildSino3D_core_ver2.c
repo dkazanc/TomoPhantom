@@ -1,16 +1,16 @@
 /*
-Copyright 2017 Daniil Kazantsev
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
+ * Copyright 2017 Daniil Kazantsev
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 #include <math.h>
 #include <stdlib.h>
@@ -39,9 +39,9 @@ limitations under the License.
 float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi_gr1, float psi_gr2, float psi_gr3)
 {
     int i, j, k;
-    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, b22, c2, phi_rot_radian, phi, theta;
+    float *Tomorange_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, C00, a1, b1, a22, b22, c2, phi_rot_radian, phi, theta;
     float *Zdel = NULL, *Zdel2 = NULL, *Sinorange_P_Ar=NULL, *AnglesRad=NULL;
-    float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00;
+    float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00, z00, a2, b2;
     
     Sinorange_Pmax = (float)(P)/(float)(N+1);
     Sinorange_Pmin = -Sinorange_Pmax;
@@ -50,11 +50,11 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     H_p = (Sinorange_Pmax - Sinorange_Pmin)/(P-1);
     for(i=0; i<P; i++) {Sinorange_P_Ar[i] = (Sinorange_Pmax) - (float)i*H_p;}
     
-    Tomorange_X_Ar = malloc(N*sizeof(float));
+    Tomorange_Ar = malloc(N*sizeof(float));
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
-    for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
+    for(i=0; i<N; i++)  {Tomorange_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
     AnglesRad = malloc(AngTot*sizeof(float));
     for(i=0; i<AngTot; i++)  AnglesRad[i] = (Th[i])*((float)M_PI/180.0f);
     
@@ -64,54 +64,71 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         /* matlab radon-iradon settings */
         x00 = x0 + H_x;
         y00 = y0 + H_x;
+        z00 = z0 + H_x;
     }
     else {
         /* astra-toolbox settings */
-        /*2D parallel beam*/
         x00 = x0 + 0.5f*H_x;
         y00 = y0 + 0.5f*H_x;
+        z00 = z0 + 0.5f*H_x;
     }
     /* parameters of an object have been extracted, now run the building module */
     /************************************************/
     a2 = 1.0f/(a*a);
-    b2 = 1.0f/(b*b);    
-    c2 = 1.0f/(c*c);  
+    b2 = 1.0f/(b*b);
+    c2 = 1.0f/(c*c);
     
     if (Object == 4) c2 =4.0f*c2;
     phi_rot_radian = (psi_gr1)*((float)M_PI/180.0f);
     
     phi = (psi_gr1)*((float)M_PI/180.0f);
-    theta = (psi_gr2)*((float)M_PI/180.0f);    
+    theta = (psi_gr2)*((float)M_PI/180.0f);
+    
+    float sin_phi, cos_phi, sin_theta, cos_theta, sin_phi2, cos_phi2, sin_theta2, cos_theta2;
+    sin_phi = sinf(phi);
+    cos_phi = cosf(phi);
+    sin_theta = sinf(theta);
+    cos_theta = cosf(theta);
+    sin_phi2 = sin_phi*sin_phi;
+    cos_phi2 = cos_phi*cos_phi;
+    sin_theta2 = sin_theta*sin_theta;
+    cos_theta2 = cos_theta*cos_theta;
     
     Zdel = malloc(N*sizeof(float));
     Zdel2 = malloc(N*sizeof(float));
     for(i=0; i<N; i++)  {
-        Zdel[i] = Tomorange_X_Ar[i] - z0;
+        Zdel[i] = Tomorange_Ar[i] - z0;
     }
     for(i=0; i<N; i++)  {Zdel2[i] = c2*powf(Zdel[i],2);}
     
-    float A_multip, D_multip, E_multip, F_multip, u0, v0, lam1, lam2, lam3;
-    lam1 = fabs(C1)*a2; lam2 = fabs(C1)*b2; lam3 = fabs(C1)*c2;
+    float A_multip, D_multip, E_multip, F_multip, u0_coord, v0_coord, u_u0_coord, u_u0_coord2, v_v0_coord, v_v0_coord2, lam1, lam2, lam3;
+    //lam1 = fabs(C1)*a2; lam2 = fabs(C1)*b2; lam3 = fabs(C1)*c2;
+    lam1 = logf(2.0f)*a2; lam2 = logf(2.0f)*b2; lam3 = logf(2.0f)*c2;
     
+    u0_coord = -x00*sin_phi + y00*cos_phi;
+    v0_coord = x00*cos_phi*cos_theta + y00*sin_phi*cos_theta - z00*sin_theta;
     
     if (Object == 1) {
         /* The object is a volumetric gaussian */
 // #pragma omp parallel for shared(A,Zdel2) private(k,i,j,a1,b1,C00,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3,AA5)
-        for(k=0; k<N; k++) {                            
-                AA5 = (N/2.0f)*(C0*sqrtf(a1)*sqrtf(b1)/2.0f)*sqrtf((float)M_PI/logf(2.0f));
-                
-                for(i=0; i<AngTot; i++) {
-                    sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
-                    cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
-                    delta1 = 1.0f/(a1*cos_2+b1*sin_2);
-                    delta_sq = sqrtf(delta1);
-                    first_dr = AA5*delta_sq;
-                    AA2 = -x00*cosf(AnglesRad[i])+y00*sinf(AnglesRad[i]); /*p0*/
-                    for(j=0; j<P; j++) {
-                        AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
-                        under_exp = (C1*AA3)*delta1;
-                        A[(k)*P*AngTot + (i)*P + (j)] += first_dr*expf(under_exp);
-                    }}} /*k-loop*/
+        
+        A_multip = lam1*sin_theta2*cos_phi2 + lam2*sin_theta2*cos_phi2 + lam3*cos_theta2;
+        D_multip = lam1*lam2*sin_theta2 + lam1*lam3*sin_phi2*cos_theta2 + lam2*lam3*sin_phi2*cos_theta2;
+        E_multip = lam1*lam3*cos_phi2 + lam2*lam3*sin_phi2;
+        F_multip = cos_theta*(2*sin_phi*cos_phi)*lam3*(lam1 - lam2);
+        for(k=0; k<N; k++) {
+            for(i=0; i<N; i++) {
+                for(j=0; j<N; j++) {
+                    u_u0_coord = (-Tomorange_Ar[i]*sin_phi + Tomorange_Ar[j]*cos_phi) - u0_coord;
+                    v_v0_coord = (Tomorange_Ar[i]*cos_phi*cos_theta + Tomorange_Ar[j]*sin_phi*cos_theta - Tomorange_Ar[k]*sin_theta) - v0_coord;
+                    u_u0_coord2 = powf(u_u0_coord,2);
+                    v_v0_coord2 = powf(v_v0_coord,2);
+                    
+                    under_exp = (1.0f/A_multip)*(D_multip*u_u0_coord2 + E_multip*v_v0_coord2 + F_multip*u_u0_coord*v_v0_coord);
+                    A[(i)*N + (j)] += a*sqrtf(M_PI/A_multip)*expf(under_exp);
+                }
+            }
+        }
     }
     else if (Object == 2) {
         /* the object is a parabola Lambda = 1/2 */
@@ -246,23 +263,23 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         
 //         y11 = 2.0f*x00 + 0.5f*H_x;
 //         x11 = -2.0f*y00 - 0.5f*H_x;
-//         
+//
 //         if (x00 == (0.5f*H_x))  y11 = 2.0f*x00  - 0.5f*H_x;
 //         if (y00 == (0.5f*H_x))  x11 = -2.0f*y00  + 0.5f*H_x;
         if (CenTypeIn == 0) {
-        /* matlab radon-iradon settings */
-        x11 = -2.0f*y0 - H_x;
-        y11 = 2.0f*x0 + H_x;
+            /* matlab radon-iradon settings */
+            x11 = -2.0f*y0 - H_x;
+            y11 = 2.0f*x0 + H_x;
         }
         else {
-        /* astra-toolbox settings */
-        /*parallel beam*/
-        x11 = -2.0f*y0 - 0.5f*H_x;
-        y11 = 2.0f*x0 + 0.5f*H_x;
+            /* astra-toolbox settings */
+            /*parallel beam*/
+            x11 = -2.0f*y0 - 0.5f*H_x;
+            y11 = 2.0f*x0 + 0.5f*H_x;
         }
         
         xwid = b;
-        ywid = a;        
+        ywid = a;
         c2 = 0.5f*c;
         if (phi_rot_radian < 0)  {ksi1 = (float)M_PI + phi_rot_radian;}
         else ksi1 = phi_rot_radian;
@@ -270,63 +287,63 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 #pragma omp parallel for shared(A,Zdel) private(k,i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)
         for(k=0; k<N; k++) {
             if (fabs(Zdel[k]) < c2) {
-               for(i=0; i<AngTot; i++) {
-					ksi00 = AnglesRad[(AngTot-1)-i]; 
-					for(j=0; j<P; j++) {
-						p00 = Sinorange_P_Ar[j];
-
-						PI2 = (float)M_PI*0.5f;
-						p = p00;
-						ksi=ksi00;
-
-						if (ksi > (float)M_PI) {
-							ksi = ksi - (float)M_PI;
-							p = -p00; }
-
-						C = cosf(ksi); S = sinf(ksi);
-						XSYC = -x11*S + y11*C;
-						A2 = xwid*0.5f;
-						B2 = ywid*0.5f;
-
-						if ((ksi - ksi1) < 0.0f)  FI = (float)M_PI + ksi - ksi1;
-						else FI = ksi - ksi1;
-
-						if (FI > PI2) FI = (float)M_PI - FI;
-
-						CF = cosf(FI);
-						SF = sinf(FI);
-						P0 = fabs(p-XSYC);
-
-						SS = xwid/CF*C0;
-
-						if (fabs(CF) <= (float)EPS) {
+                for(i=0; i<AngTot; i++) {
+                    ksi00 = AnglesRad[(AngTot-1)-i];
+                    for(j=0; j<P; j++) {
+                        p00 = Sinorange_P_Ar[j];
+                        
+                        PI2 = (float)M_PI*0.5f;
+                        p = p00;
+                        ksi=ksi00;
+                        
+                        if (ksi > (float)M_PI) {
+                            ksi = ksi - (float)M_PI;
+                            p = -p00; }
+                        
+                        C = cosf(ksi); S = sinf(ksi);
+                        XSYC = -x11*S + y11*C;
+                        A2 = xwid*0.5f;
+                        B2 = ywid*0.5f;
+                        
+                        if ((ksi - ksi1) < 0.0f)  FI = (float)M_PI + ksi - ksi1;
+                        else FI = ksi - ksi1;
+                        
+                        if (FI > PI2) FI = (float)M_PI - FI;
+                        
+                        CF = cosf(FI);
+                        SF = sinf(FI);
+                        P0 = fabs(p-XSYC);
+                        
+                        SS = xwid/CF*C0;
+                        
+                        if (fabs(CF) <= (float)EPS) {
                             SS = ywid*C0;
-							if ((P0 - A2) > (float)EPS) {
-								SS=0.0f;
-							}
-						}
-						if (fabs(SF) <= (float)EPS) {
+                            if ((P0 - A2) > (float)EPS) {
+                                SS=0.0f;
+                            }
+                        }
+                        if (fabs(SF) <= (float)EPS) {
                             SS = xwid*C0;
-							if ((P0 - B2) > (float)EPS) {
-								SS=0.0f;
-							}
-						}
-						TF = SF/CF;
-						PC = P0/CF;
-						QP = B2+A2*TF;
-						QM = QP+PC;
-						if (QM > ywid) {
-							DEL = P0+B2*CF;
+                            if ((P0 - B2) > (float)EPS) {
+                                SS=0.0f;
+                            }
+                        }
+                        TF = SF/CF;
+                        PC = P0/CF;
+                        QP = B2+A2*TF;
+                        QM = QP+PC;
+                        if (QM > ywid) {
+                            DEL = P0+B2*CF;
                             SS = ywid/SF*C0;
-							if (DEL > (A2*SF)) {
-								SS = (QP-PC)/SF*C0;
-							}}
+                            if (DEL > (A2*SF)) {
+                                SS = (QP-PC)/SF*C0;
+                            }}
                         if (QM > ywid) {
                             DEL = P0+B2*CF;
                             if (DEL > A2*SF) SS = (QP-PC)/SF*C0;
                             else SS = ywid/SF*C0;
                         }
-                        else SS = xwid/CF*C0;                                   
+                        else SS = xwid/CF*C0;
                         if (PC >= QP) SS=0.0f;
                         
                         A[(k)*P*AngTot + (i)*P + (j)] += (N/2.0f)*SS;
@@ -340,11 +357,11 @@ float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     }
     free(Zdel); free(Zdel2);
     /************************************************/
-    free(Tomorange_X_Ar); free(Sinorange_P_Ar); free(AnglesRad);
+    free(Tomorange_Ar); free(Sinorange_P_Ar); free(AnglesRad);
     return *A;
 }
 
-float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
+float buildSino3D_core_ver2(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {
     int ii, func_val;
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
@@ -419,7 +436,7 @@ float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                         
                         /*  check that the parameters are reasonable  */
                         func_val = parameters_check3D(C0, x0, y0, z0, a, b, c);
-                    
+                        
                         /* build phantom */
                         if (func_val == 0)  buildSino3D_core_single(A, N, P, Th, AngTot, CenTypeIn, Object, C0, x0,y0,z0,a,b,c,psi_gr1,psi_gr2,psi_gr3);
                         else printf("\nFunction prematurely terminated, not all objects included");
