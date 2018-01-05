@@ -1,6 +1,7 @@
 % compile mex files once from Matlab running this script
 
 cd ../
+mkdir compiled
 cd ../functions/
 
 fprintf('%s \n', 'Building functions...');
