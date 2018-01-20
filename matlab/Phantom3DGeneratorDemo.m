@@ -10,9 +10,9 @@ close all;clc;clear;
 addpath('../functions/models/'); addpath('compiled/'); 
 
 
-ModelNo = 01; % Select a model
+ModelNo = 02; % Select a model
 % Define phantom dimensions
-N = 256; % x-y-z size (cubic image)
+N = 512; % x-y-z size (cubic image)
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;
@@ -36,19 +36,19 @@ subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colorma
 %     imshow(G(:,:,i), [0 1]);
 %     pause(0.01);
 % %     
-% % % % %     write tiff images
-%     IM = im2uint16(G(:,:,i));
+% % % %     write png images
+%     IM = im2uint16(G(:,:,i));    
 %     setStrNo = num2str(counter);
 %     if (counter < 10)
-%         filename_save = strcat(filename,'_','000',setStrNo, '.tiff');
+%         filename_save = strcat(filename,'_','000',setStrNo, '.png');
 %     elseif ((counter >= 10) &&  (counter < 100))
-%         filename_save = strcat(filename,'_','00',setStrNo,'.tiff');
+%         filename_save = strcat(filename,'_','00',setStrNo,'.png');
 %     elseif ((counter >= 100) &&  (counter < 1000))
-%         filename_save = strcat(filename,'_','0',setStrNo, '.tiff');
+%         filename_save = strcat(filename,'_','0',setStrNo, '.png');
 %     else
-%         filename_save = strcat(filename,'_',setStrNo, '.tiff');
+%         filename_save = strcat(filename,'_',setStrNo, '.png');
 %     end
-%     imwrite(IM,filename_save,'tiff');
+%     imwrite(IM,filename_save,'png');
 %     counter = counter + 1;
 % end
 % close (figure(2));
