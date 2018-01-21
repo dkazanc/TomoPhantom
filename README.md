@@ -8,29 +8,28 @@
 
 ### Detailed description:
 
-**TomoPhantom** is recommended for various image processing tasks that require numerical testing: image reconstruction, denoising, deblurring, etc. 
-The software is focused mainly on tomographic image reconstruction (TIR) case. For TIR algorithms testing, the popular [Shepp-Logan phantom](https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom) is not always a 
+**TomoPhantom** is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. 
+The software is mainly suited for tomographic image reconstruction (TIR) cases. For TIR algorithms testing, the popular [Shepp-Logan phantom](https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom) is not always a 
 good choice due to the piecewise-constant nature. This toolbox provides a simple modular approach to build customisable 2D and 3D phantoms consisting of 
 piecewise-constant and also smooth analytical objects. The objects include: gaussians, parabolas, ellipses, cones, rectangulars, etc. The exact Radon
-Transform in parallel beam geometry of a phantom can be obtained, therefore producing an analytical sinogram. Those sinograms can be used for testing purposes
-without so-called the ['Inverse Crime'](http://www.sciencedirect.com/science/article/pii/S0377042705007296). TomoPhantom is compatable with 
-['ASTRA-toolbox'](http://www.astra-toolbox.com/) and therefore the generated data can be directly reconstructed using ASTRA (see examples). Additionally, the code for geometric transformation 
-introduced  in the paper [1] has been added to generate fan-beam sinograms by non-linear deformation of a phantom. 
+Transform (currently parallel beam geometry only available) can be obtained, therefore producing an analytical sinogram. The sinograms can be used for TIR testing purposes
+without so-called the ['Inverse Crime'](http://www.sciencedirect.com/science/article/pii/S0377042705007296). TomoPhantom is also compatable with 
+['ASTRA-toolbox'](http://www.astra-toolbox.com/) and therefore the generated data can be directly reconstructed using ASTRA-toolbox (see provided examples). 
 
 ### Package contents:
 
-**TomoPhantom** is available for MATLAB and Python (all main functions written in C-OMP)
-- **Phantom2DGeneratorDemo.m** and **Phantom3DGeneratorDemo.m** are demo scripts;
-- **SpectralPhantomDemo.m** a script to generate spectral phantom with 4 dedicated materials;
-- **Phantom2DDeformationDemo.m** a script demonstrating nonlinear geometrical transformation [1]; 
-- **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with models parameters;
+**TomoPhantom** is available for MATLAB and Python (core modules are written in C-OMP)
+- **Phantom2DGeneratorDemo.m** and **Phantom3DGeneratorDemo.m** are MATLAB demo scripts
+- **SpectralPhantomDemo.m** MATLAB script to generate spectral phantom with 4 dedicated materials
+- **DemoTomoPhantom.py** Python demo script showing 2D and 3D cases
+- **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with parametrised models
 
 ### Installation:
-- For MATLAB run **compile_mex.m** to compile mexed C functions
-- For Python see ReadMe in python 'directory'
+- For MATLAB, run **compile_mex.m** to compile MEX-ed C functions
+- For Python, see ReadMe in python 'directory'
 
 ### License:
-- The project uses Apache License v.2, but some demo files where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) employed are of GPLv3 license
+- The project uses Apache License v.2, but some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license
 
 
 ### If software is used, please cite the paper:
