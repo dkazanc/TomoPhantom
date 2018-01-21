@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 
-import setuptools
+#import setuptools
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 
-import os
+#import os
 import numpy
 import platform	
-import sys
+#import sys
 
 version = '1.0'
 extra_include_dirs = [numpy.get_include(), '../functions/']
@@ -42,7 +42,7 @@ setup(
                             extra_link_args = extra_link_args)]),
     zip_safe = False,
     include_package_data=True,
-    package_data={'tomophantom':['*.dat','../../functions/models/*.dat']},
+    package_data={'tomophantom':['*.dat','../functions/models/*.dat']},
     packages = {'tomophantom'}
 )
 
@@ -53,7 +53,8 @@ setup(
     cmdclass = {'build_ext': build_ext},
     ext_modules = cythonize([ Extension("tomophantom.phantom2d",
                             sources = [ "src/phantom2d.pyx",
-                                        "../functions/buildPhantom2D_core.c",                                        
+                                        "../functions/buildPhantom2D_core.c",
+                                        "../functions/buildSino2D_core.c",
                                         "../functions/utils.c"
                                       ],
                             include_dirs = extra_include_dirs,
@@ -63,6 +64,6 @@ setup(
                             extra_link_args = extra_link_args)]),
     zip_safe = False,
     include_package_data=True,
-    package_data={'tomophantom':['*.dat','../../functions/models/*.dat']},
+    package_data={'tomophantom':['*.dat','../functions/models/*.dat']},
     packages = {'tomophantom'}
 )

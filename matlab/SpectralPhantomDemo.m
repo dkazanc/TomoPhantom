@@ -1,4 +1,4 @@
-% note that TomoPhantom package released under Apache License, Version 2.0
+% Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 % generating material-specific spectral phantom
 

@@ -1,15 +1,17 @@
 % GPLv3 license (ASTRA toolbox)
-% note that TomoPhantom package released under Apache License, Version 2.0
+% Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 % Script to generate 2D analytical phantoms and sinograms (parallel beam)
-% that can be used to test reconstruction algorithms without Inverse Crime
-% If one needs to modify/add phantoms just edit Phantom2DLibrary.dat
+% that can be used to test reconstruction algorithms without the "Inverse
+% Crime"
+% If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
+% >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('compiled/'); 
+addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 1; % Select a model from Phantom2DLibrary.dat
+ModelNo = 9; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
@@ -46,23 +48,26 @@ figure;
 subplot(1,2,1); imagesc(FBP_F_a, [0 1]); title('Analytical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
 subplot(1,2,2); imagesc(FBP_F_d, [0 1]); title('Numerical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
 %%
-fprintf('%s \n', 'Use ASTRA-toolbox to generate numerical sinogram...');
-% >>>> Requirements: ASTRA toolbox, if one needs to do reconstruction <<<<<
-% generate the 2D analytical parallel beam sinogram (note 'astra' option)
+fprintf('%s \n', 'Use the ASTRA-toolbox to generate numerical sinogram...');
+% generate 2D analytical parallel beam sinogram (note the 'astra' opton)
 [F_a] = buildSino2D(ModelNo, N, P, single(angles), pathTP, 'astra'); 
+[F_num_astra] = sino2Dastra(G, (angles*pi/180), P, N);
 
-proj_geom = astra_create_proj_geom('parallel', 1, P, (angles*pi/180));
-vol_geom = astra_create_vol_geom(N,N);
-
-[sinogram_id, sino_astra] = astra_create_sino_cuda(G, proj_geom, vol_geom);
-astra_mex_data2d('delete', sinogram_id);
-
-sinT = sino_astra';
+sinT = F_num_astra';
 % calculate residiual norm (the error is expected since projection models not the same)
 err_diff = norm(F_a(:) - sinT(:))./norm(sinT(:));
 fprintf('%s %.4f\n', 'NMSE for sino residuals:', err_diff);
 
 figure; 
 subplot(1,2,1); imshow(F_a, []); title('Analytical Sinogram');
-subplot(1,2,2); imshow(sino_astra', []); title('Numerical Sinogram');
+subplot(1,2,2); imshow(sinT, []); title('Numerical Sinogram');
+%%
+fprintf('%s \n', 'Reconstruction using the ASTRA-toolbox (FBP)...');
+
+rec_an = rec2Dastra(F_a', (angles*pi/180), P, N);
+rec_num = rec2Dastra(F_num_astra, (angles*pi/180), P, N);
+
+figure; 
+subplot(1,2,1); imagesc(rec_an, [0 1]); daspect([1 1 1]); colormap hot; title('Analytical Sinogram Reconstruction [ASTRA]');
+subplot(1,2,2); imagesc(rec_num, [0 1]); daspect([1 1 1]); colormap hot; title('Numerical Sinogram Reconstruction [ASTRA]');
 %%
