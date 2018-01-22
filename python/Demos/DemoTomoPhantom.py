@@ -22,22 +22,13 @@ Phantom3DLibrary.dat
 import astra
 import numpy as np
 import matplotlib.pyplot as plt
-import sys 
-import os
-
-# modify your path to the compiled package accordingly
-#sys.path.append('~/.local/lib/python3.6/site-packages/')
-path = os.getcwd()
-head, tail = os.path.split(path)
-path = head
-sys.path.append(path)
 from tomophantom import phantom2d
 from tomophantom import phantom3d
-
 #%%
 model = 11
 N_size = 512
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
+#specify a full path to the parameters file
+pathTP = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom2DLibrary.dat'
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = phantom2d.buildPhantom2D(model, N_size, pathTP)
 
@@ -104,7 +95,8 @@ plt.title('Reconstructed Phantom')
 print ("Building 3D phantom using TomoPhantom software")
 model = 7
 N_size = 512
-pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
+#specify a full path to the parameters file
+pathTP3 = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom3DLibrary.dat'
 #This will generate a N_size x N_size x N_size phantom (3D)
 phantom_tm = phantom3d.buildPhantom3D(model, N_size, pathTP3)
 
