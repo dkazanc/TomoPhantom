@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sun Jan 21 20:38:35 2018
-
-@author: algol
-"""
-
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
 GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
@@ -19,11 +11,11 @@ Phantom3DLibrary.dat
 
 @author: daniil.kazantsev@manchester.ac.uk
 """
-import astra
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import phantom2d
 from tomophantom import phantom3d
+from astraOP import AstraOper
 #%%
 model = 11
 N_size = 512
@@ -36,7 +28,7 @@ plt.figure(1)
 plt.imshow(phantom_2D, cmap="hot")
 plt.title('2D Phantom')
 #%%
-angles_num = int(np.pi*N_size); # angles number
+angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0,180,angles_num,dtype='float32')
 angles_rad = angles*(np.pi/180)
 P = int(np.sqrt(2)*N_size) #detectors
@@ -49,12 +41,9 @@ plt.imshow(sino_an, cmap="hot")
 plt.title('Analytical sinogram')
 #%%
 # create sinogram using ASTRA toolbox
-proj_geom = astra.create_proj_geom('parallel', 1.0, P, angles_rad - 0.5*np.pi)
-vol_geom = astra.create_vol_geom(N_size, N_size)
-# Create 2D projection data
-proj_id = astra.create_projector('cuda',proj_geom,vol_geom)
-sinogram_id, sino_num_ASTRA = astra.create_sino(phantom_2D, proj_id)
-astra.data2d.delete(sinogram_id)
+A = AstraOper(P, angles_rad - 0.5*np.pi, N_size) # initiate a class object
+sino_num_ASTRA = A.forwproj(phantom_2D) # generate numerical sino (Ax)
+#x = A.backproj(sino_an) # generate backprojection (A'b)
 
 plt.figure(2) 
 plt.subplot(121)
@@ -65,30 +54,11 @@ plt.imshow(sino_num_ASTRA, cmap="hot")
 plt.title('Numerical sinogram')
 plt.show()
 #%%
-print ("Reconstructing...")
-
-rec_id = astra.data2d.create( '-vol', vol_geom)
-
-# Create a data object to hold the sinogram data
-sinogram_id = astra.data2d.create('-sino', proj_geom, sino_an)
-
-cfg = astra.astra_dict('FBP_CUDA')
-cfg['ReconstructionDataId'] = rec_id
-cfg['ProjectionDataId'] = sinogram_id
-cfg['FilterType'] = 'Ram-Lak'
-
-# Create and run the algorithm object from the configuration structure
-alg_id = astra.algorithm.create(cfg)
-astra.algorithm.run(alg_id)
-# Get the result
-rec = astra.data2d.get(rec_id)
-
-astra.algorithm.delete(alg_id)
-astra.data2d.delete(rec_id)
-astra.data2d.delete(sinogram_id)
+print ("Reconstructing using FBP...")
+FBP = A.fbp2D(sino_an)
 
 plt.figure(3) 
-plt.imshow(rec, vmin=0, vmax=1, cmap="hot")
+plt.imshow(FBP, vmin=0, vmax=1, cmap="hot")
 plt.title('Reconstructed Phantom')
 
 #%%
