@@ -11,7 +11,7 @@ addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/');
 
 ModelNo = 02; % Select a model
 % Define phantom dimensions
-N = 512; % x-y-z size (cubic image)
+N = 256; % x-y-z size (cubic image)
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;
