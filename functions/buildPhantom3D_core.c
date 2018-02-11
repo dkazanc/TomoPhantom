@@ -21,7 +21,7 @@
 
 #define M_PI 3.14159265358979323846
 
-/* Function to read from the file Phantom3DLibrary.dat the required parameters to build 3D analytical models
+/* Function to read parameters from the file Phantom3DLibrary.dat to build 3D analytical models
  *
  * Input Parameters:
  * 1. ModelNo - the model number from Phantom3DLibrary file
@@ -90,10 +90,10 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
     a2 = 1.0f/(a*a);
     b2 = 1.0f/(b*b);    
     c2 = 1.0f/(c*c);  
-    su3(bs,psi1,psi2,psi3); /*call subroutine (rotation 3x3 matrix) */
+    matrot3(bs,psi1,psi2,psi3); /* rotation of 3x3 matrix */
     
     xh1[0] = x0; xh1[1] = y0; xh1[2] = z0;
-    mmtvc(bs,xh1,xh);  /*call subroutine */
+    matvet3(bs,xh1,xh);  /* matrix-vector multiplication */
     free(xh1);
     
     if ((Object == 1) || (Object == 2) || (Object == 3) || (Object == 4)) {
@@ -109,7 +109,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                         xh1[0]=Tomorange_X_Ar[i];
                         xh1[1]=Tomorange_X_Ar[j];
                         xh1[2]=Tomorange_X_Ar[k];
-                        mmtvc(bs,xh1,xh2);
+                        matvet3(bs,xh1,xh2);
                         aa = a2*powf((xh2[0]-xh[0]),2);
                         bb = b2*powf((xh2[1]-xh[1]),2);
                         cc = c2*powf((xh2[2]-xh[2]),2);

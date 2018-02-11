@@ -1,98 +1,98 @@
 # 2D Phantom library, please use the following notations to define 2D geometrical objects:
-# 1-gaussian, 2-parabola1/2, 3-ellipse, 4-parabola1, 5-cone, 6-rectangle
-# syntax for object decription -- Object : object no, C0, x0, y0, a, b, angle
+# gaussian, parabola, ellipse, parabola1, cone, rectangle
+# syntax for objects decription -- Object : object type (see above line), C0, x0, y0, a, b, angle
 #----------------------------------------------------
 # 1 gaussian
 Model : 01;
 Components : 01;
-Object : 1 1.00 -0.1 -0.1 0.1 0.2 30.0;
+Object : gaussian 1.00 -0.1 -0.1 0.1 0.2 30.0;
 #----------------------------------------------------
 # 1 parabola1/2
 Model : 02;
 Components : 01;
-Object : 2 1.00 -0.1 -0.1 0.1 0.2 30.0;
+Object : parabola 1.00 -0.1 -0.1 0.1 0.2 30.0;
 #----------------------------------------------------
 # 1 ellipse
 Model : 03;
 Components : 01;
-Object : 3 1.00 -0.1 -0.1 0.3 0.5 30.0;
+Object : ellipse 1.00 -0.1 -0.1 0.3 0.5 30.0;
 #----------------------------------------------------
-# 1  parabola 1
+# 1  parabola1
 Model : 04;
 Components : 01;
-Object : 4 1.00 -0.1 -0.1 0.3 0.45 30.0;
+Object : parabola1 1.00 -0.1 -0.1 0.3 0.45 30.0;
 #----------------------------------------------------
 # 1 cone
 Model : 05;
 Components : 01;
-Object : 5 1.00 -0.1 -0.1 0.43 0.35 -45.0;
+Object : cone 1.00 -0.1 -0.1 0.43 0.35 -45.0;
 #----------------------------------------------------
 # 1 rectangular
 Model : 06;
 Components : 01;
-Object : 6 1.00 -0.15 0.2 0.4 0.3 45;
+Object : rectangle 1.00 -0.15 0.2 0.4 0.3 45;
 #----------------------------------------------------
 # composite
 Model : 07;
 Components : 03;
-Object : 1 1.00 -0.3 -0.3 0.2 0.2 0.0;
-Object : 2 1.00 0.3 0.3 0.2 0.35 45.0;
-Object : 6 1.00 0.1 -0.1 0.2 0.3 30.0;
+Object : gaussian 1.00 -0.3 -0.3 0.2 0.2 0.0;
+Object : parabola 1.00 0.3 0.3 0.2 0.35 45.0;
+Object : rectangle 1.00 0.1 -0.1 0.2 0.3 30.0;
 #----------------------------------------------------
-# composite
+# composite of 6 gaussians
 Model : 08;
 Components : 06;
-Object : 1 1.00e00 0.0e00  0.7e00  0.15e00 0.15e00  00.e00;
-Object : 1 1.00e00 -.6e00   .35e00  0.15e00 0.15e00  00.e00;
-Object : 1 1.00e00 -.6e00  -.35e00  0.15e00 0.15e00  00.e00;
-Object : 1 1.00e00 0.0e00  -.7e00  0.15e00 0.15e00  00.e00;
-Object : 1 1.00e00  .6e00  -.35e00  0.15e00 0.15e00  00.e00;
-Object : 1 1.00e00  .6e00   .35e00  0.15e00 0.15e00  00.e00;
+Object : gaussian 1.00e00 0.0e00  0.7e00  0.15e00 0.15e00  00.e00;
+Object : gaussian 1.00e00 -.6e00   .35e00  0.15e00 0.15e00  00.e00;
+Object : gaussian 1.00e00 -.6e00  -.35e00  0.15e00 0.15e00  00.e00;
+Object : gaussian 1.00e00 0.0e00  -.7e00  0.15e00 0.15e00  00.e00;
+Object : gaussian 1.00e00  .6e00  -.35e00  0.15e00 0.15e00  00.e00;
+Object : gaussian 1.00e00  .6e00   .35e00  0.15e00 0.15e00  00.e00;
 #----------------------------------------------------
 # composite
 Model : 09;
 Components : 05;
-Object : 6 1.00e00  0.0  0.0  0.50e00 0.3e00 00.e00;
-Object : 1 1.00e00  0.6  0.0  0.15 0.15 00;
-Object : 1 1.00e00  -0.6  0.0  0.15 0.15 00;
-Object : 4 1.00e00  0.0  -0.55  0.4 0.4 00;
-Object : 4 1.00e00  0.0  0.55  0.4 0.4 00;
+Object : rectangle 1.00e00  0.0  0.0  0.50e00 0.3e00 00.e00;
+Object : gaussian 1.00e00  0.6  0.0  0.15 0.15 00;
+Object : gaussian 1.00e00  -0.6  0.0  0.15 0.15 00;
+Object : parabola1 1.00e00  0.0  -0.55  0.4 0.4 00;
+Object : parabola1 1.00e00  0.0  0.55  0.4 0.4 00;
 #----------------------------------------------------
 # composite
 Model : 10;
 Components : 05;
-Object : 6 1.00e00  0.0  0.0  0.32 0.32 00.e00;
-Object : 1 1.00e00  0.5  0.0  0.17 0.17 00;
-Object : 2 1.00e00  -0.5  0.0  0.2 0.2 00;
-Object : 4 1.00e00  0.0  -0.55  0.3 0.3 00;
-Object : 5 1.00e00  0.0  0.55  0.3 0.3 00;
+Object : rectangle 1.00e00  0.0  0.0  0.32 0.32 00.e00;
+Object : gaussian 1.00e00  0.5  0.0  0.17 0.17 00;
+Object : parabola 1.00e00  -0.5  0.0  0.2 0.2 00;
+Object : parabola1 1.00e00  0.0  -0.55  0.3 0.3 00;
+Object : cone 1.00e00  0.0  0.55  0.3 0.3 00;
 #----------------------------------------------------
 # composite (SPECTRAL) phantom
 Model : 11;
 Components : 25;
-Object : 3 .3e00 0e00  0.0e00  .9500 .95e00  00.e00; 
-Object : 3 .5e00 0.0e00  0.7e00  0.2e00 0.2e00  00.e00;
-Object : 3 .500e00 -.6e00   .35e00  0.2e00 0.2e00  00.e00;
-Object : 3 .500e00 -.6e00  -.35e00  0.2e00 0.2e00  00.e00;
-Object : 3 .500e00 0.0e00  -.7e00  0.2e00 0.2e00  00.e00;
-Object : 3 .500e00  .6e00  -.35e00  0.2e00 0.2e00  00.e00;
-Object : 3 .500e00  .6e00   .35e00  0.2e00 0.2e00  00.e00;
-Object : 3 .500e00 -.2e00  .35e00  0.1e00 0.1e00  00.e00;         
-Object : 3 .500e00 -.4e00   .0e00  0.1e00 0.1e00  00.e00;
-Object : 3 .500e00 -.2e00  -.35e00  0.1e00 0.1e00  00.e00;
-Object : 3 .500e00  .2e00  -.35e00  0.1e00 0.1e00  00.e00;
-Object : 3 .500e00  .4e00  .0e00  0.1e00 0.1e00  00.e00;
-Object : 3 .500e00  0.2e00  .35e00  0.1e00 0.1e00  00.e00;
-Object : 6 .500e00  0.0e00   0.085e00  0.1e00 0.1e00  00.e00;
-Object : 6 .500e00  0.085e00   0.00e00  0.1e00 0.1e00  00.e00;
-Object : 6 .500e00  -0.085e00   0.0e00  0.1e00 0.1e00  00.e00;
-Object : 6 .500e00  0.0e00   -0.085e00  0.1e00 0.1e00  00.e00;
-Object : 3 .5e00   0.0e00   0.0e00  0.02e00 0.11e00  45.e00;
-Object : 3 .5e00   0.0e00   0.0e00  0.02e00 0.11e00  -45.e00;
-Object : 3 .800e00  .7e00  .0e00  0.01e00 0.01e00  00.e00;
-Object : 3 .80e00  -.38e00   -.65e00  0.01e00 0.01e00  00.e00;
-Object : 3 .90e00 -.38e00   .65e00  0.01e00 0.01e00  00.e00;
-Object : 3 .90e00  .0e00  -.35e00  0.01e00 0.01e00  00.e00;
-Object : 3 .900e00  .32e00   .18e00  0.01e00 0.01e00  00.e00;           
-Object : 3 .800e00 -.32e00   .18e00  0.01e00 0.01e00  00.e00;
+Object : ellipse .3e00 0e00  0.0e00  .9500 .95e00  00.e00; 
+Object : ellipse .5e00 0.0e00  0.7e00  0.2e00 0.2e00  00.e00;
+Object : ellipse .500e00 -.6e00   .35e00  0.2e00 0.2e00  00.e00;
+Object : ellipse .500e00 -.6e00  -.35e00  0.2e00 0.2e00  00.e00;
+Object : ellipse .500e00 0.0e00  -.7e00  0.2e00 0.2e00  00.e00;
+Object : ellipse .500e00  .6e00  -.35e00  0.2e00 0.2e00  00.e00;
+Object : ellipse .500e00  .6e00   .35e00  0.2e00 0.2e00  00.e00;
+Object : ellipse .500e00 -.2e00  .35e00  0.1e00 0.1e00  00.e00;         
+Object : ellipse .500e00 -.4e00   .0e00  0.1e00 0.1e00  00.e00;
+Object : ellipse .500e00 -.2e00  -.35e00  0.1e00 0.1e00  00.e00;
+Object : ellipse .500e00  .2e00  -.35e00  0.1e00 0.1e00  00.e00;
+Object : ellipse .500e00  .4e00  .0e00  0.1e00 0.1e00  00.e00;
+Object : ellipse .500e00  0.2e00  .35e00  0.1e00 0.1e00  00.e00;
+Object : rectangle .500e00  0.0e00   0.085e00  0.1e00 0.1e00  00.e00;
+Object : rectangle .500e00  0.085e00   0.00e00  0.1e00 0.1e00  00.e00;
+Object : rectangle .500e00  -0.085e00   0.0e00  0.1e00 0.1e00  00.e00;
+Object : rectangle .500e00  0.0e00   -0.085e00  0.1e00 0.1e00  00.e00;
+Object : ellipse .5e00   0.0e00   0.0e00  0.02e00 0.11e00  45.e00;
+Object : ellipse .5e00   0.0e00   0.0e00  0.02e00 0.11e00  -45.e00;
+Object : ellipse .800e00  .7e00  .0e00  0.01e00 0.01e00  00.e00;
+Object : ellipse .80e00  -.38e00   -.65e00  0.01e00 0.01e00  00.e00;
+Object : ellipse .90e00 -.38e00   .65e00  0.01e00 0.01e00  00.e00;
+Object : ellipse .90e00  .0e00  -.35e00  0.01e00 0.01e00  00.e00;
+Object : ellipse .900e00  .32e00   .18e00  0.01e00 0.01e00  00.e00;           
+Object : ellipse .800e00 -.32e00   .18e00  0.01e00 0.01e00  00.e00;
 #----------------------------------------------------

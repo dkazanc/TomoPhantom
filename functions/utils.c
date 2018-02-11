@@ -75,7 +75,8 @@ float parameters_check3D(float C0, float x0, float y0, float z0, float a, float 
     return 0;
 }
 
-float su3(float *A, float psi1, float psi2, float psi3)
+/* rotation matrix routine */
+float matrot3(float *A, float psi1, float psi2, float psi3)
 {
     A[0] = cosf(psi1)*cosf(psi2)*cosf(psi3)-sinf(psi1)*sinf(psi3);
     A[1] = sinf(psi1)*cosf(psi2)*cosf(psi3)+cosf(psi1)*sinf(psi3);
@@ -85,12 +86,12 @@ float su3(float *A, float psi1, float psi2, float psi3)
     A[5] = sinf(psi2)*sinf(psi3);
     A[6] = cosf(psi1)*sinf(psi2);
     A[7] = sinf(psi1)*sinf(psi2);
-    A[8] = cosf(psi2);
-    
+    A[8] = cosf(psi2);    
     return *A;
 }
 
-float mmtvc(float *A, float *V1, float *V2)
+/*matrix-vector multiplication*/
+float matvet3(float *A, float *V1, float *V2)
 {
     int i, j, counter;
     
@@ -104,3 +105,15 @@ float mmtvc(float *A, float *V1, float *V2)
     return *V2;
 }
 
+/*
+  SUBROUTINE MMTMT(A,B,C,L,N,M)
+     DIMENSION A(L,N),B(N,M),C(L,M)
+        DO 1 I=1,L
+         DO 1 J=1,M
+           C(I,J)=0.
+           DO 1 K=1,N
+              C(I,J)=C(I,J)+A(I,K)*B(K,J)
+    1   CONTINUE
+        RETURN
+        END
+*/
