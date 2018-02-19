@@ -36,7 +36,7 @@ limitations under the License.
  * 1. 2D sinogram size of [P, length(Th)]
  */
 
-float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float a, float b, float phi_rot)
+float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot)
 {
     int i, j;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, a22, b22, phi_rot_radian;
@@ -78,7 +78,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     b22 = b*b;
     
     /* parameters of an object have been extracted, now run the building module */
-    if (Object == 1) {
+    if (strcmp("gaussian",Object) == 0) {	
         /* The object is a gaussian */
         AA5 = (N/2.0f)*(C0*(a)*(b)/2.0f)*sqrtf((float)M_PI/logf(2.0f));
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3)
@@ -95,7 +95,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                 A[(i)*P + (j)] += first_dr*expf(under_exp);
             }}
     }
-    else if (Object == 2) {
+    else if (strcmp("parabola",Object) == 0) {
         /* the object is a parabola Lambda = 1/2 */
         AA5 = (N/2.0f)*(((float)M_PI/2.0f)*C0*((a))*((b)));
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
@@ -114,7 +114,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                 }
             }}
     }
-    else if (Object == 3) {
+    else if (strcmp("ellipse",Object) == 0) {
         /* the object is an elliptical disk */
         AA5 = (N*C0*a*b);
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
@@ -133,7 +133,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                 }
             }}
     }
-    else if (Object == 4) {
+    else if (strcmp("parabola1",Object) == 0) {
         /* the object is a parabola Lambda = 1 (12)*/
         AA5 = (N/2.0f)*(4.0f*((0.25f*(a)*(b)*C0)/2.5f));
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
@@ -152,7 +152,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                 }
             }}
     }
-    else if (Object == 5) {
+    else if (strcmp("cone",Object) == 0) {
         /* the object is a cone */
         float pps2,rlogi,ty1;
         AA5 = (N/2.0f)*(a*b*C0);
@@ -180,7 +180,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                 A[(i)*P + (j)] += first_dr*(pps2 - rlogi);
             }}
     }
-	else if (Object == 6) {
+	else if (strcmp("rectangle",Object) == 0) {
 		/* the object is a rectangle */
 		float xwid,ywid,p00,ksi00,ksi1;
 		float PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,x11,y11;
@@ -265,7 +265,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 					}}
 	}
     else {
-        printf("%s\n", "No such object exist!");
+        printf("%s\n", "No such object exists!");
         return 0;
     }
     /************************************************/
@@ -275,13 +275,20 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 
 float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {
-    int ii, func_val;
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
-    
+    int ii, func_val;
     if (! in_file )
     {
-        printf("%s\n", "Parameters file does not exist or cannot be read!");
+        printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
+        printf("Trying models/Phantom2DLibrary.dat");
+        in_file = fopen("models/Phantom2DLibrary.dat","r");
+        if(! in_file)
+        {
+            printf("models/Phantom2DLibrary.dat has not been found");
+            return 0;
+        }
     }
+    
     char tmpstr1[16];
     char tmpstr2[16];
     char tmpstr3[16];
@@ -291,7 +298,7 @@ float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int
     char tmpstr7[16];
     char tmpstr8[16];
     
-    int Model = 0, Components = 0, Object = 0;
+    int Model = 0, Components = 0;
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f,  phi_rot = 0.0f;
     
     char tempbuff[100];
@@ -329,7 +336,6 @@ float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                         sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
                     }
                     if  (strcmp(tmpstr1,"Object") == 0) {
-                        Object = atoi(tmpstr2); /* analytical model */
                         C0 = (float)atof(tmpstr3); /* intensity */
                         y0 = (float)atof(tmpstr4); /* x0 position */
                         x0 = (float)atof(tmpstr5); /* y0 position */
@@ -342,7 +348,7 @@ float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                         func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                         
                         /* build phantom */
-                        if (func_val == 0) buildSino2D_core_single(A, N, P, Th, AngTot, CenTypeIn, Object, C0, x0,y0,a,b,phi_rot);
+                        if (func_val == 0) buildSino2D_core_single(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0,y0,a,b,phi_rot);
                         else printf("\nFunction prematurely terminated, not all objects included");    
                     }
                 }

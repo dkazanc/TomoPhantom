@@ -38,7 +38,7 @@ limitations under the License.
  * 1. The analytical phantom size of [N x N]
  */
 
-float buildPhantom2D_core_single(float *A, int N,  int Object,
+float buildPhantom2D_core_single(float *A, int N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -70,8 +70,8 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
     a2 = 1.0f/(a*a);
     b2 = 1.0f/(b*b);
     
-    /* parameters of an object have been extracted, now run the building module */
-    if (Object == 1) {
+    /* all parameters of an object have been extracted, now run the building modules */
+    if (strcmp("gaussian",Object) == 0) {		
         /* The object is a gaussian */
 #pragma omp parallel for shared(A) private(i,j,T)
         for(i=0; i<N; i++) {
@@ -80,7 +80,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
                 A[i*N + j] += C0*expf(T);
             }}
     }
-    else if (Object == 2) {
+    else if (strcmp("parabola",Object) == 0) {
         /* the object is a parabola Lambda = 1/2 */
 #pragma omp parallel for shared(A) private(i,j,T)
         for(i=0; i<N; i++) {
@@ -91,7 +91,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
                 A[(i)*N + (j)] += T;
             }}
     }
-    else if (Object == 3) {
+    else if (strcmp("ellipse",Object) == 0) {
         /* the object is an elliptical disk */
 #pragma omp parallel for shared(A) private(i,j,T)       
                 for(i=0; i<N; i++) {
@@ -102,7 +102,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
                         A[(i)*N + (j)] = A[(i)*N + (j)] + T;
                     }}
     }
-     else if (Object == 4) {
+     else if (strcmp("parabola1",Object) == 0) {
         /* the object is a parabola Lambda = 1*/
 #pragma omp parallel for shared(A) private(i,j,T)                
                 for(i=0; i<N; i++) {
@@ -113,7 +113,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
                         A[(i)*N + (j)] += T;
                     }}
             }
-     else if (Object == 5) {
+     else if (strcmp("cone",Object) == 0) {
       /*the object is a cone*/
 #pragma omp parallel for shared(A) private(i,j,T)
                 for(i=0; i<N; i++) {
@@ -124,7 +124,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
                         A[(i)*N + (j)] += T;
                     }}
     }
-    else if (Object == 6) {
+    else if (strcmp("rectangle",Object) == 0) {
         /* the object is a rectangle */
         float x0r, y0r, HX, HY;
         a2 = 0.5f*a;
@@ -149,7 +149,7 @@ float buildPhantom2D_core_single(float *A, int N,  int Object,
                     }}
     }
     else {
-        printf("%s\n", "No such object exist!");
+        printf("%s\n", "No such object exists!");
         return 0;
     }
     free(Xdel); free(Ydel);
@@ -169,14 +169,10 @@ float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParamet
         in_file = fopen("models/Phantom2DLibrary.dat","r");
         if(! in_file)
         {
-            printf("models/Phantom2DLibrary.dat is not found");
+            printf("models/Phantom2DLibrary.dat has not been found");
             return 0;
         }
-    }
-    char tempbuff[100];
-    while(!feof(in_file))
-    {
-        
+    }		
         char tmpstr1[16];
         char tmpstr2[16];
         char tmpstr3[16];
@@ -185,7 +181,9 @@ float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParamet
         char tmpstr6[16];
         char tmpstr7[16];
         char tmpstr8[16];
-        
+    char tempbuff[100];
+    while(!feof(in_file))
+    {
         if (fgets(tempbuff,100,in_file)) {
             
             if(tempbuff[0] == '#') continue;
@@ -214,28 +212,27 @@ float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParamet
                 
                 /* loop over all components */
                 for(ii=0; ii<Components; ii++) {
-                    int Object = 0;
-                    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f,  phi_rot = 0.0f;
+                
+                    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, phi_rot = 0.0f;
                     
                     if (fgets(tempbuff,100,in_file)) {
                         sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
                     }
                     if  (strcmp(tmpstr1,"Object") == 0) {
-                        Object = atoi(tmpstr2); /* analytical model */
                         C0 = (float)atof(tmpstr3); /* intensity */
                         y0 = (float)atof(tmpstr4); /* x0 position */
                         x0 = (float)atof(tmpstr5); /* y0 position */
                         a = (float)atof(tmpstr6); /* a - size object */
                         b = (float)atof(tmpstr7); /* b - size object */
                         phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
-                        /*printf("\nObject : %i \nC0 : %f \nx0 : %f \nc : %f \n", Object, C0, x0, c);*/
+                        /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
                     }
                     
                      /*  check that the parameters are reasonable  */
                     func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                     
                     /* build phantom */
-                    if (func_val == 0) buildPhantom2D_core_single(A, N, Object, C0, x0, y0, a, b, phi_rot);
+                    if (func_val == 0) buildPhantom2D_core_single(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
                     else printf("\nFunction prematurely terminated, not all objects included");         
                     
                 }

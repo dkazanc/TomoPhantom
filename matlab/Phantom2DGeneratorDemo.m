@@ -11,7 +11,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 9; % Select a model from Phantom2DLibrary.dat
+ModelNo = 11; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
@@ -51,7 +51,7 @@ subplot(1,2,2); imagesc(FBP_F_d, [0 1]); title('Numerical Sinogram Reconstructio
 fprintf('%s \n', 'Use the ASTRA-toolbox to generate numerical sinogram...');
 % generate 2D analytical parallel beam sinogram (note the 'astra' opton)
 [F_a] = buildSino2D(ModelNo, N, P, single(angles), pathTP, 'astra'); 
-[F_num_astra] = sino2Dastra(G, (angles*pi/180), P, N);
+[F_num_astra] = sino2Dastra(G, (angles*pi/180), P, N, 'cpu');
 
 sinT = F_num_astra';
 % calculate residiual norm (the error is expected since projection models not the same)
@@ -64,8 +64,8 @@ subplot(1,2,2); imshow(sinT, []); title('Numerical Sinogram');
 %%
 fprintf('%s \n', 'Reconstruction using the ASTRA-toolbox (FBP)...');
 
-rec_an = rec2Dastra(F_a', (angles*pi/180), P, N);
-rec_num = rec2Dastra(F_num_astra, (angles*pi/180), P, N);
+rec_an = rec2Dastra(F_a', (angles*pi/180), P, N, 'cpu');
+rec_num = rec2Dastra(F_num_astra, (angles*pi/180), P, N, 'cpu');
 
 figure; 
 subplot(1,2,1); imagesc(rec_an, [0 1]); daspect([1 1 1]); colormap hot; title('Analytical Sinogram Reconstruction [ASTRA]');
