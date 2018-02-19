@@ -9,7 +9,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 02; % Select a model
+ModelNo = 09; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -51,12 +51,6 @@ subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colorma
 % end
 % close (figure(2));
 %%
-% 3D ANALYTICAL sinogram - work in progress!
-%fprintf('%s \n', 'Calculating 3D parallel-beam exact sinogram using TomoPhantom...');
-%angles = linspace(0,180,N); % projection angles
-%det = round(sqrt(2)*N);
-%sino_tomophan3D = buildSino3D(ModelNo, N, det, single(angles), pathTP, 'astra'); 
-%%
 fprintf('%s \n', 'Calculating 3D parallel-beam sinogram of a phantom using ASTRA-toolbox...');
 angles = linspace(0,pi,N); % projection angles
 det = round(sqrt(2)*N);
@@ -64,7 +58,7 @@ sino_astra3D = zeros(length(angles),det,N,'single');
 
 tic;
 for i = 1:N
-sino_astra3D(:,:,i) = sino2Dastra(G(:,:,i), angles, det, N);
+sino_astra3D(:,:,i) = sino2Dastra(G(:,:,i), angles, det, N, 'gpu');
 end
 toc;
 

@@ -105,15 +105,52 @@ float matvet3(float *A, float *V1, float *V2)
     return *V2;
 }
 
-/*
-  SUBROUTINE MMTMT(A,B,C,L,N,M)
-     DIMENSION A(L,N),B(N,M),C(L,M)
-        DO 1 I=1,L
-         DO 1 J=1,M
-           C(I,J)=0.
-           DO 1 K=1,N
-              C(I,J)=C(I,J)+A(I,K)*B(K,J)
-    1   CONTINUE
-        RETURN
-        END
-*/
+/*matrix-matrix multiplication*/
+float matmat3(float *A, float *B, float *C)
+{
+	float Am[3][3];
+	float Bm[3][3];
+	float Cm[3][3];
+	
+	 Am[0][0]=A[0];
+     Am[0][1]=A[1];
+     Am[0][2]=A[2];
+     Am[1][0]=A[3];
+     Am[1][1]=A[4];
+     Am[1][2]=A[5];
+     Am[2][0]=A[6];
+     Am[2][1]=A[7];
+     Am[2][2]=A[8];
+     
+     Bm[0][0]=B[0];
+     Bm[0][1]=B[1];
+     Bm[0][2]=B[2];
+     Bm[1][0]=B[3];
+     Bm[1][1]=B[4];
+     Bm[1][2]=B[5];
+     Bm[2][0]=B[6];
+     Bm[2][1]=B[7];
+     Bm[2][2]=B[8];
+     
+     int i, j, k;
+     for(i=0; i<3; i++) {        
+        for(j=0; j<3; j++) {
+		Cm[i][j]=0.0f;
+			for(k=0; k<3; k++) {
+			Cm[i][j] += Am[i][k]*Bm[k][j];
+			}
+	}}
+	
+	 C[0] = Cm[0][0];
+     C[1] = Cm[0][1];
+     C[2] = Cm[0][2];
+     C[3] = Cm[1][0];
+	 C[4] = Cm[1][1];
+     C[5] = Cm[1][2];
+     C[6] = Cm[2][0];
+     C[7] = Cm[2][1];
+     C[8] = Cm[2][2];
+	
+	
+    return *C;
+}

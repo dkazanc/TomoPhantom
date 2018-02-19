@@ -1,6 +1,6 @@
 # 2D Phantom library, please use the following notations to define 2D geometrical objects:
 # gaussian, parabola, ellipse, parabola1, cone, rectangle
-# syntax for objects decription -- Object : object type (see above line), C0, x0, y0, a, b, angle
+# syntax for objects decription -- Object : object type (see names above), C0, x0, y0, a, b, angle
 #----------------------------------------------------
 # 1 gaussian
 Model : 01;
