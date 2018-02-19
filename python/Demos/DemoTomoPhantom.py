@@ -75,7 +75,7 @@ plt.title('SIRT Reconstructed Phantom')
 import timeit
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 10
+model = 9
 N_size = 512
 #specify a full path to the parameters file
 pathTP3 = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom3DLibrary.dat'
@@ -85,14 +85,15 @@ toc=timeit.default_timer()
 Run_time = toc - tic
 print("Phantom has been built in {} seconds".format(Run_time))
 
+sliceSel = int(0.5*N_size)
 #plt.gray()
 plt.figure(5) 
 plt.subplot(121)
-plt.imshow(phantom_tm[128,:,:],vmin=0, vmax=1)
+plt.imshow(phantom_tm[sliceSel,:,:],vmin=0, vmax=1)
 plt.title('3D Phantom, axial view')
 
 plt.subplot(122)
-plt.imshow(phantom_tm[:,128,:],vmin=0, vmax=1)
+plt.imshow(phantom_tm[:,sliceSel,:],vmin=0, vmax=1)
 plt.title('3D Phantom, coronal view')
 plt.show()
 
