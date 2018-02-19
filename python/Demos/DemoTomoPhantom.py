@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 from tomophantom import phantom2d
 from tomophantom import phantom3d
 from astraOP import AstraTools
+
 #%%
 model = 11
 N_size = 512
@@ -70,7 +71,6 @@ SIRTrec = Atools.sirt2D(sino_an, 100)
 plt.figure(4) 
 plt.imshow(SIRTrec, vmin=0, vmax=1)
 plt.title('SIRT Reconstructed Phantom')
-
 #%%
 import timeit
 print ("Building 3D phantom using TomoPhantom software")

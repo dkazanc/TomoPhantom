@@ -55,9 +55,10 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
         float psi_gr3 /* rotation angle3 */)
 {
     int i, j, k;
-    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3;
-    float *Xdel = NULL, *Ydel = NULL, *Zdel = NULL, T;
+    float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
+    float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;        
     Tomorange_X_Ar = malloc(N*sizeof(float));
+    if(Tomorange_X_Ar == NULL ) printf("Allocation of 'Tomorange_X_Ar' failed");	
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
@@ -69,9 +70,13 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
     phi_rot_radian = psi_gr1*((float)M_PI/180.0f);
     sin_phi=sinf(phi_rot_radian); cos_phi=cosf(phi_rot_radian);
     
+    
     Xdel = malloc(N*sizeof(float));
+    if(Xdel == NULL ) printf("Allocation of 'Xdel' failed");	
     Ydel = malloc(N*sizeof(float));
+    if(Ydel == NULL ) printf("Allocation of 'Ydel' failed");
     Zdel = malloc(N*sizeof(float));
+    if(Zdel == NULL ) printf("Allocation of 'Zdel' failed");   
     for(i=0; i<N; i++)  {
         Xdel[i] = Tomorange_X_Ar[i] - x0;
         Ydel[i] = Tomorange_X_Ar[i] - y0;
@@ -81,11 +86,10 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
     psi1 = psi_gr1*((float)M_PI/180.0f);
     psi2 = psi_gr2*((float)M_PI/180.0f);
     psi3 = psi_gr3*((float)M_PI/180.0f);
-    
-    float *bs, *xh, *xh1, *xh2, *xh3;
-    bs = malloc(9*sizeof(float));
-    xh = malloc(3*sizeof(float));
-    xh3 = malloc(3*sizeof(float));    
+
+    float bs[9];
+    float xh[3];
+    float xh3[3];
     
     a2 = 1.0f/(a*a);
     b2 = 1.0f/(b*b);    
@@ -93,26 +97,26 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
     matrot3(bs,psi1,psi2,psi3); /* rotation of 3x3 matrix */
     
     xh3[0] = x0; xh3[1] = y0; xh3[2] = z0;
-    matvet3(bs,xh3,xh);  /* matrix-vector multiplication */
-    free(xh3);    
+    matvet3(bs,xh3,xh);  /* matrix-vector multiplication */   
+
+	float xh1[3];
+	float xh2[3];
 
     if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {	        
 #pragma omp parallel for shared(A) private(k,i,j,T,aa,bb,cc,xh2,xh1)
         for(k=0; k<N; k++) {
             for(i=0; i<N; i++) {
-                for(j=0; j<N; j++) {
-                    if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
-                        
-                        xh1 = malloc(3*sizeof(float));
-                        xh2 = malloc(3*sizeof(float));
+                for(j=0; j<N; j++) {  
+				
+                    if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {                
+
                         xh1[0]=Tomorange_X_Ar[i];
                         xh1[1]=Tomorange_X_Ar[j];
                         xh1[2]=Tomorange_X_Ar[k];
                         matvet3(bs,xh1,xh2);
                         aa = a2*powf((xh2[0]-xh[0]),2);
                         bb = b2*powf((xh2[1]-xh[1]),2);
-                        cc = c2*powf((xh2[2]-xh[2]),2);
-                        free(xh1); free(xh2);
+                        cc = c2*powf((xh2[2]-xh[2]),2);                        
                     }
                     else {
                         aa = a2*powf(Xdel[i],2);
@@ -139,8 +143,8 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
                         if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
                     }
-                    A[(k)*N*N + (i)*N + (j)] += T;
-                }}}
+                    A[(k)*N*N + (i)*N + (j)] += T;                   
+                }}}                
     }
     if (strcmp("cuboid",Object) == 0) {
         /* the object is a cube */
@@ -188,8 +192,8 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
             }
         } /*k-loop*/
     }    
-    free(Xdel); free(Ydel); free(Zdel); free(bs); free(xh);
-    /************************************************/
+    /****************************************************/
+    free(Xdel); free(Ydel); free(Zdel);
     free(Tomorange_X_Ar);
     return *A;
 }
