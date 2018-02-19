@@ -94,28 +94,25 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
     
     xh3[0] = x0; xh3[1] = y0; xh3[2] = z0;
     matvet3(bs,xh3,xh);  /* matrix-vector multiplication */
-    free(xh3);
-    
-    xh1 = malloc(3*sizeof(float));
-    xh2 = malloc(3*sizeof(float));
+    free(xh3);    
+
     if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {	        
-#pragma omp parallel for shared(A,bs) private(k,i,j,T,aa,bb,cc,xh2,xh1)
+#pragma omp parallel for shared(A) private(k,i,j,T,aa,bb,cc,xh2,xh1)
         for(k=0; k<N; k++) {
             for(i=0; i<N; i++) {
                 for(j=0; j<N; j++) {
                     if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
                         
-                        //xh1 = malloc(3*sizeof(float));
-                        //xh2 = malloc(3*sizeof(float));
-                        memset(xh1, 0, 3);
-                        memset(xh2, 0, 3);
+                        xh1 = malloc(3*sizeof(float));
+                        xh2 = malloc(3*sizeof(float));
                         xh1[0]=Tomorange_X_Ar[i];
                         xh1[1]=Tomorange_X_Ar[j];
                         xh1[2]=Tomorange_X_Ar[k];
                         matvet3(bs,xh1,xh2);
                         aa = a2*powf((xh2[0]-xh[0]),2);
                         bb = b2*powf((xh2[1]-xh[1]),2);
-                        cc = c2*powf((xh2[2]-xh[2]),2);                        
+                        cc = c2*powf((xh2[2]-xh[2]),2);
+                        free(xh1); free(xh2);
                     }
                     else {
                         aa = a2*powf(Xdel[i],2);
@@ -191,7 +188,7 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
             }
         } /*k-loop*/
     }    
-    free(Xdel); free(Ydel); free(Zdel); free(bs); free(xh); free(xh1); free(xh2);
+    free(Xdel); free(Ydel); free(Zdel); free(bs); free(xh);
     /************************************************/
     free(Tomorange_X_Ar);
     return *A;
