@@ -32,7 +32,6 @@ setup(
     ext_modules = cythonize([ Extension("tomophantom.phantom3d",
                             sources = [ "src/phantom3d.pyx",
                                         "../functions/buildPhantom3D_core.c",
-                                        "../functions/buildSino3D_core.c",
                                         "../functions/utils.c"
                                       ],
                             include_dirs = extra_include_dirs,

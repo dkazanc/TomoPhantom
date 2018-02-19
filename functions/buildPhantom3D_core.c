@@ -21,7 +21,7 @@
 
 #define M_PI 3.14159265358979323846
 
-/* Function to read from the file Phantom3DLibrary.dat the required parameters to build 3D analytical models
+/* Function to read parameters from the file Phantom3DLibrary.dat to build 3D analytical models
  *
  * Input Parameters:
  * 1. ModelNo - the model number from Phantom3DLibrary file
@@ -42,7 +42,7 @@
  * 1. The analytical phantom size of [N x N x N]
  */
 
-float buildPhantom3D_core_single(float *A, int N,  int Object,
+float buildPhantom3D_core_single(float *A, int N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -90,13 +90,13 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
     a2 = 1.0f/(a*a);
     b2 = 1.0f/(b*b);    
     c2 = 1.0f/(c*c);  
-    su3(bs,psi1,psi2,psi3); /*call subroutine (rotation 3x3 matrix) */
+    matrot3(bs,psi1,psi2,psi3); /* rotation of 3x3 matrix */
     
     xh1[0] = x0; xh1[1] = y0; xh1[2] = z0;
-    mmtvc(bs,xh1,xh);  /*call subroutine */
+    matvet3(bs,xh1,xh);  /* matrix-vector multiplication */
     free(xh1);
     
-    if ((Object == 1) || (Object == 2) || (Object == 3) || (Object == 4)) {
+    if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {
         
 #pragma omp parallel for shared(A) private(k,i,j,T,aa,bb,cc,xh2,xh1)
         for(k=0; k<N; k++) {
@@ -109,7 +109,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                         xh1[0]=Tomorange_X_Ar[i];
                         xh1[1]=Tomorange_X_Ar[j];
                         xh1[2]=Tomorange_X_Ar[k];
-                        mmtvc(bs,xh1,xh2);
+                        matvet3(bs,xh1,xh2);
                         aa = a2*powf((xh2[0]-xh[0]),2);
                         bb = b2*powf((xh2[1]-xh[1]),2);
                         cc = c2*powf((xh2[2]-xh[2]),2);
@@ -121,21 +121,21 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                         cc = c2*powf(Zdel[k],2);
                     }
                     T = (aa + bb + cc);
-                    if (Object == 1) {
+                    if (strcmp("gaussian",Object) == 0) {		
                         /* The object is a volumetric gaussian */
                         T = C0*expf(C1*T);
                     }
-                    if (Object == 2) {
+                    if (strcmp("paraboloid",Object) == 0) {
                         /* the object is a parabola Lambda = 1/2 */
                         if (T <= 1.0f) T = C0*sqrtf(1.0f - T);
                         else T = 0.0f;
                     }
-                    if (Object == 3) {
+                    if (strcmp("ellipsoid",Object) == 0) {
                         /* the object is en ellipsoid */
                         if (T <= 1.0f) T = C0;
                         else T = 0.0f;
                     }
-                    if (Object == 4) {
+                    if (strcmp("cone",Object) == 0) {
                          /* the object is a cone */
                         if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
@@ -143,7 +143,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
                     A[(k)*N*N + (i)*N + (j)] += T;
                 }}}
     }
-    if (Object == 5) {
+    if (strcmp("cuboid",Object) == 0) {
         /* the object is a cube */
         float x0r, y0r, HX, HY;
         a2 = 0.5f*a;
@@ -174,7 +174,7 @@ float buildPhantom3D_core_single(float *A, int N,  int Object,
             }
         }
     }
-    if (Object == 6) {
+    if (strcmp("ellipsetube",Object) == 0) {
         /* the object is an elliptical disk (2D) extended into 3D  */
 #pragma omp parallel for shared(A) private(k,i,j,T)
         for(k=0; k<N; k++) {
@@ -254,15 +254,13 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                 }
                 
                 /* loop over all components */
-                for(ii=0; ii<Components; ii++) {
-                    int Object = 0;
+                for(ii=0; ii<Components; ii++) {                    
                     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
                     
                     if (fgets(tempbuff,200,in_file)) {
                         sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10, tmpstr11, tmpstr12);
                     }
-                    if  (strcmp(tmpstr1,"Object") == 0) {
-                        Object = atoi(tmpstr2); /* analytical model */
+                    if  (strcmp(tmpstr1,"Object") == 0) {                        
                         C0 = (float)atof(tmpstr3); /* intensity */
                         y0 = (float)atof(tmpstr4); /* x0 position */
                         x0 = (float)atof(tmpstr5); /* y0 position */
@@ -273,13 +271,13 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                         psi_gr1 = (float)atof(tmpstr10); /* rotation angle 1*/
                         psi_gr2 = (float)atof(tmpstr11); /* rotation angle 2*/
                         psi_gr3 = (float)atof(tmpstr12); /* rotation angle 3*/
-                        printf("\nObject : %i \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \nPhi1 : %f \nPhi2 : %f \nPhi3 : %f\n", Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
+                        printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \nPhi1 : %f \nPhi2 : %f \nPhi3 : %f\n", tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
                     }
                     /*  check that the parameters are reasonable  */
                     func_val = parameters_check3D(C0, x0, y0, z0, a, b, c);
                     
                     /* build phantom */
-                    if (func_val == 0) buildPhantom3D_core_single(A, N, Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
+                    if (func_val == 0) buildPhantom3D_core_single(A, N, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
                     else printf("\nFunction prematurely terminated, not all objects included");
                 }
             }

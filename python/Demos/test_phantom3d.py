@@ -24,7 +24,7 @@ class TestTomophantom3D(unittest.TestCase):
         params = np.array([(2, 1.00, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, 0.0),], dtype=[('Obj', np.int), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32), ('z0', np.float32),('a',np.float32), ('b', np.float32), ('c', np.float32), ('phi', np.float32)])
         data_single_not = tomophantom.phantom3d.build_volume_phantom_3d_params(256, params)
         self.assertEqual(np.allclose(data, data_single_not), False)        
-        
+    """   
     def test_create_singoram_phantom3d(self):
         [tpath, filename] = os.path.split(os.path.abspath(tomophantom.__file__))
         libpath = os.path.join(tpath,'models/Phantom3DLibrary.dat')
@@ -47,7 +47,7 @@ class TestTomophantom3D(unittest.TestCase):
         params = np.array([(2, 1.00, 0.0, 0.0, 0.0, 0.5, 0.5, 0.5, 0.0),], dtype=[('Obj', np.int), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32), ('z0', np.float32),('a',np.float32), ('b', np.float32), ('c', np.float32), ('phi', np.float32)])
         data_single_not = tomophantom.phantom3d.build_sinogram_phantom_3d_params(256, 256, angles, centering, params)
         self.assertEqual(np.allclose(data, data_single_not), False)        
-        
+     """
         
 if __name__ == "__main__":
     unittest.main()
