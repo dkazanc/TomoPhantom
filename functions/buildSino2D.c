@@ -30,12 +30,12 @@ limitations under the License.
  * 1. Model number (see Phantom2DLibrary.dat) [required]
  * 2. ImageSize in pixels (N x N) [required]
  * 3. Detector array size P (in pixels) [required]
- * 4. Projection angles Th (in degrees) [required] 
+ * 4. Projection angles Theta (in degrees) [required] 
  * 5. An absolute path to the file Phantom2DLibrary.dat (see OS-specific syntax-differences) [required]
  * 6. ImageCentring, choose 'radon' or 'astra' (default) [optional]
  *
  * Output:
- * 1. 2D sinogram size of [P, length(Th)]
+ * 1. 2D sinogram size of [length(angles), P]
  */
 
 void mexFunction(

@@ -1,6 +1,17 @@
 """
-tomophantom.pyx
-Phantom 3D Generator
+Cython recipe to create an interface to C-functions (3D version)
+
+Copyright 2017  Srikanth Nagella / Daniil Kazantsev/ Edoardo Pasca
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 """
 
 import cython
@@ -30,14 +41,13 @@ cdef packed struct object_3d:
 	
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def build_volume_phantom_3d_params(int phantom_size, object_3d[:] obj_params):
+def Object(int phantom_size, object_3d[:] obj_params):
 	"""
-	build_volume_phantom_3d (model_parameters_filename,model_id, phantom_size)
+	Object (model_parameters_filename,model_id, phantom_size)
 	
-	Takes in a input model_id and phantom_size and returns a phantom of phantom_size x phantom_size x phantom_size of type float32 numpy array.
+	Takes in a input object description (list) and phantom_size and returns a phantom-object (3D) of phantom_size x phantom_size x phantom_size of type float32 numpy array.
 	
-	param: model_parameters_filename -- filename for the model parameters
-	param: model_id -- a model id from the functions file
+	param: obj_params -- object parameters list
 	param: phantom_size -- a phantom size in each dimension.
 	
 	returns: numpy float32 phantom array
@@ -52,20 +62,18 @@ def build_volume_phantom_3d_params(int phantom_size, object_3d[:] obj_params):
 	
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def buildPhantom3D(int model_id, int phantom_size, str model_parameters_filename):
+def Model(int model_id, int phantom_size, str model_parameters_filename):
 	"""
-	buildPhantom3D(model_id, phantom_size,model_parameters_filename)
+	Model(model_id, phantom_size,model_parameters_filename)
 	
-	Takes in a input model_id and phantom_size and returns a phantom of phantom_size x phantom_size x phantom_size of type float32 numpy array.
+	Takes in a input model_id and phantom_size and returns a phantom-model (3D) of phantom_size x phantom_size x phantom_size of type float32 numpy array.
 	
 	param: model_parameters_filename -- filename for the model parameters
 	param: model_id -- a model id from the functions file
 	param: phantom_size -- a phantom size in each dimension.
 	
-	returns: numpy float32 phantom array
-	
+	returns: numpy float32 phantom array	
 	"""
-	
 	cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([phantom_size, phantom_size, phantom_size], dtype='float32')
 	cdef float ret_val
 	py_byte_string = model_parameters_filename.encode('UTF-8')

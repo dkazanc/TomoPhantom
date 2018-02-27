@@ -29,8 +29,8 @@ setup(
     description='This is to generate phantom datasets for tomography experiments',
     version = version,
     cmdclass = {'build_ext': build_ext},
-    ext_modules = cythonize([ Extension("tomophantom.phantom3d",
-                            sources = [ "src/phantom3d.pyx",
+    ext_modules = cythonize([ Extension("tomophantom.TomoP3D",
+                            sources = [ "src/TomoP3D.pyx",
                                         "../functions/buildPhantom3D_core.c",
                                         "../functions/utils.c"
                                       ],
@@ -50,8 +50,8 @@ setup(
     description='This is to generate phantom datasets for tomography experiments',
     version = version,
     cmdclass = {'build_ext': build_ext},
-    ext_modules = cythonize([ Extension("tomophantom.phantom2d",
-                            sources = [ "src/phantom2d.pyx",
+    ext_modules = cythonize([ Extension("tomophantom.TomoP2D",
+                            sources = [ "src/TomoP2D.pyx",
                                         "../functions/buildPhantom2D_core.c",
                                         "../functions/buildSino2D_core.c",
                                         "../functions/utils.c"
