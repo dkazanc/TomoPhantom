@@ -69,7 +69,7 @@ void mexFunction(
     NStructElems = mxGetNumberOfElements(prhs[3]);
     
     /*Handling Matlab output data*/
-    int N_dims[] = {P, NStructElems}; /*format: detectors, angles dim*/
+    int N_dims[] = {NStructElems,P}; /*format: X-detectors, Y-angles dim*/
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));    
         
     buildSino2D_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);

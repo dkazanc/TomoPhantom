@@ -1,6 +1,6 @@
 """
 tomophantom.pyx
-Phantom 2D Generator
+Cython file to create an interface for C-function
 """
 
 import cython
@@ -87,14 +87,14 @@ def buildSino2D(int model_id, int image_size, int detector_size, np.ndarray[np.f
 	returns: numpy float32 phantom sinograms array.
 	
 	"""
-	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([angles.shape[0], detector_size], dtype='float32')
+	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
 	cdef float ret_val
 	py_byte_string = model_parameters_filename.encode('UTF-8')
 	cdef char* c_string = py_byte_string    
 	cdef int AngTot = angles.shape[0]
 	ret_val = buildSino2D_core(&sinogram[0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
-	return sinogram	
-	
+	return sinogram
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def build_sinogram_phantom_2d_params(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, int CenTypeIn, object_2d[:] obj_params):
@@ -113,9 +113,9 @@ def build_sinogram_phantom_2d_params(int image_size, int detector_size, np.ndarr
 	
 	"""
 	cdef Py_ssize_t i	
-	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([angles.shape[0], detector_size], dtype='float32')
+	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
 	cdef float ret_val 
 	cdef int AngTot = angles.shape[0]
 	for i in range(obj_params.shape[0]):
 		ret_val = buildSino2D_core_single(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot)
-	return sinogram		
+	return sinogram.reshape(detector_size,angles.shape[0]).transpose()

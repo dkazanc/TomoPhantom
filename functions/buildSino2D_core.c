@@ -33,7 +33,7 @@ limitations under the License.
  * 6. VolumeCentring, choose 'radon' or 'astra' (default) [optional]
  *
  * Output:
- * 1. 2D sinogram size of [P, length(Th)]
+ * 1. 2D sinogram size of [Y-length(Th),X-P]
  */
 
 float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot)
@@ -56,7 +56,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
     for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
     AnglesRad = malloc(AngTot*sizeof(float));
-    for(i=0; i<AngTot; i++)  AnglesRad[i] = (Th[i])*((float)M_PI/180.0f);
+    for(i=0; i<AngTot; i++)  AnglesRad[i] = (Th[i])*((float)M_PI/180.0f) + M_PI;
     
     C1 = -4.0f*logf(2.0f);
     
@@ -82,17 +82,17 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         /* The object is a gaussian */
         AA5 = (N/2.0f)*(C0*(a)*(b)/2.0f)*sqrtf((float)M_PI/logf(2.0f));
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3)
-        for(i=0; i<AngTot; i++) {
-            sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
-            cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
-            delta1 = 1.0f/(a22*cos_2+b22*sin_2);
+             for(i=0; i<AngTot; i++) {
+            sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
+            cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
+            delta1 = 1.0f/(a22*sin_2+b22*cos_2);
             delta_sq = sqrtf(delta1);
             first_dr = AA5*delta_sq;
-            AA2 = -x00*cosf(AnglesRad[i])+y00*sinf(AnglesRad[i]); /*p0*/
+            AA2 = -x00*sinf(AnglesRad[i])+y00*cosf(AnglesRad[i]); /*p0*/
             for(j=0; j<P; j++) {
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 under_exp = (C1*AA3)*delta1;
-                A[(i)*P + (j)] += first_dr*expf(under_exp);
+                A[j*AngTot+i] += first_dr*expf(under_exp);
             }}
     }
     else if (strcmp("parabola",Object) == 0) {
@@ -100,17 +100,17 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         AA5 = (N/2.0f)*(((float)M_PI/2.0f)*C0*((a))*((b)));
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
         for(i=0; i<AngTot; i++) {
-            sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
-            cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
-            delta1 = 1.0f/(a22*cos_2+b22*sin_2);
+            sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
+            cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
+            delta1 = 1.0f/(a22*sin_2+b22*cos_2);
             delta_sq = sqrtf(delta1);
             first_dr = AA5*delta_sq;
-            AA2 = -x00*cosf(AnglesRad[i])+y00*sinf(AnglesRad[i]); /*p0*/
+            AA2 = -x00*sinf(AnglesRad[i])+y00*cosf(AnglesRad[i]); /*p0*/
             for(j=0; j<P; j++) {
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 AA6 = AA3*delta1;
                 if (AA6 < 1.0f) {
-                    A[(i)*P + (j)] += first_dr*(1.0f - AA6);
+                    A[j*AngTot+i] += first_dr*(1.0f - AA6);
                 }
             }}
     }
@@ -119,17 +119,17 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         AA5 = (N*C0*a*b);
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
         for(i=0; i<AngTot; i++) {
-            sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
-            cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
-            delta1 = 1.0f/(a22*cos_2+b22*sin_2);
+            sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
+            cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
+            delta1 = 1.0f/(a22*sin_2 + b22*cos_2);
             delta_sq = sqrtf(delta1);
             first_dr = AA5*delta_sq;
-            AA2 = -x00*cosf(AnglesRad[i])+y00*sinf(AnglesRad[i]); /*p0*/
+            AA2 = -x00*sinf(AnglesRad[i]) + y00*cosf(AnglesRad[i]); /*p0*/
             for(j=0; j<P; j++) {
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 AA6 = (AA3)*delta1;
                 if (AA6 < 1.0f) {
-                    A[(i)*P + (j)] += first_dr*sqrtf(1.0f - AA6);
+                    A[j*AngTot+i] += first_dr*sqrtf(1.0f - AA6);
                 }
             }}
     }
@@ -138,17 +138,17 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         AA5 = (N/2.0f)*(4.0f*((0.25f*(a)*(b)*C0)/2.5f));
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
         for(i=0; i<AngTot; i++) {
-            sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
-            cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
-            delta1 = 1.0f/(0.25f*(a22)*cos_2+0.25f*b22*sin_2);
+            sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
+            cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
+            delta1 = 1.0f/(0.25f*(a22)*sin_2 + 0.25f*b22*cos_2);
             delta_sq = sqrtf(delta1);
             first_dr = AA5*delta_sq;
-            AA2 = -x00*cosf(AnglesRad[i])+y00*sinf(AnglesRad[i]); /*p0*/
+            AA2 = -x00*sinf(AnglesRad[i]) + y00*cosf(AnglesRad[i]); /*p0*/
             for(j=0; j<P; j++) {
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 AA6 = AA3*delta1;
                 if (AA6 < 1.0f) {
-                    A[(i)*P + (j)] += first_dr*(1.0f - AA6);
+                    A[j*AngTot+i] += first_dr*(1.0f - AA6);
                 }
             }}
     }
@@ -158,12 +158,12 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         AA5 = (N/2.0f)*(a*b*C0);
 #pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6,pps2,rlogi,ty1)
         for(i=0; i<AngTot; i++) {
-            sin_2 = powf((sinf((AnglesRad[i]) + phi_rot_radian)),2);
-            cos_2 = powf((cosf((AnglesRad[i]) + phi_rot_radian)),2);
-            delta1 = 1.0f/(a22*cos_2+b22*sin_2);
+            sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
+            cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
+            delta1 = 1.0f/(a22*sin_2 + b22*cos_2);
             delta_sq = sqrtf(delta1);
             first_dr = AA5*delta_sq;
-            AA2 = -x00*cosf(AnglesRad[i])+y00*sinf(AnglesRad[i]); /*p0*/
+            AA2 = -x00*sinf(AnglesRad[i]) + y00*cosf(AnglesRad[i]); /*p0*/
             for(j=0; j<P; j++) {
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 AA6 = AA3*delta1;
@@ -177,7 +177,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                     ty1 = (1.0f + pps2)/(1.0f - pps2);
                     if (ty1 > 0.0f) rlogi = 0.5f*AA6*logf(ty1);
                 }
-                A[(i)*P + (j)] += first_dr*(pps2 - rlogi);
+                A[j*AngTot+i] += first_dr*(pps2 - rlogi);
             }}
     }
 	else if (strcmp("rectangle",Object) == 0) {
@@ -197,14 +197,14 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
         }
         
         xwid = b;
-		ywid = a;
-       
+		ywid = a;        
+        
 		if (phi_rot_radian < 0)  {ksi1 = (float)M_PI + phi_rot_radian;}
         else ksi1 = phi_rot_radian;
         
-#pragma omp parallel for shared(A) private(i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)
-				for(i=0; i<AngTot; i++) {
-					ksi00 = AnglesRad[(AngTot-1)-i] ; 
+#pragma omp parallel for shared(A) private(i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)		
+        			for(i=0; i<AngTot; i++) {
+					ksi00 = AnglesRad[(AngTot-1)-i] - M_PI; 
 					for(j=0; j<P; j++) {
 						p00 = Sinorange_P_Ar[j];
 
@@ -216,8 +216,8 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
 							ksi = ksi - (float)M_PI;
 							p = -p00; }
 
-						C = cosf(ksi); S = sinf(ksi);
-						XSYC = -x11*S + y11*C;
+						S = sinf(ksi); C = cosf(ksi);
+						XSYC = -x11*C + y11*S;
 						A2 = xwid*0.5f;
 						B2 = ywid*0.5f;
 
@@ -261,8 +261,8 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
                         }
                         else SS = xwid/CF*C0;                                   
                         if (PC >= QP) SS=0.0f;
-						A[i*P + (j)] += (N/2.0f)*SS;
-					}}
+						A[j*AngTot+i] += (N/2.0f)*SS;
+					}}       
 	}
     else {
         printf("%s\n", "No such object exists!");
@@ -287,8 +287,7 @@ float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int
             printf("models/Phantom2DLibrary.dat has not been found");
             return 0;
         }
-    }
-    
+    }    
     char tmpstr1[16];
     char tmpstr2[16];
     char tmpstr3[16];

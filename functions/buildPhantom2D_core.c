@@ -77,7 +77,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = C1*(a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2));
-                A[i*N + j] += C0*expf(T);
+                A[j*N+i] += C0*expf(T);
             }}
     }
     else if (strcmp("parabola",Object) == 0) {
@@ -88,7 +88,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                 T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                 if (T <= 1) T = C0*sqrtf(1.0f - T);
                 else T = 0.0f;
-                A[(i)*N + (j)] += T;
+                A[j*N+i] += T;
             }}
     }
     else if (strcmp("ellipse",Object) == 0) {
@@ -99,7 +99,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
-                        A[(i)*N + (j)] = A[(i)*N + (j)] + T;
+                        A[j*N+i] = A[j*N+i] + T;
                     }}
     }
      else if (strcmp("parabola1",Object) == 0) {
@@ -110,7 +110,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                         T = (4.0f*a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (4.0f*b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0*sqrtf(1.0f - T);
                         else T = 0.0f;
-                        A[(i)*N + (j)] += T;
+                        A[j*N+i] += T;
                     }}
             }
      else if (strcmp("cone",Object) == 0) {
@@ -121,7 +121,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
-                        A[(i)*N + (j)] += T;
+                        A[j*N+i] += T;
                     }}
     }
     else if (strcmp("rectangle",Object) == 0) {
@@ -135,17 +135,17 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
             phi_rot_radian = (float)M_PI + phi_rot_radian;
             sin_phi=sinf(phi_rot_radian);
             cos_phi=cosf(phi_rot_radian);
-        }
+        }         
 #pragma omp parallel for shared(A) private(i,j,HX,HY,T)
                 for(i=0; i<N; i++) {
                     for(j=0; j<N; j++) {
-                        HX = fabsf((Xdel[i] - x0r)*cos_phi + (Ydel[j] - y0r)*sin_phi);
+                        HX = fabsf((Xdel[i] - x0r)*sin_phi + (Ydel[j] - y0r)*cos_phi);                        
                         T = 0.0f;
                         if (HX <= a2) {
-                            HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
+                            HY = fabsf((Ydel[j] - y0r)*sin_phi - (Xdel[i] - x0r)*cos_phi);                            
                             if (HY <= b2) {T = C0;}
                         }
-                        A[(i)*N + (j)] += T;
+                        A[j*N+i] += T;
                     }}
     }
     else {

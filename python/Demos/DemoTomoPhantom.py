@@ -9,6 +9,8 @@ If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
 Phantom3DLibrary.dat
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
+Run demo from the folder "Demos"
+
 @author: Daniil Kazantsev
 """
 import numpy as np
@@ -21,7 +23,7 @@ from astraOP import AstraTools
 model = 11
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom2DLibrary.dat'
+pathTP = '../../functions/models/Phantom2DLibrary.dat'
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = phantom2d.buildPhantom2D(model, N_size, pathTP)
 
@@ -78,12 +80,12 @@ tic=timeit.default_timer()
 model = 9
 N_size = 512
 #specify a full path to the parameters file
-pathTP3 = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom3DLibrary.dat'
+pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
 #This will generate a N_size x N_size x N_size phantom (3D)
 phantom_tm = phantom3d.buildPhantom3D(model, N_size, pathTP3)
 toc=timeit.default_timer()
 Run_time = toc - tic
-print("Phantom has been built in {} seconds".format(Run_time))
+print("Phantom had built in {} seconds".format(Run_time))
 
 sliceSel = int(0.5*N_size)
 #plt.gray()
