@@ -37,8 +37,9 @@ limitations under the License.
  * Output:
  * 1. The analytical phantom size of [N x N]
  */
-
-float buildPhantom2D_core_single(float *A, int N, char *Object,
+ 
+/* function to build a single object */
+float TomoP2DObject(float *A, int N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -77,7 +78,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = C1*(a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2));
-                A[i*N + j] += C0*expf(T);
+                A[j*N+i] += C0*expf(T);
             }}
     }
     else if (strcmp("parabola",Object) == 0) {
@@ -88,7 +89,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                 T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                 if (T <= 1) T = C0*sqrtf(1.0f - T);
                 else T = 0.0f;
-                A[(i)*N + (j)] += T;
+                A[j*N+i] += T;
             }}
     }
     else if (strcmp("ellipse",Object) == 0) {
@@ -99,7 +100,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
-                        A[(i)*N + (j)] = A[(i)*N + (j)] + T;
+                        A[j*N+i] = A[j*N+i] + T;
                     }}
     }
      else if (strcmp("parabola1",Object) == 0) {
@@ -110,7 +111,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                         T = (4.0f*a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (4.0f*b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0*sqrtf(1.0f - T);
                         else T = 0.0f;
-                        A[(i)*N + (j)] += T;
+                        A[j*N+i] += T;
                     }}
             }
      else if (strcmp("cone",Object) == 0) {
@@ -121,7 +122,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
-                        A[(i)*N + (j)] += T;
+                        A[j*N+i] += T;
                     }}
     }
     else if (strcmp("rectangle",Object) == 0) {
@@ -135,17 +136,17 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
             phi_rot_radian = (float)M_PI + phi_rot_radian;
             sin_phi=sinf(phi_rot_radian);
             cos_phi=cosf(phi_rot_radian);
-        }
+        }         
 #pragma omp parallel for shared(A) private(i,j,HX,HY,T)
                 for(i=0; i<N; i++) {
                     for(j=0; j<N; j++) {
-                        HX = fabsf((Xdel[i] - x0r)*cos_phi + (Ydel[j] - y0r)*sin_phi);
+                        HX = fabsf((Xdel[i] - x0r)*sin_phi + (Ydel[j] - y0r)*cos_phi);                        
                         T = 0.0f;
                         if (HX <= a2) {
-                            HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
+                            HY = fabsf((Ydel[j] - y0r)*sin_phi - (Xdel[i] - x0r)*cos_phi);                            
                             if (HY <= b2) {T = C0;}
                         }
-                        A[(i)*N + (j)] += T;
+                        A[j*N+i] += T;
                     }}
     }
     else {
@@ -158,7 +159,7 @@ float buildPhantom2D_core_single(float *A, int N, char *Object,
     return *A;
 }
 
-float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
+float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
     int ii, func_val;
@@ -232,7 +233,7 @@ float buildPhantom2D_core(float *A, int ModelSelected, int N, char *ModelParamet
                     func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                     
                     /* build phantom */
-                    if (func_val == 0) buildPhantom2D_core_single(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
+                    if (func_val == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
                     else printf("\nFunction prematurely terminated, not all objects included");         
                     
                 }

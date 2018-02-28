@@ -19,7 +19,7 @@ limitations under the License.
 #include <stdio.h>
 #include "omp.h"
 
-#include "buildSino2D_core.h"
+#include "TomoP2DModelSino_core.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -30,12 +30,12 @@ limitations under the License.
  * 1. Model number (see Phantom2DLibrary.dat) [required]
  * 2. ImageSize in pixels (N x N) [required]
  * 3. Detector array size P (in pixels) [required]
- * 4. Projection angles Th (in degrees) [required] 
+ * 4. Projection angles Theta (in degrees) [required] 
  * 5. An absolute path to the file Phantom2DLibrary.dat (see OS-specific syntax-differences) [required]
  * 6. ImageCentring, choose 'radon' or 'astra' (default) [optional]
  *
  * Output:
- * 1. 2D sinogram size of [P, length(Th)]
+ * 1. 2D sinogram size of [length(angles), P]
  */
 
 void mexFunction(
@@ -69,10 +69,10 @@ void mexFunction(
     NStructElems = mxGetNumberOfElements(prhs[3]);
     
     /*Handling Matlab output data*/
-    int N_dims[] = {P, NStructElems}; /*format: detectors, angles dim*/
+    int N_dims[] = {NStructElems,P}; /*format: X-detectors, Y-angles dim*/
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));    
         
-    buildSino2D_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);
+    TomoP2DModelSino_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);
     
     mxFree(ModelParameters_PATH);
 }

@@ -9,7 +9,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 09; % Select a model
+ModelNo = 9; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -17,7 +17,7 @@ N = 256; % x-y-z size (cubic image)
 curDir   = pwd;
 mainDir  = fileparts(curDir);
 pathTP = strcat(mainDir,'/functions/models/Phantom3DLibrary.dat'); % path to TomoPhantom parameters file
-[G] = buildPhantom3D(ModelNo,N,pathTP);
+[G] = TomoP3DModel(ModelNo,N,pathTP);
 
 % check 3 projections
 figure; 

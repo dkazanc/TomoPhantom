@@ -42,7 +42,8 @@
  * 1. The analytical phantom size of [N x N x N]
  */
 
-float buildPhantom3D_core_single(float *A, int N, char *Object,
+/* function to build a single object */
+float TomoP3DObject(float *A, int N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -143,7 +144,7 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
                         if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
                     }
-                    A[(k)*N*N + (i)*N + (j)] += T;                   
+                    A[(k)*N*N + j*N+i] += T;                   
                 }}}                
     }
     if (strcmp("cuboid",Object) == 0) {
@@ -171,14 +172,14 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
                             HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
                             if (HY <= b2) {T = C0;}
                         }
-                        A[(k)*N*N + (i)*N + (j)] += T;
+                        A[(k)*N*N + j*N+i] += T;
                     }
                 }
             }
         }
     }
-    if (strcmp("ellipsetube",Object) == 0) {
-        /* the object is an elliptical disk (2D) extended into 3D  */
+    if (strcmp("ellipticalcylinder",Object) == 0) {
+        /* the object is an elliptical cylinder  */
 #pragma omp parallel for shared(A) private(k,i,j,T)
         for(k=0; k<N; k++) {
             if  (fabs(Zdel[k]) < c) {
@@ -187,7 +188,7 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
-                        A[(k)*N*N + (i)*N + (j)] += T;
+                        A[(k)*N*N + j*N+i] += T;
                     }}
             }
         } /*k-loop*/
@@ -198,7 +199,7 @@ float buildPhantom3D_core_single(float *A, int N, char *Object,
     return *A;
 }
 
-float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
+float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
     int ii, func_val;
@@ -218,7 +219,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
     {
         
         char tmpstr1[16];
-        char tmpstr2[16];
+        char tmpstr2[22];
         char tmpstr3[16];
         char tmpstr4[16];
         char tmpstr5[16];
@@ -234,7 +235,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
             
             if(tempbuff[0] == '#') continue;
             
-            sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2);
+            sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2);
             /*printf("<<%s>>\n",  tmpstr1);*/
             int Model = 0, Components = 0;
             
@@ -247,7 +248,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                 /* read the model parameters */
                 printf("\nThe selected Model : %i \n", Model);
                 if (fgets(tempbuff,200,in_file)) {
-                    sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2); }
+                    sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2); }
                 if  (strcmp(tmpstr1,"Components") == 0) {
                     Components = atoi(tmpstr2);
                 }
@@ -261,7 +262,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
                     
                     if (fgets(tempbuff,200,in_file)) {
-                        sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10, tmpstr11, tmpstr12);
+                        sscanf(tempbuff, "%15s : %21s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8, tmpstr9, tmpstr10, tmpstr11, tmpstr12);
                     }
                     if  (strcmp(tmpstr1,"Object") == 0) {                        
                         C0 = (float)atof(tmpstr3); /* intensity */
@@ -280,7 +281,7 @@ float buildPhantom3D_core(float *A, int ModelSelected, int N, char *ModelParamet
                     func_val = parameters_check3D(C0, x0, y0, z0, a, b, c);
                     
                     /* build phantom */
-                    if (func_val == 0) buildPhantom3D_core_single(A, N, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
+                    if (func_val == 0) TomoP3DObject(A, N, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3);
                     else printf("\nFunction prematurely terminated, not all objects included");
                 }
             }

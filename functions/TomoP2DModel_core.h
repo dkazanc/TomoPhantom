@@ -12,11 +12,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+#include <matrix.h>
 #include <math.h>
 #include <stdlib.h>
 #include <memory.h>
 #include <stdio.h>
 #include "omp.h"
 
-float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn,char* ModelParametersFilename);
-float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Obj, float C0, float x0, float y0, float a, float b, float phi_rot);
+float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename);
+float TomoP2DObject(float *A, int N,  int Object, float C0, float x0, float y0, float a, float b, float phi_rot);

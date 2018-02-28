@@ -12,7 +12,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-#include <matrix.h>
 #include "mex.h"
 #include <math.h>
 #include <stdlib.h>
@@ -20,20 +19,20 @@ limitations under the License.
 #include <stdio.h>
 #include "omp.h"
 
-#include "buildPhantom2D_core.h"
+#include "TomoP3DModel_core.h"
 
 #define M_PI 3.14159265358979323846
 
-/* Function to read from the file Phantom2DLibrary.dat the required parameters to build 2D analytical models
+/* Function to read from the file Phantom3DLibrary.dat the required parameters to build 3D analytical models
  * (MATLAB mex-wrapper)
  *
  * Input Parameters:
- * 1. ModelNo - a model number from Phantom2DLibrary file
- * 2. VolumeSize in voxels (N x N)
- * 3. An absolute path to the file Phantom2DLibrary.dat (see OS-specific syntax-differences)
+ * 1. ModelNo - a model number from Phantom3DLibrary file
+ * 2. VolumeSize in voxels (N x N x N)
+ * 3. An absolute path to the file Phantom3DLibrary.dat (ssee OS-specific syntax-differences)
  *
  * Output:
- * 1. The analytical phantom size of [N x N]
+ * 1. The analytical phantom size of [N x N x N]
  */
 
 void mexFunction(
@@ -53,10 +52,10 @@ void mexFunction(
     ModelParameters_PATH = mxArrayToString(prhs[2]); /* provide an absolute path to the file */      
     
     /*Handling Matlab output data*/
-    int N_dims[] = {N, N};
-    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));   
+    int N_dims[] = {N, N, N};
+    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL));   
     
-    buildPhantom2D_core(A, ModelSelected, N, ModelParameters_PATH);
+    TomoP3DModel_core(A, ModelSelected, N, ModelParameters_PATH);
     
     mxFree(ModelParameters_PATH);
 }

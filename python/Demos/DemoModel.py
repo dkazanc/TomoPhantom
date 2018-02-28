@@ -9,24 +9,26 @@ If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
 Phantom3DLibrary.dat
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
+Run demo from the folder "Demos"
+
 @author: Daniil Kazantsev
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from tomophantom import phantom2d
-from tomophantom import phantom3d
+from tomophantom import TomoP2D
+from tomophantom import TomoP3D
 from astraOP import AstraTools
 
 #%%
-model = 11
+model = 9
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom2DLibrary.dat'
+pathTP = '../../functions/models/Phantom2DLibrary.dat'
 #This will generate a N_size x N_size phantom (2D)
-phantom_2D = phantom2d.buildPhantom2D(model, N_size, pathTP)
+phantom_2D = TomoP2D.Model(model, N_size, pathTP)
 
 plt.figure(1)
-plt.rcParams.update({'font.size': 22})
+plt.rcParams.update({'font.size': 21})
 plt.imshow(phantom_2D, vmin=0, vmax=1)
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('{}''{}'.format('2D Phantom using model no.',model))
@@ -37,10 +39,10 @@ angles = np.linspace(0,180,angles_num,dtype='float32')
 angles_rad = angles*(np.pi/180)
 P = int(np.sqrt(2)*N_size) #detectors
 
-sino_an = phantom2d.buildSino2D(model, N_size, P, angles, pathTP, 1)
+sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
 
 plt.figure(2)
-plt.rcParams.update({'font.size': 22})
+plt.rcParams.update({'font.size': 21})
 plt.imshow(sino_an)
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
@@ -76,14 +78,14 @@ import timeit
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
 model = 9
-N_size = 512
+N_size = 256
 #specify a full path to the parameters file
-pathTP3 = '/home/algol/Documents/DEV/TomoPhantom/functions/models/Phantom3DLibrary.dat'
+pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
 #This will generate a N_size x N_size x N_size phantom (3D)
-phantom_tm = phantom3d.buildPhantom3D(model, N_size, pathTP3)
+phantom_tm = TomoP3D.Model(model, N_size, pathTP3)
 toc=timeit.default_timer()
 Run_time = toc - tic
-print("Phantom has been built in {} seconds".format(Run_time))
+print("Phantom had built in {} seconds".format(Run_time))
 
 sliceSel = int(0.5*N_size)
 #plt.gray()
