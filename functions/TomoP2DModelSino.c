@@ -19,7 +19,7 @@ limitations under the License.
 #include <stdio.h>
 #include "omp.h"
 
-#include "buildSino2D_core.h"
+#include "TomoP2DModelSino_core.h"
 
 #define M_PI 3.14159265358979323846
 
@@ -72,7 +72,7 @@ void mexFunction(
     int N_dims[] = {NStructElems,P}; /*format: X-detectors, Y-angles dim*/
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));    
         
-    buildSino2D_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);
+    TomoP2DModelSino_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);
     
     mxFree(ModelParameters_PATH);
 }

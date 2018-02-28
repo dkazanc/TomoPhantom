@@ -20,7 +20,7 @@ from tomophantom import TomoP3D
 from astraOP import AstraTools
 
 #%%
-model = 11
+model = 9
 N_size = 512
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'

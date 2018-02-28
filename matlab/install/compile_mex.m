@@ -5,12 +5,12 @@ mkdir compiled
 cd ../functions/
 
 fprintf('%s \n', 'Building functions...');
-mex buildPhantom2D.c buildPhantom2D_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
-movefile buildPhantom2D.mexa64 ../matlab/compiled/
-mex buildSino2D.c buildSino2D_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
-movefile buildSino2D.mexa64 ../matlab/compiled/
-mex buildPhantom3D.c buildPhantom3D_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
-movefile buildPhantom3D.mexa64 ../matlab/compiled/
+mex TomoP2DModel.c TomoP2DModel_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
+movefile TomoP2DModel.mexa64 ../matlab/compiled/
+mex TomoP2DModelSino.c TomoP2DModelSino_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
+movefile TomoP2DModelSino.mexa64 ../matlab/compiled/
+mex TomoP3DModel.c TomoP3DModel_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
+movefile TomoP3DModel.mexa64 ../matlab/compiled/
 fprintf('%s \n', 'All compiled!');
 
 cd ../

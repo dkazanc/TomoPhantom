@@ -21,13 +21,13 @@ import numpy as np
 cimport numpy as np
 
 # declare the interface to the C code
-cdef extern float buildPhantom3D_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
-cdef extern float buildPhantom3D_core_single(float *A, int N,  int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3)
+cdef extern float TomoP3DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
+cdef extern float TomoP3DObject(float *A, int N, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3)
 #cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 #cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 	
 cdef packed struct object_3d:
-	np.int_t Obj
+	char[22] Obj
 	np.float32_t C0
 	np.float32_t x0
 	np.float32_t y0
@@ -57,7 +57,7 @@ def Object(int phantom_size, object_3d[:] obj_params):
 	cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([phantom_size, phantom_size, phantom_size], dtype='float32')
 	cdef float ret_val
 	for i in range(obj_params.shape[0]):
-		ret_val = buildPhantom3D_core_single(&phantom[0,0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].z0, obj_params[i].a, obj_params[i].b, obj_params[i].c, obj_params[i].psi1, obj_params[i].psi2, obj_params[i].psi3)
+		ret_val = TomoP3DObject(&phantom[0,0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].z0, obj_params[i].a, obj_params[i].b, obj_params[i].c, obj_params[i].psi1, obj_params[i].psi2, obj_params[i].psi3)
 	return phantom	
 	
 @cython.boundscheck(False)
@@ -78,5 +78,5 @@ def Model(int model_id, int phantom_size, str model_parameters_filename):
 	cdef float ret_val
 	py_byte_string = model_parameters_filename.encode('UTF-8')
 	cdef char* c_string = py_byte_string
-	ret_val = buildPhantom3D_core(&phantom[0,0,0], model_id, phantom_size, c_string)
+	ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
 	return phantom

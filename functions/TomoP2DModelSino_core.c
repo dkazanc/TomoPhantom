@@ -36,7 +36,8 @@ limitations under the License.
  * 1. 2D sinogram size of [Y-length(Th),X-P]
  */
 
-float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot)
+/* function to build a single object */
+float TomoP2DObjectSino(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot)
 {
     int i, j;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, a22, b22, phi_rot_radian;
@@ -273,7 +274,7 @@ float buildSino2D_core_single(float *A, int N, int P, float *Th, int AngTot, int
     return *A;
 }
 
-float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
+float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
     int ii, func_val;
@@ -347,7 +348,7 @@ float buildSino2D_core(float *A, int ModelSelected, int N, int P, float *Th, int
                         func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                         
                         /* build phantom */
-                        if (func_val == 0) buildSino2D_core_single(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0,y0,a,b,phi_rot);
+                        if (func_val == 0) TomoP2DObjectSino(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0,y0,a,b,phi_rot);
                         else printf("\nFunction prematurely terminated, not all objects included");    
                     }
                 }

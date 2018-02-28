@@ -19,7 +19,7 @@ N = 512; % x-y size (squared image)
 curDir   = pwd;
 mainDir  = fileparts(curDir);
 pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
-[G] = buildPhantom2D(ModelNo,N,pathTP);
+[G] = TomoP2DModel(ModelNo,N,pathTP);
 figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
 %%
 fprintf('%s \n', 'Generating sinogram analytically and numerically...');
@@ -32,7 +32,7 @@ P = size(F_d,1); %detectors dimension
 F_d = F_d';
 
 % generate the 2D analytical parallel beam sinogram
-[F_a] = buildSino2D(ModelNo, N, P, single(angles), pathTP, 'radon'); 
+[F_a] = TomoP2DModelSino(ModelNo, N, P, single(angles), pathTP, 'radon'); 
 
 figure; 
 subplot(1,2,1); imshow(F_a, []); title('Analytical Sinogram');
@@ -51,7 +51,7 @@ subplot(1,2,2); imagesc(FBP_F_d, [0 1]); title('Numerical Sinogram Reconstructio
 %%
 fprintf('%s \n', 'Use the ASTRA-toolbox to generate numerical sinogram...');
 % generate 2D analytical parallel beam sinogram (note the 'astra' opton)
-[F_a] = buildSino2D(ModelNo, N, P, single(angles), pathTP, 'astra'); 
+[F_a] = TomoP2DModelSino(ModelNo, N, P, single(angles), pathTP, 'astra'); 
 [F_num_astra] = sino2Dastra(G, (angles*pi/180), P, N, 'cpu');
 
 % calculate residiual norm (the error is expected since projection models not the same)
