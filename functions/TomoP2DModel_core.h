@@ -21,3 +21,4 @@ limitations under the License.
 
 float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename);
 float TomoP2DObject(float *A, int N,  int Object, float C0, float x0, float y0, float a, float b, float phi_rot);
+float TomoP2DObjectTemporal(float *A, int N,  int Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt);

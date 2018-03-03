@@ -1,16 +1,18 @@
-# 3D Phantom library, please use the following notations to define 3D geometrical objects:
+# 3D and 3D+time phantom library, please use the following notations to define 3D geometrical objects:
 # gaussian, paraboloid, ellipsoid, cone, cuboid, ellipticalcylinder
 # syntax for object decription -- Object : object type (see names above), C0, x0, y0, z0, a, b, c, angle1, angle2, angle3; 
 #----------------------------------------------------
 # 1 volumetric Gaussian + 1 paraboloid
 Model : 01;
 Components : 02;
+TimeSteps : 1;
 Object : gaussian 1.00 -0.3 0.1 0.0 0.3 0.2 0.5 30.0 0.0 0.0;
 Object : paraboloid 1.00 0.4 -0.1 0.0 0.2 0.2 0.3 0.0 0.0 0.0;
 #----------------------------------------------------
 # 18 components: 16 ellipsoids + 2 Gaussians
 Model : 02;
 Components : 18;
+TimeSteps : 1;
 Object : ellipsoid 1.0 0.0 0.7 0.0 0.2 0.2 0.9 00 00 00;           
 Object : ellipsoid 1.0 -.6 .35 0.0 0.2 0.2 0.9 00 00 00;
 Object : ellipsoid 1.0 -.6 -.35 0.0 0.2 0.2 0.9 00 00 00;
@@ -33,6 +35,7 @@ Object : gaussian 1.0 0.0 -0.25 0.0 0.1 0.1 0.15 90 00 00;
 # 9 components: 8 paraboloids + 1 cuboid
 Model : 03;
 Components : 09;
+TimeSteps : 1;
 Object : cuboid 1.00 0.0 0.0 0.0 0.5 0.5 0.5 00 00 00;
 Object : paraboloid 1.00 0.45 0.45 0.25 0.4 0.4 0.4 00 00 00;
 Object : paraboloid 1.00 -0.45 0.45 0.25 0.4 0.4 0.4 00 00 00;
@@ -46,11 +49,13 @@ Object : paraboloid 1.00 0.45 -0.45 -0.25 0.4 0.4 0.4 00 00 00;
 # 1 cuboid (rotated)
 Model : 04;
 Components : 01;
+TimeSteps : 1;
 Object : cuboid 1.00 0.0 0.0 0.0 0.65 0.65 0.65 45 00 00;
 #----------------------------------------------------
 # 33 components: ellipsoids
 Model : 05;
 Components : 33;
+TimeSteps : 1;
 Object : ellipsoid 1.00 0.0 0.0 0.0 0.05 0.05  0.9 0;
 Object : ellipsoid 1.00 0.1 0.1 0.0 0.01 0.05 0.9 45;
 Object : ellipsoid 1.00 0.2 0.2 0.0 0.025 0.085 0.9 45;
@@ -88,11 +93,13 @@ Object : ellipsoid 1.00 -0.65 0.0 0.0 0.025 0.025  0.9 0;
 # 1 cone
 Model : 06;
 Components : 01;
+TimeSteps : 1;
 Object : cone 1.00 0.0 0.0 0.0 0.4 0.3 0.5 45 -20 00;
 #----------------------------------------------------
 # 81 components: 3D elliptical cylinders of different sizes and intensities
 Model : 07;
 Components : 81;
+TimeSteps : 1;
 Object : ellipticalcylinder 0.75 -0.8 -0.81 0.0 0.06 0.06 1.0 0;
 Object : ellipticalcylinder 1.00 -0.6 -0.78 0.0 0.06 0.06 1.0 0;
 Object : ellipticalcylinder 0.9 -0.4 -0.82 0.0 0.06 0.06 1.0 0;
@@ -178,6 +185,7 @@ Object : ellipticalcylinder 0.92 0.88 0.83 0.0 0.09 0.09 1.0 0;
 # 62 spherical ellipsoids of different sizes and intensities 
 Model : 08;
 Components : 62;
+TimeSteps : 1;
 Object : ellipsoid 0.85 -0.3 0.0 0.0 0.3 0.3 0.3 00 00 00;
 Object : ellipsoid 0.6 -0.41 -0.6 0.0 0.2 0.2 0.2 00 00 00;
 Object : ellipsoid 0.7 -0.7 -0.75 0.0 0.1 0.1 0.1 00 00 00;
@@ -244,6 +252,7 @@ Object : ellipsoid 0.70 0.35 -0.75 0.0 0.04 0.04 0.04 00 00 00;
 #  4 gaussians + 4 rectangulars + 1 paraboloid
 Model : 09;
 Components : 9;
+TimeSteps : 1;
 Object : paraboloid 1.00 0.0 0.0 0.0 0.22 0.22 0.22 0.0 0.0 0.0;
 Object : cuboid 1.00 -0.2 0.0 0.0 0.25 0.25 0.6 0.0 0.0 0.0;
 Object : cuboid 1.00 0.2 0.0 0.0 0.25 0.25 0.6 0.0 0.0 0.0;
@@ -253,4 +262,40 @@ Object : gaussian 1.00 -0.55 0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
 Object : gaussian 1.00 0.55 0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
 Object : gaussian 1.00 0.55 -0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
 Object : gaussian 1.00 -0.55 -0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
+#----------------------------------------------------
+# Temporal (3D +time) model, 1 volumetric Gaussian + 1 paraboloid
+Model : 10;
+Components : 02;
+TimeSteps : 5;
+Object : paraboloid 1.00 0.0 0.0 0.0 0.2 0.4 0.6 30.0 0.0 0.0;
+Endvar : 1.0 0.2 0.2 0.0 0.15 0.2 0.7 60.0 0.0 0.0;
+Object : gaussian 1.00 -0.45 -0.45 -0.4 0.3 0.3 0.3 00.0 0.0 0.0;
+Endvar : 1.0 0.0 -0.3 0.3 0.4 0.15 0.5 30.0 10.0 -40.0;
+#----------------------------------------------------
+# Temporal (3D +time) model, 1 volumetric Gaussian + 1 paraboloid
+Model : 11;
+Components : 11;
+TimeSteps : 10;
+Object : cuboid 1.00 0.0 0.0 -0.6 0.2 0.2 0.2 0.0 0.0 0.0;
+Endvar : 1.00 0.0 0.0 0.6 0.2 0.2 0.2 0.0 0.0 0.0;
+Object : cuboid 1.00 0.0 0.1 -0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Endvar : 1.00 0.0 0.1 -0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Object : cuboid 1.00 0.0 -0.1 -0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Endvar : 1.00 0.0 -0.1 -0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Object : cuboid 1.00 0.0 0.1 0.0 0.1 0.1 0.1 0.0 0.0 0.0;
+Endvar : 1.00 0.0 0.1 0.0 0.1 0.1 0.1 0.0 0.0 0.0;
+Object : cuboid 1.00 0.0 -0.1 0.0 0.1 0.1 0.1 0.0 0.0 0.0;
+Endvar : 1.00 0.0 -0.1 0.0 0.1 0.1 0.1 0.0 0.0 0.0;
+Object : cuboid 1.00 0.0 0.1 0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Endvar : 1.00 0.0 0.1 0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Object : cuboid 1.00 0.0 -0.1 0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Endvar : 1.00 0.0 -0.1 0.6 0.1 0.1 0.1 0.0 0.0 0.0;
+Object : ellipsoid 1.00 -0.5 -0.5 -0.6 0.2 0.1 0.2 30.0 0.0 0.0;
+Endvar : 1.00 -0.5 -0.5 0.6 0.2 0.1 0.2 -30.0 0.0 0.0;
+Object : ellipsoid 1.00 0.5 -0.5 -0.6 0.1 0.2 0.2 0.0 30.0 0.0;
+Endvar : 1.00 0.5 -0.5 0.6 0.1 0.2 0.2 0.0 -30.0 0.0;
+Object : paraboloid 1.00 -0.5 0.5 -0.6 0.1 0.25 0.2 0.0 30.0 45.0;
+Endvar : 1.00 -0.5 0.5 0.6 0.1 0.2 0.25 0.0 -30.0 -45.0;
+Object : gaussian 1.00 0.5 0.5 -0.6 0.1 0.25 0.2 45.0 30.0 45.0;
+Endvar : 1.00 0.5 0.5 0.6 0.1 0.2 0.25 0.0 -30.0 0.0;
 #----------------------------------------------------

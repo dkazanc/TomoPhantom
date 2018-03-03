@@ -20,11 +20,11 @@ limitations under the License.
 #include "omp.h"
 
 #include "TomoP2DModelSino_core.h"
+#include "utils.h"
 
 #define M_PI 3.14159265358979323846
 
-/* Function to create 2D analytical sinograms (parallel beam geometry) to 2D phantoms using Phantom2DLibrary.dat
- * (MATLAB wrapper)
+/* MATLAB mex-wrapper to generate parallel beam sinograms using TomoP2DModelSino_core.c
  *
  * Input Parameters:
  * 1. Model number (see Phantom2DLibrary.dat) [required]
@@ -35,7 +35,7 @@ limitations under the License.
  * 6. ImageCentring, choose 'radon' or 'astra' (default) [optional]
  *
  * Output:
- * 1. 2D sinogram size of [length(angles), P]
+ * 1. 2D sinogram size of [length(angles), P] or a temporal sinogram size of [length(angles), P, Time-Frames] 
  */
 
 void mexFunction(
@@ -66,14 +66,20 @@ void mexFunction(
         if (strcmp(CenType, "radon") == 0)  CenTypeIn = 0;  /* enable 'radon'-type centaering */
         mxFree(CenType);
     }
-    NStructElems = mxGetNumberOfElements(prhs[3]);
+    NStructElems = mxGetNumberOfElements(prhs[3]);    
     
+    int *steps = (int *) mxGetData(mxCreateNumericMatrix(1, 1, mxINT16_CLASS, mxREAL));
+    /* extract the number of steps to form output data */
+    extractSteps(steps, ModelSelected, ModelParameters_PATH);
+      
     /*Handling Matlab output data*/
+    if (steps[0] == 1) {    
+    /* static phantom case */    
     int N_dims[] = {NStructElems,P}; /*format: X-detectors, Y-angles dim*/
-    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));    
-        
-    TomoP2DModelSino_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);
-    
+    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL)); }
+    else {
+    int N_dims[] = {NStructElems, P, steps[0]}; /*format: X-detectors, Y-angles dim, Time-Frames*/
+    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); }    
+    TomoP2DModelSino_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);    
     mxFree(ModelParameters_PATH);
 }
-
