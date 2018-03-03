@@ -1,40 +1,47 @@
-# 2D Phantom library, please use the following notations to define 2D geometrical objects:
+# 2D and 2D+t phantoms library, please use the following notations to define 2D geometrical objects:
 # gaussian, parabola, ellipse, parabola1, cone, rectangle
 # syntax for objects decription -- Object : object type (see names above), C0, x0, y0, a, b, angle
 #----------------------------------------------------
 # 1 gaussian
 Model : 01;
 Components : 01;
+TimeSteps : 1;
 Object : gaussian 1.00 -0.1 -0.1 0.1 0.2 30.0;
 #----------------------------------------------------
 # 1 parabola1/2
 Model : 02;
 Components : 01;
+TimeSteps : 1;
 Object : parabola 1.00 -0.1 -0.1 0.1 0.2 30.0;
 #----------------------------------------------------
 # 1 ellipse
 Model : 03;
 Components : 01;
+TimeSteps : 1;
 Object : ellipse 1.00 -0.1 -0.1 0.3 0.5 30.0;
 #----------------------------------------------------
 # 1  parabola1
 Model : 04;
 Components : 01;
+TimeSteps : 1;
 Object : parabola1 1.00 -0.1 -0.1 0.3 0.45 30.0;
 #----------------------------------------------------
 # 1 cone
 Model : 05;
 Components : 01;
+TimeSteps : 1;
 Object : cone 1.00 -0.1 -0.1 0.43 0.35 -45.0;
 #----------------------------------------------------
 # 1 rectangular
 Model : 06;
 Components : 01;
+TimeSteps : 1;
 Object : rectangle 1.00 -0.15 0.2 0.4 0.3 45;
 #----------------------------------------------------
 # composite
 Model : 07;
 Components : 03;
+TimeSteps : 1;
 Object : gaussian 1.00 -0.3 -0.3 0.2 0.2 0.0;
 Object : parabola 1.00 0.3 0.3 0.2 0.35 45.0;
 Object : rectangle 1.00 0.1 -0.1 0.2 0.3 30.0;
@@ -42,6 +49,7 @@ Object : rectangle 1.00 0.1 -0.1 0.2 0.3 30.0;
 # composite of 6 gaussians
 Model : 08;
 Components : 06;
+TimeSteps : 1;
 Object : gaussian 1.00e00 0.0e00  0.7e00  0.15e00 0.15e00  00.e00;
 Object : gaussian 1.00e00 -.6e00   .35e00  0.15e00 0.15e00  00.e00;
 Object : gaussian 1.00e00 -.6e00  -.35e00  0.15e00 0.15e00  00.e00;
@@ -52,6 +60,7 @@ Object : gaussian 1.00e00  .6e00   .35e00  0.15e00 0.15e00  00.e00;
 # composite
 Model : 09;
 Components : 05;
+TimeSteps : 1;
 Object : rectangle 1.00e00  0.0  0.0  0.50e00 0.3e00 00.e00;
 Object : gaussian 1.00e00  0.6  0.0  0.15 0.15 00;
 Object : gaussian 1.00e00  -0.6  0.0  0.15 0.15 00;
@@ -61,6 +70,7 @@ Object : parabola1 1.00e00  0.0  0.55  0.4 0.4 00;
 # composite
 Model : 10;
 Components : 05;
+TimeSteps : 1;
 Object : rectangle 1.00e00  0.0  0.0  0.32 0.32 00.e00;
 Object : gaussian 1.00e00  0.5  0.0  0.17 0.17 00;
 Object : parabola 1.00e00  -0.5  0.0  0.2 0.2 00;
@@ -70,6 +80,7 @@ Object : cone 1.00e00  0.0  0.55  0.3 0.3 00;
 # composite (SPECTRAL) phantom
 Model : 11;
 Components : 25;
+TimeSteps : 1;
 Object : ellipse .3e00 0e00  0.0e00  .9500 .95e00  00.e00; 
 Object : ellipse .5e00 0.0e00  0.7e00  0.2e00 0.2e00  00.e00;
 Object : ellipse .500e00 -.6e00   .35e00  0.2e00 0.2e00  00.e00;
@@ -95,4 +106,55 @@ Object : ellipse .90e00 -.38e00   .65e00  0.01e00 0.01e00  00.e00;
 Object : ellipse .90e00  .0e00  -.35e00  0.01e00 0.01e00  00.e00;
 Object : ellipse .900e00  .32e00   .18e00  0.01e00 0.01e00  00.e00;           
 Object : ellipse .800e00 -.32e00   .18e00  0.01e00 0.01e00  00.e00;
+#----------------------------------------------------
+# composite Temporal [2D + time] model
+Model : 12;
+Components : 03;
+TimeSteps : 3;
+Object : gaussian 0.7 0.0 0.0 0.15 0.15 0.0;
+Endvar : 1.0 -0.5 -0.5 0.2 0.5 90.0;
+Object : parabola 1.00 0.4 0.45 0.2 0.35 45.0;
+Endvar : 0.5 -0.4 0.45 0.25 0.25 0.0;
+Object : rectangle 1.00 0.1 -0.1 0.2 0.3 30.0;
+Endvar : 1.0 0.2 -0.35 0.25 0.3 90.0;
+#----------------------------------------------------
+# Temporal [2D + time] model
+Model : 13;
+Components : 03;
+TimeSteps : 350;
+Object : rectangle 0.3 -0.4 -0.4 0.05 0.05 0.0;
+Endvar : 1.0 0.1 0.1 0.5 0.25 -45.0;
+Object : ellipse 0.3 -0.75 -0.2 0.05 0.05 0.0;
+Endvar : 1.0 0.2 0.7 0.3 0.15 -70.0;
+Object : ellipse 0.3 -0.2 -0.75 0.05 0.05 0.0;
+Endvar : 1.0 0.7 0.2 0.15 0.3 70.0;
+#----------------------------------------------------
+# Temporal [2D + time] model
+Model : 14;
+Components : 12;
+TimeSteps : 25;
+Object : ellipse 1.0 0.6 0.6 0.25 0.05 0.0;
+Endvar : 1.0 0.6 0.6 0.25 0.05 179.9;
+Object : ellipse 1.0 0.6 0.6 0.05 0.25 0.0;
+Endvar : 1.0 0.6 0.6 0.05 0.25 179.9;
+Object : ellipse 1.0 -0.6 0.6 0.25 0.05 0.0;
+Endvar : 1.0 -0.6 0.6 0.25 0.05 -179.9;
+Object : ellipse 1.0 -0.6 0.6 0.05 0.25 0.0;
+Endvar : 1.0 -0.6 0.6 0.05 0.25 -179.9;
+Object : ellipse 1.0 0.0 0.65 0.1 0.1 0.0;
+Endvar : 0.3 0.0 -0.65 0.1 0.1 0.0;
+Object : ellipse 0.3 -0.17 0.65 0.05 0.05 0.0;
+Endvar : 1.0 -0.17 -0.65 0.05 0.05 0.0;
+Object : ellipse 0.3 0.17 0.65 0.05 0.05 0.0;
+Endvar : 1.0 0.17 -0.65 0.05 0.05 0.0;
+Object : rectangle 1.0 -0.3 0.0 0.15 0.15 0.0;
+Endvar : 0.5 0.3 0.0 0.15 0.15 0.0;
+Object : rectangle 0.3 -0.3 0.1 0.1 0.05 0.0;
+Endvar : 1.0 0.3 0.1 0.1 0.05 0.0;
+Object : rectangle 0.3 -0.3 -0.1 0.1 0.05 0.0;
+Endvar : 1.0 0.3 -0.1 0.1 0.05 0.0;
+Object : gaussian 1.0 -0.6 -0.65 0.15 0.15 0.0;
+Endvar : 1.0 -0.6 -0.65 0.15 0.15 0.0;
+Object : cone 1.0 0.6 -0.65 0.15 0.15 0.0;
+Endvar : 1.0 0.6 -0.65 0.15 0.15 0.0;
 #----------------------------------------------------

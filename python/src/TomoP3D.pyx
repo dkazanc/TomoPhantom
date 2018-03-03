@@ -13,8 +13,9 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-
+# cython and ctypes
 import cython
+import ctypes
 
 # import numpy and the Cython declarations for numpy
 import numpy as np
@@ -23,6 +24,7 @@ cimport numpy as np
 # declare the interface to the C code
 cdef extern float TomoP3DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
 cdef extern float TomoP3DObject(float *A, int N, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3)
+cdef extern float extractSteps(int *steps, int ModelSelected, char *ModelParametersFilename)
 #cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 #cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 	
@@ -39,6 +41,58 @@ cdef packed struct object_3d:
 	np.float32_t psi2
 	np.float32_t psi3
 	
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def Model(int model_id, int phantom_size, str model_parameters_filename):
+	"""
+	Create stationary 3D model : Model(model_id, phantom_size,model_parameters_filename)
+	
+	Takes in a input model_id and phantom_size and returns a phantom-model (3D) of phantom_size x phantom_size x phantom_size of type float32 numpy array.
+	
+	param: model_parameters_filename -- filename for the model parameters
+	param: model_id -- a model id from the functions file
+	param: phantom_size -- a phantom size in each dimension.
+	
+	returns: numpy float32 phantom array	
+	"""
+	cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([phantom_size, phantom_size, phantom_size], dtype='float32')
+	cdef float ret_val
+	py_byte_string = model_parameters_filename.encode('UTF-8')
+	cdef char* c_string = py_byte_string
+	cdef np.ndarray[int, ndim=1, mode="c"] steps
+	steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
+	extractSteps(&steps[0], model_id, c_string)
+	if steps[0] == 1:
+		ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
+	else:
+		print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
+	return phantom
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename):
+	"""
+	Create temporal 4D (3D + time) model :Model(model_id, phantom_size,model_parameters_filename)
+	
+	Takes in a input model_id and phantom_size and returns a phantom-model (4D) of phantom_size x phantom_size x phantom_size x Time-frames of type float32 numpy array.
+	
+	param: model_parameters_filename -- filename for the model parameters
+	param: model_id -- a model id from the functions file
+	param: phantom_size -- a phantom size in each dimension.
+	
+	returns: numpy float32 phantom array	
+	"""
+	cdef float ret_val
+	py_byte_string = model_parameters_filename.encode('UTF-8')
+	cdef char* c_string = py_byte_string
+	cdef np.ndarray[int, ndim=1, mode="c"] steps
+	steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
+	extractSteps(&steps[0], model_id, c_string)
+	cdef np.ndarray[np.float32_t, ndim=4, mode="c"] phantom = np.zeros([steps[0], phantom_size, phantom_size, phantom_size], dtype='float32')
+	if steps[0] == 1:
+		print("The selected model is stationary (3D), use 'Model' function instead")
+	else:
+		ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, phantom_size, c_string)
+	return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def Object(int phantom_size, object_3d[:] obj_params):
@@ -58,25 +112,4 @@ def Object(int phantom_size, object_3d[:] obj_params):
 	cdef float ret_val
 	for i in range(obj_params.shape[0]):
 		ret_val = TomoP3DObject(&phantom[0,0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].z0, obj_params[i].a, obj_params[i].b, obj_params[i].c, obj_params[i].psi1, obj_params[i].psi2, obj_params[i].psi3)
-	return phantom	
-	
-@cython.boundscheck(False)
-@cython.wraparound(False)
-def Model(int model_id, int phantom_size, str model_parameters_filename):
-	"""
-	Model(model_id, phantom_size,model_parameters_filename)
-	
-	Takes in a input model_id and phantom_size and returns a phantom-model (3D) of phantom_size x phantom_size x phantom_size of type float32 numpy array.
-	
-	param: model_parameters_filename -- filename for the model parameters
-	param: model_id -- a model id from the functions file
-	param: phantom_size -- a phantom size in each dimension.
-	
-	returns: numpy float32 phantom array	
-	"""
-	cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([phantom_size, phantom_size, phantom_size], dtype='float32')
-	cdef float ret_val
-	py_byte_string = model_parameters_filename.encode('UTF-8')
-	cdef char* c_string = py_byte_string
-	ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
 	return phantom

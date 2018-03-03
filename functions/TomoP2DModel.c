@@ -21,19 +21,19 @@ limitations under the License.
 #include "omp.h"
 
 #include "TomoP2DModel_core.h"
+#include "utils.h"
 
 #define M_PI 3.14159265358979323846
 
-/* Function to read from the file Phantom2DLibrary.dat the required parameters to build 2D analytical models
- * (MATLAB mex-wrapper)
+/* MATLAB mex-wrapper for TomoP2Dmodel
  *
  * Input Parameters:
  * 1. ModelNo - a model number from Phantom2DLibrary file
- * 2. VolumeSize in voxels (N x N)
+ * 2. VolumeSize in voxels (N x N) or (N x N x time-frames)
  * 3. An absolute path to the file Phantom2DLibrary.dat (see OS-specific syntax-differences)
  *
  * Output:
- * 1. The analytical phantom size of [N x N]
+ * 1. The analytical phantom size of [N x N] or  a temporal phantom size of [N xN x Time-frames]
  */
 
 void mexFunction(
@@ -52,12 +52,20 @@ void mexFunction(
     N  = (int) mxGetScalar(prhs[1]); /* choosen dimension (N x N x N) */
     ModelParameters_PATH = mxArrayToString(prhs[2]); /* provide an absolute path to the file */      
     
+    int *steps = (int *) mxGetData(mxCreateNumericMatrix(1, 1, mxINT16_CLASS, mxREAL));
+    /* extract the number of steps to form output data */
+    extractSteps(steps, ModelSelected, ModelParameters_PATH);
+      
     /*Handling Matlab output data*/
+    if (steps[0] == 1) {    
+    /* static phantom case */
     int N_dims[] = {N, N};
-    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));   
-    
-    TomoP2DModel_core(A, ModelSelected, N, ModelParameters_PATH);
-    
+    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL)); }
+    else {
+    /* temporal phantom 2D + time */
+    int N_dims[] = {N, N, steps[0]};
+    A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); }   
+    /* calling the main function */
+    TomoP2DModel_core(A, ModelSelected, N, ModelParameters_PATH);  
     mxFree(ModelParameters_PATH);
 }
-
