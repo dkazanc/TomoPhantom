@@ -39,5 +39,7 @@ Object3D = TomoP3D.Object(N3D, params)
 ```
 ## see Demos for more information
 DemoModel.py - shows how to create 2D/3D models and their tomographic projections
+
 DemoModel_temporal.py - demonstrate temporal capabilities of the software creating 3D/4D models 
+
 DemoObject.py - shows how to generate use software without library (*dat) files
