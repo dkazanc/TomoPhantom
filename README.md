@@ -11,7 +11,7 @@ analytical tomograms for various image processing tasks (reconstruction, denoisi
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
         <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. 
-In particular, the software is well designed for tomographic image reconstruction (TIR). For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> 
+In particular, the software is well-suited for tomographic image reconstruction (TIR). For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> 
 is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to build customisable 2D/3D/4D phantoms consisting of 
 piecewise-constant and also smooth analytical objects. The objects include: Gaussians, parabolas, ellipses, cones, rectangulars, etc. The exact tomographic projections (sinograms) as a result of applying Radon
 Transform (currently parallel beam geometry is only available) to analytical objects can be obtained. The sinograms can be used for TIR benchmarking purposes
@@ -36,9 +36,12 @@ the temporal extension, therefore a capability of creating 2D+time and 3D+time o
 ### License:
 - The project uses Apache License v.2, but some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license
 
+### Related software projects on GitHub:
+- [xdesign](https://github.com/tomography/xdesign) XDesign is an open-source Python package for generating configurable simulation phantoms for benchmarking tomographic image reconstruction.
+- [syris](https://github.com/ufo-kit/syris) Syris (synchrotron radiation imaging simulation) is a framework for simulations of X-ray absorption and phase contrast dynamic imaging experiments, like time-resolved radiography, tomography or laminography.
+
 ### For referencing, please cite:
 
 [1] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/582/8704/GP_IPSE.pdf)
-[2] TomoPhantom paper, submitted (2018)
 
 For any questions, please e-mail to daniil.kazantsev@manchester.ac.uk
