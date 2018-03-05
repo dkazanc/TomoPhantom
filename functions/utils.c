@@ -60,6 +60,112 @@ float extractSteps(int *steps, int ModelSelected, char *ModelParametersFilename)
     }
     return *steps;
 }
+
+float extractParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
+{   
+	/* parameters check which returns 'params_switch' vector with 0/1 values */
+	params_switch[0] = 1; /* parameters file */
+	params_switch[1] = 0; /* model */
+	params_switch[2] = 1; /* components */
+	params_switch[3] = 1; /* steps (actual value if > 1)*/
+	params_switch[4] = 1; /* model types */
+	params_switch[5] = 1; /* C0 */
+	params_switch[6] = 1; /* x0 */ 
+	params_switch[7] = 1; /* y0 */
+	params_switch[8] = 1; /* a */
+	params_switch[9] = 1; /* b */
+    FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
+    if (! in_file ) {
+        printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
+        params_switch[0] = 0;
+        return 0;  }
+    char tmpstr1[16];
+    char tmpstr2[22];
+    char tmpstr3[16];
+    char tmpstr4[16];
+    char tmpstr5[16];
+    char tmpstr6[16];
+    char tmpstr7[16];
+    char tmpstr8[16];
+
+    char tempbuff[150];
+    while(!feof(in_file))
+    {
+        if (fgets(tempbuff,150,in_file)) {
+            
+            if(tempbuff[0] == '#') continue;
+            
+            sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2);
+            int Model, Components = 0, steps = 1, ii;
+            
+            if (strcmp(tmpstr1,"Model")==0) {
+                Model = atoi(tmpstr2);
+            }
+            
+            /*check if we have got the right model */
+            if (ModelSelected == Model) {
+                /* read the model parameters */
+                printf("\nThe selected Model : %i \n", Model);
+                if (fgets(tempbuff,150,in_file)) {
+                    sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2); }
+                if  (strcmp(tmpstr1,"Components") == 0) Components = atoi(tmpstr2);
+                if (Components <= 0) {
+					params_switch[2] = 0; /*checking components*/					
+					printf("%s %i\n", "Components cannot be negative, the given value is", Components); }
+                
+                if (fgets(tempbuff,150,in_file)) {
+                    sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2); }
+                    // printf("<<%s>>\n",  tmpstr1);
+                if  (strcmp(tmpstr1,"TimeSteps") == 0) steps = atoi(tmpstr2);
+                if (steps <= 0) {
+					params_switch[3] = 0;
+					printf("%s %i\n", "TimeSteps cannot be negative, the given value is", steps); }
+                else {params_switch[3] = steps;}
+                
+                    /* loop over all components */
+                    for(ii=0; ii<Components; ii++) {
+                        
+                        float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f;
+                        
+                        if (fgets(tempbuff,150,in_file)) {
+                            sscanf(tempbuff, "%15s : %21s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
+                        }
+                        if  (strcmp(tmpstr1,"Object") == 0) {
+                            C0 = (float)atof(tmpstr3); /* intensity */
+                            y0 = (float)atof(tmpstr4); /* x0 position */
+                            x0 = (float)atof(tmpstr5); /* y0 position */
+                            a = (float)atof(tmpstr6); /* a - size object */
+                            b = (float)atof(tmpstr7); /* b - size object */
+                        }
+                        
+                        if ((strcmp("gaussian",tmpstr2) != 0) && (strcmp("parabola",tmpstr2) != 0) && (strcmp("ellipse",tmpstr2) != 0) && (strcmp("parabola1",tmpstr2) != 0) && (strcmp("cone",tmpstr2) != 0) && (strcmp("rectangle",tmpstr2) != 0) ) {
+							printf("%s %s\n", "Unknown name of the object, the given name is", tmpstr2); 
+							params_switch[4] = 0; }
+                        if (C0 == 0) {
+							params_switch[5] = 0;
+							printf("%s %f\n", "C0 should not be equal to zero, the given value is", C0); }
+                        if ((x0 < -1) || (x0 > 1)) {
+							params_switch[6] = 0;
+							printf("%s %f\n", "x0 (object position) must be in [-1,1] range, the given value is", x0); }
+                        if ((y0 < -1) || (y0 > 1)) {
+							params_switch[7] = 0;
+							printf("%s %f\n", "y0 (object position) must be in [-1,1] range, the given value is", y0); }
+                        if ((a <= 0) || (a > 2)) {
+							params_switch[8] = 0;
+							printf("%s %f\n", "a (object size) must be positive in [0,2] range, the given value is", a); }
+						if ((b <= 0) || (b > 2)) {
+							params_switch[9] = 0;
+							printf("%s %f\n", "b (object size) must be positive in [0,2] range, the given value is", b); }
+                    }     
+                    params_switch[1] = 1;
+            }
+            
+            if  (params_switch[1] == 0) printf("%s %i\n", "No such model available, the given value is", Model); 
+        }
+    }
+    return *params_switch;
+}
+
 float parameters_check2D(float C0, float x0, float y0, float a, float b, float phi_rot)
 {
     if ((x0 < -1) || (x0 > 1)) {

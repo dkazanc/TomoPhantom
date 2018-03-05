@@ -284,7 +284,7 @@ float TomoP2DObjectTemporal(float *A, int N, char *Object,
 float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename, int platform)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
-    int ii, func_val, steps_num = 1;
+    int ii, steps_num = 1;
     if (! in_file )
     {
         printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
@@ -355,8 +355,8 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                         }
                         if  (strcmp(tmpstr1,"Object") == 0) {
                             C0 = (float)atof(tmpstr3); /* intensity */
-                            y0 = (float)atof(tmpstr4); /* x0 position */
-                            x0 = (float)atof(tmpstr5); /* y0 position */
+                            x0 = (float)atof(tmpstr4); /* x0 position */
+                            y0 = (float)atof(tmpstr5); /* y0 position */
                             a = (float)atof(tmpstr6); /* a - size object */
                             b = (float)atof(tmpstr7); /* b - size object */
                             phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
@@ -364,13 +364,13 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                         }
                         
                         /*  check that the parameters are reasonable  */
-                        func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
+                        // func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                         
                         /* build phantom */
                         //if (func_val == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
                         //else printf("\nFunction prematurely terminated, not all objects included");
-                        if (platform == 0) TomoP2DObject(A, N, tmpstr2, C0, y0, x0, b, a, -phi_rot);  /* Matlab */
-                        else TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot); /* python */
+                        if (platform == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, b, a, -phi_rot);  /* Matlab */
+                        else TomoP2DObject(A, N, tmpstr2, C0, y0, x0, a, b, phi_rot); /* python */
                     } /* components loop*/
                 }
                 else {

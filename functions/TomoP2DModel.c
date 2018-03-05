@@ -55,7 +55,12 @@ void mexFunction(
     int *steps = (int *) mxGetData(mxCreateNumericMatrix(1, 1, mxINT16_CLASS, mxREAL));
     /* extract the number of steps to form output data */
     extractSteps(steps, ModelSelected, ModelParameters_PATH);
-      
+     
+     int *params_switch = (int *) mxGetData(mxCreateNumericMatrix(1, 10, mxINT16_CLASS, mxREAL));
+     /* extract parameters switches */
+     extractParams2D(params_switch, ModelSelected, ModelParameters_PATH);
+    
+    printf("%i %i %i %i %i %i %i\n", params_switch[0], params_switch[1],params_switch[2],params_switch[3],params_switch[4],params_switch[5],params_switch[6]);
     /*Handling Matlab output data*/
     if (steps[0] == 1) {    
     /* static phantom case */
