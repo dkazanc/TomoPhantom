@@ -66,6 +66,6 @@ void mexFunction(
     int N_dims[] = {N, N, steps[0]};
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); }   
     /* calling the main function */
-    TomoP2DModel_core(A, ModelSelected, N, ModelParameters_PATH);  
+    TomoP2DModel_core(A, ModelSelected, N, ModelParameters_PATH, 0);  
     mxFree(ModelParameters_PATH);
 }

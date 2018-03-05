@@ -20,7 +20,7 @@ curDir   = pwd;
 mainDir  = fileparts(curDir);
 pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
-figure; imagesc(G', [0 1]); daspect([1 1 1]); colormap hot;
+figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
 %%
 fprintf('%s \n', 'Generating sinogram analytically and numerically...');
 % generate angles
@@ -46,8 +46,8 @@ fprintf('%s %.4f\n', 'NMSE for sino residuals:', err_diff);
 FBP_F_a = iradon(F_a',angles,N);
 FBP_F_d = iradon(F_d',angles,N);
 figure; 
-subplot(1,2,1); imagesc(FBP_F_a', [0 1]); title('Analytical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
-subplot(1,2,2); imagesc(FBP_F_d', [0 1]); title('Numerical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
+subplot(1,2,1); imagesc(FBP_F_a, [0 1]); title('Analytical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
+subplot(1,2,2); imagesc(FBP_F_d, [0 1]); title('Numerical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
 %%
 fprintf('%s \n', 'Use the ASTRA-toolbox to generate numerical sinogram...');
 % generate 2D analytical parallel beam sinogram (note the 'astra' opton)

@@ -80,6 +80,6 @@ void mexFunction(
     else {
     int N_dims[] = {NStructElems, P, steps[0]}; /*format: X-detectors, Y-angles dim, Time-Frames*/
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); }    
-    TomoP2DModelSino_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH);    
+    TomoP2DModelSino_core(A, ModelSelected, N, P, Th, (int)NStructElems, CenTypeIn, ModelParameters_PATH, 0);    
     mxFree(ModelParameters_PATH);
 }

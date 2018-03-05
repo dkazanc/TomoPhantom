@@ -39,7 +39,7 @@ pp1 = {'Obj': 'circle',
 myObjects = [pp, pp1]
 
 Object1 = TomoP2D.Object(N_size, params)
-Object2 = TomoP2D.Object2(N_size, [pp])
+#Object2 = TomoP2D.Object2(N_size, [pp])
 
 
 plt.figure(1)

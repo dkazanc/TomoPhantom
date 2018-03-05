@@ -281,7 +281,7 @@ float TomoP2DObjectTemporal(float *A, int N, char *Object,
     return *A;
 }
 
-float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
+float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename, int platform)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
     int ii, func_val, steps_num = 1;
@@ -367,9 +367,11 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                         func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                         
                         /* build phantom */
-                        if (func_val == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
-                        else printf("\nFunction prematurely terminated, not all objects included");
-                    } /* components loop */
+                        //if (func_val == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
+                        //else printf("\nFunction prematurely terminated, not all objects included");
+                        if (platform == 0) TomoP2DObject(A, N, tmpstr2, C0, y0, x0, b, a, -phi_rot);  /* Matlab */
+                        else TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot); /* python */
+                    } /* components loop*/
                 }
                 else {
                     /* Temporal (2D + time) phantom case */

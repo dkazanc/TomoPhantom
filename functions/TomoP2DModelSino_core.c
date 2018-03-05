@@ -513,7 +513,7 @@ float TomoP2DObjectSinoTemporal(float *A, int N, int P, float *Th, int AngTot, i
 }
 
 
-float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
+float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename, int platform)
 {
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, phi_rot = 0.0f;
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
@@ -596,8 +596,10 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                             func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
                             
                             /* build phantom */
-                            if (func_val == 0) TomoP2DObjectSino(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0,y0,a,b,phi_rot);
-                            else printf("\nFunction prematurely terminated, not all objects included");
+                            //if (func_val == 0) TomoP2DObjectSino(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0,y0,a,b,phi_rot);
+                            //else printf("\nFunction prematurely terminated, not all objects included");
+                            if (platform == 0) TomoP2DObjectSino(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, y0, x0, b, a, -phi_rot);
+                            else TomoP2DObjectSino(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, -x0, y0, a, b, -phi_rot);
                         }
                     }
                 } /*steps_num*/
