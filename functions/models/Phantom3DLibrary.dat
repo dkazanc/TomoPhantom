@@ -1,6 +1,7 @@
 # 3D and 3D+time phantom library, please use the following notations to define 3D geometrical objects:
 # gaussian, paraboloid, ellipsoid, cone, cuboid, ellipticalcylinder
 # syntax for object decription -- Object : object type (see names above), C0, x0, y0, z0, a, b, c, angle1, angle2, angle3; 
+#----------Static (3D) Phantoms [no. 01-99]---------
 #----------------------------------------------------
 # 'Defrise' phantom with horizontal ellipsoids
 Model : 01;
@@ -286,8 +287,11 @@ Object : gaussian 1.00 0.55 0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
 Object : gaussian 1.00 0.55 -0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
 Object : gaussian 1.00 -0.55 -0.55 0.0 0.25 0.25 0.25 0.0 0.0 0.0;
 #----------------------------------------------------
+#****************************************************
+#---------TEMPORAL (4D) Phantoms [no . >=100]--------
+#****************************************************
 # Temporal (3D +time) model, 1 volumetric Gaussian + 1 paraboloid
-Model : 10;
+Model : 100;
 Components : 02;
 TimeSteps : 5;
 Object : paraboloid 1.00 0.0 0.0 0.0 0.2 0.4 0.6 30.0 0.0 0.0;
@@ -296,7 +300,7 @@ Object : gaussian 1.00 -0.45 -0.45 -0.4 0.3 0.3 0.3 00.0 0.0 0.0;
 Endvar : 1.0 0.0 -0.3 0.3 0.4 0.15 0.5 30.0 10.0 -40.0;
 #----------------------------------------------------
 # Temporal (3D +time) model, 1 volumetric Gaussian + 1 paraboloid
-Model : 11;
+Model : 101;
 Components : 11;
 TimeSteps : 10;
 Object : cuboid 1.00 0.0 0.0 -0.6 0.2 0.2 0.2 0.0 0.0 0.0;

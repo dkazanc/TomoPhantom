@@ -20,8 +20,8 @@ from tomophantom import TomoP3D
 from astraOP import AstraTools
 
 #%%
-model = 17
-N_size = 256
+model = 4
+N_size = 512
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'
 #This will generate a N_size x N_size phantom (2D)
@@ -53,10 +53,10 @@ sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
 
 plt.figure(2) 
 plt.subplot(121)
-plt.imshow(sino_an)
+plt.imshow(sino_an,cmap="BuPu")
 plt.title('Analytical sinogram')
 plt.subplot(122)
-plt.imshow(sino_num_ASTRA)
+plt.imshow(sino_num_ASTRA,cmap="BuPu")
 plt.title('Numerical sinogram')
 plt.show()
 #%%
@@ -64,14 +64,14 @@ print ("Reconstructing using FBP...")
 FBPrec = Atools.fbp2D(sino_an)
 
 plt.figure(3) 
-plt.imshow(FBPrec, vmin=0, vmax=1)
+plt.imshow(FBPrec, vmin=0, vmax=1, cmap="BuPu")
 plt.title('FBP Reconstructed Phantom')
 #%%
 print ("Reconstructing using SIRT...")
 SIRTrec = Atools.sirt2D(sino_an, 100)
 
 plt.figure(4) 
-plt.imshow(SIRTrec, vmin=0, vmax=1)
+plt.imshow(SIRTrec, vmin=0, vmax=1,cmap="BuPu")
 plt.title('SIRT Reconstructed Phantom')
 #%%
 import timeit

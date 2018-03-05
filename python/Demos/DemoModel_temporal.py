@@ -5,6 +5,7 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate temporal (3D and 4D) analytical phantoms and their sinograms
 If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
 Phantom3DLibrary.dat
+Note that all temporal phantoms start from no. 100
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
 Run demo from the folder "Demos"
@@ -18,7 +19,7 @@ from tomophantom import TomoP3D
 from astraOP import AstraTools
 
 #%%
-model = 14  # note that the selected model is temporal (2D + time)
+model = 102  # note that the selected model is temporal (2D + time)
 N_size = 512
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'
@@ -61,7 +62,7 @@ plt.imshow(FBPrec, vmin=0, vmax=1)
 plt.title('FBP Reconstructed Phantom')
 #%%
 # generate 4D (3D + time) model
-model = 10 # note that the selected model is temporal (3D + time)
+model = 101 # note that the selected model is temporal (3D + time)
 N_size = 256
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom3DLibrary.dat'

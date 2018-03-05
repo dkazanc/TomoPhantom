@@ -141,7 +141,7 @@ def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.flo
 		ret_val = TomoP2DModelSino_core(&sinogram[0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
 	else:
 		print("The selected model is temporal (3D), use 'ModelSinoTemporal' function instead")
-	return sinogram.transpose()
+	return np.flipud(np.fliplr(sinogram.transpose()))
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSinoTemporal(int model_id, int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
@@ -196,4 +196,4 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
 	cdef int CenTypeIn = 1 # astra center posit
 	for i in range(obj_params.shape[0]):
 		ret_val = TomoP2DObjectSino(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot)
-	return sinogram.transpose()
+	return np.flipud(np.fliplr(sinogram.transpose()))

@@ -9,7 +9,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 10; % Select a model
+ModelNo = 100; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -27,7 +27,7 @@ for i = 1:5
 end
 %%
 % another 3D + time model
-ModelNo = 11; % Select a model
+ModelNo = 101; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 

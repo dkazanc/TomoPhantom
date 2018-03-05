@@ -11,7 +11,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/');
 
-ModelNo = 12; % Select a model from Phantom2DLibrary.dat
+ModelNo = 100; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
@@ -23,7 +23,7 @@ pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to Tom
 figure(1); imagesc(G, [0 1]); daspect([1 1 1]); title('2D+t model, t=3 here'); colormap hot;
 %%
 % Lets look at more finely discretized temporal model and related sinograms
-ModelNo = 13; % Select a model from Phantom2DLibrary.dat
+ModelNo = 101; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
@@ -45,7 +45,7 @@ for i = 1:350
 end
 %%
 % another temporal phantom with stationary and dynamic features
-ModelNo = 14; % Select a model from Phantom2DLibrary.dat
+ModelNo = 102; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 

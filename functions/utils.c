@@ -62,9 +62,6 @@ float extractSteps(int *steps, int ModelSelected, char *ModelParametersFilename)
 }
 float parameters_check2D(float C0, float x0, float y0, float a, float b, float phi_rot)
 {
-    if (C0 <= 0) {
-        printf("%s %f\n", "C0 (intensity) cannot be negative or equal to zero, the given value is", C0);
-    }
     if ((x0 < -1) || (x0 > 1)) {
         printf("%s %f\n", "x0 (object position) must be in [-1,1] range, the given value is", x0);
         return -1;
@@ -85,9 +82,6 @@ float parameters_check2D(float C0, float x0, float y0, float a, float b, float p
 }
 float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c)
 {
-    if (C0 <= 0) {
-        printf("%s %f\n", "C0 (intensity) cannot be negative or equal to zero, the given value is", C0);
-    }
     if ((x0 < -1) || (x0 > 1)) {
         printf("%s %f\n", "x0 (object position) must be in [-1,1] range, the given value is", x0);
         return -1;
