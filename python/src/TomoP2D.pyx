@@ -128,3 +128,74 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
 	for i in range(obj_params.shape[0]):
 		ret_val = TomoP2DObjectSino(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot)
 	return sinogram.transpose()
+
+	@cython.boundscheck(False)
+@cython.wraparound(False)
+def Object2(int phantom_size, paramlist):
+	"""
+	Object (phantom_size,object_parameters)
+	
+	Takes in a input object description (list) and phantom_size and returns a phantom-object of phantom_size x phantom_size of type float32 numpy array.
+	
+	param: phantom_size -- a phantom size in each dimension.
+	param: obj_params -- object parameters list
+	
+	returns: numpy float32 phantom array
+	
+	"""
+	cdef Py_ssize_t i
+	cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
+	cdef float ret_val
+	for obj in obj_params:
+	    if testParams(obj):
+		    ret_val = TomoP2DObject(&phantom[0,0], phantom_size, 
+		        obj['Obj'], 
+		        obj['C0'], 
+		        obj['x0'], 
+		        obj['y0'], 
+		        obj['a'], 
+		        obj['b'], 
+		        obj['phi'])
+	return phantom
+
+def testParams(obj):
+    typecheck =  type(obj['Obj']) is str 
+	if not typecheck:
+	    raise TypeError('Obj is not a string')
+	else:
+	    if not obj['Obj'] in ['gaussian', 'parabola', 'parabola1', 'ellipse', 'cone', 'rectangle']:
+		    raise ValueError('Model unknown: {0}'.format(obj['Obj']) )
+	typecheck = typecheck and type(obj['C0']) is float:
+	    if not typecheck:
+	        raise TypeError('C0 is not a float')
+	typecheck = typecheck and type(obj['x0']) is float:
+	    if not typecheck:
+	        raise TypeError('x0 is not a float') 
+	typecheck = typecheck and type(obj['y0']) is float:
+	    if not typecheck:
+	        raise TypeError('y0 is not a float')
+	typecheck = typecheck and type(obj['a']) is float:
+	    if not typecheck:
+	        raise TypeError('a is not a float')
+	typecheck = typecheck and type(obj['b']) is float:
+	    if not typecheck:
+	        raise TypeError('b is not a float')
+	typecheck = typecheck and type(obj['phi']) is float:
+	    if not typecheck:
+	        raise TypeError('phi is not a float')
+		   
+	
+    rangecheck = obj['x0'] >= -1 and obj['x0'] <= 1
+    if not rangecheck:
+        raise ValueError('x0 is out of range. Must be between -1 and 1')
+    rangecheck = rangecheck and obj['y0'] >= -1 and obj['y0'] <= 1
+    if not rangecheck:
+        raise ValueError('y0 is out of range. Must be between -1 and 1')
+    rangecheck = rangecheck and obj['a'] > 0
+    if not rangecheck:
+        raise ValueError('a is not positive.')
+    rangecheck = rangecheck and obj['b'] > 0
+	if not rangecheck:
+        raise ValueError('b is not positive.')
+    
+	return rangecheck and typecheck

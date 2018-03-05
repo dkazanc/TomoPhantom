@@ -243,3 +243,19 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
     }
     return *A;
 }
+
+float TomoP2DModel_core_par(float *A, int N, char *Object,
+	float C0, /* intensity */
+	float x0, /* x0 position */
+	float y0, /* y0 position */
+	float a, /* a - size object */
+	float b, /* b - size object */
+	float phi_rot /* phi - rotation angle */) {
+	/*  check that the parameters are reasonable  */
+	float func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
+
+	/* build phantom */
+	if (func_val == 0) TomoP2DObject(A, N, Object, C0, x0, y0, a, b, phi_rot);
+	else printf("\nFunction prematurely terminated, not all objects included");
+	return *A;
+}

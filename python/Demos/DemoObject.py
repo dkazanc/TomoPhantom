@@ -20,8 +20,26 @@ from astraOP import AstraTools
 #%%
 # create an object explicitly without using parameters file 
 N_size = 512
-params = np.array([('gaussian', 1.00, -0.25, 0.3, 0.15, 0.3, 30.0),], dtype=[('Obj',  '|S16'), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32),('a',np.float32), ('b', np.float32),  ('phi', np.float32)])
+params = np.array([('gaussian', 1.00, -0.25, 0.3, 0.15, 0.3, 30.0),], 
+                  dtype=[('Obj',  '|S16'), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32),('a',np.float32), ('b', np.float32),  ('phi', np.float32)])
+pp = {'Obj': 'gaussian', 
+      'C0' : 1.00, 
+      'x0' : -0.25,
+      'y0' : 0.3,
+      'a'  : 0.15,
+      'b'  :  0.3,
+      'phi': 30.0}
+pp1 = {'Obj': 'circle', 
+      'C0' : 1.00, 
+      'x0' : -0.25,
+      'y0' : 0.3,
+      'a'  : 0.15,
+      'b'  :  0.3,
+      'phi': 30.0}
+myObjects = [pp, pp1]
+
 Object1 = TomoP2D.Object(N_size, params)
+Object2 = TomoP2D.Object2(N_size, [pp])
 
 
 plt.figure(1)
