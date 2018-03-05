@@ -20,7 +20,7 @@ from tomophantom import TomoP3D
 from astraOP import AstraTools
 
 #%%
-model = 9
+model = 4
 N_size = 512
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'
@@ -29,7 +29,7 @@ phantom_2D = TomoP2D.Model(model, N_size, pathTP)
 
 plt.figure(1)
 plt.rcParams.update({'font.size': 21})
-plt.imshow(phantom_2D, vmin=0, vmax=1)
+plt.imshow(phantom_2D, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('{}''{}'.format('2D Phantom using model no.',model))
 #%%
@@ -43,7 +43,7 @@ sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
 
 plt.figure(2)
 plt.rcParams.update({'font.size': 21})
-plt.imshow(sino_an)
+plt.imshow(sino_an,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
@@ -53,10 +53,10 @@ sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
 
 plt.figure(2) 
 plt.subplot(121)
-plt.imshow(sino_an)
+plt.imshow(sino_an,cmap="BuPu")
 plt.title('Analytical sinogram')
 plt.subplot(122)
-plt.imshow(sino_num_ASTRA)
+plt.imshow(sino_num_ASTRA,cmap="BuPu")
 plt.title('Numerical sinogram')
 plt.show()
 #%%
@@ -64,20 +64,20 @@ print ("Reconstructing using FBP...")
 FBPrec = Atools.fbp2D(sino_an)
 
 plt.figure(3) 
-plt.imshow(FBPrec, vmin=0, vmax=1)
+plt.imshow(FBPrec, vmin=0, vmax=1, cmap="BuPu")
 plt.title('FBP Reconstructed Phantom')
 #%%
 print ("Reconstructing using SIRT...")
 SIRTrec = Atools.sirt2D(sino_an, 100)
 
 plt.figure(4) 
-plt.imshow(SIRTrec, vmin=0, vmax=1)
+plt.imshow(SIRTrec, vmin=0, vmax=1,cmap="BuPu")
 plt.title('SIRT Reconstructed Phantom')
 #%%
 import timeit
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 9
+model = 12
 N_size = 256
 #specify a full path to the parameters file
 pathTP3 = '../../functions/models/Phantom3DLibrary.dat'

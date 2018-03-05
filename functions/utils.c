@@ -18,11 +18,50 @@
 #include <memory.h>
 #include <stdio.h>
 
+float extractSteps(int *steps, int ModelSelected, char *ModelParametersFilename)
+{
+    FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
+    if (! in_file )
+    {
+        printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
+        return 0;
+    }		
+        char tmpstr1[16];
+        char tmpstr2[22];
+    char tempbuff[100];
+    while(!feof(in_file))
+    {
+        if (fgets(tempbuff,100,in_file)) {
+            
+            if(tempbuff[0] == '#') continue;
+            
+            sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2);
+            int Model = 0;
+            
+            if (strcmp(tmpstr1,"Model")==0) {
+                Model = atoi(tmpstr2);
+            }
+            
+            /*check if we have got the right model */
+            if (ModelSelected == Model) {
+                /* read the model parameters */
+                printf("\nThe selected Model : %i \n", Model);
+                if (fgets(tempbuff,100,in_file)) {
+                    sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2); }
+                if (fgets(tempbuff,100,in_file)) {
+                    sscanf(tempbuff, "%15s : %21[^;];", tmpstr1, tmpstr2); }                
+                    // printf("<<%s>>\n",  tmpstr1);
+                if  (strcmp(tmpstr1,"TimeSteps") == 0) {
+                    steps[0] = atoi(tmpstr2);
+                }
+                else {printf("%s\n", "Number of steps should be >= 1");}              
+            }            
+        }
+    }
+    return *steps;
+}
 float parameters_check2D(float C0, float x0, float y0, float a, float b, float phi_rot)
 {
-    if (C0 <= 0) {
-        printf("%s %f\n", "C0 (intensity) cannot be negative or equal to zero, the given value is", C0);
-    }
     if ((x0 < -1) || (x0 > 1)) {
         printf("%s %f\n", "x0 (object position) must be in [-1,1] range, the given value is", x0);
         return -1;
@@ -41,13 +80,8 @@ float parameters_check2D(float C0, float x0, float y0, float a, float b, float p
     }
     return 0;
 }
-
-
 float parameters_check3D(float C0, float x0, float y0, float z0, float a, float b, float c)
 {
-    if (C0 <= 0) {
-        printf("%s %f\n", "C0 (intensity) cannot be negative or equal to zero, the given value is", C0);
-    }
     if ((x0 < -1) || (x0 > 1)) {
         printf("%s %f\n", "x0 (object position) must be in [-1,1] range, the given value is", x0);
         return -1;
