@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
 from tomophantom import TomoP3D
 from astraOP import AstraTools
-
 #%%
 # create an object explicitly without using parameters file 
 N_size = 512
@@ -63,7 +62,7 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
 # Create another object
-params = np.array([('rectangle', 1.00, 0.3, -0.2, 0.25, 0.4, 60.0),], dtype=[('Obj',  '|S16'), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32),('a',np.float32), ('b', np.float32),  ('phi', np.float32)])
+params = np.array([('rectangle', 1.00, 0.2, -0.2, 0.25, 0.4, 60.0),], dtype=[('Obj',  '|S16'), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32),('a',np.float32), ('b', np.float32),  ('phi', np.float32)])
 Object2 = TomoP2D.Object(N_size, params)
 
 
@@ -88,9 +87,8 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
 # Now add objects into a model and reconstruct added sinos
-Model = Object1 + Object2
-SinoModel = sino_an1 + sino_an2
-SinoModel = np.fliplr(np.flipud(SinoModel))
+Model = Object1 + Object2 # composite model
+SinoModel = sino_an1 + sino_an2 # composite sino
 
 plt.figure(5) 
 plt.subplot(121)
@@ -102,7 +100,7 @@ plt.title('Sinogram of the model')
 plt.show()
 #%%
 # lets reconstruct using ASTRA
-Atools = AstraTools(P, angles_rad - 0.5*np.pi, N_size, 'cpu') # initiate a class object
+Atools = AstraTools(P, angles_rad + 0.5*np.pi, N_size, 'cpu') # initiate a class object
 FBPrec = Atools.fbp2D(SinoModel)
 
 plt.figure(6) 

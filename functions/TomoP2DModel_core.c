@@ -149,8 +149,7 @@ float TomoP2DObject(float *A, int N, char *Object,
                 A[j*N+i] += T;
             }}
     }
-    else {
-        printf("%s\n", "No such object exists!");
+    else {        
         return 0;
     }
     free(Xdel); free(Ydel);
@@ -271,9 +270,8 @@ float TomoP2DObjectTemporal(float *A, int N, char *Object,
                 A[tt*N*N + j*N+i] += T;
             }}
     }
-    else {
-        printf("%s\n", "No such object exists!");
-        return 0;
+    else {        
+          return 0;
     }
     free(Xdel); free(Ydel);
     /************************************************/
@@ -284,18 +282,8 @@ float TomoP2DObjectTemporal(float *A, int N, char *Object,
 float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename, int platform)
 {
     FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
-    int ii, steps_num = 1;
-    if (! in_file )
-    {
-        printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
-        printf("Trying models/Phantom2DLibrary.dat");
-        in_file = fopen("models/Phantom2DLibrary.dat","r");
-        if(! in_file)
-        {
-            printf("models/Phantom2DLibrary.dat has not been found");
-            return 0;
-        }
-    }
+    int ii, steps_num = 1, counter = 0;
+    
     char tmpstr1[16];
     char tmpstr2[16];
     char tmpstr3[16];
@@ -309,44 +297,29 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
     char tempbuff[100];
     while(!feof(in_file))
     {
-        if (fgets(tempbuff,100,in_file)) {
+        if (fgets(tempbuff,100,in_file) != NULL) {
             
             if(tempbuff[0] == '#') continue;
-            
             sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2);
             /*printf("<<%s>>\n",  tmpstr1);*/
             int Model = 0, Components = 0;
+            Model = atoi(tmpstr2);
             
-            if (strcmp(tmpstr1,"Model")==0) {
-                Model = atoi(tmpstr2);
-            }
-            
-            /*check if we got the right model */
-            if (ModelSelected == Model) {
-                /* read the model parameters */
-                printf("\nThe selected Model : %i \n", Model);
+            if ((ModelSelected == Model) && (counter == 0))  {
+                /* read the model parameters */               
                 if (fgets(tempbuff,100,in_file)) {
                     sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2); }
                 if (fgets(tempbuff,100,in_file)) {
                     sscanf(tempbuff, "%15s : %15[^;];", tmpstr_s1, tmpstr_s2); }
                 
-                if  (strcmp(tmpstr1,"Components") == 0) {
-                    Components = atoi(tmpstr2);
-                }
-                else {
-                    printf("%s\n", "The number of components is unknown!");
-                    return 0;
-                }
-                if  (strcmp(tmpstr_s1,"TimeSteps") == 0) {
-                    steps_num = atoi(tmpstr_s2);
-                }
-                else {printf("%s\n", "Number of steps should be >= 1");}
+                Components = atoi(tmpstr2);
+                steps_num = atoi(tmpstr_s2);                
                 
-                if (steps_num == 1) {
-                    /* Stationary phantom case */
-                    
+                if (steps_num == 1) {    
+                     printf("\n Building 2D (stationary) phantom... \n");
+                     /* Stationary phantom case */                    
                     /* loop over all components */
-                    for(ii=0; ii<Components; ii++) {
+                    for(ii=0; ii < Components; ii++) {
                         
                         float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, phi_rot = 0.0f;
                         
@@ -361,20 +334,13 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                             b = (float)atof(tmpstr7); /* b - size object */
                             phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
                             /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
-                        }
-                        
-                        /*  check that the parameters are reasonable  */
-                        // func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
-                        
-                        /* build phantom */
-                        //if (func_val == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
-                        //else printf("\nFunction prematurely terminated, not all objects included");
+                        }                        
                         if (platform == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, b, a, -phi_rot);  /* Matlab */
                         else TomoP2DObject(A, N, tmpstr2, C0, y0, x0, a, b, phi_rot); /* python */
                     } /* components loop*/
                 }
                 else {
-                    /* Temporal (2D + time) phantom case */
+                    printf("\n Building Temporal (2D + time) phantom... \n"); 
                     /* loop over all components */
                     for(ii=0; ii<Components; ii++) {
                         
@@ -385,30 +351,30 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                         }
                         if  (strcmp(tmpstr1,"Object") == 0) {
                             C0 = (float)atof(tmpstr3); /* intensity */
-                            y0 = (float)atof(tmpstr4); /* x0 position */
-                            x0 = (float)atof(tmpstr5); /* y0 position */
+                            x0 = (float)atof(tmpstr4); /* x0 position */
+                            y0 = (float)atof(tmpstr5); /* y0 position */
                             a = (float)atof(tmpstr6); /* a - size object */
                             b = (float)atof(tmpstr7); /* b - size object */
                             phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
                             /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
                         }
                         
-                        /* "End variables" (Endvar) of the final position of the object and other parameters */                        
+                        /* "End variables" (Endvar) of the final position of the object and other parameters */
                         float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, a1 = 0.0f, b1 = 0.0f, phi_rot1 = 0.0f;
                         if (fgets(tempbuff,100,in_file)) {
                             sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
                         }
                         if  (strcmp(tmpstr1,"Endvar") == 0) {
                             C1 = (float)atof(tmpstr3); /* intensity final*/
-                            y1 = (float)atof(tmpstr4); /* x1 position */
-                            x1 = (float)atof(tmpstr5); /* y1 position */
+                            x1 = (float)atof(tmpstr4); /* x1 position */
+                            y1 = (float)atof(tmpstr5); /* y1 position */
                             a1 = (float)atof(tmpstr6); /* a1 - size object */
                             b1 = (float)atof(tmpstr7); /* b1 - size object */
                             phi_rot1 = (float)atof(tmpstr8); /* phi1 - rotation angle */
                             /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
                         }
-                        /*now we know the initial parameters of the object and the final ones. We linearly extrapolate to establish steps and coordinates. */
                         
+                        /*now we know the initial parameters of the object and the final ones. We linearly extrapolate to establish steps and coordinates. */                        
                         /* calculating the full distance berween the start and the end points */
                         float distance = sqrtf(pow((x1 - x0),2) + pow((y1 - y0),2));
                         float d_dist = distance/(steps_num-1); /*a step over line */
@@ -424,16 +390,17 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                         /*loop over time frames*/
                         for(tt=0; tt < steps_num; tt++) {
                             
-                            TomoP2DObjectTemporal(A, N, tmpstr2, C_t, x_t, y_t, a_t, b_t, phi_t, tt);
+                            if (platform == 0) TomoP2DObjectTemporal(A, N, tmpstr2, C_t, x_t, y_t, b_t, a_t, -phi_t, tt);  /* Matlab */
+                            else TomoP2DObjectTemporal(A, N, tmpstr2, C_t, y_t, x_t, b_t, a_t, phi_t, tt); /* python */
                             
                             /* calculating new coordinates of an object */
                             if (distance != 0.0f) {
-                            float t = d_step/distance;
-                            x_t = (1-t)*x0 + t*x1;
-                            y_t = (1-t)*y0 + t*y1; }
+                                float t = d_step/distance;
+                                x_t = (1-t)*x0 + t*x1;
+                                y_t = (1-t)*y0 + t*y1; }
                             else {
-                            x_t = x0;
-                            y_t = y0;   }
+                                x_t = x0;
+                                y_t = y0;   }
                             //printf("%f %f \n", x_t, y_t);
                             
                             d_step += d_dist;
@@ -442,26 +409,11 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                             C_t += C_step;
                             phi_t += phi_rot_step;
                         } /*time steps*/
-                    } /* components loop */
+                    } /* components loop */                      
                 }
-            }
+                counter++;
+            }          
         }
     }
     return *A;
-}
-
-float TomoP2DModel_core_par(float *A, int N, char *Object,
-	float C0, /* intensity */
-	float x0, /* x0 position */
-	float y0, /* y0 position */
-	float a, /* a - size object */
-	float b, /* b - size object */
-	float phi_rot /* phi - rotation angle */) {
-	/*  check that the parameters are reasonable  */
-	float func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
-
-	/* build phantom */
-	if (func_val == 0) TomoP2DObject(A, N, Object, C0, x0, y0, a, b, phi_rot);
-	else printf("\nFunction prematurely terminated, not all objects included");
-	return *A;
 }

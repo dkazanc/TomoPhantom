@@ -22,9 +22,9 @@ import numpy as np
 cimport numpy as np
 
 # declare the interface to the C code
-cdef extern float TomoP3DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
+cdef extern float TomoP3DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename, int platform)
 cdef extern float TomoP3DObject(float *A, int N, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3)
-cdef extern float extractSteps(int *steps, int ModelSelected, char *ModelParametersFilename)
+cdef extern float extractTimeFrames(int *steps, int ModelSelected, char *ModelParametersFilename)
 #cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 #cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
 	
@@ -61,9 +61,9 @@ def Model(int model_id, int phantom_size, str model_parameters_filename):
 	cdef char* c_string = py_byte_string
 	cdef np.ndarray[int, ndim=1, mode="c"] steps
 	steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
-	extractSteps(&steps[0], model_id, c_string)
+	extractTimeFrames(&steps[0], model_id, c_string)
 	if steps[0] == 1:
-		ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
+		ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string, 1)
 	else:
 		print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
 	return phantom
@@ -86,12 +86,12 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
 	cdef char* c_string = py_byte_string
 	cdef np.ndarray[int, ndim=1, mode="c"] steps
 	steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
-	extractSteps(&steps[0], model_id, c_string)
+	extractTimeFrames(&steps[0], model_id, c_string)
 	cdef np.ndarray[np.float32_t, ndim=4, mode="c"] phantom = np.zeros([steps[0], phantom_size, phantom_size, phantom_size], dtype='float32')
 	if steps[0] == 1:
 		print("The selected model is stationary (3D), use 'Model' function instead")
 	else:
-		ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, phantom_size, c_string)
+		ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, phantom_size, c_string, 1)
 	return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
