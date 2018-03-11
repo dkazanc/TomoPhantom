@@ -15,7 +15,6 @@ Run demo from the folder "Demos"
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
-from tomophantom import TomoP3D
 from astraOP import AstraTools
 
 #%%
@@ -55,12 +54,15 @@ for sl in range(0,timeframes):
 #%%
 # reconstruct
 Atools = AstraTools(P, angles_rad - 0.5*np.pi, N_size, 'cpu') # initiate a class object
-FBPrec = Atools.fbp2D(np.flipud(np.fliplr(sino[0,:,:].transpose())))
+FBPrec = Atools.fbp2D(sino[15,:,:].transpose())
 
 plt.figure(3) 
 plt.imshow(FBPrec, vmin=0, vmax=1)
 plt.title('FBP Reconstructed Phantom')
 #%%
+"""
+from tomophantom import TomoP3D
+
 # generate 4D (3D + time) model
 model = 101 # note that the selected model is temporal (3D + time)
 N_size = 256
@@ -75,4 +77,5 @@ sliceSel = int(0.5*N_size)
 plt.figure(4) 
 plt.imshow(phantom_3Dt[0,sliceSel,:,:],vmin=0, vmax=1)
 plt.title('4D Phantom, axial view, first time-frame')
+"""
 #%%

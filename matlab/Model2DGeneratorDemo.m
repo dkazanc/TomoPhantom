@@ -11,7 +11,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 1; % Select a model from Phantom2DLibrary.dat
+ModelNo = 12; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
@@ -19,10 +19,10 @@ N = 512; % x-y size (squared image)
 curDir   = pwd;
 mainDir  = fileparts(curDir);
 pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
-[G] = TomoP2DModel(ModelNo,N,pathTP);
-figure; imagesc(G', [0 1]); daspect([1 1 1]); colormap hot;
+[G] = TomoP2DModel(ModelNo,N,pathTP); 
+figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
 %%
-fprintf('%s \n', 'Generating sinogram analytically and numerically...');
+fprintf('%s \n', 'Generating sinogram analytically and numerically with Matlab (radon)...');
 % generate angles
 angles = linspace(0,180,N); % projection angles
 
@@ -46,8 +46,8 @@ fprintf('%s %.4f\n', 'NMSE for sino residuals:', err_diff);
 FBP_F_a = iradon(F_a',angles,N);
 FBP_F_d = iradon(F_d',angles,N);
 figure; 
-subplot(1,2,1); imagesc(FBP_F_a', [0 1]); title('Analytical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
-subplot(1,2,2); imagesc(FBP_F_d', [0 1]); title('Numerical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
+subplot(1,2,1); imagesc(FBP_F_a, [0 1]); title('Analytical Sinogram Reconstruction'); daspect([1 1 1]); colormap hot;
+subplot(1,2,2); imagesc(FBP_F_d, [0 1]); title('Numerical Sinogram (radon) Reconstruction'); daspect([1 1 1]); colormap hot;
 %%
 fprintf('%s \n', 'Use the ASTRA-toolbox to generate numerical sinogram...');
 % generate 2D analytical parallel beam sinogram (note the 'astra' opton)
@@ -60,7 +60,7 @@ fprintf('%s %.4f\n', 'NMSE for sino residuals:', err_diff);
 
 figure; 
 subplot(1,2,1); imshow(F_a, []); title('Analytical Sinogram');
-subplot(1,2,2); imshow(F_num_astra, []); title('Numerical Sinogram');
+subplot(1,2,2); imshow(F_num_astra, []); title('Numerical Sinogram (ASTRA)');
 %%
 fprintf('%s \n', 'Reconstruction using the ASTRA-toolbox (FBP)...');
 
@@ -68,6 +68,6 @@ rec_an = rec2Dastra(F_a, (angles*pi/180), P, N, 'cpu');
 rec_num = rec2Dastra(F_num_astra, (angles*pi/180), P, N, 'cpu');
 
 figure; 
-subplot(1,2,1); imagesc(rec_an', [0 1]); daspect([1 1 1]); colormap hot; title('Analytical Sinogram Reconstruction [ASTRA]');
-subplot(1,2,2); imagesc(rec_num', [0 1]); daspect([1 1 1]); colormap hot; title('Numerical Sinogram Reconstruction [ASTRA]');
+subplot(1,2,1); imagesc(rec_an, [0 1]); daspect([1 1 1]); colormap hot; title('Analytical Sinogram Reconstruction [ASTRA]');
+subplot(1,2,2); imagesc(rec_num, [0 1]); daspect([1 1 1]); colormap hot; title('Numerical Sinogram Reconstruction [ASTRA]');
 %%

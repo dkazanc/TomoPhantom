@@ -20,6 +20,7 @@
 #include "utils.h"
 
 #define M_PI 3.14159265358979323846
+#define MAXCHAR 1000
 
 /* Functions to build spatial (2D) and temporal (2D +time) phantoms from the library of models: Phantom2DLibrary.dat
  *
@@ -39,128 +40,7 @@
  */
 
 /* function to build a single object */
-float TomoP2DObject(float *A, int N, char *Object,
-        float C0, /* intensity */
-        float x0, /* x0 position */
-        float y0, /* y0 position */
-        float a , /* a - size object */
-        float b , /* b - size object */
-        float phi_rot /* phi - rotation angle */)
-{
-    int i, j;
-    float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, phi_rot_radian, sin_phi, cos_phi;
-    float *Xdel = NULL, *Ydel = NULL, T;
-    Tomorange_X_Ar = malloc(N*sizeof(float));
-    Tomorange_Xmin = -1.0f;
-    Tomorange_Xmax = 1.0f;
-    H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
-    for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
-    C1 = -4.0f*logf(2.0f);
-    
-    /************************************************/
-    phi_rot_radian = phi_rot*((float)M_PI/180.0f);
-    sin_phi=sinf(phi_rot_radian); cos_phi=cosf(phi_rot_radian);
-    
-    Xdel = malloc(N*sizeof(float));
-    Ydel = malloc(N*sizeof(float));
-    for(i=0; i<N; i++)  {
-        Xdel[i] = Tomorange_X_Ar[i] - x0;
-        Ydel[i] = Tomorange_X_Ar[i] - y0;
-    }
-    
-    a2 = 1.0f/(a*a);
-    b2 = 1.0f/(b*b);
-    
-    /* all parameters of an object have been extracted, now run the building modules */
-    if (strcmp("gaussian",Object) == 0) {
-        /* The object is a gaussian */
-#pragma omp parallel for shared(A) private(i,j,T)
-        for(i=0; i<N; i++) {
-            for(j=0; j<N; j++) {
-                T = C1*(a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2));
-                A[j*N+i] += C0*expf(T);
-            }}
-    }
-    else if (strcmp("parabola",Object) == 0) {
-        /* the object is a parabola Lambda = 1/2 */
-#pragma omp parallel for shared(A) private(i,j,T)
-        for(i=0; i<N; i++) {
-            for(j=0; j<N; j++) {
-                T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                if (T <= 1) T = C0*sqrtf(1.0f - T);
-                else T = 0.0f;
-                A[j*N+i] += T;
-            }}
-    }
-    else if (strcmp("ellipse",Object) == 0) {
-        /* the object is an elliptical disk */
-#pragma omp parallel for shared(A) private(i,j,T)
-        for(i=0; i<N; i++) {
-            for(j=0; j<N; j++) {
-                T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                if (T <= 1) T = C0;
-                else T = 0.0f;
-                A[j*N+i] += T;
-            }}
-    }
-    else if (strcmp("parabola1",Object) == 0) {
-        /* the object is a parabola Lambda = 1*/
-#pragma omp parallel for shared(A) private(i,j,T)
-        for(i=0; i<N; i++) {
-            for(j=0; j<N; j++) {
-                T = (4.0f*a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (4.0f*b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                if (T <= 1) T = C0*sqrtf(1.0f - T);
-                else T = 0.0f;
-                A[j*N+i] += T;
-            }}
-    }
-    else if (strcmp("cone",Object) == 0) {
-        /*the object is a cone*/
-#pragma omp parallel for shared(A) private(i,j,T)
-        for(i=0; i<N; i++) {
-            for(j=0; j<N; j++) {
-                T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-                if (T <= 1) T = C0*(1.0f - sqrtf(T));
-                else T = 0.0f;
-                A[j*N+i] += T;
-            }}
-    }
-    else if (strcmp("rectangle",Object) == 0) {
-        /* the object is a rectangle */
-        float x0r, y0r, HX, HY;
-        a2 = 0.5f*a;
-        b2 = 0.5f*b;
-        x0r=x0*cosf(0.0f) + y0*sinf(0.0f);
-        y0r=-x0*sinf(0.0f) + y0*cosf(0.0f);
-        if (phi_rot_radian < 0.0f) {
-            phi_rot_radian = (float)M_PI + phi_rot_radian;
-            sin_phi=sinf(phi_rot_radian);
-            cos_phi=cosf(phi_rot_radian);
-        }
-#pragma omp parallel for shared(A) private(i,j,HX,HY,T)
-        for(i=0; i<N; i++) {
-            for(j=0; j<N; j++) {
-                HX = fabsf((Xdel[i] - x0r)*sin_phi + (Ydel[j] - y0r)*cos_phi);
-                T = 0.0f;
-                if (HX <= a2) {
-                    HY = fabsf((Ydel[j] - y0r)*sin_phi - (Xdel[i] - x0r)*cos_phi);
-                    if (HY <= b2) {T = C0;}
-                }
-                A[j*N+i] += T;
-            }}
-    }
-    else {
-        printf("%s\n", "No such object exists!");
-        return 0;
-    }
-    free(Xdel); free(Ydel);
-    /************************************************/
-    free(Tomorange_X_Ar);
-    return *A;
-}
-
-/* function to build a single TEMPORAL object */
-float TomoP2DObjectTemporal(float *A, int N, char *Object,
+float TomoP2DObject_core(float *A, int N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -271,9 +151,8 @@ float TomoP2DObjectTemporal(float *A, int N, char *Object,
                 A[tt*N*N + j*N+i] += T;
             }}
     }
-    else {
-        printf("%s\n", "No such object exists!");
-        return 0;
+    else {        
+          return 0;
     }
     free(Xdel); free(Ydel);
     /************************************************/
@@ -283,167 +162,166 @@ float TomoP2DObjectTemporal(float *A, int N, char *Object,
 
 float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
 {
-    FILE *in_file = fopen(ModelParametersFilename, "r"); // read parameters file
-    int ii, func_val, steps_num = 1;
-    if (! in_file )
-    {
-        printf("%s %s\n", "Parameters file does not exist or cannot be read!", ModelParametersFilename);
-        printf("Trying models/Phantom2DLibrary.dat");
-        in_file = fopen("models/Phantom2DLibrary.dat","r");
-        if(! in_file)
+    FILE *fp = fopen(ModelParametersFilename, "r"); // read parameters file    
+    int Model=0, Components=0, steps = 0, counter=0, ii;
+    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, psi_gr1 = 0.0f;
+    
+    if( fp == NULL ) {
+        printf("%s \n","Cannot open the model library file (Phantom2DLibrary.dat)");
+    }
+    else {
+        
+        char str[MAXCHAR];
+        char tmpstr1[16];
+        char tmpstr2[22];
+        char tmpstr3[16];
+        char tmpstr4[16];
+        char tmpstr5[16];
+        char tmpstr6[16];
+        char tmpstr7[16];
+        char tmpstr8[16];
+        
+        while (fgets(str, MAXCHAR, fp) != NULL)
         {
-            printf("models/Phantom2DLibrary.dat has not been found");
-            return 0;
-        }
-    }
-    char tmpstr1[16];
-    char tmpstr2[16];
-    char tmpstr3[16];
-    char tmpstr4[16];
-    char tmpstr5[16];
-    char tmpstr6[16];
-    char tmpstr7[16];
-    char tmpstr8[16];
-    char tmpstr_s1[16];
-    char tmpstr_s2[16];
-    char tempbuff[100];
-    while(!feof(in_file))
-    {
-        if (fgets(tempbuff,100,in_file)) {
-            
-            if(tempbuff[0] == '#') continue;
-            
-            sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2);
-            /*printf("<<%s>>\n",  tmpstr1);*/
-            int Model = 0, Components = 0;
-            
-            if (strcmp(tmpstr1,"Model")==0) {
-                Model = atoi(tmpstr2);
-            }
-            
-            /*check if we got the right model */
-            if (ModelSelected == Model) {
-                /* read the model parameters */
-                printf("\nThe selected Model : %i \n", Model);
-                if (fgets(tempbuff,100,in_file)) {
-                    sscanf(tempbuff, "%15s : %15[^;];", tmpstr1, tmpstr2); }
-                if (fgets(tempbuff,100,in_file)) {
-                    sscanf(tempbuff, "%15s : %15[^;];", tmpstr_s1, tmpstr_s2); }
-                
-                if  (strcmp(tmpstr1,"Components") == 0) {
-                    Components = atoi(tmpstr2);
-                }
-                else {
-                    printf("%s\n", "The number of components is unknown!");
-                    return 0;
-                }
-                if  (strcmp(tmpstr_s1,"TimeSteps") == 0) {
-                    steps_num = atoi(tmpstr_s2);
-                }
-                else {printf("%s\n", "Number of steps should be >= 1");}
-                
-                if (steps_num == 1) {
-                    /* Stationary phantom case */
-                    
-                    /* loop over all components */
-                    for(ii=0; ii<Components; ii++) {
-                        
-                        float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, phi_rot = 0.0f;
-                        
-                        if (fgets(tempbuff,100,in_file)) {
-                            sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
-                        }
-                        if  (strcmp(tmpstr1,"Object") == 0) {
-                            C0 = (float)atof(tmpstr3); /* intensity */
-                            y0 = (float)atof(tmpstr4); /* x0 position */
-                            x0 = (float)atof(tmpstr5); /* y0 position */
-                            a = (float)atof(tmpstr6); /* a - size object */
-                            b = (float)atof(tmpstr7); /* b - size object */
-                            phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
-                            /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
-                        }
-                        
-                        /*  check that the parameters are reasonable  */
-                        func_val = parameters_check2D(C0, x0, y0, a, b, phi_rot);
-                        
-                        /* build phantom */
-                        if (func_val == 0) TomoP2DObject(A, N, tmpstr2, C0, x0, y0, a, b, phi_rot);
-                        else printf("\nFunction prematurely terminated, not all objects included");
-                    } /* components loop */
-                }
-                else {
-                    /* Temporal (2D + time) phantom case */
-                    /* loop over all components */
-                    for(ii=0; ii<Components; ii++) {
-                        
-                        /* object parameters extraction (Initial position )*/
-                        float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, phi_rot = 0.0f;
-                        if (fgets(tempbuff,100,in_file)) {
-                            sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
-                        }
-                        if  (strcmp(tmpstr1,"Object") == 0) {
-                            C0 = (float)atof(tmpstr3); /* intensity */
-                            y0 = (float)atof(tmpstr4); /* x0 position */
-                            x0 = (float)atof(tmpstr5); /* y0 position */
-                            a = (float)atof(tmpstr6); /* a - size object */
-                            b = (float)atof(tmpstr7); /* b - size object */
-                            phi_rot = (float)atof(tmpstr8); /* phi - rotation angle */
-                            /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
-                        }
-                        
-                        /* "End variables" (Endvar) of the final position of the object and other parameters */                        
-                        float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, a1 = 0.0f, b1 = 0.0f, phi_rot1 = 0.0f;
-                        if (fgets(tempbuff,100,in_file)) {
-                            sscanf(tempbuff, "%15s : %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
-                        }
-                        if  (strcmp(tmpstr1,"Endvar") == 0) {
-                            C1 = (float)atof(tmpstr3); /* intensity final*/
-                            y1 = (float)atof(tmpstr4); /* x1 position */
-                            x1 = (float)atof(tmpstr5); /* y1 position */
-                            a1 = (float)atof(tmpstr6); /* a1 - size object */
-                            b1 = (float)atof(tmpstr7); /* b1 - size object */
-                            phi_rot1 = (float)atof(tmpstr8); /* phi1 - rotation angle */
-                            /*printf("\nObject : %s \nC0 : %f \nx0 : %f \nc : %f \n", tmpstr2, C0, x0, y0);*/
-                        }
-                        /*now we know the initial parameters of the object and the final ones. We linearly extrapolate to establish steps and coordinates. */
-                        
-                        /* calculating the full distance berween the start and the end points */
-                        float distance = sqrtf(pow((x1 - x0),2) + pow((y1 - y0),2));
-                        float d_dist = distance/(steps_num-1); /*a step over line */
-                        float C_step = (C1 - C0)/(steps_num-1);
-                        float a_step = (a1 - a)/(steps_num-1);
-                        float b_step = (b1 - b)/(steps_num-1);
-                        float phi_rot_step = (phi_rot1 - phi_rot)/(steps_num-1);
-                        
-                        int tt;
-                        float x_t, y_t, a_t, b_t, C_t, phi_t, d_step;
-                        /* initialize */
-                        x_t = x0; y_t = y0; a_t = a; b_t = b; C_t = C0; phi_t = phi_rot; d_step = d_dist;
-                        /*loop over time frames*/
-                        for(tt=0; tt < steps_num; tt++) {
+            /* work with non-# commented lines */
+            if(str[0] != '#') {
+                sscanf(str, "%15s : %21[^;];", tmpstr1, tmpstr2);
+                if (strcmp(tmpstr1,"Model")==0)
+                {
+                    Model = atoi(tmpstr2);
+                    if ((ModelSelected == Model) && (counter == 0)) {
+                        /* check if we have a right model */
+                        if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %21[^;];", tmpstr1, tmpstr2);
+                        else {
+                            //mexErrMsgTxt("Unexpected the end of the line (Components) in parameters file");
+                            break; }
+                        if  (strcmp(tmpstr1,"Components") == 0) Components = atoi(tmpstr2);
+                        //printf("%s %i\n", "Components:", Components);
+                        if (Components <= 0) {
+                            // printf("%s %i\n", "Components cannot be negative, the given value is", Components);
+                           // mexErrMsgTxt("Components cannot be negative");
+                            break; }
+                        if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %21[^;];", tmpstr1, tmpstr2);
+                        else {
+                            //mexErrMsgTxt("Unexpected the end of the line (TimeSteps) in parameters file");
+                            break; }
+                        if  (strcmp(tmpstr1,"TimeSteps") == 0) steps = atoi(tmpstr2);
+                        if (steps <= 0) {
+                            // printf("%s %i\n", "TimeSteps cannot be negative, the given value is", steps);
+                            //mexErrMsgTxt("TimeSteps cannot be negative");
+                            break; }
+                        //printf("%s %i\n", "TimeSteps:", steps);
+                        if (steps == 1) {
+                            /**************************************************/                            
+                            printf("\n %s %i %s \n", "Stationary 2D model", ModelSelected, " is selected");
                             
-                            TomoP2DObjectTemporal(A, N, tmpstr2, C_t, x_t, y_t, a_t, b_t, phi_t, tt);
+                            /* loop over all components */
+                            for(ii=0; ii<Components; ii++) {
+                                if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %21s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
+                                else {
+                                    //mexErrMsgTxt("Unexpected the end of the line (objects loop) in parameters file");
+                                    break; }
+                                
+                                if  (strcmp(tmpstr1,"Object") == 0) {
+                                    C0 = (float)atof(tmpstr3); /* intensity */
+                                    x0 = (float)atof(tmpstr4); /* x0 position */
+                                    y0 = (float)atof(tmpstr5); /* y0 position */
+                                    a = (float)atof(tmpstr6); /* a - size object */
+                                    b = (float)atof(tmpstr7); /* b - size object */
+                                    psi_gr1 = (float)atof(tmpstr8); /* rotation angle 1*/
+                                }
+                                else {
+                                    //mexErrMsgTxt("Cannot find 'Object' string in parameters file");
+                                    break; }                               
+                                TomoP2DObject_core(A, N, tmpstr2, C0, y0, x0, a, b, psi_gr1, 0); /* python */
+                            }
+                        }
+                        else {
+                            /**************************************************/                            
+                            printf("\n %s %i %s \n", "Temporal 2D+time model", ModelSelected, " is selected");
+                            /* temporal phantom 2D + time (3D) */
                             
-                            /* calculating new coordinates of an object */
-                            if (distance != 0.0f) {
-                            float t = d_step/distance;
-                            x_t = (1-t)*x0 + t*x1;
-                            y_t = (1-t)*y0 + t*y1; }
-                            else {
-                            x_t = x0;
-                            y_t = y0;   }
-                            //printf("%f %f \n", x_t, y_t);
-                            
-                            d_step += d_dist;
-                            a_t += a_step;
-                            b_t += b_step;
-                            C_t += C_step;
-                            phi_t += phi_rot_step;
-                        } /*time steps*/
-                    } /* components loop */
+                            float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, a1 = 0.0f, b1 = 0.0f, psi_gr1_1 = 0.0f;
+                            /* loop over all components */
+                            for(ii=0; ii<Components; ii++) {
+                                
+                                if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %15s %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr2, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
+                                else {
+                                   // mexErrMsgTxt("Unexpected the end of the line (objects loop) in parameters file");
+                                    break; }
+                                
+                                if  (strcmp(tmpstr1,"Object") == 0) {
+                                    C0 = (float)atof(tmpstr3); /* intensity */
+                                    x0 = (float)atof(tmpstr4); /* x0 position */
+                                    y0 = (float)atof(tmpstr5); /* y0 position */
+                                    a = (float)atof(tmpstr6); /* a - size object */
+                                    b = (float)atof(tmpstr7); /* b - size object */
+                                    psi_gr1 = (float)atof(tmpstr8); /* rotation angle 1*/
+                                }
+                                else {
+                                   // mexErrMsgTxt("Cannot find 'Object' string in parameters file");
+                                    break; }                               
+
+                                /* check Endvar relatedparameters */
+                                if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %15s %15s %15s %15s %15s %15[^;];", tmpstr1, tmpstr3, tmpstr4, tmpstr5, tmpstr6, tmpstr7, tmpstr8);
+                                else {
+                                   // mexErrMsgTxt("Unexpected the end of the line (Endvar loop) in parameters file");
+                                    break; }
+                                
+                                if  (strcmp(tmpstr1,"Endvar") == 0) {
+                                    C1 = (float)atof(tmpstr3); /* intensity */
+                                    x1 = (float)atof(tmpstr4); /* x0 position */
+                                    y1 = (float)atof(tmpstr5); /* y0 position */
+                                    a1 = (float)atof(tmpstr6); /* a - size object */
+                                    b1 = (float)atof(tmpstr7); /* b - size object */
+                                    psi_gr1_1 = (float)atof(tmpstr8); /* rotation angle 1*/
+                                }
+                                else {
+                                    printf("%s\n", "Cannot find 'Endvar' string in parameters file");
+                                    break; }
+                                                              
+                                /*now we know the initial parameters of the object and the final ones. We linearly extrapolate to establish steps and coordinates. */
+                                /* calculating the full distance berween the start and the end points */                                
+                                float distance = sqrtf(pow((x1 - x0),2) + pow((y1 - y0),2));
+                                float d_dist = distance/(steps-1); /*a step over line */
+                                float C_step = (C1 - C0)/(steps-1);
+                                float a_step = (a1 - a)/(steps-1);
+                                float b_step = (b1 - b)/(steps-1);
+                                float phi_rot_step = (psi_gr1_1 - psi_gr1)/(steps-1);
+                                
+                                int tt;
+                                float x_t, y_t, a_t, b_t, C_t, phi_t, d_step;
+                                /* initialize */
+                                x_t = x0; y_t = y0; a_t = a; b_t = b; C_t = C0; phi_t = psi_gr1; d_step = d_dist;
+                                /*loop over time frames*/
+                                for(tt=0; tt < steps; tt++) {
+                                    
+                                     TomoP2DObject_core(A, N, tmpstr2, C_t, y_t, x_t, b_t, a_t, phi_t, tt); /* python */
+                                    
+                                    /* calculating new coordinates of an object */
+                                    if (distance != 0.0f) {
+                                        float t = d_step/distance;
+                                        x_t = (1-t)*x0 + t*x1;
+                                        y_t = (1-t)*y0 + t*y1; }
+                                    else {
+                                        x_t = x0;
+                                        y_t = y0;   }
+                                   
+                                    d_step += d_dist;
+                                    a_t += a_step;
+                                    b_t += b_step;
+                                    C_t += C_step;
+                                    phi_t += phi_rot_step;
+                                } /*time steps*/
+                                
+                            } /*components loop*/
+                        }
+                        counter++;
+                    }
                 }
             }
         }
     }
+    fclose(fp);    
     return *A;
 }

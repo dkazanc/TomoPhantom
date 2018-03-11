@@ -20,5 +20,4 @@ limitations under the License.
 #include "omp.h"
 
 float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename);
-float TomoP3DObject(float *A, int N,  char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot);
-float TomoP3DObjectTemporal(float *A, int N,  char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot, int tt);
+float TomoP3DObject_core(float *A, int N,  char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi_gr1, float psi_gr2, float psi_gr3, int tt);
