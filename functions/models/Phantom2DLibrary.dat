@@ -195,7 +195,7 @@ Object : ellipse .800e00 -.32e00   .18e00  0.01e00 0.01e00  00.e00;
 #----------------------------------------------------
 # composite - rectangles and ellipses 
 Model : 12;
-Components : 62;
+Components : 61;
 TimeSteps : 1;
 Object : rectangle 1.00e00 0.0  -0.37  0.33 0.1 00.e00;
 Object : rectangle 1.00e00 0.0  0.37  0.33 0.1 00.e00;

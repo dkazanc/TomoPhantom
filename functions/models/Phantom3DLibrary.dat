@@ -3,8 +3,28 @@
 # syntax for object decription -- Object : object type (see names above), C0, x0, y0, z0, a, b, c, angle1, angle2, angle3; 
 #----------Static (3D) Phantoms [no. 01-99]---------
 #----------------------------------------------------
-# 'Defrise' phantom with horizontal ellipsoids
+# 'Snake' phantom
 Model : 01;
+Components : 15;
+TimeSteps : 1;
+Object : ellipsoid 1.0 0.07 0.04 -0.7 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.0 -0.1 -0.6 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 -0.1 -0.2 -0.5 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 -0.235 -0.2 -0.4 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 -0.31 -0.06 -0.3 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 -0.265 0.085 -0.2 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 -0.16 0.2 -0.1 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.0 0.25 0.0 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.15 0.225 0.1 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.28 0.16 0.2 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.33 0.015 0.3 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.3 -0.13 0.4 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.2 -0.25 0.5 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 0.07 -0.37 0.6 0.05 0.05 0.05 0.0 0.0 0.0;
+Object : ellipsoid 1.0 -0.07 -0.43 0.7 0.05 0.05 0.05 0.0 0.0 0.0;
+#----------------------------------------------------
+# 'Defrise' phantom with horizontal ellipsoids
+Model : 02;
 Components : 12;
 TimeSteps : 1;
 Object : ellipsoid 1.0 0.0 0.0 -0.8 0.75 0.75 0.065 00 00 00;
@@ -21,7 +41,7 @@ Object : ellipsoid 1.0 0.0 0.0 0.7 0.75 0.75 0.065 00 00 00;
 Object : ellipsoid 1.0 0.0 0.0 0.85 0.75 0.75 0.065 00 00 00;
 #----------------------------------------------------
 # 18 components: 16 ellipsoids + 2 Gaussians
-Model : 02;
+Model : 03;
 Components : 18;
 TimeSteps : 1;
 Object : ellipsoid 1.0 0.0 0.7 0.0 0.2 0.2 0.9 00 00 00;           
@@ -44,7 +64,7 @@ Object : gaussian 1.0 0.0 0.25 0.0 0.1 0.1 0.15 90 00 00;
 Object : gaussian 1.0 0.0 -0.25 0.0 0.1 0.1 0.15 90 00 00;
 #----------------------------------------------------
 # 9 components: 8 paraboloids + 1 cuboid
-Model : 03;
+Model : 04;
 Components : 09;
 TimeSteps : 1;
 Object : cuboid 1.00 0.0 0.0 0.0 0.45 0.45 0.45 00 00 00;
@@ -56,12 +76,6 @@ Object : paraboloid 1.00 0.45 0.45 -0.25 0.4 0.4 0.4 00 00 00;
 Object : paraboloid 1.00 -0.45 0.45 -0.25 0.4 0.4 0.4 00 00 00;
 Object : paraboloid 1.00 -0.45 -0.45 -0.25 0.4 0.4 0.4 00 00 00;
 Object : paraboloid 1.00 0.45 -0.45 -0.25 0.4 0.4 0.4 00 00 00;
-#----------------------------------------------------
-# 1 cuboid (rotated)
-Model : 04;
-Components : 01;
-TimeSteps : 1;
-Object : cuboid 1.00 0.0 0.0 0.0 0.65 0.65 0.65 45 00 00;
 #----------------------------------------------------
 # 33 components: ellipsoids
 Model : 05;

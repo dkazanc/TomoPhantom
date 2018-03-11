@@ -19,12 +19,11 @@ limitations under the License.
 #ifdef __cplusplus
 extern "C" {
 #endif
-float extractTimeFrames(int *steps, int ModelSelected, char *ModelParametersFilename);
-float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename, int modelType);
-float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename, int modelType);
-float matrot3(float *A, float psi1, float psi2, float psi3);
-float matvet3(float *A, float *V1, float *V2);
-float matmat3(float *A, float *B, float *C);
+float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
+float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
+float matrot3(float *Ad, float psi1, float psi2, float psi3);
+float matvet3(float *Ad, float *V1, float *V2);
+// float matmat3(float *A, float *B, float *C);
 #ifdef __cplusplus
 }
 #endif

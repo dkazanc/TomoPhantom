@@ -11,7 +11,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 4; % Select a model from Phantom2DLibrary.dat
+ModelNo = 12; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 

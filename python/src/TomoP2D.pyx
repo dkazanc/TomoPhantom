@@ -23,14 +23,14 @@ import numpy as np
 cimport numpy as np
 
 # declare the interface to the C code
-cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename, int platform)
-cdef extern float TomoP2DObject(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot)
-cdef extern float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename, int platform)
-cdef extern float TomoP2DObjectSino(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot)
-cdef extern float extractTimeFrames(int *steps, int ModelSelected, char *ModelParametersFilename)
+cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
+cdef extern float TomoP2DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
+cdef extern float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
+cdef extern float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
+cdef extern float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
 
 cdef packed struct object_2d:
-    char[16] Obj
+    char[21] Obj
     np.float32_t C0
     np.float32_t x0
     np.float32_t y0
@@ -56,11 +56,12 @@ def Model(int model_id, int phantom_size, str model_parameters_filename):
     py_byte_string = model_parameters_filename.encode('UTF-8')
     cdef char* c_string = py_byte_string
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
-    cdef np.ndarray[int, ndim=1, mode="c"] steps
-    steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
-    extractTimeFrames(&steps[0], model_id, c_string)
-    if steps[0] == 1:
-        ret_val = TomoP2DModel_core(&phantom[0,0], model_id, phantom_size, c_string, 1)
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([10], dtype=ctypes.c_int))
+    checkParams2D(&params[0], model_id, c_string)
+    testParams2D(params) # check parameters and terminate before running the core
+    if params[3] == 1:
+        ret_val = TomoP2DModel_core(&phantom[0,0], model_id, phantom_size, c_string)
     else:
         print("The selected model is temporal (3D), use 'ModelTemporal' function instead")
     return phantom
@@ -80,15 +81,16 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
     """
     cdef float ret_val
     py_byte_string = model_parameters_filename.encode('UTF-8')
-    cdef char* c_string = py_byte_string
-    cdef np.ndarray[int, ndim=1, mode="c"] steps
-    steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
-    extractTimeFrames(&steps[0], model_id, c_string)
-    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([steps[0], phantom_size, phantom_size], dtype='float32')    
-    if steps[0] == 1:
+    cdef char* c_string = py_byte_string    
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([10], dtype=ctypes.c_int))
+    checkParams2D(&params[0], model_id, c_string)
+    testParams2D(params) # check parameters and terminate before running the core
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([params[3], phantom_size, phantom_size], dtype='float32')
+    if params[3] == 1:
         print("The selected model is static (2D), use 'Model' function instead")
     else:
-        ret_val = TomoP2DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string, 1)
+        ret_val = TomoP2DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -108,7 +110,7 @@ def Object(int phantom_size, object_2d[:] obj_params):
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
     for i in range(obj_params.shape[0]):
-        ret_val = TomoP2DObject(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot)
+        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -134,11 +136,12 @@ def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.flo
     cdef char* c_string = py_byte_string    
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center positioning
-    cdef np.ndarray[int, ndim=1, mode="c"] steps
-    steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
-    extractTimeFrames(&steps[0], model_id, c_string)
-    if steps[0] == 1:
-        ret_val = TomoP2DModelSino_core(&sinogram[0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string, 1)
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([10], dtype=ctypes.c_int))
+    checkParams2D(&params[0], model_id, c_string)
+    testParams2D(params) # check parameters and terminate before running the core
+    if params[3] == 1:
+        ret_val = TomoP2DModelSino_core(&sinogram[0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
     else:
         print("The selected model is temporal (3D), use 'ModelSinoTemporal' function instead")
     return sinogram.transpose()
@@ -164,18 +167,19 @@ def ModelSinoTemporal(int model_id, int image_size, int detector_size, np.ndarra
     cdef char* c_string = py_byte_string    
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center positioning
-    cdef np.ndarray[int, ndim=1, mode="c"] steps
-    steps = np.ascontiguousarray(np.zeros([1], dtype=ctypes.c_int))
-    extractTimeFrames(&steps[0], model_id, c_string)
-    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] sinogram = np.zeros([steps[0], detector_size, angles.shape[0]], dtype='float32')
-    if steps[0] == 1:
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([10], dtype=ctypes.c_int))
+    checkParams2D(&params[0], model_id, c_string)
+    testParams2D(params) # check parameters and terminate before running the core
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] sinogram = np.zeros([params[3], detector_size, angles.shape[0]], dtype='float32')
+    if params[3] == 1:
         print("The selected model is stationary (2D), use 'ModelSino' function instead")
     else:
-        ret_val = TomoP2DModelSino_core(&sinogram[0,0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string, 1)
+        ret_val = TomoP2DModelSino_core(&sinogram[0,0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
     return sinogram
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, object_2d[:] obj_params):    
+def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, object_2d[:] obj_params):
     """
     ObjectSino (image_size, detector_size, angles,object parameters)
     
@@ -195,26 +199,27 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center posit
     for i in range(obj_params.shape[0]):
-        ret_val = TomoP2DObjectSino(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0,-obj_params[i].y0, obj_params[i].x0, obj_params[i].a, obj_params[i].b, -obj_params[i].phi_rot)        
+        ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0,-obj_params[i].y0, obj_params[i].x0, obj_params[i].a, obj_params[i].b, -obj_params[i].phi_rot, 0)
     return sinogram.transpose()
 """
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def Object2(int phantom_size, paramlist):
+def Object2(int phantom_size, obj):
     cdef Py_ssize_t i
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
-    for obj in obj_params:
-        if testParams(obj):
-            ret_val = TomoP2DObject(&phantom[0,0], phantom_size, 
+    #for obj in obj_params:
+    if testParams(obj):
+        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
                                     obj['Obj'], 
                                     obj['C0'], 
                                     obj['x0'], 
                                     obj['y0'], 
                                     obj['a'], 
                                     obj['b'], 
-                                    obj['phi'])
+                                    obj['phi'], 0)
     return phantom
+
 
 def testParams(obj):
     typecheck = type(obj['Obj']) is str
@@ -223,9 +228,10 @@ def testParams(obj):
     else:
         if not obj['Obj'] in ['gaussian', 'parabola', 'parabola1', 'ellipse', 'cone', 'rectangle']:
             raise ValueError('Model unknown: {0}'.format(obj['Obj']))
-    typecheck = typecheck and type(obj['C0']) is float:
-        if not typecheck:
-            raise TypeError('C0 is not a float')
+    typecheck = type(obj['x0']) is float
+    if not typecheck:
+        raise TypeError('C0 is not a float')
+
     typecheck = typecheck and type(obj['x0']) is float:
         if not typecheck:
             raise TypeError('x0 is not a float')
@@ -241,7 +247,6 @@ def testParams(obj):
     typecheck = typecheck and type(obj['phi']) is float:
         if not typecheck:
             raise TypeError('phi is not a float')
-           
     rangecheck = obj['x0'] >= -1 and obj['x0'] <= 1
     if not rangecheck:
         raise ValueError('x0 is out of range. Must be between -1 and 1')
@@ -254,6 +259,28 @@ def testParams(obj):
     rangecheck = rangecheck and obj['b'] > 0
     if not rangecheck:
         raise ValueError('b is not positive.')
-    
     return rangecheck and typecheck
 """
+
+def testParams2D(obj):
+    if obj[0] == 0:
+         raise TypeError('Check if the library file <Phantom2DLibrary.dat> exists, the given path is correct and the syntax is valid')
+    if obj[1] == 0:
+         raise TypeError('The given model is not found, check available models in <Phantom2DLibrary.dat> file')
+    if obj[2] == 0:
+         raise TypeError('Components number cannot be negative, check <Phantom2DLibrary.dat> file')
+    if obj[3] == 0:
+         raise TypeError('TimeSteps cannot be negative, check <Phantom2DLibrary.dat> file')
+    if obj[4] == 0:
+         raise TypeError('Unknown name of the object, check <Phantom2DLibrary.dat> file')
+    if obj[5] == 0:
+         raise TypeError('C0 should not be equal to zero, check <Phantom2DLibrary.dat> file')
+    if obj[6] == 0:
+         raise TypeError('x0 (object position) must be in [-1,1] range, check <Phantom2DLibrary.dat> file')
+    if obj[7] == 0:
+         raise TypeError('y0 (object position) must be in [-1,1] range, check <Phantom2DLibrary.dat> file')
+    if obj[8] == 0:
+         raise TypeError('a (object size) must be positive in [0,2] range, check <Phantom2DLibrary.dat> file')
+    if obj[9] == 0:
+         raise TypeError('b (object size) must be positive in [0,2] range, check <Phantom2DLibrary.dat> file')
+    return 0

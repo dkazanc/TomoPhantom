@@ -1,7 +1,7 @@
 % GPLv3 license (ASTRA toolbox)
 % Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-% Script to generate 3D analytical phantoms and their sinograms
+% Script to generate 3D analytical phantoms
 % If one needs to modify/add phantoms, please edit Phantom3DLibrary.dat
 % >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
@@ -9,9 +9,9 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 9; % Select a model
+ModelNo = 1; % Select a model
 % Define phantom dimensions
-N = 128; % x-y-z size (cubic image)
+N = 256; % x-y-z size (cubic image)
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;

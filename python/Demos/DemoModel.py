@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
 from astraOP import AstraTools
 #%%
-model = 1
+model = 4
 N_size = 512
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'
@@ -89,13 +89,14 @@ plt.imshow(SIRTrec, vmin=0, vmax=1,cmap="BuPu")
 plt.title('SIRT Reconstructed Phantom')
 """
 #%%
-
+"""
 import timeit
 from tomophantom import TomoP3D
+import matplotlib.pyplot as plt
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 4
+model = 1
 N_size = 256
 #specify a full path to the parameters file
 pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
@@ -103,16 +104,21 @@ pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
 phantom_tm = TomoP3D.Model(model, N_size, pathTP3)
 toc=timeit.default_timer()
 Run_time = toc - tic
-print("Phantom had built in {} seconds".format(Run_time))
+print("Phantom has been built in {} seconds".format(Run_time))
 
 sliceSel = int(0.5*N_size)
 #plt.gray()
 plt.figure(5) 
-plt.subplot(121)
+plt.subplot(131)
 plt.imshow(phantom_tm[sliceSel,:,:],vmin=0, vmax=1)
 plt.title('3D Phantom, axial view')
 
-plt.subplot(122)
+plt.subplot(132)
 plt.imshow(phantom_tm[:,sliceSel,:],vmin=0, vmax=1)
 plt.title('3D Phantom, coronal view')
+
+plt.subplot(133)
+plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
+plt.title('3D Phantom, sagittal view')
 plt.show()
+"""

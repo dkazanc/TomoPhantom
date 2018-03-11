@@ -29,7 +29,7 @@ angles = np.linspace(0,180,angles_num,dtype='float32')
 angles_rad = angles*(np.pi/180)
 P = int(np.sqrt(2)*N_size) #detectors
 #This will generate a sinogram of model no.1
-sino_an = TomoP2D.ModelSino(model, N_size, P, angles, path/to/the/Phantom2DLibrary.dat)
+sino_an = TomoP2D.ModelSino(model, N_size, P, angles, 'path/to/the/Phantom2DLibrary.dat')
 
 # Lets build 3D phantom without using the library
 N3D = 256 # size of the phantom
