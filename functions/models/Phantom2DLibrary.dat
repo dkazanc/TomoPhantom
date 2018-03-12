@@ -18,21 +18,6 @@ Object : ellipse 0.1 0.605 -0.08 0.046 0.023 0.0;
 Object : ellipse 0.1 0.605 0.0 0.023 0.023 0.0;
 Object : ellipse 0.1 0.605 0.06 0.023 0.046 0.0;
 #----------------------------------------------------
-# Classical Shepp-Logan phantom (10 ellipses)
-Model : 50;
-Components : 10;
-TimeSteps : 1;
-Object : ellipse 1.0 0.0 0.0 0.92 0.69 0.0;
-Object : ellipse -0.8 0.0 0.0184 0.874 0.6624 0.0;
-Object : ellipse -0.2 0.0 0.22 0.11 0.31 18.0;
-Object : ellipse -0.2 0.0 -0.22 0.16 0.41 -18.0;
-Object : ellipse 0.1 -0.35 0.0 0.21 0.25 0.0;
-Object : ellipse 0.1 -0.1 0.0 0.046 0.046 0.0;
-Object : ellipse 0.1 0.1 0.0 0.046 0.046 0.0;
-Object : ellipse 0.1 0.605 -0.08 0.046 0.023 0.0;
-Object : ellipse 0.1 0.605 0.0 0.023 0.023 0.0;
-Object : ellipse 0.1 0.605 0.06 0.023 0.046 0.0;
-#----------------------------------------------------
 # Piecewise-Smooth Shepp-Logan phantom
 Model : 02;
 Components : 10;
