@@ -201,7 +201,7 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
     for i in range(obj_params.shape[0]):
         ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn, obj_params[i].Obj, obj_params[i].C0,-obj_params[i].y0, obj_params[i].x0, obj_params[i].a, obj_params[i].b, -obj_params[i].phi_rot, 0)
     return sinogram.transpose()
-"""
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def Object2(int phantom_size, obj):
@@ -222,6 +222,10 @@ def Object2(int phantom_size, obj):
 
 
 def testParams(obj):
+    if not type(obj) is dict:
+        raise TypeError('obj is not a dict {0}'.format(type(obj)))
+    
+    # type check    
     typecheck = type(obj['Obj']) is str
     if not typecheck:
         raise TypeError('Obj is not a string')
@@ -231,22 +235,23 @@ def testParams(obj):
     typecheck = type(obj['x0']) is float
     if not typecheck:
         raise TypeError('C0 is not a float')
-
-    typecheck = typecheck and type(obj['x0']) is float:
-        if not typecheck:
-            raise TypeError('x0 is not a float')
-    typecheck = typecheck and type(obj['y0']) is float:
-        if not typecheck:
-            raise TypeError('y0 is not a float')
-    typecheck = typecheck and type(obj['a']) is float:
-        if not typecheck:
-            raise TypeError('a is not a float')
-    typecheck = typecheck and type(obj['b']) is float:
-        if not typecheck:
-            raise TypeError('b is not a float')
-    typecheck = typecheck and type(obj['phi']) is float:
-        if not typecheck:
-            raise TypeError('phi is not a float')
+    typecheck = typecheck and type(obj['x0']) is float
+    if not typecheck:
+        raise TypeError('x0 is not a float')
+    typecheck = typecheck and type(obj['y0']) is float
+    if not typecheck:
+        raise TypeError('y0 is not a float')
+    typecheck = typecheck and type(obj['a']) is float
+    if not typecheck:
+        raise TypeError('a is not a float')
+    typecheck = typecheck and type(obj['b']) is float
+    if not typecheck:
+        raise TypeError('b is not a float')
+    typecheck = typecheck and type(obj['phi']) is float
+    if not typecheck:
+        raise TypeError('phi is not a float')
+    
+    # range check    
     rangecheck = obj['x0'] >= -1 and obj['x0'] <= 1
     if not rangecheck:
         raise ValueError('x0 is out of range. Must be between -1 and 1')
@@ -260,7 +265,7 @@ def testParams(obj):
     if not rangecheck:
         raise ValueError('b is not positive.')
     return rangecheck and typecheck
-"""
+
 
 def testParams2D(obj):
     if obj[0] == 0:
