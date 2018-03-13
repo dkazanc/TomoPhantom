@@ -23,6 +23,10 @@ from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 import numpy as np
 cimport numpy as np
 
+from enum import Enum
+
+
+
 # declare the interface to the C code
 cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
 cdef extern float TomoP2DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
@@ -38,6 +42,15 @@ cdef packed struct object_2d:
     np.float32_t a
     np.float32_t b
     np.float32_t phi_rot
+    
+class Objects2D(Enum):
+    GAUSSIAN  = 'gaussian'
+    PARABOLA  = 'parabola'
+    PARABOLA1 = 'parabola1'
+    ELLIPSE   = 'ellipse'
+    CONE      = 'cone'
+    RECTANGLE = 'rectangle'
+    
     
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -211,9 +224,14 @@ def Object2(int phantom_size, objlist):
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
     
+    if type(objlist) is dict:
+        objlist = [objlist]
+        
+    
     for obj in objlist:
         if testParams(obj):
-            stuff = bytes(obj['Obj'], 'ascii')
+            
+            stuff = bytes(obj['Obj'].value, 'ascii')
             
             ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
                                         stuff, 
@@ -232,12 +250,13 @@ def testParams(obj):
         raise TypeError('obj is not a dict {0}'.format(type(obj)))
     
     # type check    
-    typecheck = type(obj['Obj']) is str
-    if not typecheck:
-        raise TypeError('Obj is not a string')
-    else:
-        if not obj['Obj'] in ['gaussian', 'parabola', 'parabola1', 'ellipse', 'cone', 'rectangle']:
-            raise ValueError('Model unknown: {0}'.format(obj['Obj']))
+    #typecheck = type(obj['Obj']) is str
+    #if not typecheck:
+    #    raise TypeError('Obj is not a string')
+    #else:
+    #    if not obj['Obj'] in ['gaussian', 'parabola', 'parabola1', 'ellipse', 'cone', 'rectangle']:
+    #        raise ValueError('Model unknown: {0}'.format(obj['Obj']))
+    
     typecheck = type(obj['x0']) is float
     if not typecheck:
         raise TypeError('C0 is not a float')

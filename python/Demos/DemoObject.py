@@ -13,7 +13,8 @@ Run demo from the folder "Demos"
 """
 import numpy as np
 import matplotlib.pyplot as plt
-from tomophantom import TomoP2D
+from tomophantom import TomoP2D 
+from tomophantom.TomoP2D import Objects2D
 from astraOP import AstraTools
 #%%
 # create an object explicitly without using parameters file 
@@ -24,18 +25,18 @@ params = np.array([('gaussian', 1.00, -0.25, 0.3, 0.15, 0.3, 30.0),],
                          ('a',np.float32), ('b', np.float32),  
                          ('phi', np.float32)])
 
-pp = {'Obj': 'gaussian', 
+pp = {'Obj': Objects2D.GAUSSIAN, 
       'C0' : 1.00, 
-      'x0' : -0.25,
-      'y0' : 0.3,
+      'x0' : 0.25,
+      'y0' : -0.3,
       'a'  : 0.15,
       'b'  :  0.3,
       'phi': 30.0}
 
-pp1 = {'Obj': 'rectangle', 
+pp1 = {'Obj': Objects2D.RECTANGLE, 
       'C0' : 1.00, 
-      'x0' : 0.2,
-      'y0' : -0.2,
+      'x0' : -0.2,
+      'y0' : 0.2,
       'a'  : 0.25,
       'b'  :  0.4,
       'phi': 60.0}
