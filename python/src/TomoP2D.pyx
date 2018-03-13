@@ -17,6 +17,7 @@ limitations under the License.
 # cython and ctypes
 import cython
 import ctypes
+from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 
 # import numpy and the Cython declarations for numpy
 import numpy as np
@@ -110,7 +111,8 @@ def Object(int phantom_size, object_2d[:] obj_params):
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
     for i in range(obj_params.shape[0]):
-        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
+        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, 
+                                     obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -204,20 +206,24 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def Object2(int phantom_size, obj):
+def Object2(int phantom_size, objlist):
     cdef Py_ssize_t i
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
-    #for obj in obj_params:
-    if testParams(obj):
-        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
-                                    obj['Obj'], 
-                                    obj['C0'], 
-                                    obj['x0'], 
-                                    obj['y0'], 
-                                    obj['a'], 
-                                    obj['b'], 
-                                    obj['phi'], 0)
+    
+    for obj in objlist:
+        if testParams(obj):
+            stuff = bytes(obj['Obj'], 'ascii')
+            
+            ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
+                                        stuff, 
+                                        obj['C0'], 
+                                        obj['x0'], 
+                                        obj['y0'], 
+                                        obj['a'], 
+                                        obj['b'], 
+                                        obj['phi'], 0)
+            print ('ret_val', ret_val)
     return phantom
 
 

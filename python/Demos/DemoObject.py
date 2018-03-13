@@ -19,8 +19,11 @@ from astraOP import AstraTools
 # create an object explicitly without using parameters file 
 N_size = 512
 params = np.array([('gaussian', 1.00, -0.25, 0.3, 0.15, 0.3, 30.0),], 
-                  dtype=[('Obj',  '|S21'), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32),('a',np.float32), ('b', np.float32),  ('phi', np.float32)])
-"""
+                  dtype=[('Obj',  '|S21'), ('C0', np.float32), 
+                         ('x0', np.float32), ('y0',np.float32),
+                         ('a',np.float32), ('b', np.float32),  
+                         ('phi', np.float32)])
+
 pp = {'Obj': 'gaussian', 
       'C0' : 1.00, 
       'x0' : -0.25,
@@ -29,18 +32,18 @@ pp = {'Obj': 'gaussian',
       'b'  :  0.3,
       'phi': 30.0}
 
-pp1 = {'Obj': 'circle', 
+pp1 = {'Obj': 'rectangle', 
       'C0' : 1.00, 
-      'x0' : -0.25,
-      'y0' : 0.3,
-      'a'  : 0.15,
-      'b'  :  0.3,
-      'phi': 30.0}
-"""
+      'x0' : 0.2,
+      'y0' : -0.2,
+      'a'  : 0.25,
+      'b'  :  0.4,
+      'phi': 60.0}
+
 #myObjects = [pp, pp1]
 
 Object1 = TomoP2D.Object(N_size, params)
-#Object2 = TomoP2D.Object2(N_size, [pp])
+Object2 = TomoP2D.Object2(N_size, [pp , pp1])
 
 plt.figure(1)
 plt.rcParams.update({'font.size': 21})
@@ -64,14 +67,14 @@ plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
 # Create another object
 params = np.array([('rectangle', 1.00, 0.2, -0.2, 0.25, 0.4, 60.0),], dtype=[('Obj',  '|S21'), ('C0', np.float32), ('x0', np.float32), ('y0',np.float32),('a',np.float32), ('b', np.float32),  ('phi', np.float32)])
-Object2 = TomoP2D.Object(N_size, params)
+#Object2 = TomoP2D.Object(N_size, params)
 
 
 plt.figure(3)
 plt.rcParams.update({'font.size': 21})
 plt.imshow(Object2, vmin=0, vmax=1)
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('{}'.format('2D Object.'))
+plt.title('Object 2: {0}'.format('2D Object.'))
 #%%
 # create sinogram analytically without using the parameters file
 angles_num = int(0.5*np.pi*N_size); # angles number
