@@ -96,7 +96,7 @@ import matplotlib.pyplot as plt
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 1
+model = 2
 N_size = 256
 #specify a full path to the parameters file
 pathTP3 = '../../functions/models/Phantom3DLibrary.dat'

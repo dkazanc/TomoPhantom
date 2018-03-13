@@ -110,7 +110,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
             for(i=0; i<N; i++) {
                 for(j=0; j<N; j++) {
                     
-                    if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {                        
+                    if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
                         xh1[0]=Tomorange_X_Ar[i];
                         xh1[1]=Tomorange_X_Ar[j];
                         xh1[2]=Tomorange_X_Ar[k];
@@ -178,7 +178,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
             }
         }
     }
-    if (strcmp("ellipticalcylinder",Object) == 0) {
+    if (strcmp("elliptical_cylinder",Object) == 0) {
         /* the object is an elliptical cylinder  */
 #pragma omp parallel for shared(A) private(k,i,j,T)
         for(k=0; k<N; k++) {

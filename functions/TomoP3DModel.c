@@ -139,7 +139,7 @@ void mexFunction(
                                     mexErrMsgTxt("Cannot find 'Object' string in parameters file");
                                     break; }
                                 
-                                if ((strcmp("gaussian",tmpstr2) != 0) && (strcmp("paraboloid",tmpstr2) != 0) && (strcmp("ellipsoid",tmpstr2) != 0) && (strcmp("cone",tmpstr2) != 0) && (strcmp("cuboid",tmpstr2) != 0) && (strcmp("ellipticalcylinder",tmpstr2) != 0) ) {
+                                if ((strcmp("gaussian",tmpstr2) != 0) && (strcmp("paraboloid",tmpstr2) != 0) && (strcmp("ellipsoid",tmpstr2) != 0) && (strcmp("cone",tmpstr2) != 0) && (strcmp("cuboid",tmpstr2) != 0) && (strcmp("elliptical_cylinder",tmpstr2) != 0) ) {
                                     printf("%s %s\n", "Unknown name of the object, the given name is", tmpstr2);
                                     mexErrMsgTxt("Unknown name of the object");
                                     break; }
