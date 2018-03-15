@@ -44,6 +44,7 @@ cdef packed struct object_2d:
     np.float32_t phi_rot
     
 class Objects2D(Enum):
+    '''Enumeration with the available objects for 2D phantoms'''
     GAUSSIAN  = 'gaussian'
     PARABOLA  = 'parabola'
     PARABOLA1 = 'parabola1'
@@ -106,27 +107,29 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
     else:
         ret_val = TomoP2DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
     return phantom
-@cython.boundscheck(False)
-@cython.wraparound(False)
-def Object(int phantom_size, object_2d[:] obj_params):
-    """
-    Object (phantom_size,object_parameters)
+
+#@cython.boundscheck(False)
+#@cython.wraparound(False)
+#def Object(int phantom_size, object_2d[:] obj_params):
+#    """
+#    Object (phantom_size,object_parameters)
+#    
+#    Takes in a input object description (list) and phantom_size and returns a phantom-object of phantom_size x phantom_size of type float32 numpy array.
+#    
+#    param: phantom_size -- a phantom size in each dimension.
+#    param: obj_params -- object parameters list
+#    
+#    returns: numpy float32 phantom array
+#    
+#    """
+#    cdef Py_ssize_t i
+#    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
+#    cdef float ret_val
+#    for i in range(obj_params.shape[0]):
+#        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, 
+#                                     obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
+#    return phantom
     
-    Takes in a input object description (list) and phantom_size and returns a phantom-object of phantom_size x phantom_size of type float32 numpy array.
-    
-    param: phantom_size -- a phantom size in each dimension.
-    param: obj_params -- object parameters list
-    
-    returns: numpy float32 phantom array
-    
-    """
-    cdef Py_ssize_t i
-    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
-    cdef float ret_val
-    for i in range(obj_params.shape[0]):
-        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, 
-                                     obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
-    return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
@@ -219,15 +222,44 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def Object2(int phantom_size, objlist):
-    cdef Py_ssize_t i
+def Object(int phantom_size, objlist):
+    """
+    Object (phantom_size,object_parameters)
+    
+    Takes in a input object description (list) and phantom_size and returns a 
+    phantom-object of phantom_size x phantom_size of type float32 numpy array.
+    
+    param: phantom_size -- a phantom size in each dimension.
+    param: obj_params -- can be list or dictionary. the object parameters are 
+           formatted as Python dict with the input parameters inside. 
+           User can supply more objects by passing a list of dicts.
+           
+    Example: 
+    pp = {'Obj': Objects2D.GAUSSIAN, 
+      'C0' : 1.00, 
+      'x0' : 0.25,
+      'y0' : -0.3,
+      'a'  : 0.15,
+      'b'  :  0.3,
+      'phi': 30.0}
+
+    pp1 = {'Obj': Objects2D.RECTANGLE, 
+      'C0' : 1.00, 
+      'x0' : -0.2,
+      'y0' : 0.2,
+      'a'  : 0.25,
+      'b'  :  0.4,
+      'phi': 60.0}
+    
+    returns: numpy float32 phantom array
+    
+    """
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
     
     if type(objlist) is dict:
         objlist = [objlist]
         
-    
     for obj in objlist:
         if testParams(obj):
             
@@ -241,22 +273,15 @@ def Object2(int phantom_size, objlist):
                                         obj['a'], 
                                         obj['b'], 
                                         obj['phi'], 0)
-            print ('ret_val', ret_val)
     return phantom
 
 
 def testParams(obj):
+    '''Performs a simple type check of the input parameters and a range check'''
     if not type(obj) is dict:
         raise TypeError('obj is not a dict {0}'.format(type(obj)))
     
-    # type check    
-    #typecheck = type(obj['Obj']) is str
-    #if not typecheck:
-    #    raise TypeError('Obj is not a string')
-    #else:
-    #    if not obj['Obj'] in ['gaussian', 'parabola', 'parabola1', 'ellipse', 'cone', 'rectangle']:
-    #        raise ValueError('Model unknown: {0}'.format(obj['Obj']))
-    
+    # type check
     typecheck = type(obj['x0']) is float
     if not typecheck:
         raise TypeError('C0 is not a float')
