@@ -374,7 +374,7 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                                     break; }
                                 //printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);                                
 
-                               TomoP2DObjectSino_core(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, -y0, x0, a, b, -psi_gr1, 0);
+                               TomoP2DObjectSino_core(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, -x0, y0, a, b, -psi_gr1, 0);
                             }
                         }
                         else {
