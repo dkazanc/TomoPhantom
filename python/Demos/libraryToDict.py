@@ -7,8 +7,6 @@ Created on Thu Mar 15 11:12:51 2018
 import re
 from tomophantom.TomoP2D import Objects2D
 
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
-
 def modelfile2Dtolist(filepath, model):
     #read all the file content
     f = open(filepath).readlines()
@@ -25,6 +23,7 @@ def modelfile2Dtolist(filepath, model):
             print (i)
             i += 3
             print (i)
+            print (f[i])
             break
         i += 1
     print (i)
@@ -33,22 +32,22 @@ def modelfile2Dtolist(filepath, model):
     
     for j in range(components):
         descr = f[i+j].split()
-        objstr , C0, x0, y0 , a, b, phi = descr[2:]
+        objstr, C0, x0, y0, a, b, phi = descr[2:]
         for oo in Objects2D:
             if oo.value==objstr:
                 break
-        C0 = float(C0)
-        x0 = float(x0)
-        y0 = float(y0)
-        a = float(a)
-        b = float(b)
-        phi = float(phi[:-2])
-        
+        print (phi)
         objectlist.append( {'Obj' : oo , 
-                            'C0' : C0, 
-                            'x0' : x0,
-                            'y0' : y0,
-                            'a'  : a,
-                            'b'  : b,
-                            'phi': phi} )
+                            'C0' : float(C0), 
+                            'x0' : float(x0),
+                            'y0' : float(y0),
+                            'a'  : float(a),
+                            'b'  : float(b),
+                            'phi': float(phi[:-1])} )
     return objectlist
+
+if __name__ == "__main__":
+    
+    pathTP = '../../functions/models/Phantom2DLibrary.dat'
+
+    print (modelfile2Dtolist(pathTP , 6))
