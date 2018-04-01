@@ -299,7 +299,7 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 /*loop over time frames*/
                                 for(tt=0; tt < steps; tt++) {
                                     
-                                     TomoP2DObject_core(A, N, tmpstr2, C_t, y_t, x_t, b_t, a_t, phi_t, tt); /* python */
+                                     TomoP2DObject_core(A, N, tmpstr2, C_t, x_t, -y_t, a_t, b_t, phi_t, tt); /* python */
                                     
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {

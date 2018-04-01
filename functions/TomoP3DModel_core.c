@@ -148,7 +148,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                 }}}
     }
     if (strcmp("cuboid",Object) == 0) {
-        /* the object is a cube */
+        /* the object is a cuboid */
         float x0r, y0r, HX, HY;
         a2 = 0.5f*a;
         b2 = 0.5f*b;

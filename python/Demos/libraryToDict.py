@@ -15,15 +15,15 @@ def modelfile2Dtolist(filepath, model):
     i = 0
     model = model
     components = 0
-    timesteps = 1
+#    timesteps = 1
     while (True):
         if f[i] == 'Model : {0:02};\n'.format(model):
             components = int (re.search('^Components : (\d+);$',f[i+1]).groups()[0] )
-            timesteps = int( re.search('^TimeSteps : (\d+);$',f[i+2]).groups()[0] )
-            print (i)
+#            timesteps = int( re.search('^TimeSteps : (\d+);$',f[i+2]).groups()[0] )
+#            print (i)
             i += 3
-            print (i)
-            print (f[i])
+#            print (i)
+#            print (f[i])
             break
         i += 1
     print (i)
@@ -36,13 +36,13 @@ def modelfile2Dtolist(filepath, model):
         for oo in Objects2D:
             if oo.value==objstr:
                 break
-        print (phi)
+#        print (phi)
         objectlist.append( {'Obj' : oo , 
                             'C0' : float(C0), 
-                            'x0' : float(x0),
-                            'y0' : float(y0),
-                            'a'  : float(a),
-                            'b'  : float(b),
+                            'x0' : float(y0),
+                            'y0' : float(x0),
+                            'a'  : float(b),
+                            'b'  : float(a),
                             'phi': float(phi[:-1])} )
     return objectlist
 

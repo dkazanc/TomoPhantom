@@ -7,7 +7,6 @@ vol_geom = astra_create_vol_geom(N,N);
 cfg = astra_struct('FBP_CUDA');
 cfg.FilterType = 'Ram-Lak';
 
-
 if (strcmp(device, 'cpu') == 1)
     proj_id = astra_create_projector('strip', proj_geom, vol_geom);
     cfg.ProjectorId = proj_id;
@@ -19,6 +18,7 @@ end
     
 rec_id = astra_mex_data2d('create', '-vol', vol_geom);
 sinogram_id = astra_mex_data2d('create', '-sino', proj_geom, sino);
+
 cfg.ReconstructionDataId = rec_id;
 cfg.ProjectionDataId = sinogram_id;
 
@@ -33,6 +33,7 @@ reconstructon = astra_mex_data2d('get', rec_id);
 astra_mex_algorithm('delete', alg_id);
 astra_mex_data2d('delete', sinogram_id);
 astra_mex_data2d('delete', rec_id);
+
 if (strcmp(device, 'cpu') == 1)
 astra_mex_data2d('delete', proj_id);
 end
