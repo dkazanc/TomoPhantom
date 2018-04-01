@@ -9,7 +9,7 @@ close all;clc;clear;
 % adding paths
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
-ModelNo = 1; % Select a model
+ModelNo = 10; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 

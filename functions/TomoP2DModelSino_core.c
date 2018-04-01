@@ -70,7 +70,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
     else {
         /* astra-toolbox settings */
         /*2D parallel beam*/
-        x00 = x0 - 0.5f*H_x;
+        x00 = x0 + 0.5f*H_x;
         y00 = y0 + 0.5f*H_x;
     }
     
@@ -195,7 +195,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
         else {
             /* astra-toolbox settings */
             x11 = -2.0f*y0 - 0.5f*H_x;
-            y11 = 2.0f*x0 - 0.5f*H_x;
+            y11 = 2.0f*x0 + 0.5f*H_x;
         }
         
         xwid = b;
@@ -372,9 +372,8 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                                     printf("%s %f\n", "b (object size) must be positive in [0,2] range, the given value is", b);
                                     //mexErrMsgTxt("b (object size) must be positive in [0,2] range");
                                     break; }
-                                //printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);                                
-
-                               TomoP2DObjectSino_core(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, -y0, x0, a, b, -psi_gr1, 0);
+                                //printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);
+                               TomoP2DObjectSino_core(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0, y0, b, a, -psi_gr1, 0);
                             }
                         }
                         else {

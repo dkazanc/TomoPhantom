@@ -18,10 +18,11 @@ import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
 from astraOP import AstraTools
 #%%
-model = 4
+model = 1
 N_size = 512
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'
+#objlist = modelfile2Dtolist(pathTP, model) # one can extract parameters
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = TomoP2D.Model(model, N_size, pathTP)
 
@@ -46,7 +47,7 @@ plt.imshow(sino_an,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
-Atools = AstraTools(P, angles_rad - 0.5*np.pi, N_size, 'cpu') # initiate a class object
+Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
 #x = Atools.backproj(sino_an) # generate backprojection (A'b)
 
@@ -58,10 +59,11 @@ plt.subplot(122)
 plt.imshow(sino_num_ASTRA,cmap="BuPu")
 plt.title('Numerical sinogram')
 plt.show()
+#calculate norm
+rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
 #%%
 print ("Reconstructing analytical sinogram using FBP (astra TB)...")
 FBPrec1 = Atools.fbp2D(sino_an)
-
 plt.figure(3) 
 plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
@@ -79,6 +81,7 @@ plt.figure(5)
 plt.imshow(abs(FBPrec1-FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
 plt.title('FBP rec differences')
+rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
 #%%
 """
 print ("Reconstructing using SIRT...")
@@ -122,3 +125,4 @@ plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
 plt.title('3D Phantom, sagittal view')
 plt.show()
 """
+#%%

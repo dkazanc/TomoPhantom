@@ -9,7 +9,7 @@ close all;clc;clear;
 addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
 
 % Define phantom dimensions
-N = 1024; % x-y-z size (cubic image)
+N = 256; % x-y-z size (cubic image)
 
 % define parameters
 paramsObject.Ob = 'gaussian';

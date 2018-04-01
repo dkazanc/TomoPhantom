@@ -49,6 +49,8 @@ float TomoP2DObject_core(float *A, int N, char *Object,
         float phi_rot, /* phi - rotation angle */
         int tt /* time frame loop */)
 {
+    printf ("Base C0 %.2e x0 %.2e y0 %.2e a %.2e b %.2e phi %.2e\n" , C0, x0, y0, a, b, phi_rot);                            
+                                
     int i, j;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, phi_rot_radian, sin_phi, cos_phi;
     float *Xdel = NULL, *Ydel = NULL, T;
@@ -232,7 +234,8 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 }
                                 else {
                                     //mexErrMsgTxt("Cannot find 'Object' string in parameters file");
-                                    break; }                               
+                                    break; }   
+                                printf ("C0 %.2e x0 %.2e y0 %.2e a %.2e b %.2e phi %.2e\n" , C0, x0, y0, a, b, psi_gr1);                            
                                 TomoP2DObject_core(A, N, tmpstr2, C0, y0, x0, a, b, psi_gr1, 0); /* python */
                             }
                         }
@@ -296,7 +299,7 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 /*loop over time frames*/
                                 for(tt=0; tt < steps; tt++) {
                                     
-                                     TomoP2DObject_core(A, N, tmpstr2, C_t, y_t, x_t, b_t, a_t, phi_t, tt); /* python */
+                                     TomoP2DObject_core(A, N, tmpstr2, C_t, x_t, -y_t, a_t, b_t, phi_t, tt); /* python */
                                     
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {

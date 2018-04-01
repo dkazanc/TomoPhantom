@@ -173,13 +173,13 @@ void mexFunction(
                                     printf("%s %f\n", "b (object size) must be positive in [0,2] range, the given value is", b);
                                     mexErrMsgTxt("b (object size) must be positive in [0,2] range");
                                     break; }
-                                printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);                                
+                                printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0, a, b);
 
                                 TomoP2DObjectSino_core(A, N, P, Th, (int)NStructElems, CenTypeIn, tmpstr2, C0, x0, y0, b, a, -psi_gr1, 0); /* Matlab */
                             }
                         }
                         else {
-                            /**************************************************/                            
+                            /**************************************************/
                             printf("\n %s %i %s \n", "Temporal 2D+time model", ModelSelected, " is selected");
                             /* temporal phantom 2D + time (3D) */ 
                             const mwSize N_dims[3] = {NStructElems, P, steps}; /*format: X-detectors, Y-angles dim, Time-Frames*/
@@ -288,7 +288,7 @@ void mexFunction(
                                 /*loop over time frames*/
                                 for(tt=0; tt < steps; tt++) {
                                     
-                                    TomoP2DObjectSino_core(A, N, P, Th, (int)NStructElems, CenTypeIn, tmpstr2, C_t, -y_t, x_t, b_t, a_t, -phi_t, tt);                                          
+                                    TomoP2DObjectSino_core(A, N, P, Th, (int)NStructElems, CenTypeIn, tmpstr2, C_t, x_t, y_t, b_t, a_t, -phi_t, tt);
                                     
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {

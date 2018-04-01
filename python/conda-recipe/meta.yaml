@@ -13,10 +13,13 @@ requirements:
     - numpy
     - setuptools
     - cython
+    - enum34 # [py27]
+    
 
   run:
     - python
     - numpy
+    - enum34 # [py27]
 
 	
 about:

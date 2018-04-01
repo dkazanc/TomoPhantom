@@ -20,12 +20,13 @@ from astraOP import AstraTools
 #%%
 model = 102  # note that the selected model is temporal (2D + time)
 N_size = 512
+timeframes = 25
 #specify a full path to the parameters file
 pathTP = '../../functions/models/Phantom2DLibrary.dat'
 #This will generate a N_size x N_size x Time frames phantom (2D + time)
 phantom_2Dt = TomoP2D.ModelTemporal(model, N_size, pathTP)
 
-timeframes = 25
+plt.close('all')
 plt.figure(1)
 plt.rcParams.update({'font.size': 21})
 plt.title('{}''{}'.format('2D+t phantom using model no.',model))
@@ -53,7 +54,7 @@ for sl in range(0,timeframes):
     plt.draw
 #%%
 # reconstruct
-Atools = AstraTools(P, angles_rad - 0.5*np.pi, N_size, 'cpu') # initiate a class object
+Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 FBPrec = Atools.fbp2D(sino[15,:,:].transpose())
 
 plt.figure(3) 

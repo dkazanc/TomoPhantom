@@ -31,11 +31,6 @@ P = int(np.sqrt(2)*N_size) #detectors
 #This will generate a sinogram of model no.1
 sino_an = TomoP2D.ModelSino(model, N_size, P, angles, 'path/to/the/Phantom2DLibrary.dat')
 
-# Lets build 3D phantom without using the library
-N3D = 256 # size of the phantom
-params = np.array([('gaussian', 1.00, -0.25, 0.1, 0.0, 0.2, 0.35, 0.7, 30.0, 60.0, -25.0),], dtype=[('Obj',  '|S22'), ('C0', np.float32), ('x0', np.float32), 
-('y0',np.float32), ('z0',np.float32), ('a',np.float32), ('b', np.float32), ('c', np.float32), ('psi1', np.float32),('psi2', np.float32),('psi3', np.float32)])
-Object3D = TomoP3D.Object(N3D, params)
 ```
 ## see Demos for more information
 DemoModel.py - shows how to create 2D/3D models and their tomographic projections
