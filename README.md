@@ -43,6 +43,7 @@ the temporal extension, therefore a capability of creating 2D+time and 3D+time o
 ### For referencing, please cite:
 
 [1] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/582/8704/GP_IPSE.pdf)
+
 [2]. Software DOI: <a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 
 Software-related questions/comments can be e-mailed to Daniil Kazantsev at dkazanc@hotmail.com
