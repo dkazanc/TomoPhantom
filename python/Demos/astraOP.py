@@ -34,7 +34,7 @@ class AstraTools:
         """Applying backprojection"""
         rec_id, image = astra.create_backprojection(sinogram, self.proj_id)
         astra.data2d.delete(self.proj_id)
-        astra.data2d.delete(rec_id)		
+        astra.data2d.delete(rec_id)
         return image
     def fbp2D(self, sinogram):
         """perform FBP reconstruction""" 
