@@ -6,6 +6,7 @@
 ****************
 **TomoPhantom** is a toolbox to generate customisable 2D/3D/4D phantoms (with temporal capability) and their 
 analytical tomograms for various image processing tasks (reconstruction, denoising, deblurring, etc.).
+<a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 ****************    
    
  <div class="post-content">
@@ -44,6 +45,6 @@ the temporal extension, therefore a capability of creating 2D+time and 3D+time o
 
 [1] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://ccpforge.cse.rl.ac.uk/gf/download/frsrelease/582/8704/GP_IPSE.pdf)
 
-[2]. Software DOI: <a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
+[2]. D. Kazantsev, E. Pasca, S. Nagella, & V. Pickalov.  (2018, April 9). TomoPhantom v.1.0. Software to generate 2D-4D analytical phantoms and their Radon transforms for image processing (Version 1.0). Zenodo. http://doi.org/10.5281/zenodo.1215759
 
 Software-related questions/comments can be e-mailed to Daniil Kazantsev at dkazanc@hotmail.com
