@@ -9,7 +9,10 @@
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('compiled/'); 
+pathtoModels = sprintf(['..' filesep 'functions' filesep 'models' filesep], 1i);
+addpath(pathtoModels);
+addpath('compiled'); addpath('supplem'); 
+
 
 ModelNo = 11; 
 % Define phantom dimension
@@ -18,7 +21,8 @@ N = 512; % x-y size (squared image)
 % generate the 2D phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
+pathtoLibrary = sprintf([filesep 'functions' filesep 'models' filesep 'Phantom2DLibrary.dat'], 1i);
+pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 
 % create 4 phantoms with dedicated materials

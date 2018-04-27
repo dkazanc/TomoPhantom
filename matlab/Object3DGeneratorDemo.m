@@ -6,7 +6,10 @@
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/'); 
+pathtoModels = sprintf(['..' filesep 'functions' filesep 'models' filesep], 1i);
+addpath(pathtoModels);
+addpath('compiled'); addpath('supplem'); 
+
 
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)

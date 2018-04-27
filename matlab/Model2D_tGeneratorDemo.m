@@ -9,7 +9,9 @@
 
 close all;clc;clear;
 % adding paths
-addpath('../functions/models/'); addpath('compiled/'); addpath('supplem/');
+pathtoModels = sprintf(['..' filesep 'functions' filesep 'models' filesep], 1i);
+addpath(pathtoModels);
+addpath('compiled'); addpath('supplem'); 
 
 ModelNo = 100; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
@@ -18,7 +20,8 @@ N = 512; % x-y size (squared image)
 % Generate 2D+t phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
+pathtoLibrary = sprintf([filesep 'functions' filesep 'models' filesep 'Phantom2DLibrary.dat'], 1i);
+pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 figure(1); imagesc(G, [0 1]); daspect([1 1 1]); title('2D+t model, t=3 here'); colormap hot;
 %%
@@ -30,7 +33,8 @@ N = 512; % x-y size (squared image)
 % Generate 2D phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
+pathtoLibrary = sprintf([filesep 'functions' filesep 'models' filesep 'Phantom2DLibrary.dat'], 1i);
+pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 
 angles = linspace(0,180,N); % projection angles
@@ -53,7 +57,8 @@ N = 512; % x-y size (squared image)
 timeFrames = 25; %must be the same as in model
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathTP = strcat(mainDir,'/functions/models/Phantom2DLibrary.dat'); % path to TomoPhantom parameters file
+pathtoLibrary = sprintf([filesep 'functions' filesep 'models' filesep 'Phantom2DLibrary.dat'], 1i);
+pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 
 angles = linspace(0,180,N); % projection angles
