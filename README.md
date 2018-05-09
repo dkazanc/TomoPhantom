@@ -5,21 +5,21 @@
 
 ****************
 **TomoPhantom is a toolbox to generate customisable 2D/3D/4D phantoms (with a temporal capability) and their 
-analytical projection datae for various image processing tasks (reconstruction, denoising, deblurring, etc.).**
+analytical projection data for various image processing tasks (reconstruction, denoising, deblurring, etc.).**
 
 <a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 ****************    
    
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
-        <p> **TomoPhantom** is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. 
+        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. 
 Specifically, the software is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> 
 is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficently build customisable 2D-4D phantoms consisting of 
 piecewise-constant and also smooth analytical objects. The objects include: Gaussians, parabolas, ellipses, cones, rectangulars. The exact tomographic projections (sinograms) as a result of applying Radon
 Transform to analytical objects can be obtained. The sinograms can be used for TIR benchmarking purposes
 without so-called the <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. TomoPhantom is also compatable with 
 <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> and <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages. Generated data can be directly reconstructed using 
-toolboxes (see examples). Additionally, **TomoPhantom** provides simple temporal extension, therefore a capability of creating 2D+time and 3D+time objects.   
+toolboxes (see examples). Additionally, TomoPhantom provides simple temporal extension, therefore a capability of creating 2D+time and 3D+time objects.   
         </p>
  </div>
 
@@ -50,7 +50,7 @@ toolboxes (see examples). Additionally, **TomoPhantom** provides simple temporal
 - See MATLAB and Python demos
 
 ### License:
-- The project uses Apache License v.2, but some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license
+- TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.
 
 ### Related software projects on GitHub:
 - [xdesign](https://github.com/tomography/xdesign) XDesign is an open-source Python package for generating configurable simulation phantoms for benchmarking tomographic image reconstruction.
@@ -58,7 +58,7 @@ toolboxes (see examples). Additionally, **TomoPhantom** provides simple temporal
 
 ### References:
 
-[1] D. Kazantsev et al. 2018, *TomoPhantom, a software package to generate 2D-4D analytical phantoms for CT image reconstruction algorithm benchmarks*, Software X (accepted)
+[1] D. Kazantsev et al. 2018, *TomoPhantom, a software package to generate 2D-4D analytical phantoms for CT image reconstruction algorithm benchmarks*, Software X (accepted, to be published)
 
 [2] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://doi.org/10.1080/17415977.2017.1340946)
 
