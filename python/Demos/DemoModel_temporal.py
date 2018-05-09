@@ -15,9 +15,7 @@ Run demo from the folder "Demos"
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
-from astraOP import AstraTools
 
-#%%
 model = 102  # note that the selected model is temporal (2D + time)
 N_size = 512
 timeframes = 25
@@ -35,7 +33,7 @@ for sl in range(0,timeframes):
     plt.imshow(im, vmin=0, vmax=1)
     plt.pause(.1)
     plt.draw
-#%%
+
 # create sinogram analytically
 angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0,180,angles_num,dtype='float32')
@@ -53,7 +51,10 @@ for sl in range(0,timeframes):
     plt.pause(.1)
     plt.draw
 #%%
-# reconstruct
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from astraOP import AstraTools
 Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 FBPrec = Atools.fbp2D(sino[15,:,:].transpose())
 

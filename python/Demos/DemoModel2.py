@@ -19,10 +19,8 @@ Run demo from the folder "Demos"
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
-from astraOP import AstraTools
 from libraryToDict import modelfile2Dtolist
 
-#%%
 model = 11
 N_size = 512
 #specify a full path to the parameters file
@@ -37,7 +35,7 @@ plt.rcParams.update({'font.size': 21})
 plt.imshow(phantom_2D, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('{}''{}'.format('2D Phantom using model no.',model))
-#%%
+
 # create sinogram analytically
 angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0,180,angles_num,dtype='float32')
@@ -52,6 +50,10 @@ plt.imshow(sino_an,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from astraOP import AstraTools
 Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
 #x = Atools.backproj(sino_an) # generate backprojection (A'b)
@@ -64,21 +66,21 @@ plt.subplot(122)
 plt.imshow(sino_num_ASTRA,cmap="BuPu")
 plt.title('Numerical sinogram')
 plt.show()
-#%%
+
 print ("Reconstructing analytical sinogram using FBP (astra TB)...")
 FBPrec1 = Atools.fbp2D(sino_an)
 plt.figure(4) 
 plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (analyt)')
-#%%
+
 print ("Reconstructing numerical sinogram using FBP (astra TB)...")
 FBPrec2 = Atools.fbp2D(sino_num_ASTRA)
 plt.figure(5) 
 plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (numeric)')
-#%%
+
 plt.figure(6) 
 plt.imshow(abs(FBPrec1-FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')

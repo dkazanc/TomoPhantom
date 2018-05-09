@@ -15,7 +15,7 @@ addpath('compiled'); addpath('supplem');
 
 ModelNo = 4; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
-N = 512; % x-y size (squared image)
+N = 1024; % x-y size (squared image)
 
 % Generate 2D phantom:
 curDir   = pwd;
