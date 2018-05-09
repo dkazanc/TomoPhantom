@@ -15,8 +15,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D 
 from tomophantom.TomoP2D import Objects2D
-from astraOP import AstraTools
-#%%
+
 # create a 2D object explicitly without using parameters file
 N_size = 512 # define the grid
 
@@ -46,7 +45,7 @@ plt.rcParams.update({'font.size': 21})
 plt.imshow(Object1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('{}'.format('2D Object'))
-#%%
+
 # create sinogram analytically without using the parameters file
 angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0,180,angles_num,dtype='float32')
@@ -61,7 +60,10 @@ plt.imshow(sino_an, cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
-# lets reconstruct using ASTRA
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from astraOP import AstraTools
 Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 FBPrec = Atools.fbp2D(sino_an)
 
