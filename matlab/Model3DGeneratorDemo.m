@@ -7,7 +7,8 @@
 
 close all;clc;clear;
 % adding paths
-pathtoModels = sprintf(['..' filesep 'functions' filesep 'models' filesep], 1i);
+fsep = '/';
+pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
 addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
@@ -18,9 +19,9 @@ N = 256; % x-y-z size (cubic image)
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([filesep 'functions' filesep 'models' filesep 'Phantom3DLibrary.dat'], 1i);
+pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom3DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
-[G] = TomoP3DModel(ModelNo,N,pathTP);
+tic; [G] = TomoP3DModel(ModelNo,N,pathTP); toc;
 
 % check 3 projections
 figure; 
