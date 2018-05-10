@@ -49,7 +49,7 @@ plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from astraOP import AstraTools
+from tomophantom.supp.astraOP import AstraTools
 
 Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)

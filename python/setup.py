@@ -59,6 +59,11 @@ setup(
 )
 
 setup(
+    packages = {'tomophantom', 'tomophantom.supp'}
+)
+
+
+setup(
     name='tomophantom',
     description='This is to generate phantom datasets for tomography experiments',
     version = version,
