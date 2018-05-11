@@ -17,7 +17,6 @@ zingers, rings and noise
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
-from artifacts import ArtifactsClass
 
 model = 4 # select a model
 N_size = 512
@@ -50,6 +49,7 @@ plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 
 #%%
 # Adding artifacts and noise
+from tomophantom.supp.artifacts import ArtifactsClass
 
 # adding noise
 artifacts_add =ArtifactsClass(sino_an)
@@ -74,7 +74,7 @@ plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from astraOP import AstraTools
+from tomophantom.supp.astraOP import AstraTools
 
 Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 

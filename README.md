@@ -23,11 +23,11 @@ toolboxes (see examples). Additionally, TomoPhantom provides simple temporal ext
         </p>
  </div>
 
-## **Tomophantom** prerequisites: 
+### **TomoPhantom** prerequisites: 
 
  * [MATLAB](www.mathworks.com/products/matlab/) OR
  * Python (tested ver. 3.5); Cython
- * C compilers (GCC/MinGW/Visual Studio)
+ * C compilers: GCC/MinGW/Visual Studio
 
 ### Other dependencies (reconstruction):
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
@@ -42,7 +42,8 @@ toolboxes (see examples). Additionally, TomoPhantom provides simple temporal ext
 ```
 ### Matlab
 ```
-	run compile_mex.m % to compile CPU modules
+	run compile_mex_linux.m % to compile CPU modules on linux
+	run compile_mex_windows.m % to compile CPU modules on Windows
 ```
 
 ### Package modules:

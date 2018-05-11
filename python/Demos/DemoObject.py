@@ -63,7 +63,7 @@ plt.title('{}'.format('Analytical sinogram of an object'))
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from astraOP import AstraTools
+from tomophantom.supp.astraOP import AstraTools
 Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
 FBPrec = Atools.fbp2D(sino_an)
 

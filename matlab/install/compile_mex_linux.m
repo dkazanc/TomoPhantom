@@ -1,6 +1,6 @@
 % compile mex files once from Matlab running this script
 
-fsep = filesep;
+fsep = '/';
 UpPath = sprintf(['..' fsep], 1i);
 cd(UpPath);
 
@@ -24,8 +24,6 @@ mex TomoP3DModel.c TomoP3DModel_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -
 movefile('TomoP3DModel.mex*',Pathmove);
 mex TomoP3DObject.c TomoP3DModel_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
 movefile('TomoP3DObject.mex*',Pathmove);
-% mex BackProjCPU.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
-% movefile BackProjCPU.mex* ../matlab/compiled/
 fprintf('%s \n', 'All compiled!');
 
 cd(UpPath);

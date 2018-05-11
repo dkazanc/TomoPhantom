@@ -6,7 +6,8 @@
 
 close all;clc;clear;
 % adding paths
-pathtoModels = sprintf(['..' filesep 'functions' filesep 'models' filesep], 1i);
+fsep = '/';
+pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
 addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
