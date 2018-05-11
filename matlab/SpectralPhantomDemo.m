@@ -9,7 +9,8 @@
 
 close all;clc;clear;
 % adding paths
-pathtoModels = sprintf(['..' filesep 'functions' filesep 'models' filesep], 1i);
+fsep = '/';
+pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
 addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
@@ -21,7 +22,7 @@ N = 512; % x-y size (squared image)
 % generate the 2D phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([filesep 'functions' filesep 'models' filesep 'Phantom2DLibrary.dat'], 1i);
+pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 
