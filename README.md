@@ -27,7 +27,7 @@ toolboxes (see examples). Additionally, TomoPhantom provides simple temporal ext
 
  * [MATLAB](www.mathworks.com/products/matlab/) OR
  * Python (tested ver. 3.5); Cython
- * C compilers: GCC/MinGW/Visual Studio
+ * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
 
 ### Other dependencies (reconstruction):
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
