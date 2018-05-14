@@ -1,5 +1,6 @@
-function [noisy_sino] = add_noise(b, sigma, noisetype)
+function [noisy_sino,N_noise] = add_noise(b, sigma, noisetype)
 % function which adds Gaussian or Poisson noise to data
+% return data after negative log and also raw data
 
 if (strcmp(noisetype, 'Gaussian') == 1)
     E = randn(size(b));
