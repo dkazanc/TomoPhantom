@@ -10,7 +10,7 @@ elseif (strcmp(noisetype, 'Poisson') == 1)
     b = b./maxVal;
     dataExp = sigma.*exp(-b); % noiseless raw data
     N_noise = poissrnd(dataExp);  % adding Poisson noise to the sinogram
-    noisy_sino = -log(N_noise./sigma)*maxVal; %log corrected data -> sinogram
+    noisy_sino = -log(N_noise./max(N_noise(:)))*maxVal; %log corrected data -> sinogram
     noisy_sino(noisy_sino<0) = 0;
 else
     error('Please select Gaussian or Poisson noise');

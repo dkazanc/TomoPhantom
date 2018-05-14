@@ -42,7 +42,8 @@ subplot(1,2,1); imshow(F_a, []); title('Analytical Sinogram');
 subplot(1,2,2); imshow(F_num_astra, []); title('Numerical Sinogram (ASTRA)');
 %%
 fprintf('%s \n', 'Adding noise and artifacts to analytical sinogram...');
-[sino_noise] = add_noise(F_a, 5000, 'Poisson'); % adding Poisson noise
+dose =  1e4; % photon flux (controls noise level)
+[sino_noise] = add_noise(F_a, dose, 'Poisson'); % adding Poisson noise
 [sino_noise_zingers] = add_zingers(sino_noise, 0.5, 10); % adding zingers
 [sino_noise_zingers_stripes] = add_stripes(sino_noise_zingers, 1, 1); % adding stripes
 
