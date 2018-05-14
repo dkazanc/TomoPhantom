@@ -37,9 +37,10 @@ movefile('TomoP3DObject.mex*',Pathmove);
 %%% discussion:
 %%% https://uk.mathworks.com/matlabcentral/answers/279171-using-mingw-compiler-and-open-mp#comment_359122
 %%% 1. Install TDM-GCC independently from http://tdm-gcc.tdragon.net/ (I installed 5.1.0)
+%%% Install openmp version: http://sourceforge.net/projects/tdm-gcc/files/TDM-GCC%205%20series/5.1.0-tdm64-1/gcc-5.1.0-tdm64-1-openmp.zip/download
 %%% 2. Link til libgomp.a in that installation when compilling your mex file.
 
-%%% assuming you unzipped TDM GCC in folder TDMGCC on C drive, uncomment
+%%% assuming you unzipped TDM GCC (OpenMp) in folder TDMGCC on C drive, uncomment
 %%% bellow
 % fprintf('%s \n', 'Building functions...');
 % mex C:\TDMGCC\lib\gcc\x86_64-w64-mingw32\5.1.0\libgomp.a CXXFLAGS="$CXXFLAGS -std=c++11 -fopenmp" TomoP2DModel.c TomoP2DModel_core.c utils.c
