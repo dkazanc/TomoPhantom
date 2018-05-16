@@ -54,7 +54,7 @@ from tomophantom.supp.artifacts import ArtifactsClass
 # adding noise
 artifacts_add =ArtifactsClass(sino_an)
 #noisy_sino = artifacts_add.noise(sigma=0.1,noisetype='Gaussian')
-noisy_sino = artifacts_add.noise(sigma=2,noisetype='Poisson')
+noisy_sino = artifacts_add.noise(sigma=10000,noisetype='Poisson')
 
 # adding zingers
 artifacts_add =ArtifactsClass(noisy_sino)
