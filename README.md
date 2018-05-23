@@ -42,7 +42,7 @@ piecewise-constant, piecewise-smooth, and smooth analytical objects. The objects
 ```
 
 ### Package modules:
-- **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with parametrised models
+- **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with parametrised models (2D/3D versions of Shepp-Logan, Defrise, and QRM phantoms are included). The generation of new phantoms is highly encouraged, please submit them through pull requests or via e-mail bellow. 
 - See MATLAB and Python demos
 
 ### License:
