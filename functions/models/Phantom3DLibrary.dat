@@ -348,20 +348,31 @@ Object : ellipsoid 0.1 0.605 -0.08 0.0 0.046 0.023 0.05 0.0 0.0 0.0
 Object : ellipsoid 0.1 0.606 0.0 0.0 0.023 0.023 0.02 0.0 0.0 0.0
 Object : ellipsoid 0.1 0.605 0.06 0.0 0.023 0.046 0.02 0.0 0.0 0.0
 #----------------------------------------------------
-#  3D Shepp-Logan (modified)
+#  3D Industrial Phantom (cylindrical ellipses)
 Model : 14;
-Components : 10;
+Components : 12;
 TimeSteps : 1;
-Object : ellipsoid 1.0 0.0 0.0 0.0 0.69 0.92 0.81 0.0 0.0 0.0
-Object : ellipsoid -0.8 0.0184 0.0 0.0 0.6624 0.874 0.78 0.0 0.0 0.0
-Object : ellipsoid -0.2 0.0 0.3 0.0 0.11 0.24 0.15 6.0 0.0 20.0
-Object : ellipsoid -0.2 0.0 -0.32 0.0 0.15 0.30 0.28 -48.0 10.0 0.0
-Object : ellipsoid 0.1 -0.35 0.0 -0.2 0.21 0.320 0.37 25.0 0.0 0.0
-Object : ellipsoid 0.1 -0.15 0.0 0.3 0.046 0.046 0.05 0.0 0.0 0.0
-Object : ellipsoid 0.1 0.18 0.0 0.05 0.046 0.046 0.05 0.0 0.0 0.0
-Object : ellipsoid 0.1 0.605 -0.18 0.0 0.1 0.05 0.05 0.0 0.0 0.0
-Object : ellipsoid 0.1 0.606 0.0 0.0 0.08 0.05 0.02 20.0 0.0 0.0
-Object : ellipsoid 0.1 0.605 0.24 0.0 0.04 0.15 0.02 0.0 30.0 -10.0
+Object : elliptical_cylinder 0.5 0.0 0.0 0.3 0.5 0.5 0.43 0.0 0.0 0.0;
+Object : elliptical_cylinder 0.2 -0.1 0.32 0.3 0.05 0.1 0.43 30.0 0.0 0.0;
+Object : elliptical_cylinder 0.05 0.15 0.2 0.3 0.07 0.07 0.43 0.0 0.0 0.0;
+Object : elliptical_cylinder 0.08 0.05 -0.09 0.3 0.08 0.1 0.43 20.0 0.0 0.0;
+Object : elliptical_cylinder 0.15 0.05 -0.335 0.3 0.1 0.04 0.43 35.0 0.0 0.0;
+Object : elliptical_cylinder 0.25 0.3 -0.09 0.3 0.045 0.045 0.43 0.0 0.0 0.0;
+Object : elliptical_cylinder 0.28 -0.1 0.15 0.3 0.03 0.03 0.43 0.0 0.0 0.0;
+Object : elliptical_cylinder 0.32 -0.2 -0.15 0.3 0.065 0.1 0.43 45.0 0.0 0.0;
+Object : elliptical_cylinder 0.4 -0.3 0.2 0.3 0.05 0.03 0.43 5.0 0.0 0.0;
+Object : elliptical_cylinder 0.23 -0.3 -0.27 0.3 0.025 0.025 0.43 0.0 0.0 0.0;
+Object : elliptical_cylinder 0.17 -0.34 0.0 0.3 0.025 0.025 0.43 0.0 0.0 0.0;
+Object : elliptical_cylinder 0.12 0.34 0.15 0.3 0.03 0.045 0.43 -10.0 0.0 0.0;
+#----------------------------------------------------
+#  3D Industrial Phantom - II (spheres inside one large sphere)
+Model : 15;
+Components : 4;
+TimeSteps : 1;
+Object : ellipsoid 0.5 0.0 0.0 -0.1 0.5 0.5 0.5 0.0 0.0 0.0
+Object : ellipsoid 0.25 0.0 0.0 -0.45 0.08 0.08 0.08 0.0 0.0 0.0
+Object : ellipsoid 0.2 0.1 -0.25 -0.4 0.06 0.06 0.06 0.0 0.0 0.0
+Object : ellipsoid 0.15 0.17 0.15 -0.4 0.06 0.06 0.06 0.0 0.0 0.0
 #----------------------------------------------------
 #****************************************************
 #---------TEMPORAL (4D) Phantoms [no . >=100]--------
