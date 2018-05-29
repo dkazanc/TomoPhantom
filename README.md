@@ -54,8 +54,12 @@ piecewise-constant, piecewise-smooth, and smooth analytical objects. The objects
 
 ### References:
 
-[1] [D. Kazantsev et al. 2018, *TomoPhantom, a software package to generate 2D-4D analytical phantoms for CT image reconstruction algorithm benchmarks*, Software X (accepted, to be published)](https://github.com/dkazanc/TomoPhantom/blob/master/docs/Softwarex_Kazantsev_preprint.pdf)
+[1] [D. Kazantsev et al. 2018, *TomoPhantom, a software package to generate 2D-4D analytical phantoms for CT image reconstruction algorithm benchmarks*, Software X, Volume 7, January–June 2018, Pages 150–155](https://doi.org/10.1016/j.softx.2018.05.003)
 
 [2] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://doi.org/10.1080/17415977.2017.1340946)
+
+### Applications: 
+* [Regularised FISTA-type iterative reconstruction algorithm for X-ray tomographic reconstruction with highly inaccurate measurements](https://github.com/dkazanc/FISTA-tomo)
+* [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
 Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com
