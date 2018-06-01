@@ -26,7 +26,7 @@ piecewise-constant, piecewise-smooth, and smooth analytical objects. The objects
 
 ### Other dependencies (reconstruction):
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
- * [TomoPy](http://tomopy.readthedocs.io/en)
+ * [TomoPy](http://tomopy.readthedocs.io)
 
 ## Installation:
 
