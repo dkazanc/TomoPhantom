@@ -55,160 +55,148 @@ float TomoP3DObject_core(float *A, int N, char *Object,
         float psi_gr1, /* rotation angle1 */
         float psi_gr2, /* rotation angle2 */
         float psi_gr3, /* rotation angle3 */
-        int tt /*temporal index, 0 - for stationary */)
+        long tt /*temporal index, 0 - for stationary */)
 {
-    int i, j, k;
-//     float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
-//     float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
-//     Tomorange_X_Ar = malloc(N*sizeof(float));
-//     if(Tomorange_X_Ar == NULL ) printf("Allocation of 'Tomorange_X_Ar' failed");
-//     Tomorange_Xmin = -1.0f;
-//     Tomorange_Xmax = 1.0f;
-//     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
-//     for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
-//     C1 = -4.0f*logf(2.0f);
-//     
-//     /* parameters of a model have been extracted, now run the building module */
-//     /************************************************/
-//     phi_rot_radian = psi_gr1*((float)M_PI/180.0f);
-//     sin_phi=sinf(phi_rot_radian); cos_phi=cosf(phi_rot_radian);
-//     
-//     Xdel = malloc(N*sizeof(float));
-//     if(Xdel == NULL ) printf("Allocation of 'Xdel' failed");
-//     Ydel = malloc(N*sizeof(float));
-//     if(Ydel == NULL ) printf("Allocation of 'Ydel' failed");
-//     Zdel = malloc(N*sizeof(float));
-//     if(Zdel == NULL ) printf("Allocation of 'Zdel' failed");
-//     for(i=0; i<N; i++)  {
-//         Xdel[i] = Tomorange_X_Ar[i] - x0;
-//         Ydel[i] = Tomorange_X_Ar[i] - y0;
-//         Zdel[i] = Tomorange_X_Ar[i] - z0;
-//     }
-//     
-//     psi1 = psi_gr1*((float)M_PI/180.0f);
-//     psi2 = psi_gr2*((float)M_PI/180.0f);
-//     psi3 = psi_gr3*((float)M_PI/180.0f);
-//     
-//     //float bs[9];
-//     float bs[3][3] = {
-//     {0.0f,0.0f,0.0f},
-//     {0.0f,0.0f,0.0f},
-//     {0.0f,0.0f,0.0f}
-//     };
-//   
-//     float xh[3] = {0.0f, 0.0f, 0.0f};
-//     float xh3[3] = {0.0f, 0.0f, 0.0f};
-//     
-//     a2 = 1.0f/(a*a);
-//     b2 = 1.0f/(b*b);
-//     c2 = 1.0f/(c*c);
-//     
-//     matrot3(bs,psi1,psi2,psi3); /* rotation of 3x3 matrix */
-//     
-//     xh3[0] = x0; xh3[1] = y0; xh3[2] = z0;
-//     matvet3(bs,xh3,xh);  /* matrix-vector multiplication */
-//     
-//     float xh1[3] = {0.0f, 0.0f, 0.0f};
-//     float xh2[3] = {0.0f, 0.0f, 0.0f};
+    long i, j, k;
+    long Nc = (long)N;
+    float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
+    float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
+    Tomorange_X_Ar = malloc(N*sizeof(float));
+    if(Tomorange_X_Ar == NULL ) printf("Allocation of 'Tomorange_X_Ar' failed");
+    Tomorange_Xmin = -1.0f;
+    Tomorange_Xmax = 1.0f;
+    H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
+    for(i=0; i<Nc; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
+    C1 = -4.0f*logf(2.0f);
     
-//     if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {
-//  #pragma omp parallel for shared(A,bs) private(k,i,j,aa,bb,cc,T,xh2,xh1)
-//         for(k=0; k<N; k++) {
-//             for(i=0; i<N; i++) {
-//                 for(j=0; j<N; j++) {
-//                     
-//                     if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
-//                         xh1[0]=Tomorange_X_Ar[i];
-//                         xh1[1]=Tomorange_X_Ar[j];
-//                         xh1[2]=Tomorange_X_Ar[k];
-//                         matvet3(bs,xh1,xh2);
-//                         aa = a2*powf((xh2[0]-xh[0]),2);
-//                         bb = b2*powf((xh2[1]-xh[1]),2);
-//                         cc = c2*powf((xh2[2]-xh[2]),2);
-//                     }
-//                     else {
-//                         aa = a2*powf(Xdel[i],2);
-//                         bb = b2*powf(Ydel[j],2);
-//                         cc = ctt*N*N*N +2*powf(Zdel[k],2);
-//                     }
-//                     T = (aa + bb + cc);
-//                     if (strcmp("gaussian",Object) == 0) {
-//                         /* The object is a volumetric gaussian */
-//                         T = C0*expf(C1*T);
-//                     }
-//                     if (strcmp("paraboloid",Object) == 0) {
-//                         /* the object is a parabola Lambda = 1/2 */
-//                         if (T <= 1.0f) T = C0*sqrtf(1.0f - T);
-//                         else T = 0.0f;
-//                     }
-//                     if (strcmp("ellipsoid",Object) == 0) {
-//                         /* the object is en ellipsoid */
-//                         if (T <= 1.0f) T = C0;
-//                         else T = 0.0f;
-//                     }
-//                     if (strcmp("cone",Object) == 0) {
-//                         /* the object is a cone */
-//                         if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
-//                         else T = 0.0f;
-//                     }
-//                     A[tt*N*N*N + (k)*N*N + j*N+i] += T;
-//                 }}}
-//     }
-//     if (strcmp("cuboid",Object) == 0) {
-//         /* the object is a cuboid */
-//         float x0r, y0r, HX, HY;
-//         a2 = 0.5f*a;
-//         b2 = 0.5f*b;
-//         c2 = 0.5f*c;
-//         x0r=x0*cosf(0.0f) + y0*sinf(0.0f);
-//         y0r=-x0*sinf(0.0f) + y0*cosf(0.0f);
-//         if (phi_rot_radian < 0.0f) {
-//             phi_rot_radian = (float)M_PI + phi_rot_radian;
-//             sin_phi=sinf(phi_rot_radian);
-//             cos_phi=cosf(phi_rot_radian);
-//         }
-// #pragma omp parallel for shared(A,Zdel) private(k,i,j,HX,HY,T)
-//         for(k=0; k<N; k++) {
-//             if  (fabs(Zdel[k]) < c2) {
-//                 
-//                 for(i=0; i<N; i++) {
-//                     for(j=0; j<N; j++) {
-//                         HX = fabsf((Xdel[i] - x0r)*cos_phi + (Ydel[j] - y0r)*sin_phi);
-//                         T = 0.0f;
-//                         if (HX <= a2) {
-//                             HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
-//                             if (HY <= b2) {T = C0;}
-//                         }
-//                         A[tt*N*N*N + (k)*N*N + j*N+i] += T;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     if (strcmp("elliptical_cylinder",Object) == 0) {
-//         /* the object is an elliptical cylinder  */
-// #pragma omp parallel for shared(A) private(k,i,j,T)
-//         for(k=0; k<N; k++) {
-//             if  (fabs(Zdel[k]) < c) {
-//                 for(i=0; i<N; i++) {
-//                     for(j=0; j<N; j++) {
-//                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
-//                         if (T <= 1) T = C0;
-//                         else T = 0.0f;
-//                         A[tt*N*N*N + (k)*N*N + j*N+i] += T;
-//                     }}
-//             }
-//         } /*k-loop*/
-//     }
-    #pragma omp parallel for shared(A) private(k,i,j)
-    for(k=0; k<N; k++) {
-          for(i=0; i<N; i++) {
-                  for(j=0; j<N; j++) {
-    A[(k)*N*N + j*N+i] = 10.0f;
-                  }}}
+    /* parameters of a model have been extracted, now run the building module */
+    /************************************************/
+    phi_rot_radian = psi_gr1*((float)M_PI/180.0f);
+    sin_phi=sinf(phi_rot_radian); cos_phi=cosf(phi_rot_radian);
+    
+    Xdel = malloc(N*sizeof(float));
+    if(Xdel == NULL ) printf("Allocation of 'Xdel' failed");
+    Ydel = malloc(N*sizeof(float));
+    if(Ydel == NULL ) printf("Allocation of 'Ydel' failed");
+    Zdel = malloc(N*sizeof(float));
+    if(Zdel == NULL ) printf("Allocation of 'Zdel' failed");
+    for(i=0; i<N; i++)  {
+        Xdel[i] = Tomorange_X_Ar[i] - x0;
+        Ydel[i] = Tomorange_X_Ar[i] - y0;
+        Zdel[i] = Tomorange_X_Ar[i] - z0;
+    }
+    
+    psi1 = psi_gr1*((float)M_PI/180.0f);
+    psi2 = psi_gr2*((float)M_PI/180.0f);
+    psi3 = psi_gr3*((float)M_PI/180.0f);
+    
+    float bs[9];
+    float xh[3];
+    float xh3[3];
+    
+    a2 = 1.0f/(a*a);
+    b2 = 1.0f/(b*b);
+    c2 = 1.0f/(c*c);
+    matrot3(bs,psi1,psi2,psi3); /* rotation of 3x3 matrix */
+    
+    xh3[0] = x0; xh3[1] = y0; xh3[2] = z0;
+    matvet3(bs,xh3,xh);  /* matrix-vector multiplication */
+    
+    float xh1[3];
+    float xh2[3];
+    
+    if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {
+ #pragma omp parallel for shared(A,bs) private(k,i,j,aa,bb,cc,T,xh2,xh1)
+        for(k=0; k<N; k++) {
+            for(i=0; i<N; i++) {
+                for(j=0; j<N; j++) {
+                    
+                    if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
+                        xh1[0]=Tomorange_X_Ar[i];
+                        xh1[1]=Tomorange_X_Ar[j];
+                        xh1[2]=Tomorange_X_Ar[k];
+                        matvet3(bs,xh1,xh2);
+                        aa = a2*powf((xh2[0]-xh[0]),2);
+                        bb = b2*powf((xh2[1]-xh[1]),2);
+                        cc = c2*powf((xh2[2]-xh[2]),2);
+                    }
+                    else {
+                        aa = a2*powf(Xdel[i],2);
+                        bb = b2*powf(Ydel[j],2);
+                        cc = c2*powf(Zdel[k],2);
+                    }
+                    T = (aa + bb + cc);
+                    if (strcmp("gaussian",Object) == 0) {
+                        /* The object is a volumetric gaussian */
+                        T = C0*expf(C1*T);
+                    }
+                    if (strcmp("paraboloid",Object) == 0) {
+                        /* the object is a parabola Lambda = 1/2 */
+                        if (T <= 1.0f) T = C0*sqrtf(1.0f - T);
+                        else T = 0.0f;
+                    }
+                    if (strcmp("ellipsoid",Object) == 0) {
+                        /* the object is en ellipsoid */
+                        if (T <= 1.0f) T = C0;
+                        else T = 0.0f;
+                    }
+                    if (strcmp("cone",Object) == 0) {
+                        /* the object is a cone */
+                        if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
+                        else T = 0.0f;
+                    }
+                    A[tt*Nc*Nc*Nc + (k)*Nc*Nc + j*Nc+i] += T;
+                }}}
+    }
+    if (strcmp("cuboid",Object) == 0) {
+        /* the object is a cuboid */
+        float x0r, y0r, HX, HY;
+        a2 = 0.5f*a;
+        b2 = 0.5f*b;
+        c2 = 0.5f*c;
+        x0r=x0*cosf(0.0f) + y0*sinf(0.0f);
+        y0r=-x0*sinf(0.0f) + y0*cosf(0.0f);
+        if (phi_rot_radian < 0.0f) {
+            phi_rot_radian = (float)M_PI + phi_rot_radian;
+            sin_phi=sinf(phi_rot_radian);
+            cos_phi=cosf(phi_rot_radian);
+        }
+#pragma omp parallel for shared(A,Zdel) private(k,i,j,HX,HY,T)
+        for(k=0; k<N; k++) {
+            if  (fabs(Zdel[k]) < c2) {
+                
+                for(i=0; i<N; i++) {
+                    for(j=0; j<N; j++) {
+                        HX = fabsf((Xdel[i] - x0r)*cos_phi + (Ydel[j] - y0r)*sin_phi);
+                        T = 0.0f;
+                        if (HX <= a2) {
+                            HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
+                            if (HY <= b2) {T = C0;}
+                        }
+                        A[tt*Nc*Nc*Nc + (k)*Nc*Nc + j*Nc+i] += T;
+                    }
+                }
+            }
+        }
+    }
+    if (strcmp("elliptical_cylinder",Object) == 0) {
+        /* the object is an elliptical cylinder  */
+#pragma omp parallel for shared(A) private(k,i,j,T)
+        for(k=0; k<N; k++) {
+            if  (fabs(Zdel[k]) < c) {
+                for(i=0; i<N; i++) {
+                    for(j=0; j<N; j++) {
+                        T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
+                        if (T <= 1) T = C0;
+                        else T = 0.0f;
+                        A[tt*Nc*Nc*Nc + (k)*Nc*Nc + j*Nc+i] += T;
+                    }}
+            }
+        } /*k-loop*/
+    }
     /****************************************************/
-//     free(Xdel); free(Ydel); free(Zdel);
-//     free(Tomorange_X_Ar);
+    free(Xdel); free(Ydel); free(Zdel);
+    free(Tomorange_X_Ar);
     return *A;
 }
 
@@ -218,6 +206,7 @@ float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
 {
    
     int Model=0, Components=0, steps = 0, counter=0, ii;
+   
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;    
 
     FILE *fp = fopen(ModelParametersFilename, "r"); // read parameters file
@@ -291,7 +280,7 @@ float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                     break; }                               
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);                                                          
 
-                                 TomoP3DObject_core(A, N, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0); /* python */
+                                 TomoP3DObject_core(A, N, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0l); /* python */
                             }
                         }
                         else {
@@ -358,13 +347,13 @@ float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 float phi_rot_step2 = (psi_gr2_1 - psi_gr2)/(steps-1);
                                 float phi_rot_step3 = (psi_gr3_1 - psi_gr3)/(steps-1);
                                 
-                                int tt;
+                                long tt;
                                 float x_t, y_t, z_t, a_t, b_t, c_t, C_t, phi1_t, phi2_t, phi3_t, d_step;
                                 /* initialize */
                                 x_t = x0; y_t = y0; z_t = z0; a_t = a; b_t = b; c_t = c; C_t = C0; phi1_t = psi_gr1; phi2_t = psi_gr2; phi3_t = psi_gr3; d_step = d_dist;
                                 
                                 /*loop over time frames*/
-                                for(tt=0; tt < steps; tt++) {
+                                for(tt=0; tt < (long)steps; tt++) {
                                     
                                     TomoP3DObject_core(A, N, tmpstr2, C_t, y_t, x_t, z_t, a_t, b_t, c_t, phi1_t, phi2_t, phi3_t, tt); /* python */
                                     
