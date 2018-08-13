@@ -57,7 +57,11 @@ float TomoP3DObject_core(float *A, int N, char *Object,
         float psi_gr3, /* rotation angle3 */
         int tt /*temporal index, 0 - for stationary */)
 {
-    int i, j, k;
+	printf("read in the input image\n");
+	printf("Beginning of array %p %.2e\n", A, *(A)); 
+	printf("End of array %p %.2e\n", A+N*N*N, *(A+N*N*N));
+
+	int i, j, k;
     float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
     float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
     Tomorange_X_Ar = malloc(N*sizeof(float));
