@@ -21,9 +21,7 @@ extern "C" {
 #endif
 float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
 float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
-//float matrot3(float *Ad, float psi1, float psi2, float psi3);
 float matrot3(float Ad[3][3], float psi1, float psi2, float psi3);
-//float matvet3(float *Ad, float *V1, float *V2);
 float matvet3(float Ad[3][3], float V1[3], float V2[3]);
 // float matmat3(float *A, float *B, float *C);
 #ifdef __cplusplus

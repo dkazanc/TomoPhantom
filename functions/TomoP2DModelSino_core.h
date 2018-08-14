@@ -19,4 +19,4 @@ limitations under the License.
 #include "omp.h"
 
 float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename);
-float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char* Obj, float C0, float x0, float y0, float a, float b, float phi_rot, int tt);
+float TomoP2DObjectSino_core(float *A, long N, long P, float *Th, long AngTot, int CenTypeIn, char* Obj, float C0, float x0, float y0, float a, float b, float phi_rot, long tt);

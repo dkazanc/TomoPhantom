@@ -20,4 +20,4 @@ limitations under the License.
 #include "omp.h"
 
 float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename);
-float TomoP2DObject_core(float *A, int N,  char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt);
+float TomoP2DObject_core(float *A, long N,  char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, long tt);

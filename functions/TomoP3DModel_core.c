@@ -44,7 +44,7 @@
  */
 
 /* function to build a single (stationary) object */
-float TomoP3DObject_core(float *A, int N, char *Object,
+float TomoP3DObject_core(float *A, long N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -58,7 +58,6 @@ float TomoP3DObject_core(float *A, int N, char *Object,
         long tt /*temporal index, 0 - for stationary */)
 {
     long i, j, k;
-    long Nc = (long)N;
     float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
     float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
     Tomorange_X_Ar = malloc(N*sizeof(float));
@@ -66,7 +65,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
-    for(i=0; i<Nc; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
+    for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
     C1 = -4.0f*logf(2.0f);
     
     /* parameters of a model have been extracted, now run the building module */
@@ -90,9 +89,13 @@ float TomoP3DObject_core(float *A, int N, char *Object,
     psi2 = psi_gr2*((float)M_PI/180.0f);
     psi3 = psi_gr3*((float)M_PI/180.0f);
     
-    float bs[9];
-    float xh[3];
-    float xh3[3];
+    float bs[3][3] = {
+    {0.0f,0.0f,0.0f},
+    {0.0f,0.0f,0.0f},
+    {0.0f,0.0f,0.0f} };
+    
+    float xh[3] = {0.0f, 0.0f, 0.0f};
+    float xh3[3] = {0.0f, 0.0f, 0.0f};
     
     a2 = 1.0f/(a*a);
     b2 = 1.0f/(b*b);
@@ -102,8 +105,8 @@ float TomoP3DObject_core(float *A, int N, char *Object,
     xh3[0] = x0; xh3[1] = y0; xh3[2] = z0;
     matvet3(bs,xh3,xh);  /* matrix-vector multiplication */
     
-    float xh1[3];
-    float xh2[3];
+   float xh1[3] = {0.0f, 0.0f, 0.0f};
+   float xh2[3] = {0.0f, 0.0f, 0.0f};
     
     if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {
  #pragma omp parallel for shared(A,bs) private(k,i,j,aa,bb,cc,T,xh2,xh1)
@@ -145,7 +148,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                         if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
                     }
-                    A[tt*Nc*Nc*Nc + (k)*Nc*Nc + j*Nc+i] += T;
+                    A[tt*N*N*N + (k)*N*N + j*N+i] += T;
                 }}}
     }
     if (strcmp("cuboid",Object) == 0) {
@@ -173,7 +176,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                             HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
                             if (HY <= b2) {T = C0;}
                         }
-                        A[tt*Nc*Nc*Nc + (k)*Nc*Nc + j*Nc+i] += T;
+                        A[tt*N*N*N + (k)*N*N + j*N+i] += T;
                     }
                 }
             }
@@ -189,7 +192,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
-                        A[tt*Nc*Nc*Nc + (k)*Nc*Nc + j*Nc+i] += T;
+                        A[tt*N*N*N + (k)*N*N + j*N+i] += T;
                     }}
             }
         } /*k-loop*/

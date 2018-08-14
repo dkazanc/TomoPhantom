@@ -505,19 +505,6 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
 
 /***********************************************************************************************/
 /* rotation matrix */
-// float matrot3(float *Ad, float psi1, float psi2, float psi3)
-// {
-//     Ad[0] = cosf(psi1)*cosf(psi2)*cosf(psi3)-sinf(psi1)*sinf(psi3);
-//     Ad[1] = sinf(psi1)*cosf(psi2)*cosf(psi3)+cosf(psi1)*sinf(psi3);
-//     Ad[2] = -sinf(psi2)*cosf(psi3);
-//     Ad[3] = -cosf(psi1)*cosf(psi2)*sinf(psi3)-sinf(psi1)*cosf(psi3);
-//     Ad[4] = -sinf(psi1)*cosf(psi2)*sinf(psi3)+cosf(psi1)*cosf(psi3);
-//     Ad[5] = sinf(psi2)*sinf(psi3);
-//     Ad[6] = cosf(psi1)*sinf(psi2);
-//     Ad[7] = sinf(psi1)*sinf(psi2);
-//     Ad[8] = cosf(psi2);
-//     return *Ad;
-// }
 float matrot3(float Ad[3][3], float psi1, float psi2, float psi3)
 {
     Ad[0][0]=cosf(psi1)*cosf(psi2)*cosf(psi3)-sinf(psi1)*sinf(psi3);
@@ -534,20 +521,6 @@ float matrot3(float Ad[3][3], float psi1, float psi2, float psi3)
 }
 
 /*matrix-vector multiplication*/
-// float matvet3(float *Ad, float *V1, float *V2)
-// {
-//     int l, m, counterT;
-//     
-//     counterT = 0;
-//     for(l=0; l<3; l++) {
-//         V2[l] = 0.0f;
-//         for(m=0; m<3; m++) {
-//             V2[l] += Ad[counterT]*V1[m];
-//             counterT++;
-//         }}
-//     return *V2;
-// }
-
 float matvet3(float Ad[3][3], float V1[3], float V2[3])
 {
     int l, m;        
@@ -558,7 +531,6 @@ float matvet3(float Ad[3][3], float V1[3], float V2[3])
         }}    
     return 1;
 }
-
 
 /*matrix-matrix multiplication*/
 // float matmat3(float *A, float *B, float *C)
