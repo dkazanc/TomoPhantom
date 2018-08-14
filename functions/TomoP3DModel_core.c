@@ -44,7 +44,7 @@
  */
 
 /* function to build a single (stationary) object */
-float TomoP3DObject_core(float *A, int N, char *Object,
+float TomoP3DObject_core(float *A, long N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -55,9 +55,9 @@ float TomoP3DObject_core(float *A, int N, char *Object,
         float psi_gr1, /* rotation angle1 */
         float psi_gr2, /* rotation angle2 */
         float psi_gr3, /* rotation angle3 */
-        int tt /*temporal index, 0 - for stationary */)
+        long tt /*temporal index, 0 - for stationary */)
 {
-    int i, j, k;
+    long i, j, k;
     float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
     float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
     Tomorange_X_Ar = malloc(N*sizeof(float));
@@ -89,9 +89,13 @@ float TomoP3DObject_core(float *A, int N, char *Object,
     psi2 = psi_gr2*((float)M_PI/180.0f);
     psi3 = psi_gr3*((float)M_PI/180.0f);
     
-    float bs[9];
-    float xh[3];
-    float xh3[3];
+    float bs[3][3] = {
+    {0.0f,0.0f,0.0f},
+    {0.0f,0.0f,0.0f},
+    {0.0f,0.0f,0.0f} };
+    
+    float xh[3] = {0.0f, 0.0f, 0.0f};
+    float xh3[3] = {0.0f, 0.0f, 0.0f};
     
     a2 = 1.0f/(a*a);
     b2 = 1.0f/(b*b);
@@ -101,8 +105,8 @@ float TomoP3DObject_core(float *A, int N, char *Object,
     xh3[0] = x0; xh3[1] = y0; xh3[2] = z0;
     matvet3(bs,xh3,xh);  /* matrix-vector multiplication */
     
-    float xh1[3];
-    float xh2[3];
+   float xh1[3] = {0.0f, 0.0f, 0.0f};
+   float xh2[3] = {0.0f, 0.0f, 0.0f};
     
     if ((strcmp("gaussian",Object) == 0) ||  (strcmp("paraboloid",Object) == 0) || (strcmp("ellipsoid",Object) == 0) || (strcmp("cone",Object) == 0)) {
  #pragma omp parallel for shared(A,bs) private(k,i,j,aa,bb,cc,T,xh2,xh1)
@@ -205,6 +209,7 @@ float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
 {
    
     int Model=0, Components=0, steps = 0, counter=0, ii;
+   
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;    
 
     FILE *fp = fopen(ModelParametersFilename, "r"); // read parameters file
@@ -278,7 +283,7 @@ float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                     break; }                               
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);                                                          
 
-                                 TomoP3DObject_core(A, N, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0); /* python */
+                                 TomoP3DObject_core(A, N, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0l); /* python */
                             }
                         }
                         else {
@@ -345,13 +350,13 @@ float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 float phi_rot_step2 = (psi_gr2_1 - psi_gr2)/(steps-1);
                                 float phi_rot_step3 = (psi_gr3_1 - psi_gr3)/(steps-1);
                                 
-                                int tt;
+                                long tt;
                                 float x_t, y_t, z_t, a_t, b_t, c_t, C_t, phi1_t, phi2_t, phi3_t, d_step;
                                 /* initialize */
                                 x_t = x0; y_t = y0; z_t = z0; a_t = a; b_t = b; c_t = c; C_t = C0; phi1_t = psi_gr1; phi2_t = psi_gr2; phi3_t = psi_gr3; d_step = d_dist;
                                 
                                 /*loop over time frames*/
-                                for(tt=0; tt < steps; tt++) {
+                                for(tt=0; tt < (long)steps; tt++) {
                                     
                                     TomoP3DObject_core(A, N, tmpstr2, C_t, y_t, x_t, z_t, a_t, b_t, c_t, phi1_t, phi2_t, phi3_t, tt); /* python */
                                     
