@@ -13,8 +13,8 @@ addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
 ModelNo = 10; % Select a model
-% Define phantom dimensions
-N = 256; % x-y-z size (cubic image)
+% Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
+N = 256; % x-y-z size (cubic phantom), one can also pass DIM = [N N N] instead
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;

@@ -27,11 +27,12 @@
  *
  * Input Parameters:
  * 1. ModelNo - a model number from Phantom3DLibrary file
- * 2. VolumeSize in voxels (N x N x N) or (N x N x N x time-frames)
+ * 2. DIM volume dimensions [N1,N2,N3] in voxels (N1 x N2 x N3) or (N1 x N2 x N3 x time-frames)
  * 3. An absolute path to the file Phantom3DLibrary.dat (ssee OS-specific syntax-differences)
  *
  * Output:
- * 1. The analytical phantom size of [N x N x N] or a temporal 4D phantom (N x N x N x time-frames)
+ * 1. The analytical phantom size of [N1 x N2 x N3] or temporal 4D phantom (N1 x N2 x N3 x time-frames)
+ * 
  */
 #define MAXCHAR 1000
 
@@ -40,30 +41,50 @@ void mexFunction(
         int nrhs, const mxArray *prhs[])
         
 {
-    int ModelSelected, N;
+    int ModelSelected;
     float *A;
+    double *DimAr;
+    mwSize N1, N2, N3;
+    const mwSize *dim_array;
         
     /*Handling Matlab input data*/
-    if (nrhs != 3) mexErrMsgTxt("Input of 3 parameters is required: model, dimension, PATH");
+    if (nrhs != 3) mexErrMsgTxt("Input of 3 parameters is required: model, DIMensions, PATH");
     
-    ModelSelected  = (int) mxGetScalar(prhs[0]); /* selected model */
-    N  = (int) mxGetScalar(prhs[1]); /* choosen dimension (N x N x N) */
+    dim_array = mxGetDimensions(prhs[1]); /* get dimensions of DIM */
+      
+    //printf("%i \n", dim_array[1]);
+    
+    N1 = 0; N2 = 0; N3 = 0; 
+    if (dim_array[1] == 1) {    
+        N1 = (long) mxGetScalar(prhs[1]);
+		N2 = N1;
+		N3 = N1;
+    }
+    else if (dim_array[1] == 3) {
+        DimAr  = (double*) mxGetData(prhs[1]);
+        N1 = (long)(DimAr[0]);
+		N2 = (long)(DimAr[1]);
+		N3 = (long)(DimAr[2]);
+	}
+	else {mexErrMsgTxt("DIM must be scalar [N] or a vector with 3 elements [N1, N2, N3]");}
+    
+    ModelSelected  = (int) mxGetScalar(prhs[0]); /* selected model from Phantom3DLibrary */
+            
+    int Model=0, Components=0, steps = 0, counter=0, ii;
+    float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
      
-     int Model=0, Components=0, steps = 0, counter=0, ii;
-     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
-     
-     char *filename;
-     FILE * fp;
-     if(!mxIsChar(prhs[2]) ) {
+    char *filename;
+    FILE * fp;
+    if(!mxIsChar(prhs[2]) ) {
          mexErrMsgTxt("Need filename absolute path string input.");
-     }
-     filename = mxArrayToString(prhs[2]);
-     fp= fopen(filename, "rb");
-     mxFree(filename);
-     if( fp == NULL ) {
+    }
+    filename = mxArrayToString(prhs[2]);
+    fp= fopen(filename, "rb");
+    mxFree(filename);
+    if( fp == NULL ) {
          mexErrMsgTxt("Cannot open the model library file (Phantom3DLibrary.dat)");
-     }
-     else {
+    }
+    else {
          
          char str[MAXCHAR];
          char tmpstr1[16];
@@ -113,7 +134,7 @@ void mexFunction(
                              /**************************************************/
                              printf("\n %s %i %s \n", "Stationary 3D model", ModelSelected, " is selected");
                             
-                            const mwSize N_dims[3] = {N, N, N}; /* image dimensions */
+                            const mwSize N_dims[3] = {N1, N2, N3}; /* image dimensions */
                             A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); /*output array*/
                             
                              /* loop over all components */
@@ -173,14 +194,14 @@ void mexFunction(
                                      break; }
                                  printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
 
-                                TomoP3DObject_core(A, N, tmpstr2, C0, x0, y0, z0, b, a, c, -psi_gr1, psi_gr2, psi_gr3, 0l); /* Matlab */
+                                TomoP3DObject_core(A, N1, N2, N3, tmpstr2, C0, x0, y0, z0, b, a, c, -psi_gr1, psi_gr2, psi_gr3, 0l); /* Matlab */
                              }
                          }
                          else {
                              /**************************************************/
                              printf("\n %s %i %s \n", "Temporal 3D+time model", ModelSelected, " is selected");
                              /* temporal phantom 3D + time (4D) */
-                             const mwSize N_dims[4] = {N, N, N, steps}; /* image dimensions */
+                             const mwSize N_dims[4] = {N1, N2, N3, steps}; /* image dimensions */
                              A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(4, N_dims, mxSINGLE_CLASS, mxREAL));
                              
                              float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, z1 = 0.0f, a1 = 0.0f, b1 = 0.0f, c1 = 0.0f, psi_gr1_1 = 0.0f, psi_gr2_1 = 0.0f, psi_gr3_1 = 0.0f;
@@ -314,7 +335,7 @@ void mexFunction(
                                  /*loop over time frames*/
                                  for(tt=0; tt < steps; tt++) {
                                      
-                                     TomoP3DObject_core(A, N, tmpstr2, C_t, x_t, y_t, z_t, b_t, a_t, c_t, -phi1_t, phi2_t, phi3_t, tt); /* Matlab */
+                                     TomoP3DObject_core(A, N1, N2, N3, tmpstr2, C_t, x_t, y_t, z_t, b_t, a_t, c_t, -phi1_t, phi2_t, phi3_t, tt); /* Matlab */
                                      
                                      /* calculating new coordinates of an object */
                                      if (distance != 0.0f) {
@@ -350,8 +371,7 @@ void mexFunction(
          printf("%s %i %s \n", "Model no. ", ModelSelected, "is not found!");
          mexErrMsgTxt("No object found, check models file"); 
      }  
-}    
-    
+}
 //     if (params_switch[0] == 0) mexErrMsgTxt("Parameters file (Phantom3DLibrary.dat) cannot be read OR some major syntax errors in it; Check your PATH to the file is a valid one and the file exists");
 //     if (params_switch[1] == 0) {
 //         printf("%s %i\n", ">>>>> No such model available in the library, the given model is", ModelSelected);

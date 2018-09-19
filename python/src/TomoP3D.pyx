@@ -24,8 +24,8 @@ cimport numpy as np
 from enum import Enum
 
 # declare the interface to the C code
-cdef extern float TomoP3DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
-cdef extern float TomoP3DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
+cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, char* ModelParametersFilename)
+cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
 cdef extern float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
 #cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 #cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
@@ -54,19 +54,19 @@ class Objects3D(Enum):
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-def Model(int model_id, int phantom_size, str model_parameters_filename):
-    """
-    Create stationary 3D model : Model(model_id, phantom_size,model_parameters_filename)
+def Model(int model_id, DIM_tuple, str model_parameters_filename):
+    """       
+    Create stationary 3D model : Model(model_id, DIM_tuple, model_parameters_filename)
     
-    Takes in a input model_id and phantom_size and returns a phantom-model (3D) of phantom_size x phantom_size x phantom_size of type float32 numpy array.
+    Takes in a input model_id and phantom sizes in DIM_tuple and returns a phantom-model (3D) of DIM_tuple sizes of type float32 numpy array.
     
     param: model_parameters_filename -- filename for the model parameters
     param: model_id -- a model id from the functions file
-    param: phantom_size -- a phantom size in each dimension.
+    param: DIM_tuple -- a tuple with phantom dimesnsions. Can be DIM_tuple[1] (a scalar for the cubic phantom), or DIM_tuple[3] = [N1,N2,N3]  
     
     returns: numpy float32 phantom array    
     """
-    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([phantom_size, phantom_size, phantom_size], dtype='float32')
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([N1, N2, N3], dtype='float32')
     cdef float ret_val
     py_byte_string = model_parameters_filename.encode('UTF-8')
     cdef char* c_string = py_byte_string
@@ -75,7 +75,7 @@ def Model(int model_id, int phantom_size, str model_parameters_filename):
     checkParams3D(&params[0], model_id, c_string)
     testParams3D(params) # check parameters and terminate before running the core
     if params[3] == 1:
-        ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
+        ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, N1, N2, N3, c_string)
     else:
         print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
     return phantom
