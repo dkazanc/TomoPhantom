@@ -10,9 +10,11 @@ Phantom3DLibrary.dat
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
 Main difference from DemoModel.py is that we extract all parameters from the 
-library file using Python and then pass it to the Object function instead of model
+library file using Python and then pass it to the Object function instead of model.
+This can be helpful if one would like to avoid using library files and can
+pass parameters directly into object function
 
-Run demo from the folder "Demos"
+!Run script from "Demos" folder in order to ensure a correct path to *dat file!
 
 @author: Daniil Kazantsev
 """

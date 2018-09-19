@@ -12,16 +12,16 @@ pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
 addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
-ModelNo = 10; % Select a model
-% Define phantom dimensions
-N = 256; % x-y-z size (cubic image)
+ModelNo = 2; % Select a model
+% Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
+N = 256; % x-y-z size (cubic phantom), one can also pass DIM = [N N N] instead
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;
 mainDir  = fileparts(curDir);
 pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom3DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
-tic; [G] = TomoP3DModel(ModelNo,N,pathTP); toc;
+tic; [G] = TomoP3DModel(ModelNo,DIM,pathTP); toc;
 
 % check 3 projections
 figure; 
