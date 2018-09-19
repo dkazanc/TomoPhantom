@@ -4,12 +4,11 @@
 GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-Script to generate 2D/3D analytical phantoms and their sinograms
-If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
-Phantom3DLibrary.dat
+Script to generate 2D analytical phantoms and their sinograms
+If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
-Run demo from the folder "Demos"
+!Run script from "Demos" folder in order to ensure a correct path to *dat file!
 
 @author: Daniil Kazantsev
 """
@@ -94,39 +93,5 @@ SIRTrec = Atools.sirt2D(sino_an, 100)
 plt.figure(4) 
 plt.imshow(SIRTrec, vmin=0, vmax=1,cmap="BuPu")
 plt.title('SIRT Reconstructed Phantom')
-"""
-#%%
-"""
-import timeit
-from tomophantom import TomoP3D
-import matplotlib.pyplot as plt
-
-print ("Building 3D phantom using TomoPhantom software")
-tic=timeit.default_timer()
-model = 2
-N_size = 256
-#specify a full path to the parameters file
-pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
-#This will generate a N_size x N_size x N_size phantom (3D)
-phantom_tm = TomoP3D.Model(model, N_size, pathTP3)
-toc=timeit.default_timer()
-Run_time = toc - tic
-print("Phantom has been built in {} seconds".format(Run_time))
-
-sliceSel = int(0.5*N_size)
-#plt.gray()
-plt.figure(5) 
-plt.subplot(131)
-plt.imshow(phantom_tm[sliceSel,:,:],vmin=0, vmax=1)
-plt.title('3D Phantom, axial view')
-
-plt.subplot(132)
-plt.imshow(phantom_tm[:,sliceSel,:],vmin=0, vmax=1)
-plt.title('3D Phantom, coronal view')
-
-plt.subplot(133)
-plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
-plt.title('3D Phantom, sagittal view')
-plt.show()
 """
 #%%
