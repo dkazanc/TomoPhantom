@@ -24,8 +24,8 @@ cimport numpy as np
 from enum import Enum
 
 # declare the interface to the C code
-cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, char* ModelParametersFilename)
-cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
+cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char* ModelParametersFilename)
+cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
 cdef extern float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
 #cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 #cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
@@ -58,12 +58,12 @@ def Model(int model_id, phantom_size, str model_parameters_filename):
     """       
     Create stationary 3D model : Model(model_id, phantom_size, model_parameters_filename)
     
-    Takes in a input model_id and phantom_size as a scalar or a tuple and returns a phantom-model (3D) of phantom_size of type float32 numpy array.
+    Takes in an input model_id and phantom_size as a scalar or a tuple and returns a phantom-model (3D) of phantom_size of type float32 numpy array.
     
     param: model_parameters_filename -- filename for the model parameters
     param: model_id -- a model id from the functions file
     param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom), or phantom_size[3] = [N1,N2,N3]  
-    
+       
     returns: numpy float32 phantom array    
     """
     cdef long N1,N2,N3
@@ -81,7 +81,56 @@ def Model(int model_id, phantom_size, str model_parameters_filename):
     checkParams3D(&params[0], model_id, c_string)
     testParams3D(params) # check parameters and terminate before running the core
     if params[3] == 1:
-        ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, N3, N2, N1, c_string)
+        ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, N3, N2, N1, 0l, N1, c_string)
+    else:
+        print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
+    return phantom
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ModelSub(int model_id, phantom_size, sub_index, str model_parameters_filename):
+    """       
+    Create a subset (vertical cutoff) of stationary 3D model : Model(model_id, phantom_size, sub_index, model_parameters_filename)
+    
+    Takes in an input model_id and phantom_size as a scalar or a tuple, then a sub_index a tuple defines selected vertical subset
+    and returns a phantom-model (3D) of phantom_size of type float32 numpy array.    
+    
+    param: model_id -- a model id from the functions file
+    param: sub_index -- a tuple containing 2 indeces [lower, upper] to select a vertical subset needed to be extracted
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom), or phantom_size[3] = [N1,N2,N3]  
+    param: model_parameters_filename -- filename for the model parameters
+    
+    returns: numpy float32 phantom array    
+    """
+    cdef long N1,N2,N3,Z1,Z2
+    if type(phantom_size) == tuple:
+       N1,N2,N3 = [int(i) for i in phantom_size]
+    else:
+       N1 = N2 = N3 = phantom_size
+    
+    Z1,Z2 = [int(i) for i in sub_index]
+    
+    rangecheck = Z2 > Z1
+    if not rangecheck:
+        raise ValueError('Upper index must be larger than the lower one')
+    rangecheck = Z1 >= 0 and Z1 <= N3
+    if not rangecheck:
+        raise ValueError('Range of the lower index is incorrect')
+    rangecheck = Z2 >= 0 and Z2 <= N3
+    if not rangecheck:
+        raise ValueError('Range of the higher index is incorrect')
+    
+    sub_size = Z2 - Z1 # the size of the vertical slab
+    
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([sub_size, N2, N3], dtype='float32')
+    cdef float ret_val
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    if params[3] == 1:
+        ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, N3, N2, N1, Z1, Z2, c_string)
     else:
         print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
     return phantom
@@ -116,7 +165,55 @@ def ModelTemporal(int model_id, phantom_size, str model_parameters_filename):
     if params[3] == 1:
         print("The selected model is stationary (3D), use 'Model' function instead")
     else:
-        ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, N3, N2, N1, c_string)
+        ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, N3, N2, N1, 0l, N1, c_string)
+    return phantom
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ModelTemporalSub(int model_id, phantom_size, sub_index, str model_parameters_filename):
+    """
+    Create a subset of temporal 4D (3D + time) model: Model(model_id, phantom_size, sub_index, model_parameters_filename)
+    
+    Takes in a input model_id. phantom_size, sub_index a tuple defines selected vertical subset and returns a phantom-model (4D) of tuple size x Time-frames of type float32 numpy array.
+    
+    param: model_parameters_filename -- filename for the model parameters
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom), or phantom_size[3] = [N1,N2,N3]  
+    param: sub_index -- a tuple containing 2 indeces [lower, upper] to select a vertical subset needed to be extracted
+    param: model_id -- a model id from the functions file 
+    
+    returns: numpy float32 phantom array    
+    """
+    cdef long N1,N2,N3
+    if type(phantom_size) == tuple:
+       N1,N2,N3 = [int(i) for i in phantom_size]
+    else:
+       N1 = N2 = N3 = phantom_size
+       
+    Z1,Z2 = [int(i) for i in sub_index]
+    
+    rangecheck = Z2 > Z1
+    if not rangecheck:
+        raise ValueError('Upper index must be larger than the lower one')
+    rangecheck = Z1 >= 0 and Z1 <= N3
+    if not rangecheck:
+        raise ValueError('Range of the lower index is incorrect')
+    rangecheck = Z2 >= 0 and Z2 <= N3
+    if not rangecheck:
+        raise ValueError('Range of the higher index is incorrect')
+    
+    sub_size = Z2 - Z1 # the size of the vertical slab
+        
+    cdef float ret_val
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    cdef np.ndarray[np.float32_t, ndim=4, mode="c"] phantom = np.zeros([params[3], sub_size, N2, N3], dtype='float32')
+    if params[3] == 1:
+        print("The selected model is stationary (3D), use 'Model' function instead")
+    else:
+        ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, N3, N2, N1, Z1, Z2, c_string)
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -145,10 +242,9 @@ def Object(phantom_size, objlist):
         
     for obj in objlist:
         if testParamsPY(obj):
-            
             objectName = bytes(obj['Obj'].value, 'ascii')
             
-            ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1,
+            ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, 0l, N1,
                                         objectName, 
                                         obj['C0'], 
                                         obj['x0'], 
