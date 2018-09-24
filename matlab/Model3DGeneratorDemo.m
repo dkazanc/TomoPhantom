@@ -21,7 +21,7 @@ curDir   = pwd;
 mainDir  = fileparts(curDir);
 pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom3DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
-tic; [G] = TomoP3DModel(ModelNo,DIM,pathTP); toc;
+tic; [G] = TomoP3DModel(ModelNo,N,pathTP); toc;
 
 % check 3 projections
 figure; 
