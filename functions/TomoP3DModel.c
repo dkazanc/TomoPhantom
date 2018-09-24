@@ -194,7 +194,7 @@ void mexFunction(
                                      break; }
                                  printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
 
-                                TomoP3DObject_core(A, N1, N2, N3, tmpstr2, C0, x0, y0, z0, b, a, c, -psi_gr1, psi_gr2, psi_gr3, 0l); /* Matlab */
+                                TomoP3DObject_core(A, N1, N2, N3, 0l, N3, tmpstr2, C0, x0, y0, z0, b, a, c, -psi_gr1, psi_gr2, psi_gr3, 0l); /* Matlab */
                              }
                          }
                          else {
@@ -335,7 +335,7 @@ void mexFunction(
                                  /*loop over time frames*/
                                  for(tt=0; tt < steps; tt++) {
                                      
-                                     TomoP3DObject_core(A, N1, N2, N3, tmpstr2, C_t, x_t, y_t, z_t, b_t, a_t, c_t, -phi1_t, phi2_t, phi3_t, tt); /* Matlab */
+                                     TomoP3DObject_core(A, N1, N2, N3, 0l, N3, tmpstr2, C_t, x_t, y_t, z_t, b_t, a_t, c_t, -phi1_t, phi2_t, phi3_t, tt); /* Matlab */
                                      
                                      /* calculating new coordinates of an object */
                                      if (distance != 0.0f) {
