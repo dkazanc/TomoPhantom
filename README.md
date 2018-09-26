@@ -17,8 +17,11 @@
 
 ### What **TomoPhantom** can do:         
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms
+ 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions of them
+ 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model noise and some typical acquisition artifacts
+ 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery
 
 ### **TomoPhantom** prerequisites: 
