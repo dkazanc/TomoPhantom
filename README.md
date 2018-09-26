@@ -11,15 +11,15 @@
    
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
-        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects.
-        
-        What TomoPhantom can do:         
-        * Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms
-        * Generate 3D models and 4D (temporal) extensions of them  
-        * Model noise and some typical acquisition artifacts
-        * Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery  
+        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects.        
         </p>
  </div>
+
+### What **TomoPhantom** can do:         
+ * ![#1589F0](Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms)
+ * ![#1589F0](Generate 3D models and 4D (temporal) extensions of them)  
+ * ![#1589F0](Model noise and some typical acquisition artifacts)
+ * ![#1589F0](Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery)
 
 ### **TomoPhantom** prerequisites: 
 
@@ -44,12 +44,12 @@
 	run compile_mex_windows.m % to compile CPU modules on Windows
 ```
 
-### Package modules:
+### Package library modules:
 - **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with parametrised models (2D/3D versions of Shepp-Logan, Defrise, and QRM phantoms are included). The generation of new phantoms is highly encouraged, please submit them through pull requests or via e-mail bellow. 
 - See MATLAB and Python demos
 
 ### License:
-- TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.
+- ![#c5f015](TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.)
 
 ### Related software projects on GitHub:
 - [xdesign](https://github.com/tomography/xdesign) XDesign is an open-source Python package for generating configurable simulation phantoms for benchmarking tomographic image reconstruction.
@@ -65,4 +65,4 @@
 * [Regularised FISTA-type iterative reconstruction algorithm for X-ray tomographic reconstruction with highly inaccurate measurements](https://github.com/dkazanc/FISTA-tomo)
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
-Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com
+![#6c15ef](Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com)
