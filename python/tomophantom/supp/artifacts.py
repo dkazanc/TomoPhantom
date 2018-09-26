@@ -26,14 +26,16 @@ class ArtifactsClass:
         if noisetype == 'Gaussian':
             # add normal Gaussian noise
             sino_noisy += np.random.normal(loc = 0 ,scale = sigma * sino_noisy, size = np.shape(sino_noisy))
+            sino_noisy[sino_noisy<0] = 0
         elif noisetype == 'Poisson':
             # add Poisson noise
-            maxSino = np.max(sino_noisy)
+            maxSino = np.max(self.sinogram)
             if maxSino > 0:
-                sino_noisy = sino_noisy/maxSino
+                sino_noisy = (self.sinogram)/maxSino
                 dataExp = sigma*np.exp(-sino_noisy)  # noiseless raw data
                 sino_noisy = np.random.poisson(dataExp) #adding Poisson noise
-                sino_noisy = -np.log(sino_noisy/np.max(sino_noisy))*maxSino #log corrected data -> sinogram
+                div_res = np.float32(sino_noisy)/np.max(sino_noisy)
+                sino_noisy = -np.log(div_res)*maxSino #log corrected data -> sinogram
                 sino_noisy[sino_noisy<0] = 0
         else:
             print ("Select 'Gaussian' or 'Poisson' for noise type")

@@ -86,12 +86,5 @@ plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
 plt.title('FBP rec differences')
 rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
 #%%
-"""
-print ("Reconstructing using SIRT...")
-SIRTrec = Atools.sirt2D(sino_an, 100)
 
-plt.figure(4) 
-plt.imshow(SIRTrec, vmin=0, vmax=1,cmap="BuPu")
-plt.title('SIRT Reconstructed Phantom')
-"""
 #%%

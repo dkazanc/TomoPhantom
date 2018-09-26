@@ -4,27 +4,30 @@
 </div>
 
 ****************
-**TomoPhantom [1] is a toolbox to generate customisable 2D-4D phantoms (with a temporal capability) and their 
-analytical projection data for various image processing tasks (reconstruction, denoising, deblurring, etc.).**
+**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data for various image processing and machine learning tasks (reconstruction, denoising, deblurring, classification, etc.).**
 
 <a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 ****************    
    
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
-        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically,TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> 
-is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficently build customisable 2D-4D phantoms consisting of 
-piecewise-constant, piecewise-smooth, and smooth analytical objects. The objects include: Gaussians, parabolas, ellipses, cones, rectangulars. The exact tomographic projections (analytical sinograms) can be also obtained. The sinograms can be used for TIR benchmarking purposes, which enables reconstruction without so-called <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. TomoPhantom is also compatable with <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> and <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages. Generated data can be directly reconstructed using the toolboxes (see examples). Additionally, TomoPhantom provides a simple temporal extension, i.e. a capability of creating 2D+time and 3D+time models.   
+        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects.
+        
+        What TomoPhantom can do:         
+        * Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms
+        * Generate 3D models and 4D (temporal) extensions of them  
+        * Model noise and some typical acquisition artifacts
+        * Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery  
         </p>
  </div>
 
 ### **TomoPhantom** prerequisites: 
 
  * [MATLAB](www.mathworks.com/products/matlab/) OR
- * Python (tested ver. 3.5); Cython
+ * Python (tested ver. 2.7/3.5); Cython
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
 
-### Other dependencies (reconstruction):
+### Other (optional) dependencies (reconstruction):
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
  * [TomoPy](http://tomopy.readthedocs.io)
 
