@@ -16,10 +16,10 @@
  </div>
 
 ### What **TomoPhantom** can do:         
- * ![#1589F0](Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms)
- * ![#1589F0](Generate 3D models and 4D (temporal) extensions of them)  
- * ![#1589F0](Model noise and some typical acquisition artifacts)
- * ![#1589F0](Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery)
+ * ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms
+ * ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions of them
+ * ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model noise and some typical acquisition artifacts
+ * ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery
 
 ### **TomoPhantom** prerequisites: 
 
@@ -49,7 +49,7 @@
 - See MATLAB and Python demos
 
 ### License:
-- ![#c5f015](TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.)
+TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.
 
 ### Related software projects on GitHub:
 - [xdesign](https://github.com/tomography/xdesign) XDesign is an open-source Python package for generating configurable simulation phantoms for benchmarking tomographic image reconstruction.
@@ -65,5 +65,5 @@
 * [Regularised FISTA-type iterative reconstruction algorithm for X-ray tomographic reconstruction with highly inaccurate measurements](https://github.com/dkazanc/FISTA-tomo)
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
-![#6c15ef](Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com)
-- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `TEXT`
+Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com
+
