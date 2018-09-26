@@ -66,3 +66,4 @@
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
 ![#6c15ef](Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com)
+- ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) `TEXT`
