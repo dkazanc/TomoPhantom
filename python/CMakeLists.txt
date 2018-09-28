@@ -72,7 +72,8 @@ if (PYTHONINTERP_FOUND)
                                                        ${PYTHON_EXECUTABLE} ${SETUP_PY} build_ext --inplace
                        COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                        )
-
+      install(PythonWrapper DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ccpi 
+              DESTINATION ${PYTHON_DEST})
     endif()
     
     

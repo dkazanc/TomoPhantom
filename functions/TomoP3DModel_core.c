@@ -60,12 +60,15 @@ float TomoP3DObject_core(float *A, int N, char *Object,
 	printf("read in the input image\n");
 	printf("Beginning of array %p", A); 
 	printf(" %.2e\n", *(A)); 
-	printf("End of array %p", A + N*N*N); 
-	printf(" %.2e\n", *(A+N*N*N));
-
+	printf("End of array %p", A + (long)N*(long)N*(long)N -1l); 
+	//printf(" %.2e\n", A[(long)N*(long)N*(long)N - 1]);
+	//printf(" %.2e\n", *(A+ (long)((long)N*(long)N*(long)N -1l)));
+	//printf(" %.2e\n", A[(long)N*(long)N*(long)N-1]); 
 	int i, j, k;
     float Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa,bb,cc, psi1, psi2, psi3, T;
     float *Tomorange_X_Ar=NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
+	long lN = (long)N;
+
     Tomorange_X_Ar = malloc(N*sizeof(float));
     if(Tomorange_X_Ar == NULL ) printf("Allocation of 'Tomorange_X_Ar' failed");
     Tomorange_Xmin = -1.0f;
@@ -150,7 +153,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                         if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
                         else T = 0.0f;
                     }
-                    A[tt*N*N*N + (k)*N*N + j*N+i] += T;
+                    A[tt*lN*lN*lN + (k)*lN*lN + j*lN+i] += T;
                 }}}
     }
     if (strcmp("cuboid",Object) == 0) {
@@ -178,7 +181,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                             HY = fabsf((Ydel[j] - y0r)*cos_phi - (Xdel[i] - x0r)*sin_phi);
                             if (HY <= b2) {T = C0;}
                         }
-                        A[tt*N*N*N + (k)*N*N + j*N+i] += T;
+                        A[(long)tt*lN*lN*lN + (long)(k)*lN*lN + (long)j*lN+ (long)i] += T;
                     }
                 }
             }
@@ -194,7 +197,7 @@ float TomoP3DObject_core(float *A, int N, char *Object,
                         T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                         if (T <= 1) T = C0;
                         else T = 0.0f;
-                        A[tt*N*N*N + (k)*N*N + j*N+i] += T;
+                        A[(long)tt*lN*lN*lN + (long)(k)*lN*lN + (long)j*lN+ (long)i] += T;
                     }}
             }
         } /*k-loop*/

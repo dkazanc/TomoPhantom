@@ -21,6 +21,8 @@ import ctypes
 import numpy as np
 cimport numpy as np
 
+import ctypes
+
 from enum import Enum
 
 # declare the interface to the C code
@@ -129,7 +131,8 @@ def Object(int phantom_size, objlist):
         if testParamsPY(obj):
             
             objectName = bytes(obj['Obj'].value, 'ascii')
-            
+            #&phantom[0,0,0] = 1
+			#&phantom[N-1,N-1,N-1] = 2
             ret_val = TomoP3DObject_core(&phantom[0,0,0], phantom_size,
                                         objectName, 
                                         obj['C0'], 
