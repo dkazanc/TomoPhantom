@@ -6,9 +6,11 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 Script to generate 2D analytical phantoms and their sinograms
 If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
->>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
-!Run script from "Demos" folder in order to ensure a correct path to *dat file!
+>>>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
+install ASTRA: conda install -c astra-toolbox astra-toolbox
+ 
+!Run this script from "Demos" folder in order to ensure a correct path to *dat file!
 
 @author: Daniil Kazantsev
 """
@@ -25,7 +27,7 @@ pathTP = '../../functions/models/Phantom2DLibrary.dat'
 phantom_2D = TomoP2D.Model(model, N_size, pathTP)
 
 plt.close('all')
-plt.figure(1)
+plt.figure()
 plt.rcParams.update({'font.size': 21})
 plt.imshow(phantom_2D, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
@@ -33,17 +35,35 @@ plt.title('{}''{}'.format('2D Phantom using model no.',model))
 
 # create sinogram analytically
 angles_num = int(0.5*np.pi*N_size); # angles number
-angles = np.linspace(0,180,angles_num,dtype='float32')
-angles_rad = angles*(np.pi/180)
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
+angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
 
 sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
 
-plt.figure(2)
+plt.figure()
 plt.rcParams.update({'font.size': 21})
 plt.imshow(sino_an,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
+#%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing analytical sinogram using Fourier Slice method")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from tomophantom.supp.recMod import RecTools
+
+Rectools = RecTools(P, angles_rad, N_size) # initiate a class object
+RecFourier = Rectools.fourier(sino_an,'linear') 
+
+plt.figure() 
+plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Fourier reconstruction')
+
+plt.figure() 
+plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Fourier slice reconstructed')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
@@ -85,6 +105,5 @@ plt.imshow(abs(FBPrec1-FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
 plt.title('FBP rec differences')
 rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
-#%%
 
 #%%

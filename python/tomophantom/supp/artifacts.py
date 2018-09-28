@@ -55,7 +55,7 @@ class ArtifactsClass:
             raise ("Modulus integer must be positive")
         sino_zingers = self.sinogram
         length_sino = np.size(sino_zingers)
-        num_values = int((length_sino)*(percentage/100))
+        num_values = int((length_sino)*(np.float32(percentage)/100.0))
         sino_zingers_fl = sino_zingers.flatten()
         for x in range(num_values):
             randind = random.randint(0,length_sino) # generate random index 
@@ -79,13 +79,13 @@ class ArtifactsClass:
             pass
         else:
             raise ("percentage must be larger than zero but smaller than 100")
-        if 0 <= maxthickness <= 5:
+        if 0 <= maxthickness <= 10:
             pass
         else:
-            raise ("maximum thickness must be in [0,5] range")
+            raise ("maximum thickness must be in [0,10] range")
         sino_stripes = self.sinogram
         max_intensity = np.max(sino_stripes)
-        range_detect = int((self.DetectorsDim)*(percentage/100))
+        range_detect = int((np.float32(self.DetectorsDim))*(np.float32(percentage)/100.0))
         for x in range(range_detect):
             randind = random.randint(0,self.DetectorsDim) # generate random index
             randthickness = random.randint(0,maxthickness) #generate random thickness

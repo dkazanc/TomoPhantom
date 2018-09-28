@@ -7,7 +7,8 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts
 Sinograms then reconstructed using ASTRA TOOLBOX 
 
->>>> Prerequisites: ASTRA toolbox  <<<<<
+>>>>> Prerequisites: ASTRA toolbox  <<<<<
+install ASTRA: conda install -c astra-toolbox astra-toolbox
 
 This demo demonstrates frequent inaccuracies which are accosiated with X-ray imaging:
 zingers, rings and noise
@@ -35,8 +36,8 @@ plt.title('{}''{}'.format('2D Phantom using model no.',model))
 
 # create sinogram analytically
 angles_num = int(0.5*np.pi*N_size); # angles number
-angles = np.linspace(0,180,angles_num,dtype='float32')
-angles_rad = angles*(np.pi/180)
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
+angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
 
 sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
@@ -72,6 +73,24 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing analytical sinogram using Fourier Slice method")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from tomophantom.supp.recMod import RecTools
+
+Rectools = RecTools(P, angles_rad, N_size) # initiate a class object
+RecFourier = Rectools.fourier(noisy_zing_stripe,'linear') 
+
+plt.figure() 
+plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Fourier reconstruction')
+
+plt.figure() 
+plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Fourier slice reconstructed')
+#%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomophantom.supp.astraOP import AstraTools
@@ -101,8 +120,12 @@ rmse2 = np.linalg.norm(FBPrec_ideal-FBPrec_error)/np.linalg.norm(FBPrec_error)
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using SIRT (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-SIRTrec_ideal = Atools.sirt2D(sino_an,200) # ideal reconstruction
-SIRTrec_error = Atools.sirt2D(noisy_zing_stripe,200) # error reconstruction
+from tomophantom.supp.astraOP import AstraTools
+Atools = AstraTools(P, angles_rad, N_size, 'gpu') # initiate a class object
+
+iterationsSIRT = 200
+SIRTrec_ideal = Atools.sirt2D(sino_an,iterationsSIRT) # ideal reconstruction
+SIRTrec_error = Atools.sirt2D(noisy_zing_stripe,iterationsSIRT) # error reconstruction
 
 plt.figure()
 plt.subplot(121)

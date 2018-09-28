@@ -40,8 +40,8 @@ plt.title('{}''{}'.format('2D Phantom using model no.',model))
 
 # create sinogram analytically
 angles_num = int(0.5*np.pi*N_size); # angles number
-angles = np.linspace(0,180,angles_num,dtype='float32')
-angles_rad = angles*(np.pi/180)
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
+angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
 
 sino_an = TomoP2D.ObjectSino(N_size, P, angles, objlist)

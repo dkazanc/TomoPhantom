@@ -16,18 +16,20 @@
  </div>
 
 ### What **TomoPhantom** can do:         
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars and their analytical Radon transforms
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars
  
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions of them
  
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model noise and some typical acquisition artifacts
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transforms of models and also their numerical projections
  
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Perform 2D-4D reconstructions without <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> by using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a>,<a href="http://tomopy.readthedocs.io/en">TomoPy</a> or implemented direct methods: FBP and Fourier slice recovery
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts
+ 
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Reconstruct with implemented FBP and Fourier slice method or using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages. 
 
 ### **TomoPhantom** prerequisites: 
 
- * [MATLAB](www.mathworks.com/products/matlab/) OR
- * Python (tested ver. 2.7/3.5); Cython
+ * Python (tested ver. 2.7/3.5); Cython OR
+ * [MATLAB](www.mathworks.com/products/matlab/) 
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
 
 ### Other (optional) dependencies (reconstruction):
@@ -36,12 +38,12 @@
 
 ## Installation:
 
-### Python (conda-build preferrable)
+### Python (conda-build is preferrable)
 ```
 	conda build conda-recipe --numpy 1.12 --python 3.5
 	conda install tomophantom --use-local --force
 ```
-### Matlab
+### Matlab 
 ```
 	run compile_mex_linux.m % to compile CPU modules on linux
 	run compile_mex_windows.m % to compile CPU modules on Windows

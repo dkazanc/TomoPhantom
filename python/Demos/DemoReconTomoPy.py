@@ -84,7 +84,6 @@ reconTomoPy_ideal = tomopy.recon(sinoTP, angles_rad, center=rot_center, algorith
 sinoTP[:,0,:] = noisy_zing_stripe
 reconTomoPy_noisy = tomopy.recon(sinoTP, angles_rad, center=rot_center, algorithm='gridrec')
 
-
 plt.figure()
 plt.subplot(121)
 plt.imshow(reconTomoPy_ideal[0,:,:], vmin=0, vmax=1, cmap="gray")
