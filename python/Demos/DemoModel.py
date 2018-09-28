@@ -39,6 +39,7 @@ angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
 angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
 
+# get analytical sinogram
 sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
 
 plt.figure()
@@ -46,6 +47,9 @@ plt.rcParams.update({'font.size': 21})
 plt.imshow(sino_an,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
+
+# get numerical sinogram
+#sino_num = TomoP2D.SinoNum (phantom_2D, P, angles)
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using Fourier Slice method")
@@ -58,12 +62,7 @@ RecFourier = Rectools.fourier(sino_an,'linear')
 plt.figure() 
 plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Fourier reconstruction')
-
-plt.figure() 
-plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Fourier slice reconstructed')
+plt.title('Fourier slice reconstruction')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")

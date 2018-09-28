@@ -72,6 +72,7 @@ setup(
                             sources = [ "src/TomoP2D.pyx",
                                         "../functions/TomoP2DModel_core.c",
                                         "../functions/TomoP2DModelSino_core.c",
+                                        "../functions/TomoP2DSinoNum_core.c",
                                         "../functions/utils.c"
                                       ],
                             include_dirs = extra_include_dirs,
