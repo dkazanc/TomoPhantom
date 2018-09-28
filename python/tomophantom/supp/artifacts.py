@@ -26,14 +26,16 @@ class ArtifactsClass:
         if noisetype == 'Gaussian':
             # add normal Gaussian noise
             sino_noisy += np.random.normal(loc = 0 ,scale = sigma * sino_noisy, size = np.shape(sino_noisy))
+            sino_noisy[sino_noisy<0] = 0
         elif noisetype == 'Poisson':
             # add Poisson noise
-            maxSino = np.max(sino_noisy)
+            maxSino = np.max(self.sinogram)
             if maxSino > 0:
-                sino_noisy = sino_noisy/maxSino
+                sino_noisy = (self.sinogram)/maxSino
                 dataExp = sigma*np.exp(-sino_noisy)  # noiseless raw data
                 sino_noisy = np.random.poisson(dataExp) #adding Poisson noise
-                sino_noisy = -np.log(sino_noisy/np.max(sino_noisy))*maxSino #log corrected data -> sinogram
+                div_res = np.float32(sino_noisy)/np.max(sino_noisy)
+                sino_noisy = -np.log(div_res)*maxSino #log corrected data -> sinogram
                 sino_noisy[sino_noisy<0] = 0
         else:
             print ("Select 'Gaussian' or 'Poisson' for noise type")
@@ -53,7 +55,7 @@ class ArtifactsClass:
             raise ("Modulus integer must be positive")
         sino_zingers = self.sinogram
         length_sino = np.size(sino_zingers)
-        num_values = int((length_sino)*(percentage/100))
+        num_values = int((length_sino)*(np.float32(percentage)/100.0))
         sino_zingers_fl = sino_zingers.flatten()
         for x in range(num_values):
             randind = random.randint(0,length_sino) # generate random index 
@@ -77,13 +79,13 @@ class ArtifactsClass:
             pass
         else:
             raise ("percentage must be larger than zero but smaller than 100")
-        if 0 <= maxthickness <= 5:
+        if 0 <= maxthickness <= 10:
             pass
         else:
-            raise ("maximum thickness must be in [0,5] range")
+            raise ("maximum thickness must be in [0,10] range")
         sino_stripes = self.sinogram
         max_intensity = np.max(sino_stripes)
-        range_detect = int((self.DetectorsDim)*(percentage/100))
+        range_detect = int((np.float32(self.DetectorsDim))*(np.float32(percentage)/100.0))
         for x in range(range_detect):
             randind = random.randint(0,self.DetectorsDim) # generate random index
             randthickness = random.randint(0,maxthickness) #generate random thickness
