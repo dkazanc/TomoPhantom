@@ -134,7 +134,6 @@ def SinoNum(np.ndarray[np.float32_t, ndim=2, mode="c"] phantom, int detector_siz
     Function to calculate a numerical sinogram of the model (2D): SinoNum (phantom, detector_size, angles)
     Takes in as input model_id, image_size, detector_size and projection angles and return a 2D sinogram corresponding to the model id.
     
-    
     param: phantom - 2D array of floats (phantom)
     param: detector_size -- int detector size.
     param: angles -- a numpy array of float values with angles in radians
@@ -142,14 +141,14 @@ def SinoNum(np.ndarray[np.float32_t, ndim=2, mode="c"] phantom, int detector_siz
     returns: numpy float32 phantom sinograms array.    
     np.flipud(np.fliplr(sinogram.transpose()))
     """
-    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
+    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([angles.shape[0],detector_size], dtype='float32')
     cdef long dims[2]
     dims[0] = phantom.shape[0]
     dims[1] = phantom.shape[1]
     cdef float ret_val
     cdef int AngTot = angles.shape[0]
     ret_val = TomoP2DSinoNum_core(&sinogram[0,0], &phantom[0,0], dims[0], detector_size, &angles[0], AngTot)
-    return sinogram.transpose()
+    return sinogram
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
