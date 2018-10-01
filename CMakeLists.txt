@@ -19,22 +19,19 @@ project(TomoPhantom)
 
 # The version number.
 set (CIL_VERSION_MAJOR 0)
-set (CIL_VERSION_MINOR 10)
-set (CIL_VERSION_PATCH 1)
+set (CIL_VERSION_MINOR 11)
+set (CIL_VERSION_PATCH 0)
 
 set (CIL_VERSION '${CIL_VERSION_MAJOR}.${CIL_VERSION_MINOR}.${CIL_VERSION_PATCH}' CACHE INTERNAL "Core Imaging Library version" FORCE)
 
 # set the Python variables for the Conda environment
 #include(${CMAKE_SOURCE_DIR}/CMake/FindAnacondaEnvironment.cmake)
 
+set(CMAKE_BUILD_TYPE "Release")
+
 option (BUILD_MATLAB_WRAPPER "Build Matlab Wrappers" OFF)
 option (BUILD_PYTHON_WRAPPER "Build Python Wrappers" ON)
 option (CONDA_BUILD "Conda Build" OFF)
 
-#add_subdirectory(functions)
-if (BUILD_MATLAB_WRAPPER)
-  add_subdirectory(matlab)
-endif()
-if (BUILD_PYTHON_WRAPPER)
-  add_subdirectory(python)
-endif()
+add_subdirectory(Core)
+add_subdirectory(Wrappers)
