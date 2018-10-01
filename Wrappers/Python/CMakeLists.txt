@@ -80,11 +80,16 @@ if (PYTHONINTERP_FOUND)
                                                        LIBRARY_LIB=${CMAKE_BINARY_DIR}/Core/${CMAKE_BUILD_TYPE}
                                                        ${PYTHON_EXECUTABLE} ${SETUP_PY} build_ext --inplace
                        COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
+                       DEPENDS ctomophantom
                        )
                        
       add_custom_target(PythonWrapper ALL DEPENDS ${OUTPUT})
       install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tomophantom 
               DESTINATION ${PYTHON_DEST})
+      if (WIN32)
+      install(FILES ${CMAKE_BINARY_DIR}/Core/${CMAKE_BUILD_TYPE}/ctomophantom.dll 
+              DESTINATION ${PYTHON_DEST})
+      endif()
       #install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/wip/test.py
       #              ${CMAKE_CURRENT_SOURCE_DIR}/wip/dvc_input.json
 	#	    ${CMAKE_SOURCE_DIR}/Core/wip/central_grid.roi
