@@ -78,17 +78,12 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomophantom.supp.recMod import RecTools
 
 Rectools = RecTools(P, angles_rad, N_size) # initiate a class object
-RecFourier = Rectools.fourier(noisy_zing_stripe,'linear') 
+RecFourier = Rectools.fourier(noisy_zing_stripe,'nearest') 
 
 plt.figure() 
 plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Fourier reconstruction')
-
-plt.figure() 
-plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Fourier slice reconstructed')
+plt.title('Fourier slice reconstruction')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")

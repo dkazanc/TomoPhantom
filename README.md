@@ -32,7 +32,7 @@
  * [MATLAB](www.mathworks.com/products/matlab/) 
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
 
-### Other (optional) dependencies (reconstruction):
+### Other (optional) dependencies:
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
  * [TomoPy](http://tomopy.readthedocs.io)
 
