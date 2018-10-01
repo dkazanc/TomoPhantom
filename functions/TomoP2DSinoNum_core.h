@@ -18,6 +18,6 @@ limitations under the License.
 #include <stdio.h>
 #include "omp.h"
 
-float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength);
+float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys);
 float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct, float st);
-float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY);
+float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY, int sys);

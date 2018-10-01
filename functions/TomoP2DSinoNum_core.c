@@ -42,16 +42,16 @@
  */
  
 
-float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength)
+float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys)
 {    
 	int i, j, k, padXY;
-	float *Phantom_pad=NULL, *B=NULL,  angC, ct, st, sumSin;    
+	float *Phantom_pad=NULL, *B=NULL,  angC, ct, st, sumSin;
     
     padXY = ceil(0.5f*(DetSize - dimX)); /*Size for padding the phantom*/ 
     
     /*Perform padding of the phantom to the size [DetSize x DetSize] */
     Phantom_pad = (float*) calloc(DetSize*DetSize,sizeof(float));  /*allocating space*/
-    padding(Phantom, Phantom_pad, DetSize, dimX, padXY);    
+    padding(Phantom, Phantom_pad, DetSize, dimX, padXY, sys);
     
     /* setting OMP here */
     #pragma omp parallel for shared (Phantom_pad, Sinogram, dimX, DetSize, Theta, ThetaLength) private(B, k, j, i, sumSin, angC, ct, st)    
@@ -63,12 +63,12 @@ float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize
         ct = cos(angC + 0.5f*M_PI);
         st = sin(angC + 0.5f*M_PI);
         
-        BilinearInterpolation(Phantom_pad, B, DetSize, ct, st);    /* perform interpolation to rotate image on angle angC */
+        BilinearInterpolation(Phantom_pad, B, DetSize, ct, st); /* perform interpolation to rotate image on angle angC */
         
         for (j=0; j < DetSize; j++) {
             sumSin = 0.0f;
             Sinogram[j*ThetaLength + k] = 0.0f;
-            for (i=0; i < DetSize; i++) sumSin += B[i*DetSize+j];            
+            for (i=0; i < DetSize; i++) sumSin += B[i*DetSize+j];
             Sinogram[j*ThetaLength + k] = sumSin;
         }
         free(B);
@@ -117,7 +117,7 @@ float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct,
     return *B;
 }
 
-float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY)
+float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY, int sys)
 {
     int i,j;   
     #pragma omp parallel for shared (Phantom_pad, Phantom) private(i, j)
@@ -125,8 +125,9 @@ float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, in
         for (j=0; j < DetSize; j++) {
             Phantom_pad[j*DetSize+i] = 0.0f;
              if (((i >= padXY+1) && (i < DetSize-padXY)) &&  ((j >= padXY) && (j < DetSize-padXY))) {
-                  Phantom_pad[j*DetSize+i] = Phantom[(j-padXY)*PhantSize + (i-padXY)];                                                  
-             }           
+                  if (sys == 0) Phantom_pad[j*DetSize+i] = Phantom[(i-padXY)*PhantSize + (j-padXY)];
+                  else Phantom_pad[j*DetSize+i] = Phantom[(j-padXY)*PhantSize + (i-padXY)];
+             }
         }}
     return *Phantom_pad;
 }

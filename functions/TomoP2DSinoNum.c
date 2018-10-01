@@ -44,7 +44,7 @@
 void mexFunction(
         int nlhs, mxArray *plhs[],
         int nrhs, const mxArray *prhs[]) {
-    int number_of_dims, dimX, dimY,ThetaLength, DetSize;
+    int dimX, dimY,ThetaLength, DetSize, sys=1;
     const int  *dim_array, *dimsTh;
     float *Phantom, *Sinogram, *Theta;    
         
@@ -53,7 +53,6 @@ void mexFunction(
     DetSize  = (int) mxGetScalar(prhs[1]);    
     Theta  = (float *) mxGetData(prhs[2]);
     
-    number_of_dims = mxGetNumberOfDimensions(prhs[0]);
     dim_array = mxGetDimensions(prhs[0]);
     dimsTh = mxGetDimensions(prhs[2]);
     
@@ -65,7 +64,7 @@ void mexFunction(
         
     /*Handling Matlab output data*/
     const mwSize N_dims[2] = {ThetaLength, DetSize}; /*format: Y-angles x X-detectors dim*/
-    Sinogram = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));       
+    Sinogram = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(2, N_dims, mxSINGLE_CLASS, mxREAL));
     
-    TomoP2DSinoNum_core(Sinogram, Phantom, dimX, DetSize, Theta, ThetaLength);
+    TomoP2DSinoNum_core(Sinogram, Phantom, dimX, DetSize, Theta, ThetaLength, sys);
 }
