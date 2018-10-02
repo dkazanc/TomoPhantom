@@ -89,6 +89,10 @@ if (PYTHONINTERP_FOUND)
       if (WIN32)
       install(FILES ${CMAKE_BINARY_DIR}/Core/${CMAKE_BUILD_TYPE}/ctomophantom.dll 
               DESTINATION ${PYTHON_DEST})
+      else()
+          install(FILES ${CMAKE_BINARY_DIR}/Core/libctomophantom.so
+            DESTINATION ${PYTHON_DEST}
+            CONFIGURATIONS ${CMAKE_BUILD_TYPE})
       endif()
       #install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/wip/test.py
       #              ${CMAKE_CURRENT_SOURCE_DIR}/wip/dvc_input.json
