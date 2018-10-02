@@ -32,6 +32,8 @@ mex TomoP3DModel.c TomoP3DModel_core.c utils.c COMPFLAGS="\$COMPFLAGS -fopenmp -
 movefile('TomoP3DModel.mex*',Pathmove);
 mex TomoP3DObject.c TomoP3DModel_core.c utils.c COMPFLAGS="\$COMPFLAGS -fopenmp -Wall -std=c99"
 movefile('TomoP3DObject.mex*',Pathmove);
+mex TomoP2DSinoNum.c TomoP2DSinoNum_core.c utils.c COMPFLAGS="\$COMPFLAGS -fopenmp -Wall -std=c99"
+movefile('TomoP2DSinoNum.mex*',Pathmove);
 
 %%% The second approach to compile using TDM-GCC which follows this
 %%% discussion:
@@ -55,6 +57,8 @@ movefile('TomoP3DObject.mex*',Pathmove);
 % movefile('TomoP3DModel.mex*',Pathmove);
 % mex C:\TDMGCC\lib\gcc\x86_64-w64-mingw32\5.1.0\libgomp.a CXXFLAGS="$CXXFLAGS -std=c++11 -fopenmp" TomoP3DObject.c TomoP3DModel_core.c utils.c
 % movefile('TomoP3DObject.mex*',Pathmove);
+% mex C:\TDMGCC\lib\gcc\x86_64-w64-mingw32\5.1.0\libgomp.a CXXFLAGS="$CXXFLAGS -std=c++11 -fopenmp" TomoP2DSinoNum.c TomoP2DSinoNum_core.c utils.c
+% movefile('TomoP2DSinoNum.mex*',Pathmove);
 % fprintf('%s \n', 'All compiled!');
 
 cd(UpPath);

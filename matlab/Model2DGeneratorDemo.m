@@ -14,7 +14,7 @@ pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
 addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
-ModelNo = 4; % Select a model from Phantom2DLibrary.dat
+ModelNo = 1; % Select a model from Phantom2DLibrary.dat
 % Define phantom dimensions
 N = 512; % x-y size (squared image)
 
@@ -28,12 +28,14 @@ figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
 %%
 fprintf('%s \n', 'Generating sinogram analytically and numerically with Matlab (radon)...');
 % generate angles
-angles = linspace(0,180,N); % projection angles
+angles = linspace(0,179.9,round(1.3*N)); % projection angles
 
 % lets use Matlab's radon function
 [F_d,xp] = radon(G,angles); % discrete sinogram
 P = size(F_d,1); %detectors dimension
 F_d = F_d';
+
+% [F_num] = TomoP2DSinoNum(G, P, single(angles)); % numerical sinogram
 
 % generate the 2D analytical parallel beam sinogram
 [F_a] = TomoP2DModelSino(ModelNo, N, P, single(angles), pathTP, 'radon'); 

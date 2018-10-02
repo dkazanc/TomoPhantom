@@ -290,7 +290,8 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
             /* work with non-# commented lines */
             if(str[0] != '#') {
                 sscanf(str, "%15s : %21[^;];", tmpstr1, tmpstr2);
-                if (strcmp(tmpstr1,"Model")==0) Model = atoi(tmpstr2);   {
+                if (strcmp(tmpstr1,"Model")==0){ 
+					Model = atoi(tmpstr2);   
                     if ((ModelSelected == Model) && (counter == 0)) {
                         /* check if we have a right model */
                         if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %21[^;];", tmpstr1, tmpstr2);

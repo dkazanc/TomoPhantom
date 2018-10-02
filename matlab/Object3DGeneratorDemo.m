@@ -12,8 +12,8 @@ addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
 
-% Define phantom dimensions
-N = 256; % x-y-z size (cubic image)
+% Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
+N = 256; % x-y-z size (cubic phantom), one can also pass DIM = [N N N] instead
 
 % define parameters
 paramsObject.Ob = 'gaussian';
@@ -28,7 +28,7 @@ paramsObject.phi1 = 30;
 paramsObject.phi2 = 60;
 paramsObject.phi3 = -25;
 
-% generate 3D phantom [N x N x N]:
+% Generate 3D phantom
 tic; [G] = TomoP3DObject(paramsObject.Ob,paramsObject.C0, paramsObject.x0, paramsObject.y0, paramsObject.z0, paramsObject.a, paramsObject.b, paramsObject.c, paramsObject.phi1, paramsObject.phi2, paramsObject.phi3, N); toc;
 
 % check 3 projections

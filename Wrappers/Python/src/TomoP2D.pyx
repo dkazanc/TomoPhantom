@@ -30,6 +30,7 @@ cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* Mo
 cdef extern float TomoP2DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
 cdef extern float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 cdef extern float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
+cdef extern float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys)
 cdef extern float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
 
 cdef packed struct object_2d:
@@ -126,6 +127,28 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
 #                                     obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
 #    return phantom
     
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def SinoNum(np.ndarray[np.float32_t, ndim=2, mode="c"] phantom, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles):
+    """
+    Function to calculate a numerical sinogram of the model (2D): SinoNum (phantom, detector_size, angles)
+    Takes in as input model_id, image_size, detector_size and projection angles and return a 2D sinogram corresponding to the model id.
+    
+    param: phantom - 2D array of floats (phantom)
+    param: detector_size -- int detector size.
+    param: angles -- a numpy array of float values with angles in radians
+    
+    returns: numpy float32 phantom sinograms array.    
+    np.flipud(np.fliplr(sinogram.transpose()))
+    """
+    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
+    cdef long dims[2]
+    dims[0] = phantom.shape[0]
+    dims[1] = phantom.shape[1]
+    cdef float ret_val
+    cdef int AngTot = angles.shape[0]
+    ret_val = TomoP2DSinoNum_core(&sinogram[0,0], &phantom[0,0], dims[0], detector_size, &angles[0], AngTot, 0)
+    return sinogram.transpose()
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):

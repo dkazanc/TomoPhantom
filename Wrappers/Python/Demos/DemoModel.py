@@ -4,16 +4,18 @@
 GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-Script to generate 2D/3D analytical phantoms and their sinograms
-If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
-Phantom3DLibrary.dat
->>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
+Script to generate 2D analytical phantoms and their sinograms
+If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
 
-Run demo from the folder "Demos"
+>>>>> Optional prerequisites: ASTRA toolbox <<<<<
+install ASTRA: conda install -c astra-toolbox astra-toolbox
+ 
+!Run this script from "Demos" folder in order to ensure a correct path to *dat file!
 
 @author: Daniil Kazantsev
 """
 import numpy as np
+import timeit
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
 
@@ -26,36 +28,84 @@ pathTP = '../../functions/models/Phantom2DLibrary.dat'
 phantom_2D = TomoP2D.Model(model, N_size, pathTP)
 
 plt.close('all')
-plt.figure(1)
+plt.figure()
 plt.rcParams.update({'font.size': 21})
 plt.imshow(phantom_2D, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('{}''{}'.format('2D Phantom using model no.',model))
 
-# create sinogram analytically
+# parameters to generate a sinogram
 angles_num = int(0.5*np.pi*N_size); # angles number
-angles = np.linspace(0,180,angles_num,dtype='float32')
-angles_rad = angles*(np.pi/180)
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
+angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
-
+#%%
+###################################################################
+tic=timeit.default_timer()
+# create sinogram analytically
 sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
+toc=timeit.default_timer()
+Run_time = toc - tic
+print("Analytical sinogram has been generated in {} seconds".format(Run_time))
 
-plt.figure(2)
+plt.figure()
 plt.rcParams.update({'font.size': 21})
 plt.imshow(sino_an,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
+#%%
+###################################################################
+# get numerical sinogram
+tic=timeit.default_timer()
+sino_num = TomoP2D.SinoNum (phantom_2D, P, angles)
+toc=timeit.default_timer()
+Run_time = toc - tic
+print("Numerical sinogram has been generated in {} seconds".format(Run_time))
+
+plt.figure()
+plt.rcParams.update({'font.size': 21})
+plt.imshow(sino_num,  cmap="BuPu")
+plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
+plt.title('{}''{}'.format('Numerical sinogram of model no.',model))
+#%%
+###################################################################
+# get numerical sinogram (ASTRA-toolbox)
+from tomophantom.supp.astraOP import AstraTools
+
+tic=timeit.default_timer()
+Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
+sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
+toc=timeit.default_timer()
+Run_time = toc - tic
+print("Numerical (ASTRA) sinogram has been generated in {} seconds".format(Run_time))
+
+plt.figure()
+plt.rcParams.update({'font.size': 21})
+plt.imshow(sino_num_ASTRA,  cmap="BuPu")
+plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
+plt.title('{}''{}'.format('Numerical sinogram (ASTRA) of model no.',model))
+#%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing analytical sinogram using Fourier Slice method")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from tomophantom.supp.recMod import RecTools
+
+Rectools = RecTools(P, angles_rad, N_size) # initiate a class object
+RecFourier = Rectools.fourier(sino_an,'linear') 
+
+plt.figure() 
+plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Fourier slice reconstruction')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomophantom.supp.astraOP import AstraTools
 
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
 #x = Atools.backproj(sino_an) # generate backprojection (A'b)
 
-plt.figure(2) 
+plt.figure() 
 plt.subplot(121)
 plt.imshow(sino_an,cmap="BuPu")
 plt.title('Analytical sinogram')
@@ -68,7 +118,7 @@ rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
 
 print ("Reconstructing analytical sinogram using FBP (astra TB)...")
 FBPrec1 = Atools.fbp2D(sino_an)
-plt.figure(3) 
+plt.figure() 
 plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (analyt)')
@@ -76,57 +126,15 @@ plt.title('FBP Reconstructed Phantom (analyt)')
 print ("Reconstructing numerical sinogram using FBP (astra TB)...")
 FBPrec2 = Atools.fbp2D(sino_num_ASTRA)
 
-plt.figure(4) 
+plt.figure() 
 plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (numeric)')
 
-plt.figure(5) 
+plt.figure() 
 plt.imshow(abs(FBPrec1-FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
 plt.title('FBP rec differences')
 rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
-#%%
-"""
-print ("Reconstructing using SIRT...")
-SIRTrec = Atools.sirt2D(sino_an, 100)
 
-plt.figure(4) 
-plt.imshow(SIRTrec, vmin=0, vmax=1,cmap="BuPu")
-plt.title('SIRT Reconstructed Phantom')
-"""
-#%%
-"""
-import timeit
-from tomophantom import TomoP3D
-import matplotlib.pyplot as plt
-
-print ("Building 3D phantom using TomoPhantom software")
-tic=timeit.default_timer()
-model = 2
-N_size = 256
-#specify a full path to the parameters file
-pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
-#This will generate a N_size x N_size x N_size phantom (3D)
-phantom_tm = TomoP3D.Model(model, N_size, pathTP3)
-toc=timeit.default_timer()
-Run_time = toc - tic
-print("Phantom has been built in {} seconds".format(Run_time))
-
-sliceSel = int(0.5*N_size)
-#plt.gray()
-plt.figure(5) 
-plt.subplot(131)
-plt.imshow(phantom_tm[sliceSel,:,:],vmin=0, vmax=1)
-plt.title('3D Phantom, axial view')
-
-plt.subplot(132)
-plt.imshow(phantom_tm[:,sliceSel,:],vmin=0, vmax=1)
-plt.title('3D Phantom, coronal view')
-
-plt.subplot(133)
-plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
-plt.title('3D Phantom, sagittal view')
-plt.show()
-"""
 #%%

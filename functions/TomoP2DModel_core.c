@@ -40,18 +40,18 @@
  */
 
 /* function to build a single object */
-float TomoP2DObject_core(float *A, int N, char *Object,
+float TomoP2DObject_core(float *A, long N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
         float a , /* a - size object */
         float b , /* b - size object */
         float phi_rot, /* phi - rotation angle */
-        int tt /* time frame loop */)
+        long tt /* time frame loop */)
 {
     printf ("Base C0 %.2e x0 %.2e y0 %.2e a %.2e b %.2e phi %.2e\n" , C0, x0, y0, a, b, phi_rot);                            
                                 
-    int i, j;
+    long i, j;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, H_x, C1, a2, b2, phi_rot_radian, sin_phi, cos_phi;
     float *Xdel = NULL, *Ydel = NULL, T;
     Tomorange_X_Ar = malloc(N*sizeof(float));
@@ -236,7 +236,7 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                     //mexErrMsgTxt("Cannot find 'Object' string in parameters file");
                                     break; }   
                                 printf ("C0 %.2e x0 %.2e y0 %.2e a %.2e b %.2e phi %.2e\n" , C0, x0, y0, a, b, psi_gr1);                            
-                                TomoP2DObject_core(A, N, tmpstr2, C0, y0, x0, a, b, psi_gr1, 0); /* python */
+                                TomoP2DObject_core(A, (long)N, tmpstr2, C0, y0, x0, a, b, psi_gr1, 0l); /* python */
                             }
                         }
                         else {
@@ -292,14 +292,14 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 float b_step = (b1 - b)/(steps-1);
                                 float phi_rot_step = (psi_gr1_1 - psi_gr1)/(steps-1);
                                 
-                                int tt;
+                                long tt;
                                 float x_t, y_t, a_t, b_t, C_t, phi_t, d_step;
                                 /* initialize */
                                 x_t = x0; y_t = y0; a_t = a; b_t = b; C_t = C0; phi_t = psi_gr1; d_step = d_dist;
                                 /*loop over time frames*/
                                 for(tt=0; tt < steps; tt++) {
                                     
-                                     TomoP2DObject_core(A, N, tmpstr2, C_t, x_t, -y_t, a_t, b_t, phi_t, tt); /* python */
+                                     TomoP2DObject_core(A, (long)N, tmpstr2, C_t, x_t, -y_t, a_t, b_t, phi_t, tt); /* python */
                                     
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {

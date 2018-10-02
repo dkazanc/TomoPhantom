@@ -38,9 +38,9 @@
  */
 
 /* function to build a single sinogram - object */
-float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
+float TomoP2DObjectSino_core(float *A, long N, long P, float *Th, long AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, long tt)
 {
-    int i, j;
+    long i, j;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, a22, b22, phi_rot_radian;
     float *Sinorange_P_Ar=NULL, *AnglesRad=NULL;
     float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00;
@@ -373,7 +373,7 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                                     //mexErrMsgTxt("b (object size) must be positive in [0,2] range");
                                     break; }
                                 //printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);
-                               TomoP2DObjectSino_core(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C0, x0, y0, b, a, -psi_gr1, 0);
+                               TomoP2DObjectSino_core(A, (long)N, (long)P, Th, (long)AngTot, CenTypeIn, tmpstr2, C0, x0, y0, b, a, -psi_gr1, 0l);
                             }
                         }
                         else {
@@ -433,14 +433,14 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                                 float b_step = (b1 - b)/(steps-1);
                                 float phi_rot_step = (psi_gr1_1 - psi_gr1)/(steps-1);
                                 
-                                int tt;
+                                long tt;
                                 float x_t, y_t, a_t, b_t, C_t, phi_t, d_step;
                                 /* initialize */
                                 x_t = x0; y_t = y0; a_t = a; b_t = b; C_t = C0; phi_t = psi_gr1; d_step = d_dist;
                                 /*loop over time frames*/
                                 for(tt=0; tt < steps; tt++) {
                                     
-                                    TomoP2DObjectSino_core(A, N, P, Th, AngTot, CenTypeIn, tmpstr2, C_t, -y_t, x_t, b_t, a_t, -phi_t, tt);                                                         
+                                    TomoP2DObjectSino_core(A, (long)N, (long)P, Th, (long)AngTot, CenTypeIn, tmpstr2, C_t, -y_t, x_t, b_t, a_t, -phi_t, tt);                                                         
                                     
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {

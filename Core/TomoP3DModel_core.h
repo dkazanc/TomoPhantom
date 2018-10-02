@@ -22,3 +22,15 @@ limitations under the License.
 
 CCPI_EXPORT float TomoP3DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename);
 CCPI_EXPORT float TomoP3DObject_core(float *A, int N,  char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi_gr1, float psi_gr2, float psi_gr3, int tt);
+CCPI_EXPORT float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object,
+	float C0, /* intensity */
+	float x0, /* x0 position */
+	float y0, /* y0 position */
+	float z0, /* z0 position */
+	float a, /* a - size object */
+	float b, /* b - size object */
+	float c, /* c - size object */
+	float psi_gr1, /* rotation angle1 */
+	float psi_gr2, /* rotation angle2 */
+	float psi_gr3, /* rotation angle3 */
+	long tt /*temporal index, 0 - for stationary */);
