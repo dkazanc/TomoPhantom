@@ -1,6 +1,9 @@
 
-mkdir ${SRC_DIR}/tomophantom
-cp -r "${RECIPE_DIR}/../../" ${SRC_DIR}/tomophantom
 
-cd ${SRC_DIR}/tomophantom/python
-$PYTHON setup.py install
+mkdir ${SRC_DIR}/tomophantom
+cp -r "${RECIPE_DIR}/../" ${SRC_DIR}/tomophantom
+cd tomophantom
+
+#issue cmake to create setup.py
+cmake -G "Unix Makefiles" ${RECIPE_DIR}/../../../ -DBUILD_PYTHON_WRAPPERS=ON -DCONDA_BUILD=ON -DLIBRARY_LIB="${CONDA_PREFIX}/lib" -DLIBRARY_INC="${CONDA_PREFIX}" -DCMAKE_INSTALL_PREFIX="${PREFIX}/Library"
+make install
