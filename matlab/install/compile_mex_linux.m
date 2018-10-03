@@ -6,10 +6,13 @@ cd(UpPath);
 
 mkdir compiled
 
-PathFunc = sprintf(['..' fsep 'functions' fsep], 1i);
-cd(PathFunc);
+PathFunc = sprintf(['..' fsep 'Core' fsep], 1i);
 
-Pathmove = sprintf(['..' fsep 'matlab' fsep 'compiled' fsep], 1i);
+copyfile(PathFunc, 'mex_wrappers');
+
+cd('mex_wrappers');
+
+Pathmove = sprintf(['..' fsep 'compiled' fsep], 1i);
 
 fprintf('%s \n', 'Building functions...');
 mex TomoP2DModel.c TomoP2DModel_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
@@ -27,7 +30,8 @@ movefile('TomoP3DObject.mex*',Pathmove);
 mex TomoP2DSinoNum.c TomoP2DSinoNum_core.c utils.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
 movefile('TomoP2DSinoNum.mex*',Pathmove);
 
+delete TomoP2DModel_core* TomoP2DModelSino_core* TomoP3DModel_core* TomoP2DSinoNum_core* CCPiDefines.h utils*;
+
 fprintf('%s \n', 'All compiled!');
 
 cd(UpPath);
-cd matlab

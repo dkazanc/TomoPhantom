@@ -106,7 +106,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 
 	float xh[3] = { 0.0f, 0.0f, 0.0f };
 	float xh3[3] = { 0.0f, 0.0f, 0.0f };
-
+    
 	a2 = 1.0f / (a*a);
 	b2 = 1.0f / (b*b);
 	c2 = 1.0f / (c*c);
