@@ -13,6 +13,7 @@
  */
 
 #include "utils.h"
+#include "math.h"
 
 #define MAXCHAR 1000
 
