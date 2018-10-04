@@ -17,12 +17,12 @@ limitations under the License.
 # cython and ctypes
 import cython
 import ctypes
-from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 
 # import numpy and the Cython declarations for numpy
 import numpy as np
 cimport numpy as np
 
+from numbers import Number
 from enum import Enum
 
 # declare the interface to the C code
@@ -296,12 +296,12 @@ def Object(int phantom_size, objlist):
             
             ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
                                         objectName, 
-                                        obj['C0'], 
-                                        obj['x0'], 
-                                        obj['y0'], 
-                                        obj['b'], 
-                                        obj['a'], 
-                                        obj['phi'], 0)
+                                        float(obj['C0']), 
+                                        float(obj['x0']), 
+                                        float(obj['y0']), 
+                                        float(obj['b']), 
+                                        float(obj['a']), 
+                                        float(obj['phi']), 0)
     return phantom
 
 
@@ -309,26 +309,13 @@ def testParams(obj):
     '''Performs a simple type check of the input parameters and a range check'''
     if not type(obj) is dict:
         raise TypeError('obj is not a dict {0}'.format(type(obj)))
+
     # type check
-    typecheck = type(obj['C0']) is float
-    if not typecheck:
-        raise TypeError('C0 is not a float')
-    typecheck = typecheck and type(obj['x0']) is float
-    if not typecheck:
-        raise TypeError('x0 is not a float')
-    typecheck = typecheck and type(obj['y0']) is float
-    if not typecheck:
-        raise TypeError('y0 is not a float')
-    typecheck = typecheck and type(obj['a']) is float
-    if not typecheck:
-        raise TypeError('a is not a float')
-    typecheck = typecheck and type(obj['b']) is float
-    if not typecheck:
-        raise TypeError('b is not a float')
-    typecheck = typecheck and type(obj['phi']) is float
-    if not typecheck:
-        raise TypeError('phi is not a float')
-    
+    for k,v in obj.items():
+        if not isinstance(v, Number):
+            if not k == 'Obj':
+                raise TypeError(k, 'is not a Number')
+    typecheck = True
     # range check    
     rangecheck = obj['x0'] >= -1 and obj['x0'] <= 1
     if not rangecheck:
