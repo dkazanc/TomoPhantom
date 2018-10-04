@@ -26,7 +26,7 @@ def modelfile2Dtolist(filepath, model):
 #            print (f[i])
             break
         i += 1
-    print (i)
+    #print (i)
     
     objectlist = []
     

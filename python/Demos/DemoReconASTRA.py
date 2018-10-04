@@ -22,7 +22,7 @@ from tomophantom import TomoP2D
 model = 4 # select a model
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
+pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 #objlist = modelfile2Dtolist(pathTP, model) # one can extract parameters
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = TomoP2D.Model(model, N_size, pathTP)

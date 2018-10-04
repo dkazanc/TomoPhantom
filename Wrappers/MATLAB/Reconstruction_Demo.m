@@ -21,7 +21,7 @@ N = 512; % x-y size (squared image)
 % Generate 2D phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
+pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP); 
 figure; imagesc(G, [0 1]); daspect([1 1 1]); colormap hot;
