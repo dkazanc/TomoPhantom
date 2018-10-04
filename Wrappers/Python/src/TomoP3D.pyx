@@ -21,7 +21,8 @@ import ctypes
 import numpy as np
 cimport numpy as np
 
-import ctypes
+#import ctypes
+from numbers import Number
 
 from enum import Enum
 
@@ -248,16 +249,16 @@ def Object(phantom_size, objlist):
 
             ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, 0l, N1,
                                         objectName, 
-                                        obj['C0'], 
-                                        obj['x0'], 
-                                        obj['y0'], 
-                                        obj['z0'], 
-                                        obj['a'], 
-                                        obj['b'], 
-                                        obj['c'], 
-                                        obj['phi1'], 
-                                        obj['phi2'], 
-                                        obj['phi3'], 0)
+                                        np.float32(obj['C0']), 
+                                        np.float32(obj['x0']), 
+                                        np.float32(obj['y0']), 
+                                        np.float32(obj['z0']), 
+                                        np.float32(obj['a']), 
+                                        np.float32(obj['b']), 
+                                        np.float32(obj['c']), 
+                                        np.float32(obj['phi1']), 
+                                        np.float32(obj['phi2']), 
+                                        np.float32(obj['phi3']), 0)
     return phantom
 
 def testParamsPY(obj):
@@ -265,36 +266,41 @@ def testParamsPY(obj):
     if not type(obj) is dict:
         raise TypeError('obj is not a dict {0}'.format(type(obj)))
     # type check
-    typecheck = type(obj['C0']) is float
-    if not typecheck:
-        raise TypeError('C0 is not a float')
-    typecheck = typecheck and type(obj['x0']) is float
-    if not typecheck:
-        raise TypeError('x0 is not a float')
-    typecheck = typecheck and type(obj['y0']) is float
-    if not typecheck:
-        raise TypeError('y0 is not a float')
-    typecheck = typecheck and type(obj['z0']) is float
-    if not typecheck:
-        raise TypeError('z0 is not a float')
-    typecheck = typecheck and type(obj['a']) is float
-    if not typecheck:
-        raise TypeError('a is not a float')
-    typecheck = typecheck and type(obj['b']) is float
-    if not typecheck:
-        raise TypeError('b is not a float')
-    typecheck = typecheck and type(obj['c']) is float
-    if not typecheck:
-        raise TypeError('c is not a float')
-    typecheck = typecheck and type(obj['phi1']) is float
-    if not typecheck:
-        raise TypeError('phi1 is not a float')
-    typecheck = typecheck and type(obj['phi2']) is float
-    if not typecheck:
-        raise TypeError('phi2 is not a float')
-    typecheck = typecheck and type(obj['phi3']) is float
-    if not typecheck:
-        raise TypeError('phi3 is not a float')
+    for k,v in obj.items():
+        if not isinstance(v, Number):
+            if not k == 'Obj':
+                raise TypeError(k, 'is not a Number')
+    typecheck = True
+#    typecheck = type(obj['C0']) is float
+#    if not typecheck:
+#        raise TypeError('C0 is not a float')
+#    typecheck = typecheck and type(obj['x0']) is float
+#    if not typecheck:
+#        raise TypeError('x0 is not a float')
+#    typecheck = typecheck and type(obj['y0']) is float
+#    if not typecheck:
+#        raise TypeError('y0 is not a float')
+#    typecheck = typecheck and type(obj['z0']) is float
+#    if not typecheck:
+#        raise TypeError('z0 is not a float')
+#    typecheck = typecheck and type(obj['a']) is float
+#    if not typecheck:
+#        raise TypeError('a is not a float')
+#    typecheck = typecheck and type(obj['b']) is float
+#    if not typecheck:
+#        raise TypeError('b is not a float')
+#    typecheck = typecheck and type(obj['c']) is float
+#    if not typecheck:
+#        raise TypeError('c is not a float')
+#    typecheck = typecheck and type(obj['phi1']) is float
+#    if not typecheck:
+#        raise TypeError('phi1 is not a float')
+#    typecheck = typecheck and type(obj['phi2']) is float
+#    if not typecheck:
+#        raise TypeError('phi2 is not a float')
+#    typecheck = typecheck and type(obj['phi3']) is float
+#    if not typecheck:
+#        raise TypeError('phi3 is not a float')
     
     # range check    
     rangecheck = obj['x0'] >= -1 and obj['x0'] <= 1
