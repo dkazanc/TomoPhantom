@@ -52,24 +52,8 @@ setup(
                             library_dirs = extra_library_dirs,
                             extra_compile_args = extra_compile_args,
                             libraries = extra_libraries,
-                            extra_link_args = extra_link_args)]),
-    zip_safe = False,
-    include_package_data=True,
-    package_data={'tomophantom':['*.dat','../functions/models/*.dat']},
-    packages = {'tomophantom'}
-)
-
-setup(
-    packages = {'tomophantom', 'tomophantom.supp'}
-)
-
-
-setup(
-    name='tomophantom',
-    description='This is to generate phantom datasets for tomography experiments',
-    version = version,
-    cmdclass = {'build_ext': build_ext},
-    ext_modules = cythonize([ Extension("tomophantom.TomoP2D",
+                            extra_link_args = extra_link_args),
+                            Extension("tomophantom.TomoP2D",
                             sources = [ "src/TomoP2D.pyx",
                                         #"@CMAKE_SOURCE_DIR@/Core/TomoP2DModel_core.c",
                                         #"@CMAKE_SOURCE_DIR@/Core/TomoP2DModelSino_core.c",
@@ -79,10 +63,12 @@ setup(
                             library_dirs = extra_library_dirs,
                             extra_compile_args = extra_compile_args,
                             libraries = extra_libraries,
-                            extra_link_args = extra_link_args)],
-                            gdb_debug=True),
+                            extra_link_args = extra_link_args)
+                            ]),
     zip_safe = False,
     include_package_data=True,
-    package_data={'tomophantom':['*.dat','../functions/models/*.dat']},
-    packages = {'tomophantom'}
+    package_data={'tomophantom':['*.dat']},
+    packages = {'tomophantom', 'tomophantom.supp'}
 )
+
+
