@@ -17,6 +17,7 @@ limitations under the License.
 # cython and ctypes
 import cython
 import ctypes
+#from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 
 # import numpy and the Cython declarations for numpy
 import numpy as np
