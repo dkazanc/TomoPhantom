@@ -99,10 +99,10 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 	psi2 = psi_gr2*((float)M_PI / 180.0f);
 	psi3 = psi_gr3*((float)M_PI / 180.0f);
 
-	float bs[3][3] = {
-		{ 0.0f,0.0f,0.0f },
-		{ 0.0f,0.0f,0.0f },
-		{ 0.0f,0.0f,0.0f } };
+    float bs[3][3] = {
+        {0.0f,0.0f,0.0f},
+        {0.0f,0.0f,0.0f},
+        {0.0f,0.0f,0.0f} };
 
 	float xh[3] = { 0.0f, 0.0f, 0.0f };
 	float xh3[3] = { 0.0f, 0.0f, 0.0f };

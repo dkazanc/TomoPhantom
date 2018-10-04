@@ -10,8 +10,6 @@
 close all;clc;clear;
 % adding paths
 fsep = '/';
-pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
-addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
 ModelNo = 100; % Select a model from Phantom2DLibrary.dat
@@ -21,10 +19,10 @@ N = 512; % x-y size (squared image)
 % Generate 2D+t phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
+pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
-figure(1); imagesc(G, [0 1]); daspect([1 1 1]); title('2D+t model, t=3 here'); colormap hot;
+figure(1); imagesc(G(:,:,3), [0 1]); daspect([1 1 1]); title('2D+t model, t=3 here'); colormap hot;
 %%
 % Lets look at more finely discretized temporal model and related sinograms
 ModelNo = 101; % Select a model from Phantom2DLibrary.dat
@@ -34,7 +32,7 @@ N = 512; % x-y size (squared image)
 % Generate 2D phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
+pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 
@@ -58,7 +56,7 @@ N = 512; % x-y size (squared image)
 timeFrames = 25; %must be the same as in model
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([fsep 'functions' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
+pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 

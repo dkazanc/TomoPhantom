@@ -22,7 +22,7 @@ model = 100
 # Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
 N_size = 256 # or as a tuple of a custom size (256,256,256)
 #specify a full path to the parameters file
-pathTP3 = '../../PhantomLibrary/models/Phantom3DLibrary.dat'
+pathTP3 = '../../../PhantomLibrary/models/Phantom3DLibrary.dat'
 #This will generate a Time x N_size x N_size x N_size phantom (4D)
 phantom_tm = TomoP3D.ModelTemporal(model, N_size, pathTP3)
 toc=timeit.default_timer()
@@ -60,7 +60,7 @@ model = 101
 DIM = (256,256,256) # full dimension of required phantom (z, y, x)
 DIM_z = (94, 158) # selected vertical subset (a slab) of the phantom
 #specify a full path to the parameters file
-pathTP3 = '../../PhantomLibrary/models/Phantom3DLibrary.dat'
+pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
 #This will generate a Time x N1 x N2 x N_slab phantom (4D)
 phantom_tm = TomoP3D.ModelTemporalSub(model, DIM, DIM_z, pathTP3)
 #phantom_tm = TomoP3D.Model(model, DIM, pathTP3)

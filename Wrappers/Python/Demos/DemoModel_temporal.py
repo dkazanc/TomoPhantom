@@ -20,7 +20,7 @@ model = 102  # note that the selected model is temporal (2D + time)
 N_size = 512
 timeframes = 25
 #specify a full path to the parameters file
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
+pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 #This will generate a N_size x N_size x Time frames phantom (2D + time)
 phantom_2Dt = TomoP2D.ModelTemporal(model, N_size, pathTP)
 

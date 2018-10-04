@@ -5,9 +5,9 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts
-Sinograms then reconstructed using ASTRA TOOLBOX and TomoPy packages
+Sinograms then reconstructed using TomoPy package
 
->>>> Prerequisites: ASTRA toolbox and TomoPy packages <<<<<
+>>>> Prerequisites: TomoPy package <<<<<
 
 This demo demonstrates frequent inaccuracies which are accosiated with X-ray imaging:
 zingers, rings and noise
@@ -21,7 +21,7 @@ from tomophantom import TomoP2D
 model = 4 # select a model
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
+pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 #objlist = modelfile2Dtolist(pathTP, model) # one can extract parameters
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = TomoP2D.Model(model, N_size, pathTP)
@@ -70,33 +70,6 @@ plt.rcParams.update({'font.size': 21})
 plt.imshow(noisy_zing_stripe,cmap="gray")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
-#%%
-print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
-print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-
-FBPrec_ideal = Atools.fbp2D(sino_an) # ideal reconstruction
-FBPrec_error = Atools.fbp2D(noisy_zing_stripe) # error reconstruction
-
-plt.figure()
-plt.subplot(121)
-plt.imshow(FBPrec_ideal, vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Ideal reconstruction (ASTRA)')
-plt.subplot(122)
-plt.imshow(FBPrec_error, vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Erroneous Reconstruction (ASTRA)')
-plt.show()
-
-plt.figure() 
-plt.imshow(abs(FBPrec_ideal-FBPrec_error), vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('FBP reconsrtuction differences')
-rmse2 = np.linalg.norm(FBPrec_ideal-FBPrec_error)/np.linalg.norm(FBPrec_error)
 
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
@@ -110,7 +83,6 @@ rot_center = tomopy.find_center(sinoTP, angles_rad, init=290, ind=0, tol=0.5)
 reconTomoPy_ideal = tomopy.recon(sinoTP, angles_rad, center=rot_center, algorithm='gridrec')
 sinoTP[:,0,:] = noisy_zing_stripe
 reconTomoPy_noisy = tomopy.recon(sinoTP, angles_rad, center=rot_center, algorithm='gridrec')
-
 
 plt.figure()
 plt.subplot(121)

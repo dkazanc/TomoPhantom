@@ -10,9 +10,11 @@ Phantom3DLibrary.dat
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
 
 Main difference from DemoModel.py is that we extract all parameters from the 
-library file using Python and then pass it to the Object function instead of model
+library file using Python and then pass it to the Object function instead of model.
+This can be helpful if one would like to avoid using library files and can
+pass parameters directly into object function
 
-Run demo from the folder "Demos"
+!Run script from "Demos" folder in order to ensure a correct path to *dat file!
 
 @author: Daniil Kazantsev
 """
@@ -24,7 +26,7 @@ from libraryToDict import modelfile2Dtolist
 model = 11
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
+pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 objlist = modelfile2Dtolist(pathTP, model) # extract parameters using Python
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = TomoP2D.Object(N_size, objlist)
@@ -38,8 +40,8 @@ plt.title('{}''{}'.format('2D Phantom using model no.',model))
 
 # create sinogram analytically
 angles_num = int(0.5*np.pi*N_size); # angles number
-angles = np.linspace(0,180,angles_num,dtype='float32')
-angles_rad = angles*(np.pi/180)
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
+angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
 
 sino_an = TomoP2D.ObjectSino(N_size, P, angles, objlist)

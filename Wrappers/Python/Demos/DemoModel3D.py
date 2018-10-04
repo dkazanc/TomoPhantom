@@ -17,11 +17,11 @@ import matplotlib.pyplot as plt
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 10
+model = 2
 # Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
 N_size = 256 # or as a tuple of a custom size (256,256,256)
 #specify a full path to the parameters file
-pathTP3 = '../../PhantomLibrary/models/Phantom3DLibrary.dat'
+pathTP3 = '../../../PhantomLibrary/models/Phantom3DLibrary.dat'
 #This will generate a N_size x N_size x N_size phantom (3D) or non-cubic phantom
 phantom_tm = TomoP3D.Model(model, N_size, pathTP3)
 toc=timeit.default_timer()
@@ -56,7 +56,7 @@ model = 3
 DIM = (256,256,256) # full dimension of required phantom (z, y, x)
 DIM_z = (94, 158) # selected vertical subset (a slab) of the phantom
 #specify a full path to the parameters file
-pathTP3 = '../../PhantomLibrary/models/Phantom3DLibrary.dat'
+pathTP3 = '../../functions/models/Phantom3DLibrary.dat'
 #This will generate a N1 x N2 x N_slab phantom (3D)
 phantom_tm = TomoP3D.ModelSub(model, DIM, DIM_z, pathTP3)
 #phantom_tm = TomoP3D.Model(model, DIM, pathTP3)

@@ -22,7 +22,7 @@ from tomophantom import TomoP2D
 model = 1 # selecting a model
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '../../functions/models/Phantom2DLibrary.dat'
+pathTP = '../../PhantomLibrary/models/Phantom2DLibrary.dat'
 #objlist = modelfile2Dtolist(pathTP, model) # one can extract parameters
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = TomoP2D.Model(model, N_size, pathTP)
@@ -56,8 +56,9 @@ plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
 ###################################################################
 # get numerical sinogram
+"""
 tic=timeit.default_timer()
-sino_num = TomoP2D.SinoNum (phantom_2D, P, angles)
+sino_num = TomoP2D.SinoNum(phantom_2D, P, angles)
 toc=timeit.default_timer()
 Run_time = toc - tic
 print("Numerical sinogram has been generated in {} seconds".format(Run_time))
@@ -67,6 +68,7 @@ plt.rcParams.update({'font.size': 21})
 plt.imshow(sino_num,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Numerical sinogram of model no.',model))
+"""
 #%%
 ###################################################################
 # get numerical sinogram (ASTRA-toolbox)
