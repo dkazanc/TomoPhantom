@@ -10,8 +10,6 @@
 close all;clc;clear;
 % adding paths
 fsep = '/';
-pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
-addpath(pathtoModels);
 addpath('compiled'); addpath('supplem'); 
 
 ModelNo = 4; % Select a model from Phantom2DLibrary.dat
