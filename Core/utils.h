@@ -23,9 +23,9 @@ extern "C" {
 #endif
 CCPI_EXPORT float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
 CCPI_EXPORT float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
-CCPI_EXPORT float matrot3(float *Ad, float psi1, float psi2, float psi3);
-CCPI_EXPORT float matvet3(float *Ad, float *V1, float *V2);
-// float matmat3(float *A, float *B, float *C);
+CCPI_EXPORT float matrot3(float Ad[3][3], float psi1, float psi2, float psi3);
+CCPI_EXPORT float matvet3(float Ad[3][3], float V1[3], float V2[3]);
+// CCPI_EXPORT float matmat3(float Am[3][3], float Bm[3][3], float Cm[3][3]);
 #ifdef __cplusplus
 }
 #endif
