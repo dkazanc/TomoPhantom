@@ -26,7 +26,7 @@ from libraryToDict import modelfile2Dtolist
 model = 11
 N_size = 512
 #specify a full path to the parameters file
-pathTP = '../../PhantomLibrary/models/Phantom2DLibrary.dat'
+pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 objlist = modelfile2Dtolist(pathTP, model) # extract parameters using Python
 #This will generate a N_size x N_size phantom (2D)
 phantom_2D = TomoP2D.Object(N_size, objlist)
