@@ -29,13 +29,12 @@
  *
  * Input Parameters:
  * 1. parameters for 3D object
- * 2. Size of the 3D object
+ * 2. DIM volume dimensions [N1,N2,N3] in voxels (N1 x N2 x N3)
  *
  * VolumeSize in voxels (N x N x N)
  *
  * Output:
- * 1. The analytical phantom size of [N x N x N]
- *
+ * 1. The analytical phantom size of [N1 x N2 x N3]
  */
 #define MAXCHAR 1000
 
@@ -44,10 +43,12 @@ void mexFunction(
         int nrhs, const mxArray *prhs[])
         
 {
-    int N;
     float *A;
     char *tmpstr2;
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
+    double *DimAr;
+    mwSize N1, N2, N3;
+    const mwSize *dim_array;
     
     tmpstr2 = mxArrayToString(prhs[0]); /* name of the object */
     C0 = (float) mxGetScalar(prhs[1]); /* intensity */
@@ -60,12 +61,27 @@ void mexFunction(
     psi_gr1 = (float) mxGetScalar(prhs[8]); /* rotation angle 1*/
     psi_gr2 = (float) mxGetScalar(prhs[9]); /* rotation angle 2*/
     psi_gr3 = (float) mxGetScalar(prhs[10]); /* rotation angle 3*/
-    N  = (int) mxGetScalar(prhs[11]); /* choosen dimension (N x N x N) */
+        
+    dim_array = mxGetDimensions(prhs[11]); /* get dimensions of DIM */
+    
+    N1 = 0; N2 = 0; N3 = 0; 
+    if (dim_array[1] == 1) {    
+        N1 = (long) mxGetScalar(prhs[11]);
+		N2 = N1;
+		N3 = N1;
+    }
+    else if (dim_array[1] == 3) {
+        DimAr  = (double*) mxGetData(prhs[11]);
+        N1 = (long)(DimAr[0]);
+		N2 = (long)(DimAr[1]);
+		N3 = (long)(DimAr[2]);
+	}
+	else {mexErrMsgTxt("DIM must be scalar [N] or a vector with 3 elements [N1, N2, N3]");}  
     
     /*Handling Matlab input data*/
     if (nrhs != 12) mexErrMsgTxt("Input of 12 parameters is required");   
     
-    const mwSize N_dims[3] = {N, N, N}; /* image dimensions */
+    const mwSize N_dims[3] = {N1, N2, N3}; /* image dimensions */
     A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); /*output array*/
     
     
@@ -103,6 +119,6 @@ void mexFunction(
         }
     printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
     
-    TomoP3DObject_core(A, N, tmpstr2, C0, x0, y0, z0, b, a, c, -psi_gr1, psi_gr2, psi_gr3, 0); /* Matlab */    
+    TomoP3DObject_core(A, N1, N2, N3, 0l, N3, tmpstr2, C0, x0, y0, z0, b, a, c, -psi_gr1, psi_gr2, psi_gr3, 0); /* Matlab */    
     mxFree(tmpstr2);
 }
