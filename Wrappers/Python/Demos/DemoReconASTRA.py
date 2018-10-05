@@ -18,14 +18,16 @@ zingers, rings and noise
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
+import os
+import tomophantom
 
 model = 4 # select a model
-N_size = 512
-#specify a full path to the parameters file
-pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
-#objlist = modelfile2Dtolist(pathTP, model) # one can extract parameters
-#This will generate a N_size x N_size phantom (2D)
-phantom_2D = TomoP2D.Model(model, N_size, pathTP)
+N_size = 512 # set dimension of the phantom
+# one can specify an exact path to the parameters file
+# path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
+path = os.path.dirname(tomophantom.__file__)
+path_library2D = os.path.join(path, "Phantom2DLibrary.dat")
+phantom_2D = TomoP2D.Model(model, N_size, path_library2D)
 
 plt.close('all')
 plt.figure(1)
@@ -40,7 +42,7 @@ angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
 angles_rad = angles*(np.pi/180.0)
 P = int(np.sqrt(2)*N_size) #detectors
 
-sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
+sino_an = TomoP2D.ModelSino(model, N_size, P, angles, path_library2D)
 
 plt.figure(2)
 plt.rcParams.update({'font.size': 21})
