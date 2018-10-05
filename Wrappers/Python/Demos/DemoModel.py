@@ -17,15 +17,18 @@ install ASTRA: conda install -c astra-toolbox astra-toolbox
 import numpy as np
 import timeit
 import matplotlib.pyplot as plt
+import os
+import tomophantom
 from tomophantom import TomoP2D
 
-model = 1 # selecting a model
-N_size = 512
-#specify a full path to the parameters file
-pathTP = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
-#objlist = modelfile2Dtolist(pathTP, model) # one can extract parameters
+model = 1 # select a model number from the library
+N_size = 512 # set dimension of the phantom
+# one can specify an exact path to the parameters file
+# path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
+path = os.path.dirname(tomophantom.__file__)
+path_library2D = os.path.join(path, "Phantom2DLibrary.dat")
 #This will generate a N_size x N_size phantom (2D)
-phantom_2D = TomoP2D.Model(model, N_size, pathTP)
+phantom_2D = TomoP2D.Model(model, N_size, path_library2D)
 
 plt.close('all')
 plt.figure()
@@ -43,7 +46,7 @@ P = int(np.sqrt(2)*N_size) #detectors
 ###################################################################
 tic=timeit.default_timer()
 # create sinogram analytically
-sino_an = TomoP2D.ModelSino(model, N_size, P, angles, pathTP)
+sino_an = TomoP2D.ModelSino(model, N_size, P, angles, path_library2D)
 toc=timeit.default_timer()
 Run_time = toc - tic
 print("Analytical sinogram has been generated in {} seconds".format(Run_time))

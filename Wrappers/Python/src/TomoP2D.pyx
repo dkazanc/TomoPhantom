@@ -26,6 +26,8 @@ cimport numpy as np
 from numbers import Number
 from enum import Enum
 
+import sys
+
 # declare the interface to the C code
 cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* ModelParametersFilename)
 cdef extern float TomoP2DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
@@ -240,7 +242,10 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
     for obj in objlist:
         if testParams(obj):
             
-            objectName = bytes(obj['Obj'].value, 'ascii')
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
             ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn,
                                         objectName, 
                                         obj['C0'], 
@@ -293,7 +298,10 @@ def Object(int phantom_size, objlist):
     for obj in objlist:
         if testParams(obj):
             
-            objectName = bytes(obj['Obj'].value, 'ascii')
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
             
             ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
                                         objectName, 

@@ -25,6 +25,8 @@ from numbers import Number
 
 from enum import Enum
 
+import sys
+
 # declare the interface to the C code
 cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char* ModelParametersFilename)
 cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
@@ -244,7 +246,10 @@ def Object(phantom_size, objlist):
         
     for obj in objlist:
         if testParamsPY(obj):
-            objectName = bytes(obj['Obj'].value, 'ascii')
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
 
             ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, 0l, N1,
                                         objectName, 
