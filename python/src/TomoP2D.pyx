@@ -19,6 +19,8 @@ import cython
 import ctypes
 from cpython.mem cimport PyMem_Malloc, PyMem_Realloc, PyMem_Free
 
+import sys
+
 # import numpy and the Cython declarations for numpy
 import numpy as np
 cimport numpy as np
@@ -238,8 +240,10 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
         objlist = [objlist]
     for obj in objlist:
         if testParams(obj):
-            
-            objectName = bytes(obj['Obj'].value, 'ascii')
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
             ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn,
                                         objectName, 
                                         obj['C0'], 
@@ -291,8 +295,10 @@ def Object(int phantom_size, objlist):
         
     for obj in objlist:
         if testParams(obj):
-            
-            objectName = bytes(obj['Obj'].value, 'ascii')
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
             
             ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
                                         objectName, 

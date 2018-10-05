@@ -17,6 +17,8 @@ limitations under the License.
 import cython
 import ctypes
 
+import sys
+
 # import numpy and the Cython declarations for numpy
 import numpy as np
 cimport numpy as np
@@ -244,7 +246,10 @@ def Object(phantom_size, objlist):
         
     for obj in objlist:
         if testParamsPY(obj):
-            objectName = bytes(obj['Obj'].value, 'ascii')
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
 
             ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, 0l, N1,
                                         objectName, 
