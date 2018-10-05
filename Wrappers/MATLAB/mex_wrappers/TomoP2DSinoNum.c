@@ -38,7 +38,7 @@
  * Sinogram [No. angles] x [No. detectors]
  *
  * mex ForwardProjNum.c CFLAGS="\$CFLAGS -fopenmp -Wall -std=c99" LDFLAGS="\$LDFLAGS -fopenmp"
- * sinogram = ForwardProjNum(single(G), P, single(angles));
+ * sinogram = TomoP2DSinoNum(single(G), P, single(angles));
  */
 
 void mexFunction(

@@ -45,7 +45,7 @@
 float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys)
 {    
 	int i, j, k, padXY;
-	float *Phantom_pad=NULL, *B=NULL,  angC, ct, st, sumSin;
+	float *Phantom_pad=NULL, *B=NULL,  angC, sumSin;
     
     padXY = ceil(0.5f*(DetSize - dimX)); /*Size for padding the phantom*/ 
     
@@ -53,17 +53,32 @@ float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize
     Phantom_pad = (float*) calloc(DetSize*DetSize,sizeof(float));  /*allocating space*/
     padding(Phantom, Phantom_pad, DetSize, dimX, padXY, sys);
     
+    /*calculation of the Center of Gravity of an image */
+    float COG_X=0.0f, COG_Y=0.0f, total=0.0f;
+    for (i=0; i < DetSize; i++) {
+        for (j=0; j < DetSize; j++) {
+         COG_X += Phantom_pad[j*DetSize+i]*i;
+         COG_Y += Phantom_pad[j*DetSize+i]*j;
+         total += Phantom_pad[j*DetSize+i];
+        }
+    }
+    COG_X = COG_X/total;
+    COG_Y = COG_Y/total;    
+    printf("%f %f \n", COG_X, COG_Y);
+    
+    
     /* setting OMP here */
-    #pragma omp parallel for shared (Phantom_pad, Sinogram, dimX, DetSize, Theta, ThetaLength) private(B, k, j, i, sumSin, angC, ct, st)    
+    #pragma omp parallel for shared (Phantom_pad, Sinogram, dimX, DetSize, Theta, ThetaLength, COG_X, COG_Y) private(B, k, j, i, sumSin, angC)    
     for (k=0; k < ThetaLength; k++) {
         
         B = (float*) calloc(DetSize*DetSize,sizeof(float));
         
         angC = Theta[k]*M_PI/180.0f;
-        ct = cos(angC + 0.5f*M_PI);
-        st = sin(angC + 0.5f*M_PI);
+        //ct = cos(angC + 0.5f*M_PI);
+        //st = sin(angC + 0.5f*M_PI);
         
-        BilinearInterpolation(Phantom_pad, B, DetSize, ct, st); /* perform interpolation to rotate image on angle angC */
+        // BilinearInterpolation(Phantom_pad, B, DetSize, ct, st); /* perform interpolation to rotate image on angle angC */
+        BilinearInterpolationV2(Phantom_pad, B, DetSize, angC, COG_X, COG_Y); /* perform interpolation to rotate an image on the angle angC */
         
         for (j=0; j < DetSize; j++) {
             sumSin = 0.0f;
@@ -79,14 +94,15 @@ float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize
    return  *Sinogram;     
 }    
 
-float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct, float st)
+/*
+float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float radian, float st)
 {
+	
     int i, j, k, i0, j0, i1, j1;
     float *xs, H_x, s_min, s_max, stepS, x_rs, y_rs, dhalf, xbar, ybar;
     dhalf = 0.5f*DetSize;
     
-    xs = (float*)calloc(DetSize,sizeof(float));
-    /*calculate grid*/
+    xs = (float*)calloc(DetSize,sizeof(float));   
     H_x = 1.0f/DetSize;
     s_min = -1.0f + H_x;
     s_max = 1.0f - H_x;
@@ -112,10 +128,59 @@ float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct,
             if ((i0 < DetSize) && (j0 < DetSize)) {
                 B[i*DetSize+j] = Phantom_pad[i0*DetSize+j0]*(1.-xbar)*(1.-ybar)+Phantom_pad[(i0+1)*DetSize+j0]*ybar*(1.-xbar)+Phantom_pad[i0*DetSize+(j0+1)]*xbar*(1.-ybar)+Phantom_pad[(i0+1)*DetSize+(j0+1)]*xbar*ybar;
             }
-        }}
+        }}    
     free(xs);
     return *B;
 }
+*/
+float BilinearInterpolationV2(float *Phantom_pad, float *B, int DetSize, float radian, float COG_X, float COG_Y)
+{
+    // radian = angle as rad (2*PI*{angle in deg})/360)
+	// COGPosX & COGPosY are the Centre of Gravity pos for the Input Matrix
+	// SliceMatrix is the un-rotated input Matrix
+	int y,x, rotX, rotY, xfloor, yfloor;
+    float rotatedX, rotatedY, p1, p2, p3, p4, f1, f2, fval, COGPosX, COGPosY;
+    
+    float cosine = (float)cos(radian);
+	float sine = (float)sin(radian);
+	
+	COGPosX = COG_X;
+	COGPosY = COG_Y;
+
+	for(y=0;y<DetSize;y++)	{
+		for(x=0;x<DetSize;x++)    {
+			
+        // Calculate rotated Matrix positions
+        rotatedX=(float)((x-COGPosX)*cosine)-((y-COGPosY)*sine)+COGPosX;
+        rotatedY=(float)((x-COGPosX)*sine)+((y-COGPosY)*cosine)+COGPosY;
+
+                
+        rotX = (int)floor(rotatedX);
+        rotY = (int)floor(rotatedY);
+
+        xfloor = floor(rotatedX);
+        yfloor = floor(rotatedY);
+                
+        if(rotX >=0 && rotY < DetSize-1 && rotY >=0 && rotY < DetSize-1 )
+        {
+            // Bilinear interpolation part
+            p1 = Phantom_pad[rotX+(DetSize*rotY)];         // 0,0
+            p2 = Phantom_pad[rotX+(DetSize*(rotY+1))];     // 0,1
+            p3 = Phantom_pad[(rotX+1)+(DetSize*rotY)];     // 1,0
+            p4 = Phantom_pad[(rotX+1)+(DetSize*(rotY+1))]; // 1,1
+
+            f1 = p1 + (p3-p1)*(rotatedX-xfloor);
+            f2 = p2 + (p4-p2)*(rotatedX-xfloor);
+            fval = f1 + (f2-f1)*(rotatedY-yfloor);
+
+            B[x+(DetSize*y)]= fval; 
+        }    
+    }
+}       
+    return *B;
+}
+
+
 
 float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY, int sys)
 {

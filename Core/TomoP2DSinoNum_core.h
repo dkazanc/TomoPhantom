@@ -20,5 +20,6 @@ limitations under the License.
 #include "CCPiDefines.h"
 
 CCPI_EXPORT float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys);
-CCPI_EXPORT float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct, float st);
+//CCPI_EXPORT float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct, float st);
+CCPI_EXPORT float BilinearInterpolationV2(float *Phantom_pad, float *B, int DetSize, float radian, float COG_X, float COG_Y);
 CCPI_EXPORT float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY, int sys);
