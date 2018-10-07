@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A class based on using ASTRA toolbox to perform projection/bakprojection and 
-also some reconstruction algorithms
--- currently 2D parallel beam
+Class based on using ASTRA toolbox to perform projection/bakprojection of 2D/3D
+data using parallel beam geometry 
+- SIRT algorithm from ASTRA also added
 """
 
 import astra
 
 class AstraTools:
-    """A simple 2D parallel beam projection/backprojection class based on ASTRA toolbox"""
+    """2D parallel beam projection/backprojection class based on ASTRA toolbox"""
     def __init__(self, DetectorsDim, AnglesVec, ObjSize, device):
         self.DetectorsDim = DetectorsDim
         self.AnglesVec = AnglesVec
@@ -87,3 +87,23 @@ class AstraTools:
         astra.data2d.delete(sinogram_id)
         astra.data2d.delete(self.proj_id)
         return recSIRT
+class AstraTools3D:
+    """3D parallel beam projection/backprojection class based on ASTRA toolbox"""
+    def __init__(self, DetRows, DetColumns, AnglesVec, ObjSize):
+        self.ObjSize = ObjSize
+        self.proj_geom = astra.create_proj_geom('parallel3d', 1.0, 1.0, DetRows, DetColumns, AnglesVec)
+        if type(ObjSize) == tuple:
+            N1,N2,N3 = [int(i) for i in ObjSize]
+        else:
+            N1 = N2 = N3 = ObjSize
+        self.vol_geom = astra.create_vol_geom(N3, N2, N1)
+    def forwproj(self, object3D):
+        """Applying forward projection"""
+        proj_id, proj_data = astra.create_sino3d_gpu(object3D, self.proj_geom, self.vol_geom)
+        astra.data3d.delete(proj_id)
+        return proj_data
+    def backproj(self, proj_data):
+        """Applying backprojection"""
+        rec_id, object3D = astra.create_backprojection3d_gpu(proj_data, self.proj_geom, self.vol_geom)
+        astra.data3d.delete(rec_id)
+        return object3D
