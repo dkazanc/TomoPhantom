@@ -24,7 +24,7 @@ import numpy
 import platform	
 #import sys
 
-version = '1.1'
+version = '1.1.0'
 extra_include_dirs = [numpy.get_include(), '@CMAKE_SOURCE_DIR@/Core']
 extra_library_dirs = ['@LIBRARY_LIB@']
 extra_compile_args = []

@@ -33,7 +33,7 @@ cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* Mo
 cdef extern float TomoP2DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
 cdef extern float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 cdef extern float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
-cdef extern float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys)
+cdef extern float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sy)
 cdef extern float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
 
 cdef packed struct object_2d:
@@ -291,7 +291,12 @@ def Object(int phantom_size, objlist):
     """
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
-    
+    cdef float c0 
+    cdef float x0 
+    cdef float y0 
+    cdef float a 
+    cdef float b 
+    cdef float p1 
     if type(objlist) is dict:
         objlist = [objlist]
         
@@ -302,15 +307,15 @@ def Object(int phantom_size, objlist):
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
-            
+            c0 = obj['C0'] 
+            x0 = obj['x0']
+            y0 = obj['y0'] 
+            a = obj['a'] 
+            b = obj['b'] 
+            p1 = obj['phi']
             ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
                                         objectName, 
-                                        float(obj['C0']), 
-                                        float(obj['x0']), 
-                                        float(obj['y0']), 
-                                        float(obj['b']), 
-                                        float(obj['a']), 
-                                        float(obj['phi']), 0)
+                                        c0,x0,y0,a,b,p1,0)
     return phantom
 
 

@@ -69,7 +69,7 @@ if (PYTHONINTERP_FOUND)
                                                        ${PYTHON_EXECUTABLE} ${SETUP_PY} install
                        COMMAND ${CMAKE_COMMAND} -E touch ${OUTPUT}
                        DEPENDS ctomophantom)
-      add_custom_target(PythonWrapper ALL DEPENDS ${OUTPUT})
+       add_custom_target(PythonWrapper ALL DEPENDS ${OUTPUT} ${DEPS})
 
     else()
       add_custom_command(OUTPUT ${OUTPUT}
@@ -85,7 +85,7 @@ if (PYTHONINTERP_FOUND)
                        DEPENDS ctomophantom
                        )
                        
-      add_custom_target(PythonWrapper ALL DEPENDS ${OUTPUT})
+                   add_custom_target(PythonWrapper ALL DEPENDS ${OUTPUT} ${DEPS} )
       install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/tomophantom 
               DESTINATION ${PYTHON_DEST})
       if (WIN32)

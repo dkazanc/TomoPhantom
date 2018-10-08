@@ -241,28 +241,42 @@ def Object(phantom_size, objlist):
 
     cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([N1, N2, N3], dtype='float32')
     cdef float ret_val
+    cdef float c0 
+    cdef float x0
+    cdef float y0
+    cdef float z0
+    cdef float a
+    cdef float b
+    cdef float c
+    cdef float p1
+    cdef float p2
+    cdef float p3
     if type(objlist) is dict:
         objlist = [objlist]
         
     for obj in objlist:
         if testParamsPY(obj):
-            if sys.version_info.major == 3:
-                objectName = bytes(obj['Obj'].value, 'ascii')
-            elif sys.version_info.major == 2:
+            try:
+                if sys.version_info.major == 3:
+                    objectName = bytes(obj['Obj'].value, 'ascii')
+                elif sys.version_info.major == 2:
+                    objectName = bytes(obj['Obj'].value)
+            except TypeError as ve:
+                print ("caugth " , ve)
                 objectName = bytes(obj['Obj'].value)
-
+            c0 = float(obj['C0'])
+            x0 = float(obj['x0'])
+            y0 = float(obj['y0'])
+            z0 = float(obj['z0'])
+            a = float(obj['a'])
+            b = float(obj['b'])
+            c = float(obj['c'])
+            p1 = float(obj['phi1'])
+            p2 = float(obj['phi2'])
+            p3 = float(obj['phi3'])
             ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, 0l, N1,
                                         objectName, 
-                                        float(obj['C0']),
-                                        float(obj['x0']),
-                                        float(obj['y0']),
-                                        float(obj['z0']),
-                                        float(obj['a']),
-                                        float(obj['b']),
-                                        float(obj['c']), 
-                                        float(obj['phi1']),
-                                        float(obj['phi2']), 
-                                        float(obj['phi3']), 0)
+                                        c0, x0,y0,z0,a,b,c,p1,p2,p3,0)
     return phantom
 
 def testParamsPY(obj):
