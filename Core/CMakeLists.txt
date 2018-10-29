@@ -24,7 +24,7 @@ if (OPENMP_FOUND)
 endif()
 
 ## Build the regularisers package as a library
-message("Creating Regularisers as a shared library")
+message("Building TomoPhantom as a shared library")
 
 message("CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}")
 message("CMAKE_C_FLAGS ${CMAKE_C_FLAGS}")
@@ -62,7 +62,7 @@ endif()
 message("CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}")
 
 ## Build the regularisers package as a library
-message("Adding regularisers as a shared library")
+message("Building TomoPhantom as a shared library")
 
 #set(CMAKE_C_COMPILER /apps/pgi/linux86-64/17.4/bin/pgcc)
 #set(CMAKE_C_FLAGS "-acc -Minfo -ta=tesla:cc20 -openmp")
