@@ -12,7 +12,7 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 if (BUILD_MATLAB_WRAPPER)
-    add_subdirectory(Matlab)
+    add_subdirectory(MATLAB)
 endif()
 if (BUILD_PYTHON_WRAPPER)
     add_subdirectory(Python)

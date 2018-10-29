@@ -31,19 +31,24 @@
  * Python (tested ver. 2.7/3.5); Cython OR
  * [MATLAB](www.mathworks.com/products/matlab/) 
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
+ * [CMake](https://cmake.org) (if this installation route is chosen)
 
 ### Other (optional) dependencies:
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
  * [TomoPy](http://tomopy.readthedocs.io)
 
 ## Installation:
+### Cmake
+ * The package comes as a [CMake](https://cmake.org) project so you will need CMake to configure it. We provide wrappers for Python and Matlab.
+ * In linux, see ```run.sh``` script which you can run as ```bash run.sh```
+ * For detailed installation information using Cmake, see [CCPi-RGL toolkit](https://github.com/vais-ral/CCPi-Regularisation-Toolkit/)
 
-### Python (conda-build is preferrable)
+### Python (conda-build)
 ```
 	conda build conda-recipe --numpy 1.12 --python 3.5
 	conda install tomophantom --use-local --force
 ```
-### Matlab 
+### Matlab (possible OS-incompatability issues)
 ```
 	run compile_mex_linux.m % to compile CPU modules on linux
 	run compile_mex_windows.m % to compile CPU modules on Windows
