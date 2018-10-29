@@ -15,7 +15,7 @@ cmake ../ -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_P
 # in some cases if Matlab not found you need to give a path to ROOT dir, e.g.:
 # cmake ../ -DCONDA_BUILD=OFF -DMatlab_ROOT_DIR=/home/algol/matlab2016/ -DBUILD_MATLAB_WRAPPER=ON -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
 make install
-cd install/python/
+cd build/install/python/
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:.
 #spyder
 # one can run Matlab in Linux as:

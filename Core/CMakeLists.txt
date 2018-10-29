@@ -71,8 +71,9 @@ add_library(ctomophantom "SHARED"
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DModel_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DModelSino_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP3DModel_core.c
-	    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
+	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP3DModelSino_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DSinoNum_core.c
+	    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
 		)
 #add_library(ctomophantom_static "STATIC"
 #	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DModel_core.c

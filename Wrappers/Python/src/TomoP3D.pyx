@@ -30,9 +30,9 @@ import sys
 # declare the interface to the C code
 cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char* ModelParametersFilename)
 cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
+cdef extern float TomoP3DModelSino_core(float *A, int ModelSelected, long U_dim, long V_dim, long N, float *Theta_proj, int AngTot, char* ModelParametersFilename)
+cdef extern float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Angl_vector, int AngTot, char *Object,float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
 cdef extern float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
-#cdef extern float buildSino3D_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
-#cdef extern float buildSino3D_core_single(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, int Object, float C0, float x0, float y0, float z0, float a, float b, float c, float phi_rot)
     
 cdef packed struct object_3d:
     char[22] Obj
@@ -264,6 +264,35 @@ def Object(phantom_size, objlist):
                                         float(obj['phi2']), 
                                         float(obj['phi3']), 0)
     return phantom
+def ModelSino(int model_id, phantom_size, U_dim_detector, V_dim_detector, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
+    """  
+    returns: numpy float32 phantom array    
+    """
+    cdef long N,U_dim,V_dim
+    if type(phantom_size) == tuple:
+       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
+    
+    N = phantom_size
+    U_dim = U_dim_detector
+    V_dim = V_dim_detector
+    
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([angles.shape[0], V_dim, U_dim], dtype='float32')
+    cdef float ret_val
+    cdef int AngTot = angles.shape[0]
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    if params[3] == 1:
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, U_dim, V_dim, N, &angles[0], AngTot, c_string)
+    else:
+        print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
+    return projdata
+@cython.boundscheck(False)
+@cython.wraparound(False)
+
 
 def testParamsPY(obj):
     '''Performs a simple type check of the input parameters and a range check'''
