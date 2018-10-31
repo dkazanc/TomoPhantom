@@ -47,35 +47,33 @@ void mexFunction(
     int ModelSelected, AngTot;
     float *A, *Theta_proj;
     mwSize  NStructElems, N, U_dim, V_dim;
-    char *ModelParameters_PATH;
-    const mwSize *dim_array;
-    
+    //char *ModelParameters_PATH;
+    const mwSize *dim_array;    
     
     ModelSelected  = (int) mxGetScalar(prhs[0]); /* selected model */
     U_dim  = (int) mxGetScalar(prhs[1]); /* chosen detector dimension U */
     V_dim  = (int) mxGetScalar(prhs[2]); /* chosen detector dimension V */
     N = (int) mxGetScalar(prhs[3]); /* the size of the tomogram */
     Theta_proj  = (float*) mxGetData(prhs[4]); /* vector of angles */
-    ModelParameters_PATH = mxArrayToString(prhs[5]); /* provide an absolute path to the file */      
-    
-        
+    // ModelParameters_PATH = mxArrayToString(prhs[5]); /* provide an absolute path to the file */      
+           
     /*Handling Matlab input data*/
     // if (nrhs != 3) mexErrMsgTxt("Input of 3 parameters is required: model, DIMensions, PATH");    
     AngTot = mxGetNumberOfElements(prhs[4]);
             
-    dim_array = mxGetDimensions(prhs[N]); /* get dimensions of DIM */ 
+    // printf("%i", AngTot);
+    dim_array = mxGetDimensions(prhs[3]); /* get dimensions of DIM */ 
     if (dim_array[1] > 1) mexErrMsgTxt("A scalar for [N] must be provided assuming a cubic input phantom (model)");    
         
-    ModelSelected  = (int) mxGetScalar(prhs[0]); /* selected model from Phantom3DLibrary */            
     int Model=0, Components=0, steps = 0, counter=0, ii;
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, z0 = 0.0f, a = 0.0f, b = 0.0f, c = 0.0f, psi_gr1 = 0.0f, psi_gr2 = 0.0f, psi_gr3 = 0.0f;
      
     char *filename;
     FILE * fp;
-    if(!mxIsChar(prhs[2]) ) {
+    if(!mxIsChar(prhs[5]) ) {
          mexErrMsgTxt("Need filename absolute path string input.");
     }
-    filename = mxArrayToString(prhs[2]);
+    filename = mxArrayToString(prhs[5]);
     fp= fopen(filename, "rb");
     mxFree(filename);
     if( fp == NULL ) {
@@ -192,7 +190,7 @@ void mexFunction(
                                      break; }
                                  printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
 
-	              TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);       
+	               TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);       
                              }
                          }
                          else {
@@ -370,7 +368,7 @@ void mexFunction(
          mexErrMsgTxt("No object found, check models file"); 
      }
      
-     mxFree(ModelParameters_PATH);  
+     //mxFree(ModelParameters_PATH);  
 }    
     
     
