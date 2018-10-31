@@ -43,7 +43,7 @@
 *
 */
 
-float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Theta_proj, int AngTot, char *Object,
+float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, float *Theta_proj, int AngTot, char *Object,
 	float C0, /* intensity */
 	float x0, /* x0 position */
 	float y0, /* y0 position */
@@ -59,27 +59,27 @@ float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Th
 {
     int ll;
     long i, j, k, index;    
-    float *DetectorRange_U_ar=NULL, DetectorRange_Umin, DetectorRange_Umax, *DetectorRange_V_ar=NULL, DetectorRange_Vmin, DetectorRange_Vmax, U_step, V_step, C1, C00, a1, b1, a22, b22, c2;
+    float *DetectorRange_Horiz_ar=NULL, DetectorRange_Umin, DetectorRange_Umax, *DetectorRange_Vert_ar=NULL, DetectorRange_Vmin, DetectorRange_Vmax, U_step, V_step, C1, C00, a1, b1, a22, b22, c2;
     
     float *AnglesRad=NULL;
     float Tomorange_Xmin, Tomorange_Xmax, H_x, multiplier;
     float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00, z00, a2, b2;
     float pi22  = M_PI/2.0f;
     
-    DetectorRange_Umax = (float)(U_dim)/(float)(N+1);
+    DetectorRange_Umax = (float)(Horiz_det)/(float)(N+1);
     DetectorRange_Umin = -DetectorRange_Umax;
     
-    DetectorRange_Vmax = (float)(V_dim)/(float)(N+1);
+    DetectorRange_Vmax = (float)(Vert_det)/(float)(N+1);
     DetectorRange_Vmin = -DetectorRange_Vmax;
     
-    DetectorRange_U_ar = malloc(U_dim*sizeof(float));
-    DetectorRange_V_ar = malloc(V_dim*sizeof(float));
+    DetectorRange_Horiz_ar = malloc(Horiz_det*sizeof(float));
+    DetectorRange_Vert_ar = malloc(Vert_det*sizeof(float));
     
-    U_step = (DetectorRange_Umax - DetectorRange_Umin)/(float)(U_dim-1);
-    V_step = (DetectorRange_Vmax - DetectorRange_Vmin)/(float)(V_dim-1);
+    U_step = (DetectorRange_Umax - DetectorRange_Umin)/(float)(Horiz_det-1);
+    V_step = (DetectorRange_Vmax - DetectorRange_Vmin)/(float)(Vert_det-1);
     
-    for(i=0; i<U_dim; i++) {DetectorRange_U_ar[i] = (DetectorRange_Umax) - (float)i*U_step;}
-    for(i=0; i<V_dim; i++) {DetectorRange_V_ar[i] = (DetectorRange_Vmax) - (float)i*V_step;}
+    for(i=0; i<Horiz_det; i++) {DetectorRange_Horiz_ar[i] = (DetectorRange_Umax) - (float)i*U_step;}
+    for(i=0; i<Vert_det; i++) {DetectorRange_Vert_ar[i] = (DetectorRange_Vmax) - (float)i*V_step;}
     
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
@@ -93,9 +93,14 @@ float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Th
     multiplier = (C0*(N/2.0f));
     
     /* fix for centering */
-        x00 = x0 - 0.5f*H_x;
-        y00 = y0 - 0.5f*H_x;
-        z00 = z0 - 0.5f*H_x;
+    
+//    if (strcmp("ellipsoid",Object) == 0) {
+    //}
+//    else {
+   x00 = x0 - 1.0f*H_x;
+   y00 = y0 - 1.0f*H_x;
+   z00 = z0 - 0.5f*H_x;
+  //  }
 
     /* parameters of an object have been extracted, now run the building module */
     /************************************************/
@@ -180,12 +185,12 @@ float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Th
                     vh1[0]=0.0f;
                     
                     /* the object is an ellipsoid */
-                    for(j=0; j<U_dim; j++) {
-                        for(k=0; k<V_dim; k++) {
-                            index = ll*V_dim*U_dim + j*V_dim + k;
+                    for(j=0; j<Horiz_det; j++) {
+                        for(k=0; k<Vert_det; k++) {
+                            index = ll*Vert_det*Horiz_det + j*Vert_det + k;
                             
-                            vh1[2]=DetectorRange_V_ar[k];
-                            vh1[1]=DetectorRange_U_ar[j];
+			    vh1[1]=DetectorRange_Horiz_ar[j];
+                            vh1[2]=DetectorRange_Vert_ar[k];                           
                             
                             matvet3(bsai,vh1,al);
                             
@@ -391,13 +396,13 @@ float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Th
                 // free(Zdel); free(Zdel2);
                 /************************************************/
                 free(AnglesRad); 
-                free(DetectorRange_U_ar); 
-                free(DetectorRange_V_ar);
+                free(DetectorRange_Horiz_ar); 
+                free(DetectorRange_Vert_ar);
                 return *A;
 }
 
 /********************Core Function*****************************/
-float TomoP3DModelSino_core(float *A, int ModelSelected, long U_dim, long V_dim, long N, float *Angl_vector, int AngTot, char* ModelParametersFilename)
+float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long N, float *Angl_vector, int AngTot, char* ModelParametersFilename)
 {
 
 	int Model = 0, Components = 0, steps = 0, counter = 0, ii;
@@ -482,7 +487,9 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long U_dim, long V_dim,
 
 								// TomoP3DObject_core(A, N1, N2, N3, Z1, Z2, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0l); 
 								
-								TomoP3DObjectSino_core(A, U_dim, V_dim, N, Angl_vector, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, -psi_gr1, -psi_gr2, -psi_gr3, 0l);
+//				TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, -psi_gr1, -psi_gr2, -psi_gr3, 0l);
+				TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, psi_gr2, -psi_gr1, 0l);
+//				TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, -z0, x0, -y0, b, a, c, psi_gr3, psi_gr2, -psi_gr1, 0l);
 							}
 						}
 						else {
@@ -560,7 +567,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long U_dim, long V_dim,
 								for (tt = 0; tt < (long)steps; tt++) {
 
 									//TomoP3DObject_core(A, N1, N2, N3, Z1, Z2, tmpstr2, C_t, y_t, x_t, z_t, a_t, b_t, c_t, phi1_t, phi2_t, phi3_t, tt); /* python */
-								 // TomoP3DObjectSino_core(A, U_dim, V_dim, N, Angl_vector, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2,
+								 // TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2,
 																																					   /* calculating new coordinates of an object */
 									if (distance != 0.0f) {
 										float t = d_step / distance;

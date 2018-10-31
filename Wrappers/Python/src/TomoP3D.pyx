@@ -184,7 +184,7 @@ def ModelTemporalSub(int model_id, phantom_size, sub_index, str model_parameters
     param: sub_index -- a tuple containing 2 indeces [lower, upper] to select a vertical subset needed to be extracted
     param: model_id -- a model id from the functions file 
     
-    returns: numpy float32 phantom array    
+    returns: numpy float32 phantom array
     """
     cdef long N1,N2,N3
     if type(phantom_size) == tuple:
@@ -264,19 +264,24 @@ def Object(phantom_size, objlist):
                                         float(obj['phi2']), 
                                         float(obj['phi3']), 0)
     return phantom
-def ModelSino(int model_id, phantom_size, U_dim_detector, V_dim_detector, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
+def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
     """  
+    Create 3D or 4D analytical projection data of the dimension [] 
+    
+    Takes in a input model_id. phantom_size, 
+    
+    param: model_parameters_filename -- filename for the model parameters
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: sub_index -- a tuple containing 2 indeces [lower, upper] to select a vertical subset needed to be extracted
+    param: model_id -- a model id from the functions file 
+    
     returns: numpy float32 phantom array    
     """
     cdef long N,U_dim,V_dim
     if type(phantom_size) == tuple:
        raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
     
-    N = phantom_size
-    U_dim = U_dim_detector
-    V_dim = V_dim_detector
-    
-    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([angles.shape[0], V_dim, U_dim], dtype='float32')
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([angles.shape[0], Horiz_det, Vert_det], dtype='float32')
     cdef float ret_val
     cdef int AngTot = angles.shape[0]
     py_byte_string = model_parameters_filename.encode('UTF-8')
@@ -286,13 +291,12 @@ def ModelSino(int model_id, phantom_size, U_dim_detector, V_dim_detector, np.nda
     checkParams3D(&params[0], model_id, c_string)
     testParams3D(params) # check parameters and terminate before running the core
     if params[3] == 1:
-        ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, U_dim, V_dim, N, &angles[0], AngTot, c_string)
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, phantom_size, &angles[0], AngTot, c_string)
     else:
         print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
     return projdata
 @cython.boundscheck(False)
 @cython.wraparound(False)
-
 
 def testParamsPY(obj):
     '''Performs a simple type check of the input parameters and a range check'''

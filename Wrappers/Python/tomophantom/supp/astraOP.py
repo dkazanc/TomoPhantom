@@ -3,7 +3,7 @@
 """
 Class based on using ASTRA toolbox to perform projection/bakprojection of 2D/3D
 data using parallel beam geometry 
-- SIRT algorithm from ASTRA also added
+- SIRT algorithm from ASTRA 
 """
 
 import astra
@@ -89,9 +89,9 @@ class AstraTools:
         return recSIRT
 class AstraTools3D:
     """3D parallel beam projection/backprojection class based on ASTRA toolbox"""
-    def __init__(self, DetRows, DetColumns, AnglesVec, ObjSize):
+    def __init__(self, DetRowCount, DetColumnCount, AnglesVec, ObjSize):
         self.ObjSize = ObjSize
-        self.proj_geom = astra.create_proj_geom('parallel3d', 1.0, 1.0, DetRows, DetColumns, AnglesVec)
+        self.proj_geom = astra.create_proj_geom('parallel3d', 1.0, 1.0, DetRowCount, DetColumnCount, AnglesVec)
         if type(ObjSize) == tuple:
             N1,N2,N3 = [int(i) for i in ObjSize]
         else:

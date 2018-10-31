@@ -146,6 +146,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 					if (strcmp("paraboloid", Object) == 0) {
 						/* the object is a parabola Lambda = 1/2 */
 						if (T <= 1.0f) T = C0*sqrtf(1.0f - T);
+//						if (T <= 1.0f) T = C0*(1.0f - T);
 						else T = 0.0f;
 					}
 					if (strcmp("ellipsoid", Object) == 0) {

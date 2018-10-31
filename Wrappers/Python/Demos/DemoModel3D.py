@@ -19,7 +19,7 @@ import tomophantom
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 2 # select a model number from the library
+model = 16 # select a model number from the library
 # Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
 N_size = 256 # or as a tuple of a custom size (256,256,256)
 # one can specify an exact path to the parameters file
@@ -47,6 +47,32 @@ plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
 plt.title('3D Phantom, sagittal view')
 plt.show()
 
+#%%
+import numpy as np
+
+print ("Building 3D analytical projection data with TomoPhantom")
+U_dim = 300 # detector column count (vertical)
+V_dim = 280 # detector row count (horizontal)
+angles_num = 360 # angles number
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
+
+proj_data3D = TomoP3D.ModelSino(model, N_size, U_dim, V_dim, angles, path_library3D)
+
+sliceSel = 200
+#plt.gray()
+plt.figure(1) 
+plt.subplot(131)
+plt.imshow(proj_data3D[sliceSel,:,:],vmin=0, vmax=100)
+plt.title('2D Projection')
+
+plt.subplot(132)
+plt.imshow(proj_data3D[:,sliceSel,:],vmin=0, vmax=100)
+plt.title('Sinogram view')
+
+plt.subplot(133)
+plt.imshow(proj_data3D[:,:,sliceSel],vmin=0, vmax=100)
+plt.title('Tangentogram view')
+plt.show()
 #%%
 # The capability of building a subset of vertical slices out of 3D phantom (faster)
 import timeit
