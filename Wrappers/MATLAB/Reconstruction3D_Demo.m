@@ -17,7 +17,7 @@ pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Pha
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
 % generate a 3D phantom 
-N = 256;
+N = 512;
 ModelNo = 16;
 [G] = TomoP3DModel(ModelNo,N,pathTP);
 figure; 
@@ -27,8 +27,8 @@ subplot(1,3,2); imagesc(squeeze(G(:,slice,:)), [0 1]); daspect([1 1 1]); colorma
 subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colormap hot; title('X-Slice');
 
 angles = linspace(0,179.99,360); % projection angles
-detU = 400; % detector column count (vertical)
-detV = 300; % detector row count (horizontal)
+detU = N; % detector column count (vertical)
+detV = 600; % detector row count (horizontal)
 %%
 % using astra-toolbox to generate data
 proj_geom = astra_create_proj_geom('parallel3d', 1, 1, detU, detV, angles*pi/180);
@@ -39,18 +39,19 @@ astra_mex_data3d('delete', sinogram_id);
 %%
 
 % figure; imshow(squeeze(sino3D_astra(:,1,:)),[]);
-tic; sino_tomophan3D = TomoP3DModelSino(ModelNo, detU, detV, N, single(angles), pathTP); toc;
+tic; proj3D_tomophant = TomoP3DModelSino(ModelNo, detU, detV, N, single(angles), pathTP); toc;
 % figure; imshow(sino_tomophan3D, []);
 
 % load astraprojs.mat
 % comparing 2D analytical projections with ASTRA numerical projections
 %compar_im = proj250_astra;
 % sino_tomophan3D = reshape(sino_tomophan3D, [detV,length(angles),detU]);
-slice2 = 200;
+slice2 = 220;
 compar_im = squeeze(sino3D_astra(:,slice2,:));
-sel_im = sino_tomophan3D(:,:,slice2);
+sel_im = proj3D_tomophant(:,:,slice2);
 disp(norm(sel_im(:) - compar_im(:))/norm(compar_im(:)))
 
+% figure;imshow(squeeze(sino_tomophan3D(:,150,:)), []);
 figure; 
 subplot(1,3,1); imshow(sel_im, []); title('Analytical projection');
 subplot(1,3,2); imshow(compar_im, []); title('Numerical projection');
