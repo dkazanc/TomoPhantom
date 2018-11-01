@@ -1,6 +1,6 @@
 #!/bin/bash  
 echo "Building Tomophantom using CMake"  
-#rm -r build
+rm -r build
 # Requires Cython, install it first: 
 # pip install cython
 mkdir build

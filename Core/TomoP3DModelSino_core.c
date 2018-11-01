@@ -59,24 +59,25 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
 {
     int ll;
     long i, j, k, index;    
-    float *DetectorRange_Horiz_ar=NULL, DetectorRange_Umin, DetectorRange_Umax, *DetectorRange_Vert_ar=NULL, DetectorRange_Vmin, DetectorRange_Vmax, U_step, V_step, C1, C00, a1, b1, a22, b22, c2;
+    float *DetectorRange_Horiz_ar=NULL, DetectorRange_Umin, DetectorRange_Umax, *DetectorRange_Vert_ar=NULL, DetectorRange_Vmin, DetectorRange_Vmax, U_step, V_step, C1, C00, a1, b1, a22, b22, c2, *Tomorange_Z_Ar = NULL, *Zdel = NULL;
     
     float *AnglesRad=NULL;
-    float Tomorange_Xmin, Tomorange_Xmax, H_x, multiplier;
-    float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6, under_exp, x00, y00, z00, a2, b2;
+    float Tomorange_Xmin, Tomorange_Xmax, H_x, multiplier, under_exp, x00, y00, z00, a2, b2;
     float pi22  = M_PI/2.0f;
     
     DetectorRange_Umax = (float)(Horiz_det)/(float)(N+1);
     DetectorRange_Umin = -DetectorRange_Umax;
     
-    DetectorRange_Vmax = (float)(Vert_det)/(float)(N+1);
+    // DetectorRange_Vmax = (float)(Vert_det)/(float)(N+1);
+    // assuming that the size of the vertical detector array is always equal to Z-dim of the phantom
+    DetectorRange_Vmax = 1.0f;
     DetectorRange_Vmin = -DetectorRange_Vmax;
     
     DetectorRange_Horiz_ar = malloc(Horiz_det*sizeof(float));
     DetectorRange_Vert_ar = malloc(Vert_det*sizeof(float));
     
     U_step = (DetectorRange_Umax - DetectorRange_Umin)/(float)(Horiz_det-1);
-    V_step = (DetectorRange_Vmax - DetectorRange_Vmin)/(float)(Vert_det-1);
+    V_step = (DetectorRange_Vmax - DetectorRange_Vmin)/(float)(Vert_det);
     
     for(i=0; i<Horiz_det; i++) {DetectorRange_Horiz_ar[i] = (DetectorRange_Umax) - (float)i*U_step;}
     for(i=0; i<Vert_det; i++) {DetectorRange_Vert_ar[i] = (DetectorRange_Vmax) - (float)i*V_step;}
@@ -85,6 +86,12 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     Tomorange_Xmax = 1.0f;
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(float)(N);
     
+    Tomorange_Z_Ar = malloc(N * sizeof(float));
+    for (i = 0; i<N; i++) { Tomorange_Z_Ar[i] = Tomorange_Xmin + (float)i*H_x; }
+    Zdel = malloc(N * sizeof(float));
+    for (i = 0; i<N; i++) Zdel[i] = Tomorange_Z_Ar[i] - z0;
+    
+    /* vector of angles */
     AnglesRad = malloc(AngTot*sizeof(float));
     for(ll=0; ll<AngTot; ll++)  AnglesRad[ll] = (Theta_proj[ll])*((float)M_PI/180.0f);
     
@@ -97,9 +104,9 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
 //    if (strcmp("ellipsoid",Object) == 0) {
     //}
 //    else {
-   x00 = x0 - 1.0f*H_x;
-   y00 = y0 - 1.0f*H_x;
-   z00 = z0 - 0.5f*H_x;
+        x00 = x0 - 0.5f*H_x;
+        y00 = y0 - 0.5f*H_x;
+        z00 = z0 - 0.5f*H_x;
   //  }
 
     /* parameters of an object have been extracted, now run the building module */
@@ -158,8 +165,11 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                 
     float a_v, b_v, c_v, d_v, p1, p2, alh, bth, gmh, p3;
     float zz0,p02,p01,ph,z1,z2,ph1,ph2;
-                    
-#pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,p3,alh,bth,gmh,zz0,p02,p01,ph,z1,z2,ph1,ph2)
+    
+    float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6;
+    AA5 = (N*C0*a*b);	         
+    
+#pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,p3,alh,bth,gmh,zz0,p02,p01,ph,z1,z2,ph1,ph2,sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6)
     for(ll=0; ll<AngTot; ll++) {
                     
                     TETAs = AnglesRad[ll]; /* the variable projection angle (AnglesRad) */
@@ -293,9 +303,31 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                                     //}
                                 //}
                             //}
-                        }} /*main for loop*/
-                        if (strcmp("ellipsetube",Object) == 0)  { }
+                        }} /*main for j-k loop*/
+
                         
+                    if (strcmp("elliptical_cylinder",Object) == 0)  {                  
+                    
+                    sin_2 = powf((sinf(TETAs - psi3)),2);
+	            cos_2 = powf((cosf(TETAs - psi3)),2);           
+	            
+	            delta1 = 1.0f/(a22*sin_2 + b22*cos_2);
+	            delta_sq = sqrtf(delta1);
+	            first_dr = AA5*delta_sq;
+	            AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs); 
+	            for(j=0; j<Horiz_det; j++) {
+		//        AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
+	                  for(k=0; k<Vert_det; k++) {
+//			  if (fabs(Zdel[k]) < c) {            			  
+		             index = ll*Vert_det*Horiz_det + j*Vert_det + k;
+//	                     AA6 = (AA3)*delta1;
+//	                    if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
+				A[index] = 1.0f;
+			      //	}
+			      }	    
+                    	}
+                    }       
+                                                
                     if (strcmp("cuboid",Object) == 0) {
                         /* the object is a cuboid */
                         /* the object is a rectangle */
@@ -398,6 +430,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                 free(AnglesRad); 
                 free(DetectorRange_Horiz_ar); 
                 free(DetectorRange_Vert_ar);
+                free(Tomorange_Z_Ar);
+                free(Zdel);
                 return *A;
 }
 
@@ -483,13 +517,9 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
 								else {
 									break;
 								}
-								// printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);                                                          
-
-								// TomoP3DObject_core(A, N1, N2, N3, Z1, Z2, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0l); 
-								
-//				TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, -psi_gr1, -psi_gr2, -psi_gr3, 0l);
-				TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, psi_gr2, -psi_gr1, 0l);
-//				TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, -z0, x0, -y0, b, a, c, psi_gr3, psi_gr2, -psi_gr1, 0l);
+								// printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);                                                          							
+		TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python		
+//		TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, psi_gr2, -psi_gr1, 0l); // matlab? 
 							}
 						}
 						else {

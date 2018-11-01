@@ -50,8 +50,8 @@ plt.title('3D Phantom, sagittal view')
 plt.show()
 
 import numpy as np
-Horiz_det = 280 # detector row count (horizontal)
-Vert_det = 300 # detector column count (vertical)
+Horiz_det = 400 # detector row count (horizontal)
+Vert_det = N_size # detector column count (vertical) (no reason for it to be > N)
 angles_num = 360 # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
 angles_rad = angles*(np.pi/180.0)
@@ -62,19 +62,21 @@ print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
 
 #needs to be reshaped to fit ASTRAs conventions
-#projData3D_analyt_r = np.zeros((Horiz_det, angles_num, Vert_det),'float32')
-#for i in range(0,Vert_det): 
-    #projData3D_analyt_r[:,:,i] = np.transpose(projData3D_analyt[:,:,i])
-#del projData3D_analyt
+projData3D_analyt_r = np.zeros((Horiz_det, angles_num, Vert_det),'float32')
+for i in range(0,Vert_det): 
+    projData3D_analyt_r[i,:,] = projData3D_analyt[:,i,:]
+projData3D_analyt = projData3D_analyt_r
+del projData3D_analyt_r
 
-intens_max = 90
+
+intens_max = 70
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)
-plt.imshow(projData3D_analyt[sliceSel,:],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max)
 plt.title('2D Projection')
 plt.subplot(132)
-plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_analyt[sliceSel,:,:],vmin=0, vmax=intens_max)
 plt.title('Sinogram view')
 plt.subplot(133)
 plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
@@ -82,20 +84,18 @@ plt.title('Tangentogram view')
 plt.show()
 
 
-#intens_max = 2
+intens_max = 10
 plt.figure() 
 plt.subplot(131)
-plt.imshow(abs(projData3D_analyt[sliceSel,:] - projData3D_astra[:,sliceSel,:]),vmin=0, vmax=intens_max)
+plt.imshow(abs(projData3D_analyt[:,sliceSel,:] - projData3D_astra[:,sliceSel,:]),vmin=0, vmax=intens_max)
 plt.title('2D Projection differnce')
 plt.subplot(132)
-plt.imshow(abs(projData3D_analyt[:,sliceSel,:] - projData3D_astra[sliceSel,:,:]) ,vmin=0, vmax=intens_max)
+plt.imshow(abs(projData3D_analyt[sliceSel,:,:] - projData3D_astra[sliceSel,:,:]) ,vmin=0, vmax=intens_max)
 plt.title('Sinogram difference')
 plt.subplot(133)
 plt.imshow(abs(projData3D_analyt[:,:,sliceSel] - projData3D_astra[:,:,sliceSel]),vmin=0, vmax=intens_max)
 plt.title('Tangentogram difference')
 plt.show()
-
-
 #%%
 print ("Building 3D numerical projection data with ASTRA-toolbox")
 from tomophantom.supp.astraOP import AstraTools3D
@@ -104,7 +104,7 @@ Atools = AstraTools3D(Horiz_det, Vert_det, angles_rad, N_size) # initiate a clas
 
 projData3D_astra = Atools.forwproj(phantom_tm) # numerical projection data
 
-intens_max = 90
+intens_max = 70
 sliceSel = 150
 #plt.gray()
 plt.figure() 
