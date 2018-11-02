@@ -50,7 +50,7 @@ plt.title('3D Phantom, sagittal view')
 plt.show()
 
 import numpy as np
-Horiz_det = 400 # detector row count (horizontal)
+Horiz_det = 300 # detector row count (horizontal)
 Vert_det = N_size # detector column count (vertical) (no reason for it to be > N)
 angles_num = 360 # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
@@ -69,12 +69,12 @@ projData3D_analyt = projData3D_analyt_r
 del projData3D_analyt_r
 
 
-intens_max = 70
+intens_max = 60
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)
 plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max)
-plt.title('2D Projection')
+plt.title('2D Projection (analytical)')
 plt.subplot(132)
 plt.imshow(projData3D_analyt[sliceSel,:,:],vmin=0, vmax=intens_max)
 plt.title('Sinogram view')
@@ -83,8 +83,7 @@ plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 
-
-intens_max = 10
+intens_max = 3
 plt.figure() 
 plt.subplot(131)
 plt.imshow(abs(projData3D_analyt[:,sliceSel,:] - projData3D_astra[:,sliceSel,:]),vmin=0, vmax=intens_max)
@@ -104,7 +103,7 @@ Atools = AstraTools3D(Horiz_det, Vert_det, angles_rad, N_size) # initiate a clas
 
 projData3D_astra = Atools.forwproj(phantom_tm) # numerical projection data
 
-intens_max = 70
+intens_max = 60
 sliceSel = 150
 #plt.gray()
 plt.figure() 

@@ -1,11 +1,11 @@
 #!/bin/bash  
 echo "Building Tomophantom using CMake"  
-rm -r build
+# rm -r build
 # Requires Cython, install it first: 
 # pip install cython
 mkdir build
 cd build/
-#make clean
+make clean
 # install Python modules only
 cmake ../ -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
 # install Matlab modules only

@@ -190,9 +190,11 @@ void mexFunction(
                                      break; }
                                  printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
 
-	               // TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);       
+                   // TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);       
+
                    // for elliptical_cyllinder
                    TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);       
+                   
                              }
                          }
                          else {
