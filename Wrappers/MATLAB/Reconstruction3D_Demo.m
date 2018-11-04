@@ -17,7 +17,7 @@ pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Pha
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
 % generate a 3D phantom 
-N = 512;
+N = 256;
 ModelNo = 16;
 [G] = TomoP3DModel(ModelNo,N,pathTP);
 figure; 
@@ -27,11 +27,11 @@ subplot(1,3,2); imagesc(squeeze(G(:,slice,:)), [0 1]); daspect([1 1 1]); colorma
 subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colormap hot; title('X-Slice');
 
 angles = linspace(0,179.99,360); % projection angles
-detU = N; % detector column count (vertical)
-detV = 600; % detector row count (horizontal)
+DetectorWidth = 300; % detector column count (horizontal)
+DetectorHeight = N; % detector row count (vertical)
 %%
 % using astra-toolbox to generate data
-proj_geom = astra_create_proj_geom('parallel3d', 1, 1, detU, detV, angles*pi/180);
+proj_geom = astra_create_proj_geom('parallel3d', 1, 1, DetectorHeight, DetectorWidth, angles*pi/180);
 vol_geom = astra_create_vol_geom(N,N,N);
 
 tic; [sinogram_id, sino3D_astra] = astra_create_sino3d_cuda(G, proj_geom, vol_geom); toc;
@@ -39,13 +39,13 @@ astra_mex_data3d('delete', sinogram_id);
 %%
 
 % figure; imshow(squeeze(sino3D_astra(:,1,:)),[]);
-tic; proj3D_tomophant = TomoP3DModelSino(ModelNo, detU, detV, N, single(angles), pathTP); toc;
+tic; proj3D_tomophant = TomoP3DModelSino(ModelNo, DetectorHeight, DetectorWidth, N, single(angles), pathTP); toc;
 % figure; imshow(sino_tomophan3D, []);
 
 % load astraprojs.mat
 % comparing 2D analytical projections with ASTRA numerical projections
 %compar_im = proj250_astra;
-% sino_tomophan3D = reshape(sino_tomophan3D, [detV,length(angles),detU]);
+% sino_tomophan3D = reshape(sino_tomophan3D, [DetectorWidth,length(angles),DetectorHeight]);
 slice2 = 220;
 compar_im = squeeze(sino3D_astra(:,slice2,:));
 sel_im = proj3D_tomophant(:,:,slice2);

@@ -347,25 +347,25 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                     if (strcmp("cuboid",Object) == 0) {
                       /* the object is a cuboid */                     
                         
-		     y11 = 2.0f*x00 + 0.5f*H_x;
-		     x11 = -2.0f*y00 - 0.5f*H_x;
-
-           	     if (x00 == (0.5f*H_x))  y11 = 2.0f*x00  - 0.5f*H_x;
-           	     if (y00 == (0.5f*H_x))  x11 = -2.0f*y00  + 0.5f*H_x;    
-         
-                      
- 	             xwid = b;
-                     ywid = a;
-                     c2 = 0.5f*c;
-                     
-                     if (psi3 < 0)  {ksi1 = (float)M_PI + psi3;}
-                     else ksi1 = psi3;                        
+// 		     y11 = 2.0f*x00 + 0.5f*H_x;
+// 		     x11 = -2.0f*y00 - 0.5f*H_x;
+// 
+//            	     if (x00 == (0.5f*H_x))  y11 = 2.0f*x00  - 0.5f*H_x;
+//            	     if (y00 == (0.5f*H_x))  x11 = -2.0f*y00  + 0.5f*H_x;    
+//          
+//                       
+//  	             xwid = b;
+//                      ywid = a;
+//                      c2 = 0.5f*c;
+//                      
+//                      if (psi3 < 0)  {ksi1 = (float)M_PI + psi3;}
+//                      else ksi1 = psi3;                        
 //#pragma omp parallel for shared(A,Zdel) private(k,i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)
-                        for(k=0; k<N; k++) {
-                        if (fabs(Zdel[k]) < c2) {
-                        	for(i=0; i<AngTot; i++) {
-                        	ksi00 = AnglesRad[(AngTot-1)-i];                        	
-                        for(j=0; j<P; j++) {
+//                         for(k=0; k<N; k++) {
+//                         if (fabs(Zdel[k]) < c2) {
+//                         	for(i=0; i<AngTot; i++) {
+//                         	ksi00 = AnglesRad[(AngTot-1)-i];                        	
+//                         for(j=0; j<P; j++) {
                         
                         //p00 = Sinorange_P_Ar[j];
                         
@@ -424,9 +424,9 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                         //if (PC >= QP) SS=0.0f;
                         
                         //A[(k)*P*AngTot + (i)*P + (j)] += (N/2.0f)*SS;
-                         }}
-                         }
-                        } /*k-loop*/
+//                          }}
+//                          }
+//                         } /*k-loop*/
                     }
                 }
                 // free(Zdel); free(Zdel2);
