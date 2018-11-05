@@ -18,7 +18,7 @@ pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
 % generate a 3D phantom 
 N = 256;
-ModelNo = 16;
+ModelNo = 14;
 [G] = TomoP3DModel(ModelNo,N,pathTP);
 figure; 
 slice = round(0.5*N);
@@ -52,8 +52,9 @@ sel_im = proj3D_tomophant(:,:,slice2);
 disp(norm(sel_im(:) - compar_im(:))/norm(compar_im(:)))
 
 % figure;imshow(squeeze(sino_tomophan3D(:,150,:)), []);
+max_val = 100;
 figure; 
-subplot(1,3,1); imshow(sel_im, []); title('Analytical projection');
-subplot(1,3,2); imshow(compar_im, []); title('Numerical projection');
-subplot(1,3,3); imshow(abs(sel_im - compar_im), []); title('image error');
+subplot(1,3,1); imagesc(sel_im, [0 max_val]); title('Analytical projection');
+subplot(1,3,2); imagesc(compar_im, [0 max_val]); title('Numerical projection');
+subplot(1,3,3); imagesc(abs(sel_im - compar_im), [0 max_val]); title('image error');
 %%

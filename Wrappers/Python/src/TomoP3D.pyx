@@ -282,7 +282,7 @@ def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.flo
        raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
     cdef int AngTot = angles.shape[0]
     
-    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([AngTot, Horiz_det,Vert_det], dtype='float32')
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([AngTot, Vert_det, Horiz_det], dtype='float32')
     cdef float ret_val
     py_byte_string = model_parameters_filename.encode('UTF-8')
     cdef char* c_string = py_byte_string

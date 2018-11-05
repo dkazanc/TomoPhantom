@@ -16,6 +16,7 @@
 #include "TomoP3DModelSino_core.h"
 
 #define M_PI 3.14159265358979323846
+#define M_PI2 1.57079632679
 #define EPS 0.000000001
 #define MAXCHAR 1000
 
@@ -59,28 +60,27 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
 {
     int ll;
     long i, j, k, index;
-    float *DetectorRange_Horiz_ar=NULL, DetectorRange_Umin, DetectorRange_Umax, *DetectorRange_Vert_ar=NULL, DetectorRange_Vmin, DetectorRange_Vmax, U_step, V_step, C1, C00, a1, b1, a22, b22, c2, *Tomorange_Z_Ar = NULL, *Zdel = NULL;
+    float *DetectorRange_Horiz_ar=NULL, DetectorRange_Horiz_min, DetectorRange_Horiz_max, *DetectorRange_Vert_ar=NULL, DetectorRange_Vert_min, DetectorRange_Vert_max, U_step, V_step, C1, a22, b22, c2, *Tomorange_Z_Ar = NULL, *Zdel = NULL;
     
     float *AnglesRad=NULL;
-    float Tomorange_Xmin, Tomorange_Xmax, H_x, multiplier, under_exp, x00, y00, z00, a2, b2;
-    float pi22  = M_PI/2.0f;
+    float Tomorange_Xmin, Tomorange_Xmax, H_x, multiplier, x00, y00, z00, a2, b2;
     
-    DetectorRange_Umax = (float)(Horiz_det)/(float)(N+1);
-    DetectorRange_Umin = -DetectorRange_Umax;
+    DetectorRange_Horiz_max = (float)(Horiz_det)/(float)(N+1); /* horizontal detector range */
+    DetectorRange_Horiz_min = -DetectorRange_Horiz_max;
     
     // printf("%i %i\n", Horiz_det, Vert_det);
-    DetectorRange_Vmax = (float)(Vert_det)/(float)(N+1);
-    // assuming that the size of the vertical detector array is always equal to Z-dim of the phantom
-    DetectorRange_Vmin = -DetectorRange_Vmax;
+    /* Here assuming that the size of the vertical detector array is always equal to Z-dim of the phantom */
+    DetectorRange_Vert_max = (float)(Vert_det)/(float)(N+1); /* vertical detector range */
+    DetectorRange_Vert_min = -DetectorRange_Vert_max;      
     
-    DetectorRange_Horiz_ar = malloc(Horiz_det*sizeof(float));
-    DetectorRange_Vert_ar = malloc(Vert_det*sizeof(float));
+    DetectorRange_Horiz_ar = malloc(Horiz_det*sizeof(float)); /* horizontal array */
+    DetectorRange_Vert_ar = malloc(Vert_det*sizeof(float));   /* vertical array */
     
-    U_step = (DetectorRange_Umax - DetectorRange_Umin)/(float)(Horiz_det-1);
-    V_step = (DetectorRange_Vmax - DetectorRange_Vmin)/(float)(Vert_det-1);
+    U_step = (DetectorRange_Horiz_max - DetectorRange_Horiz_min)/(float)(Horiz_det-1);
+    V_step = (DetectorRange_Vert_max - DetectorRange_Vert_min)/(float)(Vert_det-1);
     
-    for(i=0; i<Horiz_det; i++) {DetectorRange_Horiz_ar[i] = (DetectorRange_Umax) - (float)i*U_step;}
-    for(i=0; i<Vert_det; i++) {DetectorRange_Vert_ar[i] = (DetectorRange_Vmax) - (float)i*V_step;}
+    for(i=0; i<Horiz_det; i++) {DetectorRange_Horiz_ar[i] = (DetectorRange_Horiz_max) - (float)i*U_step;}
+    for(i=0; i<Vert_det; i++) {DetectorRange_Vert_ar[i] = (DetectorRange_Vert_max) - (float)i*V_step;}
     
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
@@ -99,17 +99,31 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     C1 = -4.0f*alog2;
     multiplier = (C0*(N/2.0f));
     
-    /* fix for centering */
+    float RS = 1.0f;
+    /*Angles: TETA1, PSIs, FI1 ? */
+    float TETAs, TETA1, FIs, FI1, PSI1, PSIs;
+    float psi1, psi2, psi3;
     
+    psi_gr1 = psi_gr1 + 90.0f;
+    psi_gr2 = psi_gr2 + 90.0f;
+    
+    psi1 = psi_gr1*((float)M_PI/180.0f);
+    psi2 = psi_gr2*((float)M_PI/180.0f);
+    psi3 = psi_gr3*((float)M_PI/180.0f);    
+    
+    float xwid,ywid,p00,ksi00,ksi1; /* cuboid-related */
+    float p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,x11,y11;                
+   
+    /* fix for centering */    
     if (strcmp("elliptical_cylinder",Object) == 0) {
-    x00 = x0 + 0.5f*H_x;
-    y00 = y0 + 0.5f*H_x;
-    z00 = z0 + 0.5f*H_x;           
-    }
+        x00 = x0 + 0.5f*H_x;
+        y00 = y0 + 0.5f*H_x;
+        z00 = z0 + 0.5f*H_x;
+    }   
     else {
-    x00 = x0 - 0.5f*H_x;
-    y00 = y0 - 0.5f*H_x;
-    z00 = z0 - 0.5f*H_x;
+        x00 = x0 - 0.5f*H_x;
+        y00 = y0 - 0.5f*H_x;
+        z00 = z0 - 0.5f*H_x;
     }
     
     /* parameters of an object have been extracted, now run the building module */
@@ -126,19 +140,9 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     b2 = 1.0f/(b22);
     c2 = 1.0f/(c*c);
     
-    // if (Object == 4) c2 =4.0f*c2;
     
-    float RS = 1.0f;
-    /*Angles: TETA1, PSIs, FI1 ? */
-    float TETAs, TETA1, FIs, FI1, PSI1, PSIs;
-    float psi1, psi2, psi3;
+    // if (Object == 4) c2 =4.0f*c2;  
     
-    psi_gr1 = psi_gr1 + 90.0f;
-    psi_gr2 = psi_gr2 + 90.0f;
-    
-    psi1 = psi_gr1*((float)M_PI/180.0f);
-    psi2 = psi_gr2*((float)M_PI/180.0f);
-    psi3 = psi_gr3*((float)M_PI/180.0f);
     
     float xh[3] = {0.0f, 0.0f, 0.0f};
     float xh1[3] = {0.0f, 0.0f, 0.0f};
@@ -165,21 +169,36 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                 xh1[0] = x00; xh1[1] = y00; xh1[2] = z00;
                 matvet3(bs,xh1,xh);  /* matrix-vector multiplication */
                 
-                float a_v, b_v, c_v, d_v, p1, p2, alh, bth, gmh, p3;
-                // float zz0,p02,p01,ph,z1,z2,ph1,ph2; /*cone related */
+                float a_v, b_v, c_v, d_v, p1, p2, alh, bth, gmh;
+                // float zz0,p02,p01,ph,z1,z2,ph1,ph2; /*cone related */               
                 
-                float xwid,ywid,p00,ksi00,ksi1; /* cuboid-related */
-                float PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,x11,y11;
                 
-                float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6;
-                AA5 = (N*C0*a*b);
+              if (strcmp("cuboid",Object) == 0) {
+	     /* the object is a cuboid */                
+	     
+             x11 = 2.0f*x00 + 0.5f*H_x;
+	     y11 = 2.0f*y00 - 0.5f*H_x;
+             	    
+	    // if (x00 == (0.5f*H_x))  y11 = 2.0f*x0  - 0.5f*H_x;
+            // if (y00 == (0.5f*H_x))  x11 = -2.0f*y0  + 0.5f*H_x;	                        
+                   
+	    xwid = b;
+	    ywid = a;
+	    c2 = 0.5f*c;
+                    
+	    if (psi3 < 0)  {ksi1 = (float)M_PI + psi3;}
+	    else ksi1 = psi3;
+	    }
                 
-#pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,p3,alh,bth,gmh,sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6)
+            float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6;
+            AA5 = (N*C0*a*b);
+                
+#pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,alh,bth,gmh,sin_2, cos_2,delta1,delta_sq,first_dr, AA2, AA3, AA6, p00,ksi00,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS)
                 for(ll=0; ll<AngTot; ll++) {
                     
                     TETAs = AnglesRad[ll]; /* the variable projection angle (AnglesRad) */
                     
-                    TETA1 = TETAs - pi22;
+                    TETA1 = TETAs - M_PI2;
                     FIs =  0.0f  ; /* always zero for the fixed source? */
                     PSIs = 0.0f;  /* always zero for the fixed source? */
                     
@@ -207,7 +226,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                             vh1[1]=DetectorRange_Horiz_ar[j];
                             vh1[2]=DetectorRange_Vert_ar[k];
                             
-                            matvet3(bsai,vh1,al);                    
+                            matvet3(bsai,vh1,al);
                             
                             if (strcmp("ellipsoid",Object) == 0) {
                                 a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) + powf((aa[2]/c),2);
@@ -317,119 +336,107 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                         delta1 = 1.0f/(a22*sin_2 + b22*cos_2);
                         delta_sq = sqrtf(delta1);
                         first_dr = AA5*delta_sq;
-                        AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs);                        			                                                
+                        AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs);
                         
                         
+                        /* Matlab version */  
+                        /*                      
                         for(j=0; j< Vert_det; j++) {
                             AA3 = powf((DetectorRange_Vert_ar[j] - AA2),2);
                             AA6 = (AA3)*delta1;
                             for(k=0; k< Horiz_det; k++) {
                                 index = ll*Vert_det*Horiz_det + k*Vert_det + j;
-                                if (fabs(Zdel[k]) < c)  {  
-                                    if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);                                    
-                                }                                
+                                if (fabs(Zdel[k]) < c)  {
+                                    if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
+                                }
                             }
                         }
-                        /*                                                
-                         for(j=0; j<Horiz_det; j++) {
-                            AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2); 
-                            AA6 = (AA3)*delta1;
-                            for(k=0; k<Vert_det; k++) {
-                                index = ll*Vert_det*Horiz_det + k*Vert_det + j;
-                                if (fabs(Zdel[k]) < c)  {  
-                                    if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
-                                } 
-                                else A[index] = 0.0f;
-                            }
-                        }              
-                        */                       
-                    }                    
+			*/
+                        /* Python version */                    
+                          for(j=0; j<Horiz_det; j++) {
+                          AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
+                          AA6 = (AA3)*delta1;
+                          for(k=0; k<Vert_det; k++) {
+                          index = ll*Vert_det*Horiz_det + k*Vert_det + j;
+                          if (fabs(Zdel[k]) < c)  {
+                          if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
+	                          }
+                          else A[index] = 0.0f;
+                          	}
+                          }                          
+                   }
                     if (strcmp("cuboid",Object) == 0) {
-                      /* the object is a cuboid */                     
+                        /* the object is a cuboid */
                         
-// 		     y11 = 2.0f*x00 + 0.5f*H_x;
-// 		     x11 = -2.0f*y00 - 0.5f*H_x;
-// 
-//            	     if (x00 == (0.5f*H_x))  y11 = 2.0f*x00  - 0.5f*H_x;
-//            	     if (y00 == (0.5f*H_x))  x11 = -2.0f*y00  + 0.5f*H_x;    
-//          
-//                       
-//  	             xwid = b;
-//                      ywid = a;
-//                      c2 = 0.5f*c;
-//                      
-//                      if (psi3 < 0)  {ksi1 = (float)M_PI + psi3;}
-//                      else ksi1 = psi3;                        
-//#pragma omp parallel for shared(A,Zdel) private(k,i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)
-//                         for(k=0; k<N; k++) {
-//                         if (fabs(Zdel[k]) < c2) {
-//                         	for(i=0; i<AngTot; i++) {
-//                         	ksi00 = AnglesRad[(AngTot-1)-i];                        	
-//                         for(j=0; j<P; j++) {
-                        
-                        //p00 = Sinorange_P_Ar[j];
-                        
-                        //PI2 = (float)M_PI*0.5f;
-                        //p = p00;
-                        //ksi=ksi00;
-                        
-                        //if (ksi > (float)M_PI) {
-                        //ksi = ksi - (float)M_PI;
-                        //p = -p00; }
-                        
-                        //C = cosf(ksi); S = sinf(ksi);
-                        //XSYC = -x11*S + y11*C;
-                        //A2 = xwid*0.5f;
-                        //B2 = ywid*0.5f;
-                        
-                        //if ((ksi - ksi1) < 0.0f)  FI = (float)M_PI + ksi - ksi1;
-                        //else FI = ksi - ksi1;
-                        
-                        //if (FI > PI2) FI = (float)M_PI - FI;
-                        
-                        //CF = cosf(FI);
-                        //SF = sinf(FI);
-                        //P0 = fabs(p-XSYC);
-                        
-                        //SS = xwid/CF*C0;
-                        
-                        //if (fabs(CF) <= (float)EPS) {
-                        //SS = ywid*C0;
-                        //if ((P0 - A2) > (float)EPS) {
-                        //SS=0.0f;
-                        //}
-                        //}
-                        //if (fabs(SF) <= (float)EPS) {
-                        //SS = xwid*C0;
-                        //if ((P0 - B2) > (float)EPS) {
-                        //SS=0.0f;
-                        //}
-                        //}
-                        //TF = SF/CF;
-                        //PC = P0/CF;
-                        //QP = B2+A2*TF;
-                        //QM = QP+PC;
-                        //if (QM > ywid) {
-                        //DEL = P0+B2*CF;
-                        //SS = ywid/SF*C0;
-                        //if (DEL > (A2*SF)) {
-                        //SS = (QP-PC)/SF*C0;
-                        //}}
-                        //if (QM > ywid) {
-                        //DEL = P0+B2*CF;
-                        //if (DEL > A2*SF) SS = (QP-PC)/SF*C0;
-                        //else SS = ywid/SF*C0;
-                        //}
-                        //else SS = xwid/CF*C0;
-                        //if (PC >= QP) SS=0.0f;
-                        
-                        //A[(k)*P*AngTot + (i)*P + (j)] += (N/2.0f)*SS;
-//                          }}
-//                          }
-//                         } /*k-loop*/
+                        ksi00 = AnglesRad[(AngTot-1)-ll];
+                        /*
+                        for(k=0; k< Horiz_det; k++) {
+                            if (fabs(Zdel[k]) < c2) {
+                                for(j=0; j< Vert_det; j++) {
+                                    p00 = DetectorRange_Vert_ar[j];
+                                    index = ll*Vert_det*Horiz_det + k*Vert_det + j;
+                         */           
+                        for(k=0; k < Vert_det; k++) {
+	                      if (fabs(Zdel[k]) < c2) {
+                                for(j=0; j< Horiz_det; j++) {
+                                    p00 = DetectorRange_Horiz_ar[j];
+                                    index = ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                                                                        
+                                    p = p00;
+                                    ksi=ksi00;
+                                    
+                                    if (ksi > (float)M_PI) {
+                                        ksi = ksi - (float)M_PI;
+                                        p = -p00; }
+                                    
+                                    C = cosf(ksi); S = sinf(ksi);
+                                    XSYC = -x11*S + y11*C;
+                                    A2 = xwid*0.5f;
+                                    B2 = ywid*0.5f;
+                                    
+                                    if ((ksi - ksi1) < 0.0f)  FI = (float)M_PI + ksi - ksi1;
+                                    else FI = ksi - ksi1;
+                                    
+                                    if (FI > M_PI2) FI = (float)M_PI - FI;
+                                    
+                                    CF = cosf(FI);
+                                    SF = sinf(FI);
+                                    P0 = fabs(p-XSYC);
+                                    
+                                    SS = xwid/CF*C0;
+                                    
+                                    if (fabs(CF) <= (float)EPS) {
+                                        SS = ywid*C0;
+                                        if ((P0 - A2) > (float)EPS) SS=0.0f;
+                                    }
+                                    if (fabs(SF) <= (float)EPS) {
+                                        SS = xwid*C0;
+                                        if ((P0 - B2) > (float)EPS) SS=0.0f;
+                                    }
+                                    
+                                    TF = SF/CF;
+                                    PC = P0/CF;
+                                    QP = B2+A2*TF;
+                                    QM = QP+PC;
+                                    if (QM > ywid) {
+                                        DEL = P0+B2*CF;
+                                        SS = ywid/SF*C0;
+                                        if (DEL > (A2*SF)) SS = (QP-PC)/SF*C0;
+                                    }
+                                    if (QM > ywid) {
+                                        DEL = P0+B2*CF;
+                                        if (DEL > A2*SF) SS = (QP-PC)/SF*C0;
+                                        else SS = ywid/SF*C0;
+                                    }
+                                    else SS = xwid/CF*C0;
+                                    if (PC >= QP) SS=0.0f;                                   
+                                    
+                                    A[index] += (N/2.0f)*SS;
+                                } /*j-loop*/
+                            }
+                        } /*k-loop*/
                     }
                 }
-                // free(Zdel); free(Zdel2);
                 /************************************************/
                 free(AnglesRad);
                 free(DetectorRange_Horiz_ar);
@@ -522,10 +529,10 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                     break;
                                 }
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
-                           TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+                                //TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
                                 
-                           // for elliptical_cyllinder
-                           // TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+                                // for elliptical_cyllinder
+                                TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
                             }
                         }
                         else {
