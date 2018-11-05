@@ -46,13 +46,13 @@ void mexFunction(
 {
     int ModelSelected, AngTot;
     float *A, *Theta_proj;
-    mwSize  N, U_dim, V_dim;
+    mwSize  N, DetectorHeight, DetectorWidth;
     //char *ModelParameters_PATH;
     const mwSize *dim_array;
     
     ModelSelected  = (int) mxGetScalar(prhs[0]); /* selected model */
-    U_dim  = (int) mxGetScalar(prhs[1]); /* chosen detector dimension U */
-    V_dim  = (int) mxGetScalar(prhs[2]); /* chosen detector dimension V */
+    DetectorHeight  = (int) mxGetScalar(prhs[1]); /* chosen detector dimension - horizontal */
+    DetectorWidth  = (int) mxGetScalar(prhs[2]); /* chosen detector dimension - vertical */
     N = (int) mxGetScalar(prhs[3]); /* the size of the tomogram */
     Theta_proj  = (float*) mxGetData(prhs[4]); /* vector of angles */
     // ModelParameters_PATH = mxArrayToString(prhs[5]); /* provide an absolute path to the file */
@@ -130,7 +130,7 @@ void mexFunction(
                             printf("\n %s %i %s \n", "Stationary 3D model", ModelSelected, " is selected");
                             
                             /* Allocating data volume */
-                            const mwSize N_dims[3] = {V_dim, U_dim, AngTot}; /* projection data dimensions */
+                            const mwSize N_dims[3] = {DetectorWidth, DetectorHeight, AngTot}; /* projection data dimensions */
                             A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(3, N_dims, mxSINGLE_CLASS, mxREAL)); /*output array*/
                             
                             /* loop over all components */
@@ -191,11 +191,14 @@ void mexFunction(
                                 printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
                                 
                                 
-                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) != 0)) {
-                                    TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l); }
+                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {                                    
+                                       TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l); 
+                                }
                                 else {
-                                    // for elliptical_cyllinder
-                                    TomoP3DObjectSino_core(A, U_dim, V_dim, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
+                                    // for elliptical_cyllinder 
+                                    // TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
+                                    // and cuboid
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, -psi_gr2, psi_gr1, 0l);
                                 }
                             }
                         }

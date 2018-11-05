@@ -68,10 +68,9 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     DetectorRange_Horiz_max = (float)(Horiz_det)/(float)(N+1); /* horizontal detector range */
     DetectorRange_Horiz_min = -DetectorRange_Horiz_max;
     
-    // printf("%i %i\n", Horiz_det, Vert_det);
     /* Here assuming that the size of the vertical detector array is always equal to Z-dim of the phantom */
     DetectorRange_Vert_max = (float)(Vert_det)/(float)(N+1); /* vertical detector range */
-    DetectorRange_Vert_min = -DetectorRange_Vert_max;      
+    DetectorRange_Vert_min = -DetectorRange_Vert_max;
     
     DetectorRange_Horiz_ar = malloc(Horiz_det*sizeof(float)); /* horizontal array */
     DetectorRange_Vert_ar = malloc(Vert_det*sizeof(float));   /* vertical array */
@@ -91,6 +90,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     Zdel = malloc(N * sizeof(float));
     for (i = 0; i<N; i++) Zdel[i] = Tomorange_Z_Ar[i] - z0;
     
+    // printf("%i %i\n", Horiz_det, Vert_det);
+    
     /* vector of angles */
     AnglesRad = malloc(AngTot*sizeof(float));
     for(ll=0; ll<AngTot; ll++)  AnglesRad[ll] = (Theta_proj[ll])*((float)M_PI/180.0f);
@@ -109,17 +110,17 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     
     psi1 = psi_gr1*((float)M_PI/180.0f);
     psi2 = psi_gr2*((float)M_PI/180.0f);
-    psi3 = psi_gr3*((float)M_PI/180.0f);    
+    psi3 = psi_gr3*((float)M_PI/180.0f);
     
     float xwid,ywid,p00,ksi00,ksi1; /* cuboid-related */
-    float p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,x11,y11;                
-   
-    /* fix for centering */    
+    float p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,x11,y11;
+    
+    /* fix for centering */
     if (strcmp("elliptical_cylinder",Object) == 0) {
         x00 = x0 + 0.5f*H_x;
         y00 = y0 + 0.5f*H_x;
         z00 = z0 + 0.5f*H_x;
-    }   
+    }
     else {
         x00 = x0 - 0.5f*H_x;
         y00 = y0 - 0.5f*H_x;
@@ -141,8 +142,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     c2 = 1.0f/(c*c);
     
     
-    // if (Object == 4) c2 =4.0f*c2;  
-    
+    // if (Object == 4) c2 =4.0f*c2;   
     
     float xh[3] = {0.0f, 0.0f, 0.0f};
     float xh1[3] = {0.0f, 0.0f, 0.0f};
@@ -170,28 +170,32 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                 matvet3(bs,xh1,xh);  /* matrix-vector multiplication */
                 
                 float a_v, b_v, c_v, d_v, p1, p2, alh, bth, gmh;
-                // float zz0,p02,p01,ph,z1,z2,ph1,ph2; /*cone related */               
+                // float zz0,p02,p01,ph,z1,z2,ph1,ph2; /*cone related */
                 
                 
-              if (strcmp("cuboid",Object) == 0) {
-	     /* the object is a cuboid */                
-	     
-             x11 = 2.0f*x00 + 0.5f*H_x;
-	     y11 = 2.0f*y00 - 0.5f*H_x;
-             	    
-	    // if (x00 == (0.5f*H_x))  y11 = 2.0f*x0  - 0.5f*H_x;
-            // if (y00 == (0.5f*H_x))  x11 = -2.0f*y0  + 0.5f*H_x;	                        
-                   
-	    xwid = b;
-	    ywid = a;
-	    c2 = 0.5f*c;
+                if (strcmp("cuboid",Object) == 0) {
+                    /* the object is a cuboid */
                     
-	    if (psi3 < 0)  {ksi1 = (float)M_PI + psi3;}
-	    else ksi1 = psi3;
-	    }
+                    //x11 = 2.0f*x00 + 0.5f*H_x;
+                    // y11 = 2.0f*y00 - 0.5f*H_x;
+                    
+                    x11 = 2.0f*x00 + 2.0f*H_x;
+                    y11 = 2.0f*y00 + 2.0f*H_x;
+                    
+                    
+                    // if (x00 == (0.5f*H_x))  y11 = 2.0f*x0  - 0.5f*H_x;
+                    // if (y00 == (0.5f*H_x))  x11 = -2.0f*y0  + 0.5f*H_x;
+                    
+                    xwid = b;
+                    ywid = a;
+                    c2 = 0.5f*c;
+                    
+                    if (psi3 < 0)  {ksi1 = (float)M_PI + psi3;}
+                    else ksi1 = psi3;
+                }
                 
-            float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6;
-            AA5 = (N*C0*a*b);
+                float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6;
+                AA5 = (N*C0*a*b);
                 
 #pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,alh,bth,gmh,sin_2, cos_2,delta1,delta_sq,first_dr, AA2, AA3, AA6, p00,ksi00,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS)
                 for(ll=0; ll<AngTot; ll++) {
@@ -339,49 +343,41 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                         AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs);
                         
                         
-                        /* Matlab version */  
-                        /*                      
-                        for(j=0; j< Vert_det; j++) {
-                            AA3 = powf((DetectorRange_Vert_ar[j] - AA2),2);
+                        /* Matlab version */
+                        /*
+                         * for(j=0; j< Vert_det; j++) {
+                         * AA3 = powf((DetectorRange_Vert_ar[j] - AA2),2);
+                         * AA6 = (AA3)*delta1;
+                         * for(k=0; k< Horiz_det; k++) {
+                         * index = ll*Vert_det*Horiz_det + k*Vert_det + j;
+                         * if (fabs(Zdel[k]) < c)  {
+                         * if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
+                         * }
+                         * }
+                         * }
+                         */
+                        /* Python version */
+                        for(j=0; j<Horiz_det; j++) {
+                            AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
                             AA6 = (AA3)*delta1;
-                            for(k=0; k< Horiz_det; k++) {
+                            for(k=0; k<Vert_det; k++) {
                                 index = ll*Vert_det*Horiz_det + k*Vert_det + j;
                                 if (fabs(Zdel[k]) < c)  {
                                     if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
                                 }
+                                else A[index] = 0.0f;
                             }
                         }
-			*/
-                        /* Python version */                    
-                          for(j=0; j<Horiz_det; j++) {
-                          AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
-                          AA6 = (AA3)*delta1;
-                          for(k=0; k<Vert_det; k++) {
-                          index = ll*Vert_det*Horiz_det + k*Vert_det + j;
-                          if (fabs(Zdel[k]) < c)  {
-                          if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
-	                          }
-                          else A[index] = 0.0f;
-                          	}
-                          }                          
-                   }
+                    }
                     if (strcmp("cuboid",Object) == 0) {
-                        /* the object is a cuboid */
-                        
+                        /* the object is a cuboid */                        
                         ksi00 = AnglesRad[(AngTot-1)-ll];
-                        /*
-                        for(k=0; k< Horiz_det; k++) {
-                            if (fabs(Zdel[k]) < c2) {
-                                for(j=0; j< Vert_det; j++) {
-                                    p00 = DetectorRange_Vert_ar[j];
-                                    index = ll*Vert_det*Horiz_det + k*Vert_det + j;
-                         */           
                         for(k=0; k < Vert_det; k++) {
-	                      if (fabs(Zdel[k]) < c2) {
+                            if (fabs(Zdel[k]) < c2) {
                                 for(j=0; j< Horiz_det; j++) {
                                     p00 = DetectorRange_Horiz_ar[j];
                                     index = ll*Vert_det*Horiz_det + k*Horiz_det + j;
-                                                                        
+                                    
                                     p = p00;
                                     ksi=ksi00;
                                     
@@ -429,7 +425,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                                         else SS = ywid/SF*C0;
                                     }
                                     else SS = xwid/CF*C0;
-                                    if (PC >= QP) SS=0.0f;                                   
+                                    if (PC >= QP) SS=0.0f;
                                     
                                     A[index] += (N/2.0f)*SS;
                                 } /*j-loop*/
