@@ -49,28 +49,33 @@ plt.show()
 
 #%%
 import numpy as np
+Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
+Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
+angles_num = int(0.5*np.pi*N_size); # angles number
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
+angles_rad = angles*(np.pi/180.0)
 
 print ("Building 3D analytical projection data with TomoPhantom")
-U_dim = 300 # detector column count (vertical)
-V_dim = 280 # detector row count (horizontal)
-angles_num = 360 # angles number
-angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
+projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
 
-proj_data3D = TomoP3D.ModelSino(model, N_size, U_dim, V_dim, angles, path_library3D)
+#data rearranging to fit ASTRAs conventions
+projData3D_analyt_r = np.zeros((Vert_det, angles_num, Horiz_det),'float32')
+for i in range(0,Horiz_det): 
+    projData3D_analyt_r[:,:,i] = np.transpose(projData3D_analyt[:,:,i])
+projData3D_analyt = projData3D_analyt_r
+del projData3D_analyt_r
 
-sliceSel = 200
-#plt.gray()
-plt.figure(1) 
+intens_max = 60
+sliceSel = 150
+plt.figure() 
 plt.subplot(131)
-plt.imshow(proj_data3D[sliceSel,:,:],vmin=0, vmax=100)
-plt.title('2D Projection')
-
+plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.title('2D Projection (analytical)')
 plt.subplot(132)
-plt.imshow(proj_data3D[:,sliceSel,:],vmin=0, vmax=100)
+plt.imshow(projData3D_analyt[sliceSel,:,:],vmin=0, vmax=intens_max)
 plt.title('Sinogram view')
-
 plt.subplot(133)
-plt.imshow(proj_data3D[:,:,sliceSel],vmin=0, vmax=100)
+plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 #%%

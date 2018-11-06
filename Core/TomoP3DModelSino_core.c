@@ -20,13 +20,14 @@
 #define EPS 0.000000001
 #define MAXCHAR 1000
 
-/* Function to create 3D analytical sinograms (parallel beam geometry) to 3D phantoms using Phantom3DLibrary.dat
+/* Function to create 3D analytical projection data (parallel beam geometry) for 3D models 
  *
  * Input Parameters:
  * - ModelNo - the model number from Phantom3DLibrary file
- * - DIM volume dimensions [N1,N2,N3] in voxels (N1 x N2 x N3)
- * - Object - Analytical Model selection
- * - Z1,Z2 are upper and lower indeces of the vertical dim to extract a slab
+ * - Horiz_det - the number of horizontal detectors
+ * - Vert_det - - the number of vertical detectors 
+ * - N - the size of the Phantom (N x N x N), currently  Vert_det must be set to N
+ * - Theta_proj - a vector of projection anges in degrees 
  * - C0 - intensity
  * - x0 - x0 position
  * - y0 - y0 position
@@ -35,8 +36,6 @@
  * - b  - size object
  * - c - size object
  * - psi_gr1 - rotation angle1
- * - psi_gr2 - rotation angle2
- * - psi_gr3 - rotation angle3
  *
  * Output:
  * 1. The analytical phantom size of [N1 x N2 x N3] or temporal 4D phantom (N1 x N2 x N3 x time-frames)
@@ -89,10 +88,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     for (i = 0; i<N; i++) { Tomorange_Z_Ar[i] = Tomorange_Xmin + (float)i*H_x; }
     Zdel = malloc(N * sizeof(float));
     for (i = 0; i<N; i++) Zdel[i] = Tomorange_Z_Ar[i] - z0;
-    
-    // printf("%i %i\n", Horiz_det, Vert_det);
-    
-    /* vector of angles */
+        
+    /* convert to radians */
     AnglesRad = malloc(AngTot*sizeof(float));
     for(ll=0; ll<AngTot; ll++)  AnglesRad[ll] = (Theta_proj[ll])*((float)M_PI/180.0f);
     
@@ -118,11 +115,11 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     /* fix for centering */
     if (strcmp("elliptical_cylinder",Object) == 0) {
         x00 = x0 + 0.5f*H_x;
-        y00 = y0 + 0.5f*H_x;
+        y00 = y0 - 0.5f*H_x;
         z00 = z0 + 0.5f*H_x;
     }
     else {
-        x00 = x0 - 0.5f*H_x;
+        x00 = x0 + 0.5f*H_x;
         y00 = y0 - 0.5f*H_x;
         z00 = z0 - 0.5f*H_x;
     }
@@ -140,9 +137,6 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     a2 = 1.0f/(a22);
     b2 = 1.0f/(b22);
     c2 = 1.0f/(c*c);
-    
-    
-    // if (Object == 4) c2 =4.0f*c2;   
     
     float xh[3] = {0.0f, 0.0f, 0.0f};
     float xh1[3] = {0.0f, 0.0f, 0.0f};
@@ -169,22 +163,24 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                 xh1[0] = x00; xh1[1] = y00; xh1[2] = z00;
                 matvet3(bs,xh1,xh);  /* matrix-vector multiplication */
                 
-                float a_v, b_v, c_v, d_v, p1, p2, alh, bth, gmh;
-                // float zz0,p02,p01,ph,z1,z2,ph1,ph2; /*cone related */
-                
+                float a_v, b_v, c_v, d_v, p1, p2, alh, bth, gmh;       
                 
                 if (strcmp("cuboid",Object) == 0) {
                     /* the object is a cuboid */
                     
-                    //x11 = 2.0f*x00 + 0.5f*H_x;
+                    // x11 = 2.0f*x00 + 0.5f*H_x;
                     // y11 = 2.0f*y00 - 0.5f*H_x;
-                    
-                    x11 = 2.0f*x00 + 2.0f*H_x;
-                    y11 = 2.0f*y00 + 2.0f*H_x;
-                    
-                    
-                    // if (x00 == (0.5f*H_x))  y11 = 2.0f*x0  - 0.5f*H_x;
-                    // if (y00 == (0.5f*H_x))  x11 = -2.0f*y0  + 0.5f*H_x;
+
+                    /*Python*/                   
+	            x11 = 2.0f*x0;
+        	    y11 = 2.0f*y0 + 1.0f*H_x;
+                      
+                    //if (x00 == (0.5f*H_x))  y11 = 2.0f*x0  - 0.5f*H_x;
+                    //if (y00 == (0.5f*H_x))  x11 = -2.0f*y0  + 0.5f*H_x;
+
+                    /* Matlab version ? */
+//                  x11 = 2.0f*x00 + 2.0f*H_x;
+//                  y11 = 2.0f*y00 + 2.0f*H_x;              
                     
                     xwid = b;
                     ywid = a;
@@ -203,7 +199,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                     TETAs = AnglesRad[ll]; /* the variable projection angle (AnglesRad) */
                     
                     TETA1 = TETAs - M_PI2;
-                    FIs =  0.0f  ; /* always zero for the fixed source? */
+                    FIs =  0.0f;  /* always zero for the fixed source? */
                     PSIs = 0.0f;  /* always zero for the fixed source? */
                     
                     aa1[0]=-RS*sinf(TETAs)*cosf(FIs);
@@ -218,19 +214,19 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                     PSI1=-PSIs;
                     matrot3(ai,PSI1,TETA1,FI1); /* rotation of 3x3 matrix */
                     
-                    /* Bычисление матрицы перехода от системы проекции к системе об'екта.*/
-                    matmat3(bs,ai,bsai); /* call mmtmt(bs,ai,bsai,n3,n3,n3) */
+                    /* A transform matrix from projection space to object space */
+                    matmat3(bs,ai,bsai); 
                     vh1[0]=0.0f;
                     
                     /* the object is an ellipsoid */
                     for(j=0; j<Horiz_det; j++) {
                         for(k=0; k<Vert_det; k++) {
-                            index = ll*Vert_det*Horiz_det + j*Vert_det + k;
+                            index = ll*Vert_det*Horiz_det + k*Horiz_det + j;                            
+                                                        
+                            vh1[2]=DetectorRange_Horiz_ar[j];
+                            vh1[1]=DetectorRange_Vert_ar[k];
                             
-                            vh1[1]=DetectorRange_Horiz_ar[j];
-                            vh1[2]=DetectorRange_Vert_ar[k];
-                            
-                            matvet3(bsai,vh1,al);
+                            matvet3(bsai,vh1,al); /*matrix-vector multiplication */
                             
                             if (strcmp("ellipsoid",Object) == 0) {
                                 a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) + powf((aa[2]/c),2);
@@ -243,11 +239,9 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                                     p2 = (sqrtf(d_v)-b_v)/a_v;
                                     A[index] += (p2-p1)*multiplier;
                                 }
-                            }
-                            
+                            }                            
                             if (strcmp("paraboloid",Object) == 0) {
-                                /* the object is a parabola Lambda = 1 */
-                                
+                                /* the object is a parabola Lambda = 1 */                                
                                 a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) + powf((aa[2]/c),2);
                                 b_v = aa[0]*(al[0]-xh[0])*a2 + aa[1]*(al[1]-xh[1])*b2 + aa[2]*(al[2]-xh[2])*c2;
                                 c_v = powf(((al[0]-xh[0])/a),2) + powf(((al[1]-xh[1])/b), 2) + powf(((al[2]-xh[2])/c),2) - 1.0f;
@@ -258,8 +252,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                                     p2 = (sqrtf(d_v)-b_v)/a_v;
                                     A[index] += multiplier*(a_v/3.0f*(pow(p1,3.0f) - pow(p2,3.0f)) +  b_v*(pow(p1,2.0f) - pow(p2,2.0f)) + c_v*(p1-p2));
                                 }
-                            }
-                            
+                            }                            
                             if (strcmp("gaussian",Object) == 0) {
                                 /* The object is a volumetric gaussian */
                                 alh=alog2*a2;
@@ -271,101 +264,25 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                                 c_v = alh*powf(((al[0]-xh[0])),2) + bth*powf(((al[1]-xh[1])),2) + gmh*powf(((al[2]-xh[2])),2);
                                 
                                 A[index] += multiplier*sqrtf(M_PI*a_v)*expf((pow(b_v,2))*a_v-c_v);
-                            }
-                            //if (strcmp("cone",Object) == 0) {
-                            ///* the object is a cone */
-                            //// !c    Определение z-координаты основания конуса - zz0.
-                            //p3 = 0.0f;
-                            //zz0 = xh[2] - c;
-                            ////!c    Определение параметра точки пересечения прямой с основанием.
-                            //if (aa[2] != 0.0f) {p3 = (zz0-al[2])/aa[2];}
-                            //// !c    Определение точек пересечения прямой с боковой поверхностью.
-                            //a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) - powf((aa[2]/c),2);
-                            //b_v = aa[0]*(al[0]-xh[0])*a2 + aa[1]*(al[1]-xh[1])*b2 - aa[2]*(al[2]-xh[2])*c2;
-                            //c_v = powf(((al[0]-xh[0])/a),2) + powf(((al[1]-xh[1])/b), 2) - powf(((al[2]-xh[2])/c),2);
-                            //d_v = b_v*b_v - a_v*c_v;
-                            //// !c    Eсли  d<0, то прямая не пересекает боковой поверхности.
-                            //if (d_v <= 0.0f) {
-                            //// !c    Если  d=0, то прямая пересекает коническую поверхность в одной точке.
-                            //if (d_v == 0.0f) {
-                            //ph=-b_v/a_v;
-                            //p01=fminf(ph,p3);
-                            //p02=fmaxf(ph,p3);
-                            //A[index] += (p02-p01)*multiplier;
-                            //}
-                            //else {
-                            //ph1 =-(sqrtf(d_v)+b_v)/a_v;
-                            //ph2 = (sqrtf(d_v)-b_v)/a_v;
-                            //p1=fminf(ph1,ph2);
-                            //p2=fmaxf(ph1,ph2);
-                            //// !c    Определение z-координат пересечений с коничесой поверхностью.
-                            //z1=aa[2]*p1+al[2];
-                            //z2=aa[2]*p2+al[2];
-                            //// !c    Отбрасываются варианты когда прямая не пересекает конуса.
-                            //if ((z1 < xh[2]) && (z2 < xh[2])) {
-                            //if ((z1 < xh[2]) && (z2 > zz0)) {
-                            //if ((z1 > zz0) && (z2 < xh[2])) {
-                            //if ((z1 > zz0) && (z2 > zz0)) {
-                            ////!c    Если Z-координата одного из пересечений с боковой поверхностью
-                            //// !c    не лежит между Z-координатами основания и вершины то переход.
-                            //if ((z1 < xh[2]) || (z1 > zz0) || (z2 < xh[2]) || (z2 > zz0)) {
-                            //p01=p1;
-                            //p02=p2;
-                            //A[index] += (p02-p01)*multiplier;
-                            //}
-                            //else {
-                            //// !c    Перебор возможных взаимоположений точек пересечения.
-                            //if ((z1 >= xh[2]) || (z1 <= zz0)) {
-                            //p01=fminf(p2,p3);
-                            //p02=fmaxf(p2,p3);
-                            //}
-                            //if ((z2 >= xh[2]) || (z2 <= zz0)) {
-                            //p01=fminf(p1,p3);
-                            //p02=fmaxf(p1,p3);
-                            //}
-                            //A[index] += (p02-p01)*multiplier;
-                            //}
-                            //}}}}
-                            //}
-                            //}
-                            //}
-                        }} /*main for j-k loop*/
+                            }    
+                        }} /*main for j-k loop*/           
                     
-                    
-                    if (strcmp("elliptical_cylinder",Object) == 0)  {
-                        
+                    if (strcmp("elliptical_cylinder",Object) == 0)  {                        
                         sin_2 = powf((sinf(TETAs - psi3)),2);
                         cos_2 = powf((cosf(TETAs - psi3)),2);
                         
                         delta1 = 1.0f/(a22*sin_2 + b22*cos_2);
                         delta_sq = sqrtf(delta1);
                         first_dr = AA5*delta_sq;
-                        AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs);
-                        
-                        
-                        /* Matlab version */
-                        /*
-                         * for(j=0; j< Vert_det; j++) {
-                         * AA3 = powf((DetectorRange_Vert_ar[j] - AA2),2);
-                         * AA6 = (AA3)*delta1;
-                         * for(k=0; k< Horiz_det; k++) {
-                         * index = ll*Vert_det*Horiz_det + k*Vert_det + j;
-                         * if (fabs(Zdel[k]) < c)  {
-                         * if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
-                         * }
-                         * }
-                         * }
-                         */
-                        /* Python version */
-                        for(j=0; j<Horiz_det; j++) {
+                        AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs);                        
+                        for(k=0; k<Vert_det; k++) {
+                           if (fabs(Zdel[k]) < c)  {                        
+                            for(j=0; j<Horiz_det; j++) {
                             AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
-                            AA6 = (AA3)*delta1;
-                            for(k=0; k<Vert_det; k++) {
-                                index = ll*Vert_det*Horiz_det + k*Vert_det + j;
-                                if (fabs(Zdel[k]) < c)  {
-                                    if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
-                                }
-                                else A[index] = 0.0f;
+                            AA6 = (AA3)*delta1;                            
+                            index = ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                            if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
+                            	}                            
                             }
                         }
                     }
@@ -525,10 +442,15 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                     break;
                                 }
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
-                                //TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
-                                
-                                // for elliptical_cyllinder
-                                TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+                                }
+                                else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
+		 	TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, -y0, z0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+				}
+                                else {                                                               
+                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr3, psi_gr2, -psi_gr1, 0l); //python
+                                }
                             }
                         }
                         else {
@@ -607,6 +529,8 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                     
                                     //TomoP3DObject_core(A, N1, N2, N3, Z1, Z2, tmpstr2, C_t, y_t, x_t, z_t, a_t, b_t, c_t, phi1_t, phi2_t, phi3_t, tt); /* python */
                                     // TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2,
+                                    
+                                                                        
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {
                                         float t = d_step / distance;

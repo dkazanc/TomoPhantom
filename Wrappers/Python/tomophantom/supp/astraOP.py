@@ -4,6 +4,7 @@
 Class based on using ASTRA toolbox to perform projection/bakprojection of 2D/3D
 data using parallel beam geometry 
 - SIRT algorithm from ASTRA 
+- CGLS algorithm from ASTRA 
 """
 
 import astra
@@ -89,7 +90,7 @@ class AstraTools:
         return recSIRT
 class AstraTools3D:
     """3D parallel beam projection/backprojection class based on ASTRA toolbox"""
-    def __init__(self, DetRowCount, DetColumnCount, AnglesVec, ObjSize):
+    def __init__(self, DetColumnCount, DetRowCount, AnglesVec, ObjSize):
         self.ObjSize = ObjSize
         self.proj_geom = astra.create_proj_geom('parallel3d', 1.0, 1.0, DetRowCount, DetColumnCount, AnglesVec)
         if type(ObjSize) == tuple:
@@ -107,3 +108,47 @@ class AstraTools3D:
         rec_id, object3D = astra.create_backprojection3d_gpu(proj_data, self.proj_geom, self.vol_geom)
         astra.data3d.delete(rec_id)
         return object3D
+    def sirt3D(self, sinogram, iterations):
+        """perform SIRT reconstruction""" 
+        sinogram_id = astra.data3d.create("-sino", self.proj_geom, sinogram)
+        # Create a data object for the reconstruction
+        rec_id = astra.data3d.create('-vol', self.vol_geom)
+
+        cfg = astra.astra_dict('SIRT3D_CUDA')
+        cfg['ReconstructionDataId'] = rec_id
+        cfg['ProjectionDataId'] = sinogram_id
+
+        # Create the algorithm object from the configuration structure
+        alg_id = astra.algorithm.create(cfg)
+        # This will have a runtime in the order of 10 seconds.
+        astra.algorithm.run(alg_id, iterations)
+        
+        # Get the result
+        recSIRT = astra.data3d.get(rec_id)
+
+        astra.algorithm.delete(alg_id)
+        astra.data3d.delete(rec_id)
+        astra.data3d.delete(sinogram_id)
+        return recSIRT
+    def cgls3D(self, sinogram, iterations):
+        """perform CGLS reconstruction""" 
+        sinogram_id = astra.data3d.create("-sino", self.proj_geom, sinogram)
+        # Create a data object for the reconstruction
+        rec_id = astra.data3d.create('-vol', self.vol_geom)
+
+        cfg = astra.astra_dict('CGLS3D_CUDA')
+        cfg['ReconstructionDataId'] = rec_id
+        cfg['ProjectionDataId'] = sinogram_id
+
+        # Create the algorithm object from the configuration structure
+        alg_id = astra.algorithm.create(cfg)
+        # This will have a runtime in the order of 10 seconds.
+        astra.algorithm.run(alg_id, iterations)
+        
+        # Get the result
+        recCGLS = astra.data3d.get(rec_id)
+
+        astra.algorithm.delete(alg_id)
+        astra.data3d.delete(rec_id)
+        astra.data3d.delete(sinogram_id)
+        return recCGLS

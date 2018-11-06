@@ -266,18 +266,19 @@ def Object(phantom_size, objlist):
     return phantom
 def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
     """  
-    Create 3D or 4D analytical projection data of the dimension [] 
+    Create 3D or 4D analytical projection data of the dimension [AngTot, Vert_det, Horiz_det] 
     
-    Takes in a input model_id. phantom_size, 
+    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
     
-    param: model_parameters_filename -- filename for the model parameters
-    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
-    param: sub_index -- a tuple containing 2 indeces [lower, upper] to select a vertical subset needed to be extracted
     param: model_id -- a model id from the functions file 
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: Horiz_det -- horizontal detector size
+    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
+    params: angles -- 1D array of projection angles in degrees
+    param: model_parameters_filename -- filename for the model parameters
     
-    returns: numpy float32 phantom array    
+    returns: numpy float32 phantom array (3D or 4D)
     """
-    cdef long N,U_dim,V_dim
     if type(phantom_size) == tuple:
        raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
     cdef int AngTot = angles.shape[0]
