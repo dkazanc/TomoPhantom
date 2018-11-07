@@ -20,7 +20,7 @@ pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
 % generate a 3D phantom 
 N = 256;
-ModelNo = 16;
+ModelNo = 13;
 [G] = TomoP3DModel(ModelNo,N,pathTP);
 figure; 
 slice = round(0.5*N);

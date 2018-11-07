@@ -190,15 +190,14 @@ void mexFunction(
                                     break; }
                                 printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
                                 
-                                
-                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {                                    
-                             TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l); 
+                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
+                                }
+                                else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
                                 }
                                 else {
-                              // for elliptical_cyllinder 
-                              // TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
-                              // and cuboid
-                              TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, -psi_gr2, psi_gr1, 0l);
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, -psi_gr2, psi_gr1, 0l);
                                 }
                             }
                         }
@@ -206,8 +205,9 @@ void mexFunction(
                             /**************************************************/
                             printf("\n %s %i %s \n", "Temporal 3D+time model", ModelSelected, " is selected");
                             /* temporal phantom 3D + time (4D) */
-                            // const mwSize N_dims[4] = {N1, N2, N3, steps}; /* image dimensions */
-                            // A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(4, N_dims, mxSINGLE_CLASS, mxREAL));
+                            /* Allocating data volume */
+                            const mwSize N_dims[4] = {DetectorWidth, DetectorHeight, AngTot, steps}; /* projection data dimensions */
+                            A = (float*)mxGetPr(plhs[0] = mxCreateNumericArray(4, N_dims, mxSINGLE_CLASS, mxREAL)); /*output array*/
                             
                             float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, z1 = 0.0f, a1 = 0.0f, b1 = 0.0f, c1 = 0.0f, psi_gr1_1 = 0.0f, psi_gr2_1 = 0.0f, psi_gr3_1 = 0.0f;
                             /* loop over all components */
@@ -340,8 +340,15 @@ void mexFunction(
                                 /*loop over time frames*/
                                 for(tt=0; tt < steps; tt++) {
                                     
-           //  TomoP3DObject_core(A, N1, N2, N3, 0l, N3, tmpstr2, C_t, x_t, y_t, z_t, b_t, a_t, c_t, -phi1_t, phi2_t, phi3_t, tt); /* Matlab */
-                                    
+                                    if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C_t, x_t, -z_t, -y_t, a_t, b_t, c_t, phi3_t, -phi2_t, -phi1_t, tt);
+                                    }
+                                    else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
+                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C_t, y_t, -x_t, z_t, a_t, b_t, c_t, phi3_t, -phi2_t, -phi1_t, tt);
+                                    }
+                                    else {
+                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C_t, y_t, x_t, z_t, b_t, a_t, c_t, phi3_t, -phi2_t, phi1_t, tt);
+                                    }
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {
                                         float t = d_step/distance;
