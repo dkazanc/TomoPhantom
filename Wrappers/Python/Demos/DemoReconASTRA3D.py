@@ -5,7 +5,7 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 * Script to generate 3D analytical phantoms and their projection data using TomoPhantom
-* Projection data can be also generated numerically and reconstructed using ASTRA TOOLBOX 
+* Projection data is also generated numerically and reconstructed using ASTRA TOOLBOX 
 
 >>>>> Prerequisites: ASTRA toolbox  <<<<<
 install ASTRA: conda install -c astra-toolbox astra-toolbox
@@ -14,20 +14,19 @@ install ASTRA: conda install -c astra-toolbox astra-toolbox
 """
 import timeit
 import os
-from tomophantom import TomoP3D
 import matplotlib.pyplot as plt
+import numpy as np
 import tomophantom
+from tomophantom import TomoP3D
+from tomophantom.supp.qualitymetrics import QualityTools
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 9 # select a model number from the library
-# Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
-N_size = 256 # or as a tuple of a custom size (256,256,256)
-# one can specify an exact path to the parameters file
-# path_library2D = '../../../PhantomLibrary/models/Phantom3DLibrary.dat'
+model = 3 # select a model number from the library
+N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
-#This will generate a N_size x N_size x N_size phantom (3D) or non-cubic phantom
+#This will generate a N_size x N_size x N_size phantom (3D)
 phantom_tm = TomoP3D.Model(model, N_size, path_library3D)
 toc=timeit.default_timer()
 Run_time = toc - tic
@@ -49,10 +48,10 @@ plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
 plt.title('3D Phantom, sagittal view')
 plt.show()
 
-import numpy as np
+# Projection geometry related parameters:
 Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
 Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
-angles_num = 360 # angles number
+angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
 angles_rad = angles*(np.pi/180.0)
 #%%
@@ -63,7 +62,7 @@ Atools = AstraTools3D(Horiz_det, Vert_det, angles_rad, N_size) # initiate a clas
 
 projData3D_astra = Atools.forwproj(phantom_tm) # numerical projection data
 
-intens_max = 60
+intens_max = 150
 sliceSel = 150
 #plt.gray()
 plt.figure() 
@@ -106,6 +105,7 @@ plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 
+# comparing numerical projections with analytical ones
 intens_max = 2
 plt.figure() 
 plt.subplot(131)
@@ -120,12 +120,12 @@ plt.title('Tangentogram difference')
 plt.show()
 #%%
 print ("Reconstruction using ASTRA-toolbox")
-recNumerical= Atools.cgls3D(projData3D_analyt, 10) # reconstruct projection data
+recNumerical= Atools.cgls3D(projData3D_analyt, 10) # CGLS-reconstruct projection data
 
 sliceSel = int(0.5*N_size)
 max_val = 1
 #plt.gray()
-plt.figure(1) 
+plt.figure() 
 plt.subplot(131)
 plt.imshow(recNumerical[sliceSel,:,:],vmin=0, vmax=max_val)
 plt.title('3D Reconstruction, axial view')
@@ -139,4 +139,8 @@ plt.imshow(recNumerical[:,:,sliceSel],vmin=0, vmax=max_val)
 plt.title('3D Reconstruction, sagittal view')
 plt.show()
 
+# calculate errors 
+Qtools = QualityTools(phantom_tm, recNumerical)
+RMSE = Qtools.rmse()
+print("Root Mean Square Error is {}".format(RMSE))
 #%%

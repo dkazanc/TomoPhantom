@@ -20,7 +20,7 @@
  
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions of them
  
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transforms of models and also their numerical projections
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transform of 2D-4D models and also their numerical projections
  
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts
  

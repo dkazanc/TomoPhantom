@@ -20,8 +20,8 @@ limitations under the License.
 #include "CCPiDefines.h"
 #include "utils.h"
 
-CCPI_EXPORT float TomoP3DModelSino_core(float *A, int ModelSelected, long U_dim, long V_dim, long N, float *Theta_proj, int AngTot, char* ModelParametersFilename);
-CCPI_EXPORT float TomoP3DObjectSino_core(float *A, long U_dim, long V_dim, long N, float *Angl_vector, int AngTot, char *Object,
+CCPI_EXPORT float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long N, float *Theta_proj, int AngTot, char* ModelParametersFilename);
+CCPI_EXPORT float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, float *Angl_vector, int AngTot, char *Object,
 	float C0, /* longensity */
 	float x0, /* x0 position */
 	float y0, /* y0 position */

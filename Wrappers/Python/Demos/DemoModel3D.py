@@ -13,27 +13,26 @@ If one needs to modify/add phantoms, please edit Phantom3DLibrary.dat
 """
 import timeit
 import os
+import numpy as np
 from tomophantom import TomoP3D
 import matplotlib.pyplot as plt
 import tomophantom
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 16 # select a model number from the library
-# Define phantom dimensions using a scalar (cubic) or a tuple [N1, N2, N3]
-N_size = 256 # or as a tuple of a custom size (256,256,256)
-# one can specify an exact path to the parameters file
-# path_library2D = '../../../PhantomLibrary/models/Phantom3DLibrary.dat'
+model = 14 # select a model number from the library
+N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
-#This will generate a N_size x N_size x N_size phantom (3D) or non-cubic phantom
+#This will generate a N_size x N_size x N_size phantom (3D)
 phantom_tm = TomoP3D.Model(model, N_size, path_library3D)
 toc=timeit.default_timer()
 Run_time = toc - tic
 print("Phantom has been built in {} seconds".format(Run_time))
+
 sliceSel = int(0.5*N_size)
 #plt.gray()
-plt.figure(1) 
+plt.figure() 
 plt.subplot(131)
 plt.imshow(phantom_tm[sliceSel,:,:],vmin=0, vmax=1)
 plt.title('3D Phantom, axial view')
@@ -46,9 +45,7 @@ plt.subplot(133)
 plt.imshow(phantom_tm[:,:,sliceSel],vmin=0, vmax=1)
 plt.title('3D Phantom, sagittal view')
 plt.show()
-
 #%%
-import numpy as np
 Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
 Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
 angles_num = int(0.5*np.pi*N_size); # angles number
