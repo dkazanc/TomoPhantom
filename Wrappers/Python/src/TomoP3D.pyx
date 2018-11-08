@@ -295,7 +295,7 @@ def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.flo
         ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, phantom_size, &angles[0], AngTot, c_string)
     else:
         print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
-    return projdata
+    return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSinoTemporal(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
@@ -329,7 +329,7 @@ def ModelSinoTemporal(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarra
         print("The selected model is stationary (3D), use 'ModelSino' function instead")
     else:
         ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, phantom_size, &angles[0], AngTot, c_string)
-    return projdata
+    return np.swapaxes(projdata,1,2)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 

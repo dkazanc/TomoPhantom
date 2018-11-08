@@ -79,17 +79,8 @@ plt.imshow(projData3D_astra[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 #%%
-# projData3D_astra = np.load('/home/kjy41806/Documents/SOFT/tempProj.npy')
-
 print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
-
-#data rearranging to fit ASTRAs conventions
-projData3D_analyt_r = np.zeros((Vert_det, angles_num, Horiz_det),'float32')
-for i in range(0,Horiz_det): 
-    projData3D_analyt_r[:,:,i] = np.transpose(projData3D_analyt[:,:,i])
-projData3D_analyt = projData3D_analyt_r
-del projData3D_analyt_r
 
 intens_max = 70
 sliceSel = 150
@@ -105,6 +96,7 @@ plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 
+"""
 # comparing numerical projections with analytical ones
 intens_max = 2
 plt.figure() 
@@ -118,6 +110,7 @@ plt.subplot(133)
 plt.imshow(abs(projData3D_analyt[:,:,sliceSel] - projData3D_astra[:,:,sliceSel]),vmin=0, vmax=intens_max)
 plt.title('Tangentogram difference')
 plt.show()
+"""
 #%%
 print ("Reconstruction using ASTRA-toolbox")
 recNumerical= Atools.cgls3D(projData3D_analyt, 10) # CGLS-reconstruct projection data

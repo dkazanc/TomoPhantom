@@ -61,15 +61,7 @@ angles_rad = angles*(np.pi/180.0)
 
 projData4D_analyt= TomoP3D.ModelSinoTemporal(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
 
-#data rearranging to fit ASTRAs conventions (if needed)
 time_frames = projData4D_analyt.shape[0]
-projData4D_analyt_r = np.zeros((time_frames,Vert_det, angles_num, Horiz_det),'float32')
-for j in range(0,time_frames):
-    for i in range(0,Horiz_det):
-        projData4D_analyt_r[j,:,:,i] = np.transpose(projData4D_analyt[j,:,:,i])
-projData4D_analyt = projData4D_analyt_r
-del projData4D_analyt_r
-
 intens_max = 60
 sliceSel = 150
 for i in range(0,time_frames):
