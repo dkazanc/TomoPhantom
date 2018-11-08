@@ -530,7 +530,7 @@ float matvet3(float Ad[3][3], float V1[3], float V2[3])
 }
 
 /*matrix-matrix multiplication*/
-/*float matmat3(float Am[3][3], float Bm[3][3], float Cm[3][3])
+float matmat3(float Am[3][3], float Bm[3][3], float Cm[3][3])
 {
     int i, j, k;
     for(i=0; i<3; i++) {
@@ -542,4 +542,3 @@ float matvet3(float Ad[3][3], float V1[3], float V2[3])
         }}
     return 1;  
 }
-*/

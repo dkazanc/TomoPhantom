@@ -37,9 +37,11 @@ mex TomoP3DObject.c TomoP3DModel_core.c utils.c COMPFLAGS="\$COMPFLAGS -fopenmp 
 movefile('TomoP3DObject.mex*',Pathmove);
 mex TomoP2DSinoNum.c TomoP2DSinoNum_core.c utils.c COMPFLAGS="\$COMPFLAGS -fopenmp -Wall -std=c99"
 movefile('TomoP2DSinoNum.mex*',Pathmove);
+mex TomoP3DModelSino.c TomoP3DModelSino_core.c utils.c COMPFLAGS="\$COMPFLAGS -fopenmp -Wall -std=c99"
+movefile('TomoP3DModelSino.mex*',Pathmove);
 
 
-delete TomoP2DModel_core* TomoP2DModelSino_core* TomoP3DModel_core* TomoP2DSinoNum_core* CCPiDefines.h utils* CMakeLists.txt;
+delete TomoP2DModel_core* TomoP2DModelSino_core* TomoP3DModel_core* TomoP2DSinoNum_core* TomoP3DModelSino_core* CCPiDefines.h utils* CMakeLists.txt;
 
 %%% The second approach to compile using TDM-GCC which follows this
 %%% discussion:
@@ -65,7 +67,9 @@ delete TomoP2DModel_core* TomoP2DModelSino_core* TomoP3DModel_core* TomoP2DSinoN
 % movefile('TomoP3DObject.mex*',Pathmove);
 % mex C:\TDMGCC\lib\gcc\x86_64-w64-mingw32\5.1.0\libgomp.a CXXFLAGS="$CXXFLAGS -std=c++11 -fopenmp" TomoP2DSinoNum.c TomoP2DSinoNum_core.c utils.c
 % movefile('TomoP2DSinoNum.mex*',Pathmove);
-% delete TomoP2DModel_core* TomoP2DModelSino_core* TomoP3DModel_core* TomoP2DSinoNum_core* CCPiDefines.h utils* CMakeLists.txt;
+% mex C:\TDMGCC\lib\gcc\x86_64-w64-mingw32\5.1.0\libgomp.a CXXFLAGS="$CXXFLAGS -std=c++11 -fopenmp" TomoP3DModelSino.c TomoP3DModelSino_core.c utils.c
+% movefile('TomoP3DModelSino.mex*',Pathmove);
+% delete TomoP2DModel_core* TomoP2DModelSino_core* TomoP3DModel_core* TomoP3DModelSino_core* TomoP2DSinoNum_core* CCPiDefines.h utils* CMakeLists.txt;
 
 fprintf('%s \n', 'All compiled!');
 cd(UpPath);

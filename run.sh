@@ -1,11 +1,11 @@
 #!/bin/bash  
 echo "Building Tomophantom using CMake"  
-#rm -r build
+# rm -r build
 # Requires Cython, install it first: 
 # pip install cython
 mkdir build
 cd build/
-#make clean
+make clean
 # install Python modules only
 cmake ../ -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
 # install Matlab modules only
@@ -17,6 +17,6 @@ cmake ../ -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_P
 make install
 cd install/python/
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:.
-#spyder
+# spyder
 # one can run Matlab in Linux as:
 # PATH="/path/to/mex/:$PATH" LD_LIBRARY_PATH="/path/to/library:$LD_LIBRARY_PATH" matlab

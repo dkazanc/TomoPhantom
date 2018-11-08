@@ -50,7 +50,41 @@ for i in range(0,np.size(phantom_tm,0)):
     plt.title('3D Phantom, sagittal view')
     plt.show()
     plt.pause(0.3)
+#%%
+print ("Getting 4D projection data using TomoPhantom software")
+# Projection geometry related parameters:
+Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
+Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
+angles_num = int(0.5*np.pi*N_size); # angles number
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
+angles_rad = angles*(np.pi/180.0)
 
+projData4D_analyt= TomoP3D.ModelSinoTemporal(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
+
+#data rearranging to fit ASTRAs conventions (if needed)
+time_frames = projData4D_analyt.shape[0]
+projData4D_analyt_r = np.zeros((time_frames,Vert_det, angles_num, Horiz_det),'float32')
+for j in range(0,time_frames):
+    for i in range(0,Horiz_det):
+        projData4D_analyt_r[j,:,:,i] = np.transpose(projData4D_analyt[j,:,:,i])
+projData4D_analyt = projData4D_analyt_r
+del projData4D_analyt_r
+
+intens_max = 60
+sliceSel = 150
+for i in range(0,time_frames):
+    plt.figure(2) 
+    plt.subplot(131)
+    plt.imshow(projData4D_analyt[i,:,sliceSel,:],vmin=0, vmax=intens_max)
+    plt.title('2D Projection (analytical)')
+    plt.subplot(132)
+    plt.imshow(projData4D_analyt[i,sliceSel,:,:],vmin=0, vmax=intens_max)
+    plt.title('Sinogram view')
+    plt.subplot(133)
+    plt.imshow(projData4D_analyt[i,:,:,sliceSel],vmin=0, vmax=intens_max)
+    plt.title('Tangentogram view')
+    plt.show()
+    plt.pause(0.3)
 #%%
 # A capability of building a subset of vertical slices out of 4D phantom (faster)
 import timeit
