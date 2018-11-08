@@ -20,7 +20,7 @@ import tomophantom
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 14 # select a model number from the library
+model = 13 # select a model number from the library
 N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
@@ -54,13 +54,6 @@ angles_rad = angles*(np.pi/180.0)
 
 print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
-
-#data rearranging to fit ASTRAs conventions
-projData3D_analyt_r = np.zeros((Vert_det, angles_num, Horiz_det),'float32')
-for i in range(0,Horiz_det): 
-    projData3D_analyt_r[:,:,i] = np.transpose(projData3D_analyt[:,:,i])
-projData3D_analyt = projData3D_analyt_r
-del projData3D_analyt_r
 
 intens_max = 60
 sliceSel = 150
