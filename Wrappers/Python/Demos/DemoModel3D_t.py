@@ -52,7 +52,6 @@ for i in range(0,np.size(phantom_tm,0)):
     plt.pause(0.3)
 #%%
 print ("Getting 4D projection data using TomoPhantom software")
-
 # Projection geometry related parameters:
 Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
 Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)

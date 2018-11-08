@@ -114,8 +114,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     /* fix for centering */
     x00 = x0 + 0.5f*H_x;
     y00 = y0 - 0.5f*H_x;
-    z00 = z0 - 0.5f*H_x;
-    
+    z00 = z0 - 0.5f*H_x;    
     
     /* parameters of an object have been extracted, now run the building module */
     /************************************************/
@@ -160,20 +159,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                 
                 if (strcmp("cuboid",Object) == 0) {
                     /* the object is a cuboid */
-                    
-                    // x11 = 2.0f*x00 + 0.5f*H_x;
-                    // y11 = 2.0f*y00 - 0.5f*H_x;
-                    
-                    /*Python*/
                     x11 = 2.0f*x0;
                     y11 = 2.0f*y0 + 1.0f*H_x;
-                    
-                    //if (x00 == (0.5f*H_x))  y11 = 2.0f*x0  - 0.5f*H_x;
-                    //if (y00 == (0.5f*H_x))  x11 = -2.0f*y0  + 0.5f*H_x;
-                    
-                    /* Matlab version ? */
-//                  x11 = 2.0f*x00 + 2.0f*H_x;
-//                  y11 = 2.0f*y00 + 2.0f*H_x;
                     
                     xwid = b;
                     ywid = a;

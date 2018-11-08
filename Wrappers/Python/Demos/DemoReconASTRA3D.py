@@ -22,7 +22,7 @@ from tomophantom.supp.qualitymetrics import QualityTools
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 3 # select a model number from the library
+model = 13 # select a model number from the library
 N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
@@ -62,7 +62,7 @@ Atools = AstraTools3D(Horiz_det, Vert_det, angles_rad, N_size) # initiate a clas
 
 projData3D_astra = Atools.forwproj(phantom_tm) # numerical projection data
 
-intens_max = 150
+intens_max = 70
 sliceSel = 150
 #plt.gray()
 plt.figure() 
@@ -91,7 +91,7 @@ for i in range(0,Horiz_det):
 projData3D_analyt = projData3D_analyt_r
 del projData3D_analyt_r
 
-intens_max = 60
+intens_max = 70
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)

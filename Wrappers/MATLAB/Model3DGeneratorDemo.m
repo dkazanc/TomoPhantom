@@ -10,7 +10,7 @@ close all;clc;clear;
 fsep = '/';
 addpath('compiled'); addpath('supplem'); 
 
-ModelNo = 10; % Select a model
+ModelNo = 13; % Select a model
 % Define phantom dimensions
 N = 256; % x-y-z size (cubic image)
 
@@ -53,33 +53,17 @@ subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colorma
 % end
 % close (figure(2));
 %%
-fprintf('%s \n', 'Calculating 3D parallel-beam sinogram of a phantom using ASTRA-toolbox...');
-angles = linspace(0,pi,N); % projection angles
-det = round(sqrt(2)*N);
-sino_astra3D = zeros(length(angles),det,N,'single');
+angles_num = round(0.5*pi*N); % angles number
+angles = linspace(0,179.99,angles_num); % projection angles
+Horiz_det = round(sqrt(2)*N); % detector column count (horizontal)
+Vert_det = N; % detector row count (vertical) (no reason for it to be > N, so fixed)
 
-tic;
-for i = 1:N
-sino_astra3D(:,:,i) = sino2Dastra(G(:,:,i), angles, det, N, 'gpu');
-end
-toc;
+disp('Using TomoPhantom to generate 3D projection data');
+proj3D_tomophant = TomoP3DModelSino(ModelNo, Vert_det, Horiz_det, N, single(angles), pathTP);
 
-% calculate residiual norm (the error is expected since projection models not the same)
-% err_diff = norm(sino_tomophan3D(:) - sino_astra3D(:))./norm(sino_astra3D(:));
-% fprintf('%s %.4f\n', 'NRMSE for sino residuals:', err_diff);
-% figure; 
-% subplot(1,2,1); imagesc(sino_tomophan3D(:,:,slice)', [0 70]); colormap hot; colorbar; daspect([1 1 1]); title('Exact sinogram');
-% subplot(1,2,2); imagesc(sino_astra3D(:,:,slice)', [0 70]); colormap hot; colorbar; daspect([1 1 1]); title('Discrete sinogram');
-%%
-fprintf('%s \n', 'Reconstruction using ASTRA-toolbox (FBP)...');
-FBP3D = zeros(N,N,N,'single');
+figure; 
+subplot(1,3,1); imagesc(squeeze(proj3D_tomophant(:,:,slice2)), [0 max_val]); title('Analytical projection');
+subplot(1,3,2); imagesc(squeeze(proj3D_tomophant(slice2,:,:))', [0 max_val]); title('Tangentogram');
+subplot(1,3,3); imagesc(squeeze(proj3D_tomophant(:,slice2,:)), [0 max_val]); title('Sinogram');
 
-% choose which sinogram to substitute
-for i = 1:N
-FBP3D(:,:,i) = rec2Dastra(sino_astra3D(:,:,i), angles, det, N);
-end
-figure(3); 
-subplot(1,3,1); imagesc(FBP3D(:,:,slice), [0 1]); daspect([1 1 1]); colormap hot; title('Axial Slice');
-subplot(1,3,2); imagesc(squeeze(FBP3D(:,slice,:)), [0 1]); daspect([1 1 1]); colormap hot; title('Y-Slice');
-subplot(1,3,3); imagesc(squeeze(FBP3D(slice,:,:)), [0 1]); daspect([1 1 1]); colormap hot; title('X-Slice');
 %%

@@ -1,8 +1,7 @@
 % GPLv3 license (ASTRA toolbox)
 % Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-% Script to generate 3D analytical phantoms and their sinograms with added noise and artifacts
-% Sinograms then reconstructed using ASTRA TOOLBOX 
+% Script to generate 3D analytical phantoms and projection data then reconstructed using ASTRA TOOLBOX 
 
 % If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
 % >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
@@ -18,7 +17,7 @@ mainDir  = fileparts(curDir);
 pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom3DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
-% generate a 3D phantom 
+disp('Using TomoPhantom to generate 3D phantom');
 N = 256;
 ModelNo = 13;
 [G] = TomoP3DModel(ModelNo,N,pathTP);
@@ -28,26 +27,19 @@ subplot(1,3,1); imagesc(G(:,:,slice), [0 1]); daspect([1 1 1]); colormap hot; ti
 subplot(1,3,2); imagesc(squeeze(G(:,slice,:)), [0 1]); daspect([1 1 1]); colormap hot; title('Y-Slice');
 subplot(1,3,3); imagesc(squeeze(G(slice,:,:)), [0 1]); daspect([1 1 1]); colormap hot; title('X-Slice');
 
-angles = linspace(0,179.99,360); % projection angles
-DetectorWidth = 300; % detector column count (horizontal)
-DetectorHeight = N; % detector row count (vertical)
+angles_num = round(0.5*pi*N); % angles number
+angles = linspace(0,179.99,angles_num); % projection angles
+Horiz_det = round(sqrt(2)*N); % detector column count (horizontal)
+Vert_det = N; % detector row count (vertical) (no reason for it to be > N, so fixed)
 %%
-% using astra-toolbox to generate data
-proj_geom = astra_create_proj_geom('parallel3d', 1, 1, DetectorHeight, DetectorWidth, angles*pi/180);
-vol_geom = astra_create_vol_geom(N,N,N);
-
-tic; [sinogram_id,proj3D_astra] = astra_create_sino3d_cuda(G, proj_geom, vol_geom); toc;
-astra_mex_data3d('delete', sinogram_id);
+disp('Using astra-toolbox (GPU) to generate 3D projection data');
+proj3D_astra = sino3Dastra(G, angles, Vert_det, Horiz_det);
+%%
+disp('Using TomoPhantom to generate 3D projection data');
+proj3D_tomophant = TomoP3DModelSino(ModelNo, Vert_det, Horiz_det, N, single(angles), pathTP);
 %%
 
-% figure; imshow(squeeze(sino3D_astra(:,1,:)),[]);
-tic; proj3D_tomophant = TomoP3DModelSino(ModelNo, DetectorHeight, DetectorWidth, N, single(angles), pathTP); toc;
-% figure; imshow(sino_tomophan3D, []);
-
-% load astraprojs.mat
 % comparing 2D analytical projections with ASTRA numerical projections
-%compar_im = proj250_astra;
-% sino_tomophan3D = reshape(sino_tomophan3D, [DetectorWidth,length(angles),DetectorHeight]);
 slice2 = 160;
 compar_im = squeeze(proj3D_astra(:,slice2,:));
 sel_im = proj3D_tomophant(:,:,slice2);
@@ -69,6 +61,13 @@ figure;
 subplot(1,3,1); imagesc(squeeze(proj3D_tomophant(:,:,slice2)), [0 max_val]); title('Analytical projection');
 subplot(1,3,2); imagesc(squeeze(proj3D_tomophant(slice2,:,:))', [0 max_val]); title('Tangentogram');
 subplot(1,3,3); imagesc(squeeze(proj3D_tomophant(:,slice2,:)), [0 max_val]); title('Sinogram');
-
+%%
+disp('Reconstructing data using ASTRA toolbox (CGLS method)');
+reconstructon = rec3Dastra(proj3D_tomophant, angles, Vert_det, Horiz_det);
+figure; 
+slice = round(0.5*N);
+subplot(1,3,1); imagesc(reconstructon(:,:,slice), [0 1]); daspect([1 1 1]); colormap hot; title('Axial Slice (reconstruction)');
+subplot(1,3,2); imagesc(squeeze(reconstructon(:,slice,:)), [0 1]); daspect([1 1 1]); colormap hot; title('Y-Slice');
+subplot(1,3,3); imagesc(squeeze(reconstructon(slice,:,:)), [0 1]); daspect([1 1 1]); colormap hot; title('X-Slice');
 
 %%
