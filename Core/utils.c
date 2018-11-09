@@ -135,7 +135,7 @@ float checkParams2D(int *params_switch, int ModelSelected, char *ModelParameters
                                     printf("%s %f\n", "b (object size) must be positive in [0,2] range, the given value is", b);
                                     params_switch[9] = 0;
                                     break; }
-                                printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);                           
+                                // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \na : %f \nb : %f \n", tmpstr2, C0, x0, y0,  a, b);                           
                             }
                         }
                         else {
@@ -375,7 +375,7 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
                                     params_switch[11] = 0;
                                     printf("%s %f\n", "c (object size) must be positive in [0,2] range, the given value is", c);
                                     break; }
-                                printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
+                                //printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
                             }
                         }
                         else {                            
@@ -486,7 +486,7 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
                                     params_switch[11] = 0;
                                     printf("%s %f\n", "Endvar c (object size) must be positive in [0,2] range, the given value is", c);
                                     break; }
-                                printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
+                               //printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
                             } /*components loop*/
                         }
                         params_switch[1] = 1;
