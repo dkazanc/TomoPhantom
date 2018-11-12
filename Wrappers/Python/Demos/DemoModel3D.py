@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 Script to generate 3D analytical phantoms (wip: generation of 3D projection data )
 If one needs to modify/add phantoms, please edit Phantom3DLibrary.dat
-
-!Run script from "Demos" folder in order to ensure a correct path to *dat file!
 
 @author: Daniil Kazantsev
 """
@@ -50,7 +47,6 @@ Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
 Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
 angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
-angles_rad = angles*(np.pi/180.0)
 
 print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)

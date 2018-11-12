@@ -9,9 +9,6 @@ If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
 Phantom3DLibrary.dat
 Note that all temporal phantoms start from no. 100
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
-
-Run demo from the folder "Demos"
-
 @author: Daniil Kazantsev
 """
 import numpy as np

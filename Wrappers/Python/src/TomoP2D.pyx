@@ -33,7 +33,7 @@ cdef extern float TomoP2DModel_core(float *A, int ModelSelected, int N, char* Mo
 cdef extern float TomoP2DObject_core(float *A, int N, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
 cdef extern float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename)
 cdef extern float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
-cdef extern float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys)
+cdef extern float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int system)
 cdef extern float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
 
 cdef packed struct object_2d:
@@ -232,7 +232,7 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
     param: obj_params -- object parameters list (dictionary)
     returns: numpy float32 phantom sinograms array.
     """
-    cdef Py_ssize_t i    
+    cdef Py_ssize_t i
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
     cdef float ret_val 
     cdef int AngTot = angles.shape[0]
