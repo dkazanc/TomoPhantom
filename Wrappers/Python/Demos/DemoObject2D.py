@@ -8,9 +8,6 @@ Script to generate 2D/3D analytical objects and their sinograms
 Recursively adding objects and sinos one can build a required model
 
 >>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
-
-Run demo from the folder "Demos"
-
 @author: Daniil Kazantsev
 """
 import numpy as np

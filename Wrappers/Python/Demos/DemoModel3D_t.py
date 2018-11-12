@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 Script to generate 4D (3D+time) analytical phantoms (wip: generation of 4D projection data )
 If one needs to modify/add phantoms, please edit Phantom3DLibrary.dat
-
-!Run script from "Demos" folder in order to ensure a correct path to *dat file!
-
 @author: Daniil Kazantsev
 """
 import timeit

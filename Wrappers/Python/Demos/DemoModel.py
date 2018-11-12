@@ -9,9 +9,6 @@ If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
 
 >>>>> Optional prerequisites: ASTRA toolbox <<<<<
 install ASTRA: conda install -c astra-toolbox astra-toolbox
- 
-!Run this script from "Demos" folder in order to ensure a correct path to *dat file!
-
 @author: Daniil Kazantsev
 """
 import numpy as np
