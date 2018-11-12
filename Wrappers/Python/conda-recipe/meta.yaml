@@ -1,11 +1,11 @@
 package:
   name: tomophantom
-  version: 1.2
+  version: 1.2.0
 
 
 build:
   preserve_egg_dir: False
-#  number: 0
+  number: 0
   
 requirements:
   build:
