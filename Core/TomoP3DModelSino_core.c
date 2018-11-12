@@ -43,7 +43,7 @@
  *
  */
 
-float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, float *Theta_proj, int AngTot, char *Object,
+float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Theta_proj, int AngTot, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -58,7 +58,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
         
 {
     int ll;
-    long i, j, k, index;
+    long i, j, k, index, sub_vol_size;
     float *DetectorRange_Horiz_ar=NULL, DetectorRange_Horiz_min, DetectorRange_Horiz_max, *DetectorRange_Vert_ar=NULL, DetectorRange_Vert_min, DetectorRange_Vert_max, U_step, V_step, a22, b22, c2, *Tomorange_Z_Ar = NULL, *Zdel = NULL;
     
     float *AnglesRad=NULL;
@@ -80,6 +80,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
     for(i=0; i<Horiz_det; i++) {DetectorRange_Horiz_ar[i] = (DetectorRange_Horiz_max) - (float)i*U_step;}
     for(i=0; i<Vert_det; i++) {DetectorRange_Vert_ar[i] = (DetectorRange_Vert_max) - (float)i*V_step;}
     
+    sub_vol_size = Z2 - Z1;
     Tomorange_Xmin = -1.0f;
     Tomorange_Xmax = 1.0f;
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(float)(N);
@@ -200,8 +201,10 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                     
                     /* the object is an ellipsoid */
                     for(j=0; j<Horiz_det; j++) {
-                        for(k=0; k<Vert_det; k++) {
-                            index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                        // for(k=0; k<Vert_det; k++) {
+                        for(k=Z1; k<Z2; k++) {
+                            //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                            index = tt*Horiz_det*AngTot*sub_vol_size + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
                             
                             vh1[2]=DetectorRange_Horiz_ar[j];
                             vh1[1]=DetectorRange_Vert_ar[k];
@@ -260,7 +263,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                                 for(j=0; j<Horiz_det; j++) {
                                     AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
                                     AA6 = (AA3)*delta1;
-                                    index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                                    //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                                    index = tt*sub_vol_size*Horiz_det*AngTot + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
                                     if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
                                 }
                             }
@@ -273,7 +277,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
                             if (fabs(Zdel[k]) < c2) {
                                 for(j=0; j< Horiz_det; j++) {
                                     p00 = DetectorRange_Horiz_ar[j];
-                                    index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                                    //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                                    index = tt*sub_vol_size*Horiz_det*AngTot + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
                                     
                                     p = p00;
                                     ksi=ksi00;
@@ -340,7 +345,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, fl
 }
 
 /********************Core Function*****************************/
-float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long N, float *Angl_vector, int AngTot, char* ModelParametersFilename)
+float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Angl_vector, int AngTot, char* ModelParametersFilename)
 {
     
     int Model = 0, Components = 0, steps = 0, counter = 0, ii;
@@ -423,13 +428,13 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                 }
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
                                 if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
-                                    TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+                                    TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
                                 }
                                 else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
-                                    TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, -y0, z0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
+                                    TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C0, x0, -y0, z0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
                                 }
                                 else {
-                                    TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr3, psi_gr2, -psi_gr1, 0l); //python
+                                    TomoP3DObjectSino_core(A, Horiz_det, Vert_det,  Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C0, x0, y0, z0, a, b, c, psi_gr3, psi_gr2, -psi_gr1, 0l); //python
                                 }
                             }
                         }
@@ -508,13 +513,13 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                 for (tt = 0; tt < (long)steps; tt++) {
                                     
                                     if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
-                                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C_t, y_t, -z_t, -x_t, b_t, a_t, c_t, phi3_t, phi2_t, phi1_t, tt); //python
+                                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2,  N, Angl_vector, AngTot, tmpstr2, C_t, y_t, -z_t, -x_t, b_t, a_t, c_t, phi3_t, phi2_t, phi1_t, tt); //python
                                     }
                                     else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
-                                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C_t, x_t, -y_t, z_t, b_t, a_t, c_t, phi3_t, phi2_t, phi1_t, tt); //python
+                                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det,  Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C_t, x_t, -y_t, z_t, b_t, a_t, c_t, phi3_t, phi2_t, phi1_t, tt); //python
                                     }
                                     else {
-                                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det, N, Angl_vector, AngTot, tmpstr2, C_t, x_t, y_t, z_t, a_t, b_t, c_t, phi3_t, phi2_t, -phi1_t, tt); //python
+                                        TomoP3DObjectSino_core(A, Horiz_det, Vert_det,  Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C_t, x_t, y_t, z_t, a_t, b_t, c_t, phi3_t, phi2_t, -phi1_t, tt); //python
                                     }
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {
