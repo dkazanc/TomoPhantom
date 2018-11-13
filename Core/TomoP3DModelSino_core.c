@@ -258,7 +258,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                         delta_sq = sqrtf(delta1);
                         first_dr = AA5*delta_sq;
                         AA2 = -x00*sinf(TETAs) + y00*cosf(TETAs);
-                        for(k=0; k<Vert_det; k++) {
+                        for(k=Z1; k<Z2; k++) {
                             if (fabs(Zdel[k]) < c)  {
                                 for(j=0; j<Horiz_det; j++) {
                                     AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
@@ -273,11 +273,11 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                     if (strcmp("cuboid",Object) == 0) {
                         /* the object is a cuboid */
                         ksi00 = AnglesRad[(AngTot-1)-ll];
-                        for(k=0; k < Vert_det; k++) {
+                        for(k=Z1; k<Z2; k++) {
                             if (fabs(Zdel[k]) < c2) {
                                 for(j=0; j< Horiz_det; j++) {
                                     p00 = DetectorRange_Horiz_ar[j];
-                                    //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
+                                    
                                     index = tt*sub_vol_size*Horiz_det*AngTot + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
                                     
                                     p = p00;

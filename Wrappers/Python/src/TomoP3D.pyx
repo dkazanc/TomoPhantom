@@ -297,9 +297,43 @@ def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.flo
     return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
+def ModelSinoTemporal(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
+    """  
+    Creates 4D (3D + time) analytical projection data of the dimension [TimeFrames, AngTot, Vert_det, Horiz_det]
+    
+    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
+    
+    param: model_id -- a model id from the functions file 
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: Horiz_det -- horizontal detector size
+    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
+    params: angles -- 1D array of projection angles in degrees
+    param: model_parameters_filename -- filename for the model parameters
+    
+    returns: numpy float32 phantom array (4D)
+    """
+    if type(phantom_size) == tuple:
+       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
+    cdef int AngTot = angles.shape[0]
+    
+    cdef float ret_val
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    cdef np.ndarray[np.float32_t, ndim=4, mode="c"] projdata = np.zeros([params[3], AngTot, Vert_det, Horiz_det], dtype='float32')
+    if params[3] == 1:
+        print("The selected model is stationary (3D), use 'ModelSino' function instead")
+    else:
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot, c_string)
+    return np.swapaxes(projdata,1,2)
+@cython.boundscheck(False)
+@cython.wraparound(False)
 def ModelSinoSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_index, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
     """  
-    Creates 3D analytical projection data of the dimension [AngTot, Vert_det, Horiz_det] 
+    Creates 3D analytical projection data of the dimension [AngTot, Subset_size, Horiz_det] 
     
     sub_index - defines a subset of the vertical detector dimension
     
@@ -345,6 +379,56 @@ def ModelSinoSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_index, np.
     else:
         print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
     return np.swapaxes(projdata,0,1)
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ModelSinoTemporalSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_index, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
+    """  
+    Creates 4D analytical projection data of the dimension [AngTot, Subset_size, Horiz_det] 
+    
+    sub_index - defines a subset of the vertical detector dimension
+    
+    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
+    
+    param: model_id -- a model id from the functions file 
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: Horiz_det -- horizontal detector size
+    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
+    params: angles -- 1D array of projection angles in degrees
+    param: model_parameters_filename -- filename for the model parameters
+    
+    returns: numpy float32 phantom array (3D)
+    """
+    if type(phantom_size) == tuple:
+       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
+    cdef int AngTot = angles.shape[0]
+    
+    Z1,Z2 = [int(i) for i in sub_index]
+    
+    rangecheck = Z2 > Z1
+    if not rangecheck:
+        raise ValueError('Upper index must be larger than the lower one')
+    rangecheck = Z1 >= 0 and Z1 < Vert_det
+    if not rangecheck:
+        raise ValueError('Range of the lower index is incorrect')
+    rangecheck = Z2 >= 0 and Z2 <= Vert_det
+    if not rangecheck:
+        raise ValueError('Range of the higher index is incorrect')
+    
+    sub_size = Z2 - Z1 # the size of the vertical slab
+    
+    cdef float ret_val
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    cdef np.ndarray[np.float32_t, ndim=4, mode="c"] projdata = np.zeros([params[3], AngTot, sub_size, Horiz_det], dtype='float32')
+    if params[3] == 1:
+        print("The selected model is stationary (3D), use 'ModelSino' function instead")
+    else:
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, Z1, Z2, phantom_size, &angles[0], AngTot, c_string)
+    return np.swapaxes(projdata,1,2)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, objlist):
@@ -417,40 +501,6 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
                                         float(0.0), 
                                         float(-obj['phi1']), 0)
     return np.swapaxes(projdata,0,1)
-@cython.boundscheck(False)
-@cython.wraparound(False)
-def ModelSinoTemporal(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
-    """  
-    Creates 4D (3D + time) analytical projection data of the dimension [TimeFrames, AngTot, Vert_det, Horiz_det]
-    
-    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
-    
-    param: model_id -- a model id from the functions file 
-    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
-    param: Horiz_det -- horizontal detector size
-    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
-    params: angles -- 1D array of projection angles in degrees
-    param: model_parameters_filename -- filename for the model parameters
-    
-    returns: numpy float32 phantom array (4D)
-    """
-    if type(phantom_size) == tuple:
-       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
-    cdef int AngTot = angles.shape[0]
-    
-    cdef float ret_val
-    py_byte_string = model_parameters_filename.encode('UTF-8')
-    cdef char* c_string = py_byte_string
-    cdef np.ndarray[int, ndim=1, mode="c"] params
-    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
-    checkParams3D(&params[0], model_id, c_string)
-    testParams3D(params) # check parameters and terminate before running the core
-    cdef np.ndarray[np.float32_t, ndim=4, mode="c"] projdata = np.zeros([params[3], AngTot, Vert_det, Horiz_det], dtype='float32')
-    if params[3] == 1:
-        print("The selected model is stationary (3D), use 'ModelSino' function instead")
-    else:
-        ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot, c_string)
-    return np.swapaxes(projdata,1,2)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 

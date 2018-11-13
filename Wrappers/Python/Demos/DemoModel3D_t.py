@@ -80,18 +80,16 @@ import os
 import tomophantom
 from tomophantom import TomoP3D
 import matplotlib.pyplot as plt
+import numpy as np
 
-print ("Building a subset of 3D phantom using TomoPhantom software")
+print ("Building a subset of 4D phantom using TomoPhantom software")
 tic=timeit.default_timer()
 model = 101
-# Define phantom dimensions using a scalar (cubic) or a tuple [Z, Y, X]
-DIM = (256,256,256) # full dimension of required phantom (z, y, x)
+N_size = 256 # Define phantom dimensions using a scalar value
 DIM_z = (94, 158) # selected vertical subset (a slab) of the phantom
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
-#This will generate a Time x N1 x N2 x N_slab phantom (4D)
-phantom_tm = TomoP3D.ModelTemporalSub(model, DIM, DIM_z, path_library3D)
-#phantom_tm = TomoP3D.Model(model, DIM, pathTP3)
+phantom_tm = TomoP3D.ModelTemporalSub(model, N_size, DIM_z, path_library3D)
 toc=timeit.default_timer()
 Run_time = toc - tic
 print("Phantom has been built in {} seconds".format(Run_time))
@@ -102,15 +100,43 @@ for i in range(0,np.size(phantom_tm,0)):
     plt.figure(1) 
     plt.subplot(131)
     plt.imshow(phantom_tm[i,sliceSel,:,:],vmin=0, vmax=1)
-    plt.title('3D Phantom, axial view')
+    plt.title('4D Phantom, axial view')
 
     plt.subplot(132)
     plt.imshow(phantom_tm[i,:,70,:],vmin=0, vmax=1)
-    plt.title('3D Phantom, coronal view')
+    plt.title('4D Phantom, coronal view')
 
     plt.subplot(133)
     plt.imshow(phantom_tm[i,:,:,70],vmin=0, vmax=1)
-    plt.title('3D Phantom, sagittal view')
+    plt.title('4D Phantom, sagittal view')
+    plt.show()
+    plt.pause(0.5)
+    
+
+print ("Building a subset of 4D projection data using TomoPhantom software")
+Horiz_det = int(np.sqrt(2)*N_size) # detector column count (horizontal)
+Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
+angles_num = int(0.5*np.pi*N_size); # angles number
+angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
+
+projData4D_cut = TomoP3D.ModelSinoTemporalSub(model, N_size, Horiz_det, Vert_det, DIM_z, angles, path_library3D)
+
+intens_max = 45
+for i in range(0,np.size(projData4D_cut,0)): 
+    sliceSel = 32
+    #plt.gray()
+    plt.figure(1) 
+    plt.subplot(131)
+    plt.imshow(projData4D_cut[i,sliceSel,:,:],vmin=0, vmax=intens_max)
+    plt.title('Sinogram View')
+
+    plt.subplot(132)
+    plt.imshow(projData4D_cut[i,:,sliceSel,:],vmin=0, vmax=intens_max)
+    plt.title('Projection view')
+
+    plt.subplot(133)
+    plt.imshow(projData4D_cut[i,:,:,sliceSel],vmin=0, vmax=intens_max)
+    plt.title('Tangentogram view')
     plt.show()
     plt.pause(0.5)
 #%%
