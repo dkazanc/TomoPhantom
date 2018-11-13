@@ -22,7 +22,6 @@ import numpy as np
 cimport numpy as np
 
 from numbers import Number
-
 from enum import Enum
 
 import sys
@@ -30,8 +29,8 @@ import sys
 # declare the interface to the C code
 cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char* ModelParametersFilename)
 cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
-cdef extern float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long N, float *Theta_proj, int AngTot, char* ModelParametersFilename)
-cdef extern float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long N, float *Angl_vector, int AngTot, char *Object,float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
+cdef extern float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Theta_proj, int AngTot, char* ModelParametersFilename)
+cdef extern float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Angl_vector, int AngTot, char *Object,float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
 cdef extern float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
     
 cdef packed struct object_3d:
@@ -114,7 +113,7 @@ def ModelSub(int model_id, phantom_size, sub_index, str model_parameters_filenam
     rangecheck = Z2 > Z1
     if not rangecheck:
         raise ValueError('Upper index must be larger than the lower one')
-    rangecheck = Z1 >= 0 and Z1 <= N3
+    rangecheck = Z1 >= 0 and Z1 < N3
     if not rangecheck:
         raise ValueError('Range of the lower index is incorrect')
     rangecheck = Z2 >= 0 and Z2 <= N3
@@ -195,7 +194,7 @@ def ModelTemporalSub(int model_id, phantom_size, sub_index, str model_parameters
     rangecheck = Z2 > Z1
     if not rangecheck:
         raise ValueError('Upper index must be larger than the lower one')
-    rangecheck = Z1 >= 0 and Z1 <= N3
+    rangecheck = Z1 >= 0 and Z1 < N3
     if not rangecheck:
         raise ValueError('Range of the lower index is incorrect')
     rangecheck = Z2 >= 0 and Z2 <= N3
@@ -292,81 +291,9 @@ def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.flo
     checkParams3D(&params[0], model_id, c_string)
     testParams3D(params) # check parameters and terminate before running the core
     if params[3] == 1:
-        ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, phantom_size, &angles[0], AngTot, c_string)
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot, c_string)
     else:
         print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
-    return np.swapaxes(projdata,0,1)
-@cython.boundscheck(False)
-@cython.wraparound(False)
-def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, objlist):
-    """  
-    Creates 3D analytical projection data of the dimension [AngTot, Vert_det, Horiz_det] 
-    
-    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
-
-    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
-    param: Horiz_det -- horizontal detector size
-    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
-    params: angles -- 1D array of projection angles in degrees
-    param: objlist -- a list of parameters for the object
-    
-    returns: numpy float32 phantom array (3D)
-    """
-    if type(phantom_size) == tuple:
-       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
-    cdef int AngTot = angles.shape[0]
-    
-    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([AngTot, Vert_det, Horiz_det], dtype='float32')
-    cdef float ret_val
-    if type(objlist) is dict:
-        objlist = [objlist]
-        
-    for obj in objlist:
-        if testParamsPY(obj):
-            if sys.version_info.major == 3:
-                objectName = bytes(obj['Obj'].value, 'ascii')
-            elif sys.version_info.major == 2:
-                objectName = bytes(obj['Obj'].value)
-            
-            if (("gaussian" == objectName) or ("paraboloid" == objectName) or ("ellipsoid" == objectName)):
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, phantom_size, &angles[0], AngTot,
-                                        objectName, 
-                                        float(obj['C0']),
-                                        float(obj['y0']),
-                                        float(-obj['z0']),
-                                        float(-obj['x0']),
-                                        float(obj['b']),
-                                        float(obj['a']),
-                                        float(obj['c']), 
-                                        float(0.0),
-                                        float(0.0), 
-                                        float(obj['phi1']), 0)
-            elif ("elliptical_cylinder" == objectName):
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, phantom_size, &angles[0], AngTot,
-                                        objectName, 
-                                        float(obj['C0']),
-                                        float(obj['x0']),
-                                        float(-obj['y0']),
-                                        float(obj['z0']),
-                                        float(obj['b']),
-                                        float(obj['a']),
-                                        float(obj['c']), 
-                                        float(0.0),
-                                        float(0.0), 
-                                        float(obj['phi1']), 0)
-            else:
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, phantom_size, &angles[0], AngTot,
-                                        objectName, 
-                                        float(obj['C0']),
-                                        float(obj['x0']),
-                                        float(obj['y0']),
-                                        float(obj['z0']),
-                                        float(obj['a']),
-                                        float(obj['b']),
-                                        float(obj['c']), 
-                                        float(0.0),
-                                        float(0.0), 
-                                        float(-obj['phi1']), 0)
     return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -400,8 +327,180 @@ def ModelSinoTemporal(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarra
     if params[3] == 1:
         print("The selected model is stationary (3D), use 'ModelSino' function instead")
     else:
-        ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, phantom_size, &angles[0], AngTot, c_string)
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot, c_string)
     return np.swapaxes(projdata,1,2)
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ModelSinoSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_index, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
+    """  
+    Creates 3D analytical projection data of the dimension [AngTot, Subset_size, Horiz_det] 
+    
+    sub_index - defines a subset of the vertical detector dimension
+    
+    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
+    
+    param: model_id -- a model id from the functions file 
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: Horiz_det -- horizontal detector size
+    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
+    params: angles -- 1D array of projection angles in degrees
+    param: model_parameters_filename -- filename for the model parameters
+    
+    returns: numpy float32 phantom array (3D)
+    """
+    if type(phantom_size) == tuple:
+       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
+    cdef int AngTot = angles.shape[0]
+    
+    Z1,Z2 = [int(i) for i in sub_index]
+    
+    rangecheck = Z2 > Z1
+    if not rangecheck:
+        raise ValueError('Upper index must be larger than the lower one')
+    rangecheck = Z1 >= 0 and Z1 < Vert_det
+    if not rangecheck:
+        raise ValueError('Range of the lower index is incorrect')
+    rangecheck = Z2 >= 0 and Z2 <= Vert_det
+    if not rangecheck:
+        raise ValueError('Range of the higher index is incorrect')
+    
+    sub_size = Z2 - Z1 # the size of the vertical slab
+    
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([AngTot, sub_size, Horiz_det], dtype='float32')
+    cdef float ret_val
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    if params[3] == 1:
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, Z1, Z2, phantom_size, &angles[0], AngTot, c_string)
+    else:
+        print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
+    return np.swapaxes(projdata,0,1)
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ModelSinoTemporalSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_index, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
+    """  
+    Creates 4D analytical projection data of the dimension [AngTot, Subset_size, Horiz_det] 
+    
+    sub_index - defines a subset of the vertical detector dimension
+    
+    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
+    
+    param: model_id -- a model id from the functions file 
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: Horiz_det -- horizontal detector size
+    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
+    params: angles -- 1D array of projection angles in degrees
+    param: model_parameters_filename -- filename for the model parameters
+    
+    returns: numpy float32 phantom array (3D)
+    """
+    if type(phantom_size) == tuple:
+       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
+    cdef int AngTot = angles.shape[0]
+    
+    Z1,Z2 = [int(i) for i in sub_index]
+    
+    rangecheck = Z2 > Z1
+    if not rangecheck:
+        raise ValueError('Upper index must be larger than the lower one')
+    rangecheck = Z1 >= 0 and Z1 < Vert_det
+    if not rangecheck:
+        raise ValueError('Range of the lower index is incorrect')
+    rangecheck = Z2 >= 0 and Z2 <= Vert_det
+    if not rangecheck:
+        raise ValueError('Range of the higher index is incorrect')
+    
+    sub_size = Z2 - Z1 # the size of the vertical slab
+    
+    cdef float ret_val
+    py_byte_string = model_parameters_filename.encode('UTF-8')
+    cdef char* c_string = py_byte_string
+    cdef np.ndarray[int, ndim=1, mode="c"] params
+    params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
+    checkParams3D(&params[0], model_id, c_string)
+    testParams3D(params) # check parameters and terminate before running the core
+    cdef np.ndarray[np.float32_t, ndim=4, mode="c"] projdata = np.zeros([params[3], AngTot, sub_size, Horiz_det], dtype='float32')
+    if params[3] == 1:
+        print("The selected model is stationary (3D), use 'ModelSino' function instead")
+    else:
+        ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, Z1, Z2, phantom_size, &angles[0], AngTot, c_string)
+    return np.swapaxes(projdata,1,2)
+@cython.boundscheck(False)
+@cython.wraparound(False)
+def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, objlist):
+    """  
+    Creates 3D analytical projection data of the dimension [AngTot, Vert_det, Horiz_det] 
+    
+    Takes in a input model_id. phantom_size, detector sizes, array of projection angles
+
+    param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom)
+    param: Horiz_det -- horizontal detector size
+    param: Vert_det -- vertical detector size (currently Vert_det = phantom_size)
+    params: angles -- 1D array of projection angles in degrees
+    param: objlist -- a list of parameters for the object
+    
+    returns: numpy float32 phantom array (3D)
+    """
+    if type(phantom_size) == tuple:
+       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained from non-cubic phantom')
+    cdef int AngTot = angles.shape[0]
+    
+    cdef np.ndarray[np.float32_t, ndim=3, mode="c"] projdata = np.zeros([AngTot, Vert_det, Horiz_det], dtype='float32')
+    cdef float ret_val
+    if type(objlist) is dict:
+        objlist = [objlist]
+        
+    for obj in objlist:
+        if testParamsPY(obj):
+            if sys.version_info.major == 3:
+                objectName = bytes(obj['Obj'].value, 'ascii')
+            elif sys.version_info.major == 2:
+                objectName = bytes(obj['Obj'].value)
+            
+            if (("gaussian" == objectName) or ("paraboloid" == objectName) or ("ellipsoid" == objectName)):
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot,
+                                        objectName, 
+                                        float(obj['C0']),
+                                        float(obj['y0']),
+                                        float(-obj['z0']),
+                                        float(-obj['x0']),
+                                        float(obj['b']),
+                                        float(obj['a']),
+                                        float(obj['c']), 
+                                        float(0.0),
+                                        float(0.0), 
+                                        float(obj['phi1']), 0)
+            elif ("elliptical_cylinder" == objectName):
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot,
+                                        objectName, 
+                                        float(obj['C0']),
+                                        float(obj['x0']),
+                                        float(-obj['y0']),
+                                        float(obj['z0']),
+                                        float(obj['b']),
+                                        float(obj['a']),
+                                        float(obj['c']), 
+                                        float(0.0),
+                                        float(0.0), 
+                                        float(obj['phi1']), 0)
+            else:
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot,
+                                        objectName, 
+                                        float(obj['C0']),
+                                        float(obj['x0']),
+                                        float(obj['y0']),
+                                        float(obj['z0']),
+                                        float(obj['a']),
+                                        float(obj['b']),
+                                        float(obj['c']), 
+                                        float(0.0),
+                                        float(0.0), 
+                                        float(-obj['phi1']), 0)
+    return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
 
