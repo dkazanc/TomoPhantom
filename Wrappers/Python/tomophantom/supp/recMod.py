@@ -1,26 +1,12 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 27 12:28:29 2018
-A reconstruction class for TomoPhantom, currently includes methods:
+A reconstruction class for TomoPhantom, currently includes direct methods:
 -- Fourier Slice Theorem reconstruction (adopted from Tim Day's code)
--- FISTA: FISTA algorithm with regularisation or not
--- Filtered Back Projection (wip)
+-- Filtered Back Projection (to be added, wip)
 
 @author: Daniil Kazantsev
 """
-def powermethod(operator):
-    import numpy as np
-    from numpy import linalg as LA
-    niter = 15
-    x1 = np.float32(np.random.randn(operator.ObjSize,operator.ObjSize))
-    y = operator.forwproj(x1)
-    for iter in range(0,niter):
-        x1 = operator.backproj(y)
-        s = LA.norm(x1)
-        x1 = x1/s
-        y = operator.forwproj(x1)
-    return s
 
 import numpy as np
 
@@ -115,39 +101,3 @@ class RecTools:
         # Cropping reconstruction to size of the original image
         image = recon[int(((self.DetectorsDim-self.ObjSize)/2)+1):self.DetectorsDim-int(((self.DetectorsDim-self.ObjSize)/2)-1),int(((self.DetectorsDim-self.ObjSize)/2)):self.DetectorsDim-int(((self.DetectorsDim-self.ObjSize)/2))]
         return image
-    def FISTA(self, sinogram, datafidelity='LS', regularisation='none', iterationsFISTA=100, tolerance = 1e-06, device='gpu'):
-        """ 
-        Reconstruction method based on A. Beck and M. Teboulle, 
-        A fast iterative shrinkage-thresholding algorithm for linear inverse problems,
-        SIAM Journal on Imaging Sciences, vol. 2, no. 1, pp. 183–202, 2009.
-        
-        If regularisation is used install: CCPi-RGL toolkit 
-        conda install ccpi-regulariser -c ccpi -c conda-forge
-        https://github.com/vais-ral/CCPi-Regularisation-Toolkit
-        """
-        if sinogram.ndim == 2:
-            # 2D reconstruction
-            from tomophantom.supp.astraOP import AstraTools
-            X = np.zeros((self.ObjSize,self.ObjSize), 'float32')
-            
-            Atools = AstraTools(self.DetectorsDim, self.AnglesVec, self.ObjSize, device) # initiate ASTRA class object
-            X = np.zeros((self.ObjSize,self.ObjSize), 'float32')
-            t = 1.0
-            X_t = np.copy(X)
-            L_const_inv = 1.0/powermethod(Atools) # get Lipschitz constant
-            
-            # Outer FISTA iterations
-            for iter in range(0,iterationsFISTA):
-                X_old = X
-                t_old = t
-                if (datafidelity == 'LS'):
-                    grad_fidelity = Atools.backproj(Atools.forwproj(X_t) - sinogram) # gradient step for the LS fidelity
-                else:
-                    raise ("Choose data fidelity term as 'LS', 'PWLS'")
-                X = X_t - L_const_inv*grad_fidelity
-                # <<<<<< ADD HERE >>>>>>> the proximal operator of the regulariser
-                t = (1.0 + np.sqrt(1.0 + 4.0*t**2))*0.5; # updating t
-                X_t = X + ((t_old - 1.0)/t)*(X - X_old) # updating X
-        if sinogram.ndim == 3:
-            raise ("TODO")
-        return X

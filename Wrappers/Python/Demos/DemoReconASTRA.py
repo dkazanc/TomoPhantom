@@ -141,3 +141,23 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('SIRT reconsrtuction differences')
 rmse3 = np.linalg.norm(SIRTrec_ideal-SIRTrec_error)/np.linalg.norm(SIRTrec_error)
 #%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing with FISTA method (ASTRA is used underneath)")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from tomophantom.supp.recModIter import RecTools
+
+# set parameters and initiate a class object
+Rectools = RecTools(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    IterativeMethod = 'FISTA', # iterative method
+                    datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
+                    iterationsOuter=100, # the number of outer iterations
+                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
+                    device='gpu')
+
+# Run the reconstrucion algorithm
+Rec = Rectools.FISTA(noisy_sino)
+
+#%%
