@@ -22,7 +22,8 @@ import numpy as np
 from numpy import linalg as LA
 
 class RecTools:
-    """ Class for iterative reconstruction using ASTRA for forward/backw operator
+    """ 
+    A class for iterative reconstruction algorithms using ASTRA (only for forward/back operations)
     If regularisation is used install: CCPi-RGL toolkit 
     conda install ccpi-regulariser -c ccpi -c conda-forge
     https://github.com/vais-ral/CCPi-Regularisation-Toolkit
@@ -38,7 +39,7 @@ class RecTools:
               tolerance, # tolerance to stop outer iterations earlier
               device):
         if ObjSize is tuple: 
-            raise (" Reconstruction is currently for square or cubic objects only ")
+            raise (" Reconstruction is currently available for square or cubic objects only ")
         else:
             self.ObjSize = ObjSize # size of the object
         
@@ -88,13 +89,39 @@ class RecTools:
                 del InitialObject
             else:
                 X = np.zeros((self.ObjSize,self.ObjSize), 'float32')
-            # If the regularisation is used then dependency on the CCPi-RGL toolkit
+            # If the regularisation is used, then the dependency is on the CCPi-RGL toolkit
             if (regularisation == 'ROF_TV'):
-                # Rudin - Osher - Fatemi method is selected 
+                # Rudin - Osher - Fatemi Total variation method
                 from ccpi.filters.regularisers import ROF_TV
-                regularisation_iterations = 200
-                time_marching_parameter = 0.0025
-            
+                # setting some default values
+                regularisation_iterations = 250
+                time_marching_parameter = 0.0025 # gradient step parameter
+            if (regularisation == 'FGP_TV'):
+                # Fast-Gradient-Projection Total variation method
+                from ccpi.filters.regularisers import FGP_TV
+                # setting some default values
+                regularisation_iterations = 100
+                tolerance_regul = 1e-06 # tolerance to stop regularisation
+                methodTV = 0 # 0/1 - isotropic/anisotropic TV
+                nonneg = 0 # 0/1 disabled/enabled nonnegativity
+            if (regularisation == 'SB_TV'):
+                # Split Bregman Total variation method
+                from ccpi.filters.regularisers import SB_TV
+                # setting some default values
+                regularisation_iterations = 50
+                tolerance_regul = 1e-06 # tolerance to stop regularisation
+                methodTV = 0 # 0/1 - isotropic/anisotropic TV
+                
+        if (self.geom == '3D'):
+            # initialise the solution
+            if (np.size(InitialObject) == self.ObjSize**3):
+                # the object has been initialised with an array
+                X = InitialObject
+                del InitialObject
+            else:
+                X = np.zeros((self.ObjSize,self.ObjSize,self.ObjSize), 'float32')
+#****************************************************************************#
+            # FISTA algorithm begins here:
             t = 1.0
             denomN = 1.0/np.size(X)
             X_t = np.copy(X)
@@ -114,14 +141,11 @@ class RecTools:
                     # The proximal operator of the chosen regulariser
                     if (regularisation == 'ROF_TV'):
                         X = ROF_TV(X, regularisation_parameter, regularisation_iterations, time_marching_parameter, self.device)
-                    t = (1.0 + np.sqrt(1.0 + 4.0*t**2))*0.5; # updating t
+                    if (regularisation == 'FGP_TV'):
+                        X = FGP_TV(X, regularisation_parameter, regularisation_iterations, tolerance_regul, methodTV, nonneg, 0, self.device)
+                    if (regularisation == 'SB_TV'):
+                        X = SB_TV(X, regularisation_parameter, regularisation_iterations, tolerance_regul, methodTV, 0, self.device)
+                    t = (1.0 + np.sqrt(1.0 + 4.0*t**2))*0.5; # updating t variable
                     X_t = X + ((t_old - 1.0)/t)*(X - X_old) # updating X
-        if (self.geom == '3D'):
-            # initialise the solution
-            if (np.size(InitialObject) == self.ObjSize**3):
-                # the object has been initialised with an array
-                X = InitialObject
-                del InitialObject
-            else:
-                X = np.zeros((self.ObjSize,self.ObjSize,self.ObjSize), 'float32')
+#****************************************************************************#
         return X
