@@ -120,7 +120,7 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomophantom.supp.astraOP import AstraTools
 Atools = AstraTools(P, angles_rad, N_size, 'gpu') # initiate a class object
 
-iterationsSIRT = 200
+iterationsSIRT = 50
 SIRTrec_ideal = Atools.sirt2D(sino_an,iterationsSIRT) # ideal reconstruction
 SIRTrec_error = Atools.sirt2D(noisy_zing_stripe,iterationsSIRT) # error reconstruction
 
@@ -140,4 +140,36 @@ plt.imshow(abs(SIRTrec_ideal-SIRTrec_error), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('SIRT reconsrtuction differences')
 rmse3 = np.linalg.norm(SIRTrec_ideal-SIRTrec_error)/np.linalg.norm(SIRTrec_error)
+#%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing with FISTA method (ASTRA is used for projection)")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from tomophantom.supp.recModIter import RecTools
+
+# set parameters and initiate a class object
+Rectools = RecTools(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    IterativeMethod = 'FISTA', # iterative method
+                    datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
+                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
+                    device='gpu')
+
+# Run FISTA reconstrucion algorithm without regularisation
+RecFISTA = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150)
+
+# Run FISTA reconstrucion algorithm with regularisation 
+RecFISTA_reg = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV')
+
+plt.figure()
+plt.subplot(121)
+plt.imshow(RecFISTA, vmin=0, vmax=1, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('FISTA reconstruction')
+plt.subplot(122)
+plt.imshow(RecFISTA_reg, vmin=0, vmax=1, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Regularised FISTA reconstruction')
+plt.show()
 #%%

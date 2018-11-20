@@ -10,7 +10,7 @@ import numpy as np
 class QualityTools:
     def __init__(self, im1, im2):
         if im1.size != im2.size:
-            print "Error: Sizes of images/volumes are different"
+            print ('Error: Sizes of images/volumes are different')
             raise SystemExit
         self.im1 = im1 # image or volume - 1
         self.im2 = im2 # image or volume - 2

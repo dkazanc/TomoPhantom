@@ -1,13 +1,13 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 """
-Created on Thu Sep 27 12:28:29 2018
-A reconstruction class for TomoPhantom, currently includes 
+A reconstruction class for TomoPhantom, currently includes direct methods:
 -- Fourier Slice Theorem reconstruction (adopted from Tim Day's code)
--- Filtered Back Projection
+-- Filtered Back Projection (to be added, wip)
 
 @author: Daniil Kazantsev
 """
+
 import numpy as np
 
 class RecTools:
@@ -20,7 +20,7 @@ class RecTools:
         else:
             self.ObjSize = ObjSize # size of the object
         
-    def fourier(self, sinogram, method):
+    def fourier(self, sinogram, method='linear'):
         """ 
         2D Reconstruction using Fourier slice theorem (scipy required) 
         for griddata interpolation module choose nearest, linear or cubic

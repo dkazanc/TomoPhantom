@@ -25,6 +25,8 @@
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts
  
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Reconstruct with implemented FBP and Fourier slice method or using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages. 
+ 
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Reconstruct iteratively using <a href="https://people.rennes.inria.fr/Cedric.Herzet/Cedric.Herzet/Sparse_Seminar/Entrees/2012/11/12_A_Fast_Iterative_Shrinkage-Thresholding_Algorithmfor_Linear_Inverse_Problems_(A._Beck,_M._Teboulle)_files/Breck_2009.pdf">FISTA</a>. The MATLAB version of the code can be accessed <a href="https://github.com/dkazanc/FISTA-tomo">HERE</a>. 
 
 ### **TomoPhantom** prerequisites: 
 
