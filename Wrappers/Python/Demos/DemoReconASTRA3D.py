@@ -137,3 +137,43 @@ Qtools = QualityTools(phantom_tm, recNumerical)
 RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
 #%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing with FISTA method (ASTRA is used for projection)")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+from tomophantom.supp.recModIter import RecTools
+
+# set parameters and initiate a class object
+Rectools = RecTools(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    IterativeMethod = 'FISTA', # iterative method
+                    datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
+                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
+                    device='gpu')
+
+# Run FISTA reconstrucion algorithm without regularisation
+RecFISTA = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85)
+
+# Run FISTA reconstrucion algorithm with 3D regularisation
+#RecFISTA_reg = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85, regularisation = 'ROF_TV')
+
+
+sliceSel = int(0.5*N_size)
+max_val = 1
+plt.figure() 
+plt.subplot(131)
+plt.imshow(RecFISTA[sliceSel,:,:],vmin=0, vmax=max_val)
+plt.title('3D FISTA Reconstruction, axial view')
+
+plt.subplot(132)
+plt.imshow(RecFISTA[:,sliceSel,:],vmin=0, vmax=max_val)
+plt.title('3D FISTA Reconstruction, coronal view')
+
+plt.subplot(133)
+plt.imshow(RecFISTA[:,:,sliceSel],vmin=0, vmax=max_val)
+plt.title('3D FISTA Reconstruction, sagittal view')
+plt.show()
+#%%
+
+
