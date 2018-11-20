@@ -147,17 +147,18 @@ Rectools = RecTools(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimen
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    IterativeMethod = 'FISTA', # iterative method
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
                     tolerance = 1e-06, # tolerance to stop outer iterations earlier
                     device='gpu')
 
+
+lc = Rectools.powermethod() # calculate Lipschitz constant
+
 # Run FISTA reconstrucion algorithm without regularisation
-RecFISTA = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85)
+RecFISTA = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85, lipschitz_const = lc)
 
 # Run FISTA reconstrucion algorithm with 3D regularisation
-#RecFISTA_reg = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85, regularisation = 'ROF_TV')
-
+#RecFISTA_reg = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85, regularisation = 'ROF_TV', lipschitz_const = lc)
 
 sliceSel = int(0.5*N_size)
 max_val = 1

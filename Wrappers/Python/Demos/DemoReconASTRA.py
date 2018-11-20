@@ -120,7 +120,7 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomophantom.supp.astraOP import AstraTools
 Atools = AstraTools(P, angles_rad, N_size, 'gpu') # initiate a class object
 
-iterationsSIRT = 50
+iterationsSIRT = 250
 SIRTrec_ideal = Atools.sirt2D(sino_an,iterationsSIRT) # ideal reconstruction
 SIRTrec_error = Atools.sirt2D(noisy_zing_stripe,iterationsSIRT) # error reconstruction
 
@@ -151,16 +151,17 @@ Rectools = RecTools(DetectorsDimH = P,  # DetectorsDimH # detector dimension (ho
                     DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    IterativeMethod = 'FISTA', # iterative method
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
                     tolerance = 1e-06, # tolerance to stop outer iterations earlier
                     device='gpu')
 
+lc = Rectools.powermethod() # calculate Lipschitz constant
+
 # Run FISTA reconstrucion algorithm without regularisation
-RecFISTA = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150)
+RecFISTA = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150, lipschitz_const = lc)
 
 # Run FISTA reconstrucion algorithm with regularisation 
-RecFISTA_reg = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV')
+RecFISTA_reg = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV', lipschitz_const = lc)
 
 plt.figure()
 plt.subplot(121)

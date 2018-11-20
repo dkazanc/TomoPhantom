@@ -15,20 +15,6 @@ conda install -c astra-toolbox astra-toolbox
 
 @author: Daniil Kazantsev
 """
-def powermethod(self):
-    # power iteration algorithm to  calculate the eigenvalue of the operator (projection matrix)
-    niter = 10
-    if (self.geom == '2D'):
-        x1 = np.float32(np.random.randn(self.Atools.ObjSize,self.Atools.ObjSize))
-    else:
-        x1 = np.float32(np.random.randn(self.Atools.ObjSize,self.Atools.ObjSize,self.Atools.ObjSize))
-    y = self.Atools.forwproj(x1)
-    for iter in range(0,niter):
-        x1 = self.Atools.backproj(y)
-        s = LA.norm(x1)
-        x1 = x1/s
-        y = self.Atools.forwproj(x1)
-    return s
 
 import numpy as np
 from numpy import linalg as LA
@@ -42,7 +28,6 @@ class RecTools:
               DetectorsDimV,  # DetectorsDimV # detector dimension (vertical) for 3D case only
               AnglesVec, # array of angles in radians
               ObjSize, # a scalar to define reconstructed object dimensions
-              IterativeMethod, # iterative method. select FISTA
               datafidelity,# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
               tolerance, # tolerance to stop outer iterations earlier
               device):
@@ -69,13 +54,25 @@ class RecTools:
             self.Atools = AstraTools3D(DetectorsDimH, DetectorsDimV, AnglesVec, ObjSize) # initiate 3D ASTRA class object
             self.geom = '3D'
 
-        if (IterativeMethod == 'FISTA'):
-            # set all parameters here for FISTA
-            self.L_const_inv = 1.0/powermethod(self) # get Lipschitz constant
-
+    def powermethod(self):
+        # power iteration algorithm to  calculate the eigenvalue of the operator (projection matrix)
+        niter = 10
+        if (self.geom == '2D'):
+            x1 = np.float32(np.random.randn(self.Atools.ObjSize,self.Atools.ObjSize))
+        else:
+            x1 = np.float32(np.random.randn(self.Atools.ObjSize,self.Atools.ObjSize,self.Atools.ObjSize))
+        y = self.Atools.forwproj(x1)
+        for iter in range(0,niter):
+            x1 = self.Atools.backproj(y)
+            s = LA.norm(x1)
+            x1 = x1/s
+            y = self.Atools.forwproj(x1)
+        return s
+    
     def FISTA(self, 
               projdata, # tomographic projection data in 2D (sinogram) or 3D array
               InitialObject = 0, # initialise reconstruction with an array
+              lipschitz_const = 5e+06, # can be a given value or calculated using Power method
               iterationsFISTA = 100, # the number of OUTER FISTA iterations
               regularisation = None, # enable regularisation  with CCPi - RGL toolkit
               regularisation_parameter = 0.01, # regularisation parameter if regularisation is not None
@@ -91,6 +88,8 @@ class RecTools:
               methodTV = 0, # 0/1 - isotropic/anisotropic TV
               nonneg = 0 # 0/1 disabled/enabled nonnegativity (for FGP_TV currently)
               ):
+        
+        L_const_inv = 1.0/lipschitz_const # inverted Lipschitz constant
         if (self.geom == '2D'):
             # 2D reconstruction
             # initialise the solution
@@ -130,7 +129,7 @@ class RecTools:
                 grad_fidelity = self.Atools.backproj(self.Atools.forwproj(X_t) - projdata) # gradient step for the LS fidelity
             else:
                 raise ("Choose the data fidelity term: LS, PWLS")
-            X = X_t - self.L_const_inv*grad_fidelity
+            X = X_t - L_const_inv*grad_fidelity
             # stopping criteria
             nrm = LA.norm(X - X_old)*denomN
             if nrm > self.tolerance:
