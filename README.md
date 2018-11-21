@@ -40,21 +40,62 @@
  * [TomoPy](http://tomopy.readthedocs.io)
 
 ## Installation:
-### Cmake
- * The package comes as a [CMake](https://cmake.org) project so you will need CMake to configure it. We provide wrappers for Python and Matlab.
- * In linux, see ```run.sh``` script which you can run as ```bash run.sh```
- * For detailed installation information using Cmake, see [CCPi-RGL toolkit](https://github.com/vais-ral/CCPi-Regularisation-Toolkit/)
+
+
+The package comes as a [CMake](https://cmake.org) project so you will need CMake (v.>=3) to configure it. Additionally you will need a C compiler, and a build tool as `make` (on linux). The toolkit may be used with Python and/or Matlab for which we provide wrappers. TomoPhantom's core is built as shared library and it should be possible to call it directly from C/C++, but currently no C/C++ API is available. 
+
+Prerequisites:
+1. [CMake](https://cmake.org) >= 3.0
+2. a C compiler with OpenMP
+3. [libm](https://en.wikipedia.org/wiki/C_mathematical_functions#libm) on linux
+4. [Cython](https://cython.org/) to build the Python wrappers (optional)
+5. MATLAB installation to build MATLAB wrappers (optional)
+
+### Build
+
+1. Clone this repository to a directory, i.e. `TomoPhantom`, 
+2. create a build directory. 
+3. Issue `cmake` to configure (or `cmake-gui`, or `ccmake`, or `cmake3`). Use additional flags to fine tune the configuration. 
+
+### CMake flags
+Flags used during configuration
+
+| CMake flag | type | meaning |
+|:---|:----|:----|
+| `BUILD_PYTHON_WRAPPER` | bool | `ON\|OFF` whether to build the Python wrapper |
+| `BUILD_MATLAB_WRAPPER` | bool | `ON\|OFF` whether to build the Matlab wrapper |
+| `CMAKE_INSTALL_PREFIX` | path | your favourite install directory |
+| `PYTHON_DEST_DIR` | path | python modules install directory (default `${CMAKE_INSTALL_PREFIX}/python`) |
+| `MATLAB_DEST_DIR` | path | Matlab modules install directory (default `${CMAKE_INSTALL_PREFIX}/matlab`)|
+| `CONDA_BUILD`| bool | `ON\|OFF` whether it is installed with `setup.py install`|
+| `Matlab_ROOT_DIR` | path | Matlab directory|
+|`PYTHON_EXECUTABLE` | path | /path/to/python/executable|
+
+Here an example of build on Linux:
+
+```bash
+git clone https://github.com/dkazanc/TomoPhantom.git
+mkdir build
+cd build
+cmake ../ -DCONDA_BUILD=OFF -DMatlab_ROOT_DIR=/home/algol/matlab2016/ -DBUILD_MATLAB_WRAPPER=ON \
+  -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
+make install
+# let Python find the shared library
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./install
+# let MATLAB find the shared library and mex files
+PATH="./install/matlab:$PATH" LD_LIBRARY_PATH="./install/lib:$LD_LIBRARY_PATH" matlab
+```
+
+See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script for additional examples on build.
+
+## Installation:
+
 
 ### Python (conda-build)
 ```
 	cd Wrappers/Python/
 	conda build conda-recipe --numpy 1.12 --python 3.5
 	conda install tomophantom --use-local --force
-```
-### Matlab (possible OS-incompatability issues)
-```
-	run compile_mex_linux.m % to compile CPU modules on linux
-	run compile_mex_windows.m % to compile CPU modules on Windows
 ```
 
 ### Package library modules:
