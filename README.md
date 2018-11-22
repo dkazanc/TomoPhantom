@@ -4,7 +4,7 @@
 </div>
 
 ****************
-**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data for various image processing and machine learning tasks (reconstruction, denoising, deblurring, classification, etc.).**
+**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data for various image processing (e.g. reconstruction, denoising, deblurring, segmentation, etc.) and machine learning (classification,  clustering, etc.) tasks.**
 
 <a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 ****************    
