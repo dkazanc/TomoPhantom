@@ -138,9 +138,13 @@ RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing with FISTA method (ASTRA is used for projection)")
+print ("Reconstructing with FISTA method (ASTRA used for projection)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.recModIter import RecTools
+
+# install FISTA-tomo with: conda install -c dkazanc fista-tomo
+# or from https://github.com/dkazanc/FISTA-tomo
+
+from fista.tomo.recModIter import RecTools
 
 # set parameters and initiate a class object
 Rectools = RecTools(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
