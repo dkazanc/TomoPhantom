@@ -20,6 +20,7 @@ import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
 import os
 import tomophantom
+from tomophantom.supp.qualitymetrics import QualityTools
 
 model = 4 # select a model
 N_size = 512 # set dimension of the phantom
@@ -112,7 +113,6 @@ plt.figure()
 plt.imshow(abs(FBPrec_ideal-FBPrec_error), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP reconsrtuction differences')
-rmse2 = np.linalg.norm(FBPrec_ideal-FBPrec_error)/np.linalg.norm(FBPrec_error)
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using SIRT (ASTRA-TOOLBOX)...")
@@ -139,12 +139,15 @@ plt.figure()
 plt.imshow(abs(SIRTrec_ideal-SIRTrec_error), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('SIRT reconsrtuction differences')
-rmse3 = np.linalg.norm(SIRTrec_ideal-SIRTrec_error)/np.linalg.norm(SIRTrec_error)
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing with FISTA method (ASTRA is used for projection)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.recModIter import RecTools
+
+# install FISTA-tomo with: conda install -c dkazanc fista-tomo
+# or from https://github.com/dkazanc/FISTA-tomo
+
+from fista.tomo.recModIter import RecTools
 
 # set parameters and initiate a class object
 Rectools = RecTools(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
@@ -173,4 +176,12 @@ plt.imshow(RecFISTA_reg, vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('Regularised FISTA reconstruction')
 plt.show()
+
+# calculate errors 
+Qtools = QualityTools(phantom_2D, RecFISTA)
+RMSE_FISTA = Qtools.rmse()
+Qtools = QualityTools(phantom_2D, RecFISTA_reg)
+RMSE_FISTA_reg = Qtools.rmse()
+print("RMSE for FISTA is {}".format(RMSE_FISTA))
+print("RMSE for regularised FISTA is {}".format(RMSE_FISTA_reg))
 #%%
