@@ -91,9 +91,10 @@ See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script
 
 ### Python (conda-build)
 ```
-	cd Wrappers/Python/
-	conda build conda-recipe --numpy 1.12 --python 3.5
-	conda install tomophantom --use-local --force
+git clone https://github.com/dkazanc/TomoPhantom.git
+cd TomoPhantom
+conda build Wrappers/Python/conda-recipe --numpy 1.12 --python 3.5
+conda install tomophantom --use-local --force
 ```
 
 ### Package library modules:
