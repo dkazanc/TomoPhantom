@@ -146,12 +146,13 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
 from fista.tomo.recModIter import RecTools
 
-# set parameters and initiate a class object
+# set geometry related parameters and initiate a class object
 Rectools = RecTools(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
+                    OS_number = None, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
                     tolerance = 1e-06, # tolerance to stop outer iterations earlier
                     device='gpu')
 
