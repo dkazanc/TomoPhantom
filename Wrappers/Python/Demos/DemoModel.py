@@ -7,8 +7,11 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate 2D analytical phantoms and their sinograms
 If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat
 
->>>>> Optional prerequisites: ASTRA toolbox <<<<<
-install ASTRA: conda install -c astra-toolbox astra-toolbox
+>>>>> Optional dependencies (reconstruction mainly): <<<<<
+1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
+2. TomoRec: conda install -c dkazanc tomorec
+or install from https://github.com/dkazanc/TomoRec
+
 @author: Daniil Kazantsev
 """
 import numpy as np
@@ -17,6 +20,7 @@ import matplotlib.pyplot as plt
 import os
 import tomophantom
 from tomophantom import TomoP2D
+from tomophantom.supp.qualitymetrics import QualityTools
 
 model = 1 # select a model number from the library
 N_size = 512 # set dimension of the phantom
@@ -85,13 +89,20 @@ plt.imshow(sino_num_ASTRA,  cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Numerical sinogram (ASTRA) of model no.',model))
 #%%
+###################################################################
+# initialise TomoRec reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device='cpu')
+#%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using Fourier Slice method")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.recMod import RecTools
 
-Rectools = RecTools(P, angles_rad, N_size) # initiate a class object
-RecFourier = Rectools.fourier(sino_an,'linear') 
+RecFourier = RectoolsDIR.fourier(sino_an,'linear') 
 
 plt.figure() 
 plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
@@ -99,10 +110,8 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('Fourier slice reconstruction')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-
 #x = Atools.backproj(sino_an) # generate backprojection (A'b)
 
 plt.figure() 
@@ -114,17 +123,17 @@ plt.imshow(sino_num_ASTRA,cmap="BuPu")
 plt.title('Numerical sinogram')
 plt.show()
 #calculate norm
-rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
+#rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
 
 print ("Reconstructing analytical sinogram using FBP (astra TB)...")
-FBPrec1 = Atools.fbp2D(sino_an)
+FBPrec1 = RectoolsDIR.FBP(sino_an)
 plt.figure() 
 plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (analyt)')
 
 print ("Reconstructing numerical sinogram using FBP (astra TB)...")
-FBPrec2 = Atools.fbp2D(sino_num_ASTRA)
+FBPrec2 = RectoolsDIR.FBP(sino_num_ASTRA)
 
 plt.figure() 
 plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")
@@ -135,6 +144,13 @@ plt.figure()
 plt.imshow(abs(FBPrec1-FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
 plt.title('FBP rec differences')
-rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
+# rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
+
+Qtools = QualityTools(phantom_2D, FBPrec1)
+RMSE_FBP1 = Qtools.rmse()
+Qtools = QualityTools(phantom_2D, FBPrec2)
+RMSE_FBP2 = Qtools.rmse()
+print("RMSE for FBP (analyt) {}".format(RMSE_FBP1))
+print("RMSE for FBP (numeric) {}".format(RMSE_FBP2))
 
 #%%

@@ -7,7 +7,11 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate 2D/3D analytical objects and their sinograms
 Recursively adding objects and sinos one can build a required model
 
->>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
+>>>>> Optional dependencies (reconstruction mainly): <<<<<
+1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
+2. TomoRec: conda install -c dkazanc tomorec
+or install from https://github.com/dkazanc/TomoRec
+
 @author: Daniil Kazantsev
 """
 import numpy as np
@@ -60,11 +64,17 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-FBPrec = Atools.fbp2D(sino_an)
+# initialise TomoRec reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device='cpu')
+
+FBPrec = RectoolsDIR.FBP(sino_an)
 
 plt.figure(3) 
 plt.imshow(FBPrec, vmin=0, vmax=1, cmap="BuPu")

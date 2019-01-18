@@ -7,8 +7,14 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate temporal (2D + time)  analytical phantoms and their sinograms
 If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
 Phantom3DLibrary.dat
-Note that all temporal phantoms start from no. 100
->>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
+! Note that all temporal phantoms start from no. 100 
+
+>>>>> Optional dependencies (reconstruction mainly): <<<<<
+1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
+2. TomoRec: conda install -c dkazanc tomorec
+or install from https://github.com/dkazanc/TomoRec
+
+
 @author: Daniil Kazantsev
 """
 import numpy as np
@@ -56,9 +62,15 @@ for sl in range(0,np.shape(phantom_2Dt)[0]):
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-FBPrec = Atools.fbp2D(sino[15,:,:].transpose())
+# initialise TomoRec reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device='cpu')
+
+FBPrec = RectoolsDIR.FBP(sino[15,:,:].transpose()) # reconstruct one frame
 
 plt.figure(3) 
 plt.imshow(FBPrec, vmin=0, vmax=1)
