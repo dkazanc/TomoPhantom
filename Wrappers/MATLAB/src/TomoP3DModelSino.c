@@ -189,15 +189,15 @@ void mexFunction(
                                     mexErrMsgTxt("c (object size) must be positive in [0,2] range");
                                     break; }
                                 printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
-                                
+                               
                                 if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
-                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, 0l, N, N, Theta_proj, AngTot, tmpstr2, C0, x0, -z0, -y0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
                                 }
                                 else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
-                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, 0l, N, N, Theta_proj, AngTot, tmpstr2, C0, y0, -x0, z0, a, b, c, psi_gr3, -psi_gr2, -psi_gr1, 0l);
                                 }
                                 else {
-                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, -psi_gr2, psi_gr1, 0l);
+                                    TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, 0l, N, N, Theta_proj, AngTot, tmpstr2, C0, y0, x0, z0, b, a, c, psi_gr3, -psi_gr2, psi_gr1, 0l);
                                 }
                             }
                         }
@@ -341,13 +341,13 @@ void mexFunction(
                                 for(tt=0; tt < steps; tt++) {
                                     
                                     if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
-                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C_t, x_t, -z_t, -y_t, a_t, b_t, c_t, phi3_t, -phi2_t, -phi1_t, tt);
+                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight,  0l, N, N, Theta_proj, AngTot, tmpstr2, C_t, x_t, -z_t, -y_t, a_t, b_t, c_t, phi3_t, -phi2_t, -phi1_t, tt);
                                     }
                                     else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
-                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C_t, y_t, -x_t, z_t, a_t, b_t, c_t, phi3_t, -phi2_t, -phi1_t, tt);
+                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight,  0l, N, N, Theta_proj, AngTot, tmpstr2, C_t, y_t, -x_t, z_t, a_t, b_t, c_t, phi3_t, -phi2_t, -phi1_t, tt);
                                     }
                                     else {
-                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight, N, Theta_proj, AngTot, tmpstr2, C_t, y_t, x_t, z_t, b_t, a_t, c_t, phi3_t, -phi2_t, phi1_t, tt);
+                                        TomoP3DObjectSino_core(A, DetectorWidth, DetectorHeight,  0l, N, N, Theta_proj, AngTot, tmpstr2, C_t, y_t, x_t, z_t, b_t, a_t, c_t, phi3_t, -phi2_t, phi1_t, tt);
                                     }
                                     /* calculating new coordinates of an object */
                                     if (distance != 0.0f) {
