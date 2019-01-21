@@ -60,7 +60,7 @@ for sl in range(0,np.shape(phantom_2Dt)[0]):
     plt.draw
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # initialise TomoRec reconstruction class ONCE
 from tomorec.methodsDIR import RecToolsDIR

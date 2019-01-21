@@ -5,10 +5,13 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 * Script to generate 3D analytical phantoms and their projection data using TomoPhantom
-* Projection data is also generated numerically and reconstructed using ASTRA TOOLBOX 
+* Projection data is also generated numerically and reconstructed using 
+* TomoRec/ ASTRA TOOLBOX 
 
->>>>> Prerequisites: ASTRA toolbox  <<<<<
-install ASTRA: conda install -c astra-toolbox astra-toolbox
+>>>>> Dependencies (reconstruction): <<<<<
+1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
+2. TomoRec: conda install -c dkazanc tomorec
+or install from https://github.com/dkazanc/TomoRec
 
 @author: Daniil Kazantsev
 """
@@ -55,12 +58,16 @@ angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
 angles_rad = angles*(np.pi/180.0)
 #%%
-print ("Building 3D numerical projection data with ASTRA-toolbox")
-from tomophantom.supp.astraOP import AstraTools3D
-
-Atools = AstraTools3D(Horiz_det, Vert_det, angles_rad, N_size) # initiate a class object
-
-projData3D_astra = Atools.forwproj(phantom_tm) # numerical projection data
+# initialise TomoRec DIRECT reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device = 'gpu')
+#%%
+print ("Building 3D numerical projection data with TomoRec/ASTRA-toolbox")
+projData3D_astra = RectoolsDIR.FORWPROJ(phantom_tm) # numerical projection data
 
 intens_max = 70
 sliceSel = 150
@@ -112,8 +119,8 @@ plt.title('Tangentogram difference')
 plt.show()
 """
 #%%
-print ("Reconstruction using ASTRA-toolbox")
-recNumerical= Atools.cgls3D(projData3D_analyt, 10) # CGLS-reconstruct projection data
+print ("Reconstruction using FBP from TomoRec")
+recNumerical= RectoolsDIR.FBP(projData3D_analyt) # FBP reconstruction
 
 sliceSel = int(0.5*N_size)
 max_val = 1
@@ -138,32 +145,26 @@ RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing with FISTA method (ASTRA used for projection)")
+print ("Reconstructing with FISTA-OS method using TomoRec")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-
-# install FISTA-tomo with: conda install -c dkazanc fista-tomo
-# or from https://github.com/dkazanc/FISTA-tomo
-
-from fista.tomo.recModIter import RecTools
-
-# set geometry related parameters and initiate a class object
-Rectools = RecTools(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+# initialise TomoRec ITERATIVE reconstruction class ONCE
+from tomorec.methodsIR import RecToolsIR
+RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
-                    OS_number = None, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
-                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
+                    OS_number = 12, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
+                    tolerance = 1e-07, # tolerance to stop outer iterations earlier
                     device='gpu')
 
-
-lc = Rectools.powermethod() # calculate Lipschitz constant
-
+lc = RectoolsIR.powermethod() # calculate Lipschitz constant
+#%%
 # Run FISTA reconstrucion algorithm without regularisation
-RecFISTA = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85, lipschitz_const = lc)
+RecFISTA = RectoolsIR.FISTA(projData3D_analyt, iterationsFISTA = 5, lipschitz_const = lc)
 
 # Run FISTA reconstrucion algorithm with 3D regularisation
-#RecFISTA_reg = Rectools.FISTA(projData3D_analyt, iterationsFISTA = 85, regularisation = 'ROF_TV', lipschitz_const = lc)
+#RecFISTA_reg = RectoolsIR.FISTA(projData3D_analyt, iterationsFISTA = 5, regularisation = 'ROF_TV', lipschitz_const = lc)
 
 sliceSel = int(0.5*N_size)
 max_val = 1
