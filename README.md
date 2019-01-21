@@ -4,9 +4,9 @@
 </div>
 
 ****************
-**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data for various image processing (e.g. reconstruction, denoising, deblurring, segmentation, etc.) and machine learning (classification,  clustering, etc.) tasks.**
+**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data for various image processing (e.g. reconstruction, denoising, deblurring, segmentation, etc.) and machine learning tasks (e.g. deep learning, classification, clustering, etc.).**
 
-<a href="https://zenodo.org/badge/latestdoi/95991001"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
+<a href="https://doi.org/10.5281/zenodo.1215758"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 ****************    
    
  <div class="post-content">
@@ -24,7 +24,7 @@
  
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts
  
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Reconstruct with implemented FBP and Fourier slice method or using <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Demos provided to perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Using <a href="https://github.com/dkazanc/TomoRec">TomoRec</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
 
 ### **TomoPhantom** prerequisites: 
 
@@ -33,12 +33,12 @@
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
  * [CMake](https://cmake.org) (if this installation route is chosen)
 
-### Other (optional) dependencies:
+### Other dependencies (required for reconstruction mainly):
+ * [TomoRec](https://github.com/dkazanc/TomoRec)
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
  * [TomoPy](http://tomopy.readthedocs.io)
 
 ## Installation:
-
 
 The package comes as a [CMake](https://cmake.org) project so you will need CMake (v.>=3) to configure it. Additionally you will need a C compiler, and a build tool as `make` (on linux). The toolkit may be used with Python and/or Matlab for which we provide wrappers. TomoPhantom's core is built as shared library and it should be possible to call it directly from C/C++, but currently no C/C++ API is available. 
 
@@ -88,7 +88,6 @@ See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script
 
 ## Installation:
 
-
 ### Python (conda-build)
 ```
 git clone https://github.com/dkazanc/TomoPhantom.git
@@ -115,8 +114,7 @@ TomoPhantom is released under [Apache License v.2](http://www.apache.org/license
 [2] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://doi.org/10.1080/17415977.2017.1340946)
 
 ### Applications: 
-* [Regularised FISTA-type iterative reconstruction algorithm for X-ray tomographic reconstruction with highly inaccurate measurements](https://github.com/dkazanc/FISTA-tomo)
+* [A library of direct and iterative (regularised) tomographic reconstruction algorithms in Python/MATLAB](https://github.com/dkazanc/TomoRec)
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
 Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com
-
