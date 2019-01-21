@@ -7,7 +7,11 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate 2D/3D analytical objects and their sinograms
 Recursively adding objects and sinos one can build a required model
 
->>>> Prerequisites: ASTRA toolbox, if one needs to do reconstruction <<<<<
+>>>>> Optional dependencies (reconstruction mainly): <<<<<
+1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
+2. TomoRec: conda install -c dkazanc tomorec
+or install from https://github.com/dkazanc/TomoRec
+
 @author: Daniil Kazantsev
 """
 import numpy as np
@@ -60,11 +64,17 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-FBPrec = Atools.fbp2D(sino_an)
+# initialise TomoRec reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device='cpu')
+
+FBPrec = RectoolsDIR.FBP(sino_an)
 
 plt.figure(3) 
 plt.imshow(FBPrec, vmin=0, vmax=1, cmap="BuPu")
@@ -83,7 +93,7 @@ import matplotlib.pyplot as plt
 import os
 import tomophantom
 from tomophantom import TomoP2D
-from libraryToDict import modelfile2Dtolist
+from tomophantom.supp.libraryToDict import modelfile2Dtolist
 
 model = 11 # select a model number from the library
 N_size = 512 # set dimension of the phantom
@@ -117,11 +127,18 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
+# initialise TomoRec reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device='cpu')
+
+
+sino_num_ASTRA = RectoolsDIR.FORWPROJ(phantom_2D) # generate numerical sino (Ax)
 #x = Atools.backproj(sino_an) # generate backprojection (A'b)
 
 plt.figure(3) 
@@ -134,14 +151,14 @@ plt.title('Numerical sinogram')
 plt.show()
 
 print ("Reconstructing analytical sinogram using FBP (astra TB)...")
-FBPrec1 = Atools.fbp2D(sino_an)
+FBPrec1 = RectoolsDIR.FBP(sino_an)
 plt.figure(4) 
 plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (analyt)')
 
 print ("Reconstructing numerical sinogram using FBP (astra TB)...")
-FBPrec2 = Atools.fbp2D(sino_num_ASTRA)
+FBPrec2 = RectoolsDIR.FBP(sino_num_ASTRA)
 plt.figure(5) 
 plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')

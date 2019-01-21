@@ -7,8 +7,10 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts
 Sinograms then reconstructed using ASTRA TOOLBOX 
 
->>>>> Prerequisites: ASTRA toolbox  <<<<<
-install ASTRA: conda install -c astra-toolbox astra-toolbox
+>>>>> Dependencies (reconstruction): <<<<<
+1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
+2. TomoRec: conda install -c dkazanc tomorec
+or install from https://github.com/dkazanc/TomoRec
 
 This demo demonstrates frequent inaccuracies which are accosiated with X-ray imaging:
 zingers, rings and noise
@@ -75,28 +77,28 @@ plt.imshow(noisy_zing_stripe,cmap="gray")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
 #%%
+# initialise TomoRec DIRECT reconstruction class ONCE
+from tomorec.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device='cpu')
+#%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using Fourier Slice method")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.recMod import RecTools
-
-Rectools = RecTools(P, angles_rad, N_size) # initiate a class object
-RecFourier = Rectools.fourier(noisy_zing_stripe,'nearest') 
-
+RecFourier = RectoolsDIR.fourier(sino_an,'linear') 
 plt.figure() 
 plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('Fourier slice reconstruction')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-
-FBPrec_ideal = Atools.fbp2D(sino_an) # ideal reconstruction
-FBPrec_error = Atools.fbp2D(noisy_zing_stripe) # error reconstruction
+FBPrec_ideal = RectoolsDIR.FBP(sino_an)  # ideal reconstruction
+FBPrec_error = RectoolsDIR.FBP(noisy_zing_stripe) # error reconstruction
 
 plt.figure()
 plt.subplot(121)
@@ -114,15 +116,23 @@ plt.imshow(abs(FBPrec_ideal-FBPrec_error), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP reconsrtuction differences')
 #%%
+# initialise TomoRec ITERATIVE reconstruction class ONCE
+from tomorec.methodsIR import RecToolsIR
+RectoolsIR = RecToolsIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
+                    OS_number = None, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
+                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
+                    device='gpu')
+#%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using SIRT (ASTRA-TOOLBOX)...")
+print ("Reconstructing analytical sinogram using SIRT (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-from tomophantom.supp.astraOP import AstraTools
-Atools = AstraTools(P, angles_rad, N_size, 'gpu') # initiate a class object
-
 iterationsSIRT = 250
-SIRTrec_ideal = Atools.sirt2D(sino_an,iterationsSIRT) # ideal reconstruction
-SIRTrec_error = Atools.sirt2D(noisy_zing_stripe,iterationsSIRT) # error reconstruction
+SIRTrec_ideal = RectoolsIR.SIRT(sino_an,iterationsSIRT) # ideal reconstruction
+SIRTrec_error = RectoolsIR.SIRT(noisy_zing_stripe,iterationsSIRT) # error reconstruction
 
 plt.figure()
 plt.subplot(121)
@@ -141,31 +151,15 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('SIRT reconsrtuction differences')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing with FISTA method (ASTRA is used for projection)")
+print ("Reconstructing using FISTA method (TomoRec)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-
-# install FISTA-tomo with: conda install -c dkazanc fista-tomo
-# or from https://github.com/dkazanc/FISTA-tomo
-
-from fista.tomo.recModIter import RecTools
-
-# set geometry related parameters and initiate a class object
-Rectools = RecTools(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
-                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-                    AnglesVec = angles_rad, # array of angles in radians
-                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
-                    OS_number = None, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
-                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
-                    device='gpu')
-
-lc = Rectools.powermethod() # calculate Lipschitz constant
+lc = RectoolsIR.powermethod() # calculate Lipschitz constant
 
 # Run FISTA reconstrucion algorithm without regularisation
-RecFISTA = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150, lipschitz_const = lc)
+RecFISTA = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, lipschitz_const = lc)
 
 # Run FISTA reconstrucion algorithm with regularisation 
-RecFISTA_reg = Rectools.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV', lipschitz_const = lc)
+RecFISTA_reg = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV', lipschitz_const = lc)
 
 plt.figure()
 plt.subplot(121)
@@ -175,7 +169,7 @@ plt.title('FISTA reconstruction')
 plt.subplot(122)
 plt.imshow(RecFISTA_reg, vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Regularised FISTA reconstruction')
+plt.title('TV-Regularised FISTA reconstruction')
 plt.show()
 
 # calculate errors 
