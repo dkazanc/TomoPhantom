@@ -62,6 +62,10 @@ artifacts_add = ArtifactsClass(sino_an)
 #noisy_sino = artifacts_add.noise(sigma=0.1,noisetype='Gaussian')
 noisy_sino = artifacts_add.noise(sigma=10000,noisetype='Poisson')
 
+# adding object shifts (misalignment)
+artifacts_add = ArtifactsClass(noisy_sino)
+noisy_sino_misalign = artifacts_add.shifts(maxamplitude = 10)
+
 # adding zingers
 artifacts_add =ArtifactsClass(noisy_sino)
 noisy_zing = artifacts_add.zingers(percentage=0.25, modulus = 10)
@@ -98,17 +102,22 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 FBPrec_ideal = RectoolsDIR.FBP(sino_an)  # ideal reconstruction
-FBPrec_error = RectoolsDIR.FBP(noisy_zing_stripe) # error reconstruction
+FBPrec_error = RectoolsDIR.FBP(noisy_zing_stripe) # reconstruction with artifacts
+FBPrec_misalign = RectoolsDIR.FBP(noisy_sino_misalign) # reconstruction with misalignment
 
 plt.figure()
-plt.subplot(121)
+plt.subplot(131)
 plt.imshow(FBPrec_ideal, vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Ideal FBP reconstruction (ASTRA)')
-plt.subplot(122)
+plt.title('Ideal FBP reconstruction')
+plt.subplot(132)
 plt.imshow(FBPrec_error, vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Erroneous data FBP Reconstruction (ASTRA)')
+plt.title('Erroneous data FBP Reconstruction')
+plt.subplot(133)
+plt.imshow(FBPrec_misalign, vmin=0, vmax=1, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('Misaligned noisy FBP Reconstruction')
 plt.show()
 
 plt.figure() 

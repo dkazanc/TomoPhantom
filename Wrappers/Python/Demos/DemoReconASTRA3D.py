@@ -66,26 +66,6 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     device = 'gpu')
 #%%
-print ("Building 3D numerical projection data with TomoRec/ASTRA-toolbox")
-projData3D_astra = RectoolsDIR.FORWPROJ(phantom_tm) # numerical projection data
-
-intens_max = 70
-sliceSel = 150
-#plt.gray()
-plt.figure() 
-plt.subplot(131)
-plt.imshow(projData3D_astra[:,sliceSel,:],vmin=0, vmax=intens_max)
-plt.title('2D Projection (astra)')
-
-plt.subplot(132)
-plt.imshow(projData3D_astra[sliceSel,:,:],vmin=0, vmax=intens_max)
-plt.title('Sinogram view')
-
-plt.subplot(133)
-plt.imshow(projData3D_astra[:,:,sliceSel],vmin=0, vmax=intens_max)
-plt.title('Tangentogram view')
-plt.show()
-#%%
 print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
 
@@ -102,25 +82,29 @@ plt.subplot(133)
 plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
+#%%
+print ("Adding noise to projection data")
+from tomophantom.supp.artifacts import ArtifactsClass
+artifacts_add = ArtifactsClass(projData3D_analyt)
 
-"""
-# comparing numerical projections with analytical ones
-intens_max = 2
+projData3D_analyt_noisy = artifacts_add.noise(sigma=15000,noisetype='Poisson')
+
+intens_max = 70
+sliceSel = 150
 plt.figure() 
 plt.subplot(131)
-plt.imshow(abs(projData3D_analyt[:,sliceSel,:] - projData3D_astra[:,sliceSel,:]),vmin=0, vmax=intens_max)
-plt.title('2D Projection differnce')
+plt.imshow(projData3D_analyt_noisy[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.title('2D noisy Projection (analytical)')
 plt.subplot(132)
-plt.imshow(abs(projData3D_analyt[sliceSel,:,:] - projData3D_astra[sliceSel,:,:]) ,vmin=0, vmax=intens_max)
-plt.title('Sinogram difference')
+plt.imshow(projData3D_analyt_noisy[sliceSel,:,:],vmin=0, vmax=intens_max)
+plt.title('Noisy sinogram view')
 plt.subplot(133)
-plt.imshow(abs(projData3D_analyt[:,:,sliceSel] - projData3D_astra[:,:,sliceSel]),vmin=0, vmax=intens_max)
-plt.title('Tangentogram difference')
+plt.imshow(projData3D_analyt_noisy[:,:,sliceSel],vmin=0, vmax=intens_max)
+plt.title('Noisy tangentogram view')
 plt.show()
-"""
 #%%
 print ("Reconstruction using FBP from TomoRec")
-recNumerical= RectoolsDIR.FBP(projData3D_analyt) # FBP reconstruction
+recNumerical= RectoolsDIR.FBP(projData3D_analyt_noisy) # FBP reconstruction
 
 sliceSel = int(0.5*N_size)
 max_val = 1
@@ -161,10 +145,10 @@ RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector d
 lc = RectoolsIR.powermethod() # calculate Lipschitz constant
 #%%
 # Run FISTA reconstrucion algorithm without regularisation
-RecFISTA = RectoolsIR.FISTA(projData3D_analyt, iterationsFISTA = 5, lipschitz_const = lc)
+RecFISTA = RectoolsIR.FISTA(projData3D_analyt_noisy, iterationsFISTA = 5, lipschitz_const = lc)
 
 # Run FISTA reconstrucion algorithm with 3D regularisation
-#RecFISTA_reg = RectoolsIR.FISTA(projData3D_analyt, iterationsFISTA = 5, regularisation = 'ROF_TV', lipschitz_const = lc)
+#RecFISTA_reg = RectoolsIR.FISTA(projData3D_analyt_noisy, iterationsFISTA = 5, regularisation = 'ROF_TV', lipschitz_const = lc)
 
 sliceSel = int(0.5*N_size)
 max_val = 1
@@ -182,5 +166,40 @@ plt.imshow(RecFISTA[:,:,sliceSel],vmin=0, vmax=max_val)
 plt.title('3D FISTA Reconstruction, sagittal view')
 plt.show()
 #%%
+#%%
+"""
+print ("Building 3D numerical projection data with TomoRec/ASTRA-toolbox")
+projData3D_astra = RectoolsDIR.FORWPROJ(phantom_tm) # numerical projection data
 
+intens_max = 70
+sliceSel = 150
+#plt.gray()
+plt.figure() 
+plt.subplot(131)
+plt.imshow(projData3D_astra[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.title('2D Projection (astra)')
 
+plt.subplot(132)
+plt.imshow(projData3D_astra[sliceSel,:,:],vmin=0, vmax=intens_max)
+plt.title('Sinogram view')
+
+plt.subplot(133)
+plt.imshow(projData3D_astra[:,:,sliceSel],vmin=0, vmax=intens_max)
+plt.title('Tangentogram view')
+plt.show()
+
+# comparing numerical projections with analytical ones
+intens_max = 2
+plt.figure() 
+plt.subplot(131)
+plt.imshow(abs(projData3D_analyt[:,sliceSel,:] - projData3D_astra[:,sliceSel,:]),vmin=0, vmax=intens_max)
+plt.title('2D Projection differnce')
+plt.subplot(132)
+plt.imshow(abs(projData3D_analyt[sliceSel,:,:] - projData3D_astra[sliceSel,:,:]) ,vmin=0, vmax=intens_max)
+plt.title('Sinogram difference')
+plt.subplot(133)
+plt.imshow(abs(projData3D_analyt[:,:,sliceSel] - projData3D_astra[:,:,sliceSel]),vmin=0, vmax=intens_max)
+plt.title('Tangentogram difference')
+plt.show()
+"""
+#%%
