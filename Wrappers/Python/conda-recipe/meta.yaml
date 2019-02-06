@@ -1,11 +1,13 @@
 package:
   name: tomophantom
-  version: 1.2.0
+  version: {{CIL_VERSION}}
 
 
 build:
   preserve_egg_dir: False
   number: 0
+  script_env:
+    - CIL_VERSION
   
 requirements:
   build:
@@ -18,11 +20,15 @@ requirements:
     
 
   run:
+    - {{ pin_compatible('numpy', max_pin='x.x') }}
     - python
     - numpy
+    - vc 14 # [win and py36] 
+    - vc 14 # [win and py35] 
+    - vc 9  # [win and py27]
     - enum34 # [py27]
+    - libgcc-ng
 
-	
 about:
   home: https://github.com/dkazanc/TomoPhantom
   license:  Apache 2.0 license
