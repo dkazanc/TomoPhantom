@@ -32,7 +32,7 @@
 
 ### **TomoPhantom** prerequisites: 
 
- * Python (tested ver. 2.7/3.5); Cython OR
+ * Python (tested ver. 2.7/3.5/3.6); Cython OR
  * [MATLAB](www.mathworks.com/products/matlab/) 
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
  * [CMake](https://cmake.org) (if this installation route is chosen)
@@ -44,6 +44,15 @@
 
 ## Installation:
 
+### Binary installation
+Tomophantom is distributed as conda package for linux-64 from the [ccpi](https://www.ccpi.ac.uk) [channel](https://anaconda.org/ccpi). To install 
+
+```
+conda install tomophantom -c ccpi
+```
+
+### Install from sources
+
 The package comes as a [CMake](https://cmake.org) project so you will need CMake (v.>=3) to configure it. Additionally you will need a C compiler, and a build tool as `make` (on linux). The toolkit may be used with Python and/or Matlab for which we provide wrappers. TomoPhantom's core is built as shared library and it should be possible to call it directly from C/C++, but currently no C/C++ API is available. 
 
 Prerequisites:
@@ -53,13 +62,13 @@ Prerequisites:
 4. [Cython](https://cython.org/) to build the Python wrappers (optional)
 5. MATLAB installation to build MATLAB wrappers (optional)
 
-### Build
+#### Build
 
 1. Clone this repository to a directory, i.e. `TomoPhantom`, 
 2. create a build directory. 
 3. Issue `cmake` to configure (or `cmake-gui`, or `ccmake`, or `cmake3`). Use additional flags to fine tune the configuration. 
 
-### CMake flags
+#### CMake flags
 Flags used during configuration
 
 | CMake flag | type | meaning |
@@ -90,9 +99,7 @@ PATH="./install/matlab:$PATH" LD_LIBRARY_PATH="./install/lib:$LD_LIBRARY_PATH" m
 
 See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script for additional examples on build.
 
-## Installation:
-
-### Python (conda-build)
+#### conda build (Python only)
 ```
 git clone https://github.com/dkazanc/TomoPhantom.git
 cd TomoPhantom
@@ -100,24 +107,24 @@ conda build Wrappers/Python/conda-recipe --numpy 1.12 --python 3.5
 conda install tomophantom --use-local --force
 ```
 
-### Package library modules:
+## Package library modules:
 - **Phantom2DLibrary.dat** and **Phantom3DLibrary.dat** are editable text files with parametrised models (2D/3D versions of Shepp-Logan, Defrise, and QRM phantoms are included). The generation of new phantoms is highly encouraged, please submit them through pull requests or via e-mail bellow. 
 - See MATLAB and Python demos
 
-### License:
+## License:
 TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.
 
-### Related software projects on GitHub:
+## Related software projects on GitHub:
 - [xdesign](https://github.com/tomography/xdesign) XDesign is an open-source Python package for generating configurable simulation phantoms for benchmarking tomographic image reconstruction.
 - [syris](https://github.com/ufo-kit/syris) Syris (synchrotron radiation imaging simulation) is a framework for simulations of X-ray absorption and phase contrast dynamic imaging experiments, like time-resolved radiography, tomography or laminography.
 
-### References:
+## References:
 
 [1] [D. Kazantsev et al. 2018, *TomoPhantom, a software package to generate 2D-4D analytical phantoms for CT image reconstruction algorithm benchmarks*, Software X, Volume 7, January–June 2018, Pages 150–155](https://doi.org/10.1016/j.softx.2018.05.003)
 
 [2] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://doi.org/10.1080/17415977.2017.1340946)
 
-### Applications: 
+## Applications: 
 * [A library of direct and iterative (regularised) tomographic reconstruction algorithms in Python/MATLAB](https://github.com/dkazanc/TomoRec)
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
