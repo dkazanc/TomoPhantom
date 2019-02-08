@@ -4,16 +4,15 @@
 Created on Wed May  9 10:47:01 2018
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-@author: Daniil Kazantsev
-
---- A class which simulates artifacts applied to a sinogram (2D) or to 3D 
-projection data
+Artifacts simulation class for sinograms (2D) or for 3D-projection data
  
 What can be simulated: 
 -- noise (Poisson or Gaussian)
 -- zingers (streaks in reconstructions)
 -- stripes (rings in reconstructions)
 -- shifts - misalignment (blur in reconstruction)
+
+@author: Daniil Kazantsev
 """
 import numpy as np
 import random
@@ -30,7 +29,7 @@ class ArtifactsClass:
         sino_noisy = self.sinogram
         if noisetype == 'Gaussian':
             # add normal Gaussian noise
-            sino_noisy += np.random.normal(loc = 0 ,scale = sigma * sino_noisy, size = np.shape(sino_noisy))
+            sino_noisy += np.random.normal(loc = 0.0, scale = sigma, size = np.shape(sino_noisy))
             sino_noisy[sino_noisy<0] = 0
         elif noisetype == 'Poisson':
             # add Poisson noise
@@ -85,7 +84,7 @@ class ArtifactsClass:
         return sino_zingers
     def stripes(self, percentage, maxthickness):
         """
-        function to add stripes (constant offsets) to sinogram which results in rings in the 
+        A function to add stripes (constant offsets) to sinogram which results in rings in the 
         reconstructed image
         - percentage defines the density of stripes
         - maxthickness defines maximal thickness of a stripe
@@ -123,7 +122,7 @@ class ArtifactsClass:
         return sino_stripes
     def shifts(self, maxamplitude):
         """
-        function to add random shifts to sinogram rows (an offset for each angular position)
+        A function to add random shifts to sinogram rows (an offset for each angular position)
         - maxamplitude (in pixels) defines the maximal amplitude of each angular deviation
         """
         sino_shifts = np.zeros(np.shape(self.sinogram),dtype='float32')
