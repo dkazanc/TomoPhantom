@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 A function to generate fake flat field images for 3D projection data normalisation
+
+@author: Daniil Kazantsev
 """
 
 from scipy.special import spherical_yn
