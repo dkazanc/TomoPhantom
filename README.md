@@ -1,5 +1,5 @@
-| Master | Development |
-|--------|-------------|
+| Master | Development | Anaconda binaries |
+|--------|-------------|-------------------|
 | [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom/) | [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom-dev)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom-dev/) | ![conda version](https://anaconda.org/ccpi/tomophantom/badges/version.svg) ![conda last release](https://anaconda.org/ccpi/tomophantom/badges/latest_release_date.svg) [![conda platforms](https://anaconda.org/ccpi/tomophantom/badges/platforms.svg) ![conda dowloads](https://anaconda.org/ccpi/tomophantom/badges/downloads.svg)](https://anaconda.org/ccpi/tomophantom) |
 
 <div align="center">
