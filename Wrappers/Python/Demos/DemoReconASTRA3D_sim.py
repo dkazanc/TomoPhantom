@@ -89,7 +89,7 @@ plt.title('A selected simulated flat-field')
 #%%
 # Apply normalisation of data and add noise
 flux_intensity = 10000 # controls the level of noise 
-sigma_flats = 0.06 # contro the level of noise in flats (higher creates ring artifacts)
+sigma_flats = 0.15 # contro the level of noise in flats (higher creates ring artifacts)
 projData3D_norm = normaliser_sim(projData3D_analyt, flatsSIM, sigma_flats, flux_intensity)
 
 intens_max = 70
@@ -160,10 +160,10 @@ lc = RectoolsIR.powermethod() # calculate Lipschitz constant
 
 # Run FISTA reconstrucion algorithm with 3D regularisation
 RecFISTA_reg = RectoolsIR.FISTA(projData3D_norm, 
-                                iterationsFISTA = 7, 
+                                iterationsFISTA = 8, 
                                 regularisation = 'FGP_TV', 
-                                regularisation_parameter = 0.007, 
-                                regularisation_iterations = 180,
+                                regularisation_parameter = 0.0007, 
+                                regularisation_iterations = 200,
                                 lipschitz_const = lc)
 
 sliceSel = int(0.5*N_size)
@@ -171,14 +171,39 @@ max_val = 1
 plt.figure() 
 plt.subplot(131)
 plt.imshow(RecFISTA_reg[sliceSel,:,:],vmin=0, vmax=max_val)
-plt.title('3D FISTA Reconstruction, axial view')
+plt.title('3D FISTA-TV Reconstruction, axial view')
 
 plt.subplot(132)
 plt.imshow(RecFISTA_reg[:,sliceSel,:],vmin=0, vmax=max_val)
-plt.title('3D FISTA Reconstruction, coronal view')
+plt.title('3D FISTA-TV Reconstruction, coronal view')
 
 plt.subplot(133)
 plt.imshow(RecFISTA_reg[:,:,sliceSel],vmin=0, vmax=max_val)
+plt.title('3D FISTA-TV Reconstruction, sagittal view')
+plt.show()
+#%%
+# Run FISTA reconstrucion algorithm with 3D regularisation
+RecFISTA_Huber_TV = RectoolsIR.FISTA(projData3D_norm, 
+                                iterationsFISTA = 8, 
+                                huber_data_threshold = 2.0,
+                                regularisation = 'FGP_TV', 
+                                regularisation_parameter = 0.0007, 
+                                regularisation_iterations = 200,
+                                lipschitz_const = lc)
+
+sliceSel = int(0.5*N_size)
+max_val = 1
+plt.figure() 
+plt.subplot(131)
+plt.imshow(RecFISTA_Huber_TV[sliceSel,:,:],vmin=0, vmax=max_val)
+plt.title('3D FISTA Reconstruction, axial view')
+
+plt.subplot(132)
+plt.imshow(RecFISTA_Huber_TV[:,sliceSel,:],vmin=0, vmax=max_val)
+plt.title('3D FISTA Reconstruction, coronal view')
+
+plt.subplot(133)
+plt.imshow(RecFISTA_Huber_TV[:,:,sliceSel],vmin=0, vmax=max_val)
 plt.title('3D FISTA Reconstruction, sagittal view')
 plt.show()
 #%%
