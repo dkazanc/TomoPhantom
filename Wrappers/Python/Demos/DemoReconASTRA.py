@@ -169,7 +169,7 @@ lc = RectoolsIR.powermethod() # calculate Lipschitz constant
 RecFISTA = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, lipschitz_const = lc)
 
 # Run FISTA reconstrucion algorithm with regularisation 
-RecFISTA_reg = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV', lipschitz_const = lc)
+RecFISTA_reg = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV', regularisation_parameter = 0.003, lipschitz_const = lc)
 
 plt.figure()
 plt.subplot(121)
@@ -189,4 +189,21 @@ Qtools = QualityTools(phantom_2D, RecFISTA_reg)
 RMSE_FISTA_reg = Qtools.rmse()
 print("RMSE for FISTA is {}".format(RMSE_FISTA))
 print("RMSE for regularised FISTA is {}".format(RMSE_FISTA_reg))
+#%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing using ADMM method (TomoRec)")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+# Run ADMM reconstrucion algorithm with regularisation 
+RecADMM_reg = RectoolsIR.ADMM(noisy_zing_stripe, rho_const = 5000.0, iterationsADMM = 10, regularisation = 'ROF_TV', regularisation_parameter = 0.3)
+
+plt.figure()
+plt.imshow(RecADMM_reg, vmin=0, vmax=1, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('ADMM reconstruction')
+plt.show()
+
+# calculate errors 
+Qtools = QualityTools(phantom_2D, RecADMM_reg)
+RMSE_ADMM_reg = Qtools.rmse()
+print("RMSE for regularised ADMM is {}".format(RMSE_ADMM_reg))
 #%%
