@@ -28,7 +28,7 @@
  
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts)
  
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Demos provided to perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Using <a href="https://github.com/dkazanc/TomoRec">TomoRec</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Demos provided to perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
 
 ### **TomoPhantom** prerequisites: 
 
@@ -38,7 +38,7 @@
  * [CMake](https://cmake.org) (if this installation route is chosen)
 
 ### Other dependencies (required for reconstruction mainly):
- * [TomoRec](https://github.com/dkazanc/TomoRec)
+ * [ToMoBAR](https://github.com/dkazanc/ToMoBAR)
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
  * [TomoPy](http://tomopy.readthedocs.io)
 
@@ -126,7 +126,7 @@ TomoPhantom is released under [Apache License v.2](http://www.apache.org/license
 [2] [D. Kazantsev, V. Pickalov "New iterative reconstruction methods for fan-beam tomography", IPSE, 2017](https://doi.org/10.1080/17415977.2017.1340946)
 
 ## Applications: 
-* [A library of direct and iterative (regularised) tomographic reconstruction algorithms in Python/MATLAB](https://github.com/dkazanc/TomoRec)
+* [TOmographic MOdel-BAsed Reconstruction (ToMoBAR)](https://github.com/dkazanc/ToMoBAR)
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
 
 Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com

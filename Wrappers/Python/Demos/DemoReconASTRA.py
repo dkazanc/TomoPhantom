@@ -9,8 +9,8 @@ Sinograms then reconstructed using ASTRA TOOLBOX
 
 >>>>> Dependencies (reconstruction): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. TomoRec: conda install -c dkazanc tomorec
-or install from https://github.com/dkazanc/TomoRec
+2. tomobar: conda install -c dkazanc tomobar
+or install from https://github.com/dkazanc/ToMoBAR
 
 This demo demonstrates frequent inaccuracies which are accosiated with X-ray imaging:
 zingers, rings and noise
@@ -81,8 +81,8 @@ plt.imshow(noisy_zing_stripe,cmap="gray")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
 #%%
-# initialise TomoRec DIRECT reconstruction class ONCE
-from tomorec.methodsDIR import RecToolsDIR
+# initialise tomobar DIRECT reconstruction class ONCE
+from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
@@ -99,7 +99,7 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('Fourier slice reconstruction')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
+print ("Reconstructing analytical sinogram using FBP (tomobar)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 FBPrec_ideal = RectoolsDIR.FBP(sino_an)  # ideal reconstruction
 FBPrec_error = RectoolsDIR.FBP(noisy_zing_stripe) # reconstruction with artifacts
@@ -125,8 +125,8 @@ plt.imshow(abs(FBPrec_ideal-FBPrec_error), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP reconsrtuction differences')
 #%%
-# initialise TomoRec ITERATIVE reconstruction class ONCE
-from tomorec.methodsIR import RecToolsIR
+# initialise tomobar ITERATIVE reconstruction class ONCE
+from tomobar.methodsIR import RecToolsIR
 RectoolsIR = RecToolsIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
@@ -138,7 +138,7 @@ RectoolsIR = RecToolsIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension
                     device='gpu')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using SIRT (TomoRec)...")
+print ("Reconstructing analytical sinogram using SIRT (tomobar)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 iterationsSIRT = 250
 SIRTrec_ideal = RectoolsIR.SIRT(sino_an,iterationsSIRT) # ideal reconstruction
@@ -161,7 +161,7 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('SIRT reconsrtuction differences')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing using FISTA method (TomoRec)")
+print ("Reconstructing using FISTA method (tomobar)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 lc = RectoolsIR.powermethod() # calculate Lipschitz constant
 
@@ -191,7 +191,7 @@ print("RMSE for FISTA is {}".format(RMSE_FISTA))
 print("RMSE for regularised FISTA is {}".format(RMSE_FISTA_reg))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing using ADMM method (TomoRec)")
+print ("Reconstructing using ADMM method (tomobar)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # Run ADMM reconstrucion algorithm with regularisation 
 RecADMM_reg = RectoolsIR.ADMM(noisy_zing_stripe, rho_const = 5000.0, iterationsADMM = 10, regularisation = 'ROF_TV', regularisation_parameter = 0.3)

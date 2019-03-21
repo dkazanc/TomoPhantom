@@ -8,12 +8,12 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 * Synthetic flat fields are also genererated and noise incorporated into data 
 together with normalisation errors. This simulates more challeneging data for 
 reconstruction.
-* TomoRec is required for reconstruction
+* tomobar is required for reconstruction
 
 >>>>> Dependencies (reconstruction): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. TomoRec: conda install -c dkazanc tomorec
-or install from https://github.com/dkazanc/TomoRec
+2. tomobar: conda install -c dkazanc tomobar
+or install from https://github.com/dkazanc/ToMoBAR
 
 @author: Daniil Kazantsev
 """
@@ -106,15 +106,15 @@ plt.imshow(projData3D_norm[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 #%%
-# initialise TomoRec DIRECT reconstruction class ONCE
-from tomorec.methodsDIR import RecToolsDIR
+# initialise tomobar DIRECT reconstruction class ONCE
+from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     device = 'gpu')
 #%%
-print ("Reconstruction using FBP from TomoRec")
+print ("Reconstruction using FBP from tomobar")
 recNumerical= RectoolsDIR.FBP(projData3D_norm) # FBP reconstruction
 
 sliceSel = int(0.5*N_size)
@@ -140,10 +140,10 @@ RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing with FISTA-OS method using TomoRec")
+print ("Reconstructing with FISTA-OS method using tomobar")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# initialise TomoRec ITERATIVE reconstruction class ONCE
-from tomorec.methodsIR import RecToolsIR
+# initialise tomobar ITERATIVE reconstruction class ONCE
+from tomobar.methodsIR import RecToolsIR
 RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians

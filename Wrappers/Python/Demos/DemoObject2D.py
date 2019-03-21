@@ -9,8 +9,8 @@ Recursively adding objects and sinos one can build a required model
 
 >>>>> Optional dependencies (reconstruction mainly): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. TomoRec: conda install -c dkazanc tomorec
-or install from https://github.com/dkazanc/TomoRec
+2. tomobar: conda install -c dkazanc tomobar
+or install from https://github.com/dkazanc/ToMoBAR
 
 @author: Daniil Kazantsev
 """
@@ -64,10 +64,10 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}'.format('Analytical sinogram of an object'))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
+print ("Reconstructing analytical sinogram using FBP (tomobar)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# initialise TomoRec reconstruction class ONCE
-from tomorec.methodsDIR import RecToolsDIR
+# initialise tomobar reconstruction class ONCE
+from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
@@ -127,10 +127,10 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing analytical sinogram using FBP (TomoRec)...")
+print ("Reconstructing analytical sinogram using FBP (tomobar)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# initialise TomoRec reconstruction class ONCE
-from tomorec.methodsDIR import RecToolsDIR
+# initialise tomobar reconstruction class ONCE
+from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians

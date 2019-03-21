@@ -6,12 +6,12 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 * Script to generate 3D analytical phantoms and their projection data using TomoPhantom
 * Projection data is also generated numerically and reconstructed using 
-* TomoRec/ ASTRA TOOLBOX 
+* tomobar/ ASTRA TOOLBOX 
 
 >>>>> Dependencies (reconstruction): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. TomoRec: conda install -c dkazanc tomorec
-or install from https://github.com/dkazanc/TomoRec
+2. tomobar: conda install -c dkazanc tomobar
+or install from https://github.com/dkazanc/ToMoBAR
 
 @author: Daniil Kazantsev
 """
@@ -58,8 +58,8 @@ angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
 angles_rad = angles*(np.pi/180.0)
 #%%
-# initialise TomoRec DIRECT reconstruction class ONCE
-from tomorec.methodsDIR import RecToolsDIR
+# initialise tomobar DIRECT reconstruction class ONCE
+from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
@@ -103,7 +103,7 @@ plt.imshow(projData3D_analyt_noisy[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Noisy tangentogram view')
 plt.show()
 #%%
-print ("Reconstruction using FBP from TomoRec")
+print ("Reconstruction using FBP from tomobar")
 recNumerical= RectoolsDIR.FBP(projData3D_analyt_noisy) # FBP reconstruction
 
 sliceSel = int(0.5*N_size)
@@ -129,10 +129,10 @@ RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing with FISTA-OS method using TomoRec")
+print ("Reconstructing with FISTA-OS method using tomobar")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# initialise TomoRec ITERATIVE reconstruction class ONCE
-from tomorec.methodsIR import RecToolsIR
+# initialise tomobar ITERATIVE reconstruction class ONCE
+from tomobar.methodsIR import RecToolsIR
 RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
                     AnglesVec = angles_rad, # array of angles in radians
@@ -169,7 +169,7 @@ plt.show()
 #%%
 #%%
 """
-print ("Building 3D numerical projection data with TomoRec/ASTRA-toolbox")
+print ("Building 3D numerical projection data with tomobar/ASTRA-toolbox")
 projData3D_astra = RectoolsDIR.FORWPROJ(phantom_tm) # numerical projection data
 
 intens_max = 70
