@@ -44,7 +44,7 @@ cdef packed struct object_2d:
     np.float32_t a
     np.float32_t b
     np.float32_t phi_rot
-    
+
 class Objects2D(Enum):
     '''Enumeration with the available objects for 2D phantoms'''
     GAUSSIAN  = 'gaussian'
@@ -59,13 +59,13 @@ class Objects2D(Enum):
 def Model(int model_id, int phantom_size, str model_parameters_filename):
     """
     To generate stationary (2D) Model(model_id, phantom_size,model_parameters_filename)
-    
+
     Takes in a input model_id and phantom_size and returns a phantom-model of phantom_size x phantom_size of type float32 numpy array.
-    
+
     param: model_parameters_filename -- filename for the model parameters
     param: model_id -- a model id from the functions file
     param: phantom_size -- a phantom size in each dimension.
-    
+
     returns: numpy float32 phantom array
     """
     cdef float ret_val
@@ -86,18 +86,18 @@ def Model(int model_id, int phantom_size, str model_parameters_filename):
 def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename):
     """
     to generate temporal (2D + time) Model(model_id, phantom_size,model_parameters_filename)
-    
+
     Takes in a input model_id and phantom_size and returns a phantom-model of Time Frames x phantom_size x phantom_size of type float32 numpy array.
-    
+
     param: model_parameters_filename -- filename for the model parameters
     param: model_id -- a model id from the functions file
     param: phantom_size -- a phantom size in each dimension.
-    
+
     returns: numpy float32 phantom array
     """
     cdef float ret_val
     py_byte_string = model_parameters_filename.encode('UTF-8')
-    cdef char* c_string = py_byte_string    
+    cdef char* c_string = py_byte_string
     cdef np.ndarray[int, ndim=1, mode="c"] params
     params = np.ascontiguousarray(np.zeros([10], dtype=ctypes.c_int))
     checkParams2D(&params[0], model_id, c_string)
@@ -113,35 +113,35 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
 #def Object(int phantom_size, object_2d[:] obj_params):
 #    """
 #    Object (phantom_size,object_parameters)
-#    
+#
 #    Takes in a input object description (list) and phantom_size and returns a phantom-object of phantom_size x phantom_size of type float32 numpy array.
-#    
+#
 #    param: phantom_size -- a phantom size in each dimension.
 #    param: obj_params -- object parameters list
-#    
+#
 #    returns: numpy float32 phantom array
-#    
+#
 #    """
 #    cdef Py_ssize_t i
 #    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
 #    cdef float ret_val
 #    for i in range(obj_params.shape[0]):
-#        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0, 
+#        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0,
 #                                     obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
 #    return phantom
-    
+
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def SinoNum(np.ndarray[np.float32_t, ndim=2, mode="c"] phantom, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles):
     """
     Function to calculate a numerical sinogram of the model (2D): SinoNum (phantom, detector_size, angles)
     Takes in as input model_id, image_size, detector_size and projection angles and return a 2D sinogram corresponding to the model id.
-    
+
     param: phantom - 2D array of floats (phantom)
     param: detector_size -- int detector size.
-    param: angles -- a numpy array of float values with angles in radians
-    
-    returns: numpy float32 phantom sinograms array.    
+    param: angles -- a numpy array of float values with angles in degrees
+
+    returns: numpy float32 phantom sinograms array.
     np.flipud(np.fliplr(sinogram.transpose()))
     """
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
@@ -155,25 +155,25 @@ def SinoNum(np.ndarray[np.float32_t, ndim=2, mode="c"] phantom, int detector_siz
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
-    
+
     """
     function to build a sinogram of the model (2D): ModelSino (model_id, image_size, detector_size, angles, model_parameters_filename)
-    
+
     Takes in as input model_id, image_size, detector_size and projection angles and return a 2D sinogram corresponding to the model id.
-    
+
     param: model_parameters_filename -- filename for the model parameters
     param: model_id -- a model id from the functions file
     param: image_size -- a phantom size in each dimension.
     param: detector_size -- int detector size.
     param: angles -- a numpy array of float values with angles in radians
     param: CenTypeIn -- 1 as default [0: radon, 1:astra]
-    returns: numpy float32 phantom sinograms array.    
+    returns: numpy float32 phantom sinograms array.
     np.flipud(np.fliplr(sinogram.transpose()))
     """
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
     cdef float ret_val
     py_byte_string = model_parameters_filename.encode('UTF-8')
-    cdef char* c_string = py_byte_string    
+    cdef char* c_string = py_byte_string
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center positioning
     cdef np.ndarray[int, ndim=1, mode="c"] params
@@ -188,23 +188,23 @@ def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.flo
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def ModelSinoTemporal(int model_id, int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, str model_parameters_filename):
-    
+
     """
     function to build a 3D (2D +t) sinogram of the model: ModelSino (model_id, image_size, detector_size, angles, model_parameters_filename)
-    
+
     Takes in as input model_id, image_size, detector_size and projection angles and return a 2D sinogram corresponding to the model id.
-    
+
     param: model_parameters_filename -- filename for the model parameters
     param: model_id -- a model id from the functions file
     param: image_size -- a phantom size in each dimension.
     param: detector_size -- int detector size.
     param: angles -- a numpy array of float values with angles in radians
     param: CenTypeIn -- 1 as default [0: radon, 1:astra]
-    returns: numpy float32 phantom sinograms array.    
-    """    
+    returns: numpy float32 phantom sinograms array.
+    """
     cdef float ret_val
     py_byte_string = model_parameters_filename.encode('UTF-8')
-    cdef char* c_string = py_byte_string    
+    cdef char* c_string = py_byte_string
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center positioning
     cdef np.ndarray[int, ndim=1, mode="c"] params
@@ -222,9 +222,9 @@ def ModelSinoTemporal(int model_id, int image_size, int detector_size, np.ndarra
 def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles, objlist):
     """
     ObjectSino (image_size, detector_size, angles, object parameters)
-    
+
     Takes in as input object parameters list, image_size, detector_size and projection angles and return a 2D sinogram corresponding to the object
-    
+
     param: image_size -- a phantom size in each dimension.
     param: detector_size -- int detector size.
     param: angles -- a numpy array of float values with angles in radians
@@ -234,25 +234,25 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
     """
     cdef Py_ssize_t i
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
-    cdef float ret_val 
+    cdef float ret_val
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center posit
     if type(objlist) is dict:
         objlist = [objlist]
     for obj in objlist:
         if testParams(obj):
-            
+
             if sys.version_info.major == 3:
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
             ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn,
-                                        objectName, 
-                                        obj['C0'], 
-                                        obj['y0'], 
-                                        obj['x0'], 
-                                        obj['a'], 
-                                        obj['b'], 
+                                        objectName,
+                                        obj['C0'],
+                                        obj['y0'],
+                                        obj['x0'],
+                                        obj['a'],
+                                        obj['b'],
                                         -obj['phi'], 0)
     return sinogram.transpose()
 @cython.boundscheck(False)
@@ -260,56 +260,56 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
 def Object(int phantom_size, objlist):
     """
     Object (phantom_size,objlist)
-    
-    Takes in a input object description (list) and phantom_size and returns a 
+
+    Takes in a input object description (list) and phantom_size and returns a
     phantom-object of phantom_size x phantom_size of type float32 numpy array.
-    
+
     param: phantom_size -- a phantom size in each dimension.
-    param: obj_params -- can be list or dictionary. the object parameters are 
-           formatted as Python dict with the input parameters inside. 
+    param: obj_params -- can be list or dictionary. the object parameters are
+           formatted as Python dict with the input parameters inside.
            User can supply more objects by passing a list of dicts.
-           
-    Example: 
-    pp = {'Obj': Objects2D.GAUSSIAN, 
-      'C0' : 1.00, 
+
+    Example:
+    pp = {'Obj': Objects2D.GAUSSIAN,
+      'C0' : 1.00,
       'x0' : 0.25,
       'y0' : -0.3,
       'a'  : 0.15,
       'b'  :  0.3,
       'phi': 30.0}
 
-    pp1 = {'Obj': Objects2D.RECTANGLE, 
-      'C0' : 1.00, 
+    pp1 = {'Obj': Objects2D.RECTANGLE,
+      'C0' : 1.00,
       'x0' : -0.2,
       'y0' : 0.2,
       'a'  : 0.25,
       'b'  :  0.4,
       'phi': 60.0}
-    
+
     returns: numpy float32 phantom array
-    
+
     """
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
-    
+
     if type(objlist) is dict:
         objlist = [objlist]
-        
+
     for obj in objlist:
         if testParams(obj):
-            
+
             if sys.version_info.major == 3:
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
-            
-            ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, 
-                                        objectName, 
-                                        float(obj['C0']), 
-                                        float(obj['x0']), 
-                                        float(obj['y0']), 
-                                        float(obj['b']), 
-                                        float(obj['a']), 
+
+            ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size,
+                                        objectName,
+                                        float(obj['C0']),
+                                        float(obj['x0']),
+                                        float(obj['y0']),
+                                        float(obj['b']),
+                                        float(obj['a']),
                                         float(obj['phi']), 0)
     return phantom
 
@@ -325,7 +325,7 @@ def testParams(obj):
             if not k == 'Obj':
                 raise TypeError(k, 'is not a Number')
     typecheck = True
-    # range check    
+    # range check
     rangecheck = obj['x0'] >= -1 and obj['x0'] <= 1
     if not rangecheck:
         raise ValueError('x0 is out of range. Must be between -1 and 1')
