@@ -10,21 +10,24 @@ Recursively adding objects one can build a required model with the corresponding
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import tomophantom
 from tomophantom import TomoP3D
 from tomophantom.TomoP3D import Objects3D
 
-N3D_size = 256
+N3D_size = 128
 
 # specify object parameters, here we replicate model 
 obj3D_1 = {'Obj': Objects3D.GAUSSIAN, 
-      'C0' : 1.00,
+      'C0' : 1.0,
       'x0' :-0.25,
       'y0' : -0.15,
       'z0' : 0.0,
       'a'  : 0.3,
       'b'  :  0.2,
       'c'  :  0.3,
-      'phi1'  : 35.0}
+      'phi1'  : 35.0,
+      'phi2'  : 25.0,
+      'phi3'  : 45.0}
 
 obj3D_2 = {'Obj': Objects3D.CUBOID, 
       'C0' : 1.00,
@@ -38,7 +41,7 @@ obj3D_2 = {'Obj': Objects3D.CUBOID,
 
 print ("Building 3D object using TomoPhantom software")
 myObjects = [obj3D_1, obj3D_2] # dictionary of objects
-Object3D = TomoP3D.Object(N3D_size, myObjects)
+Object3D = TomoP3D.Object(N3D_size, obj3D_1)
 
 sliceSel = int(0.5*N3D_size)
 #plt.gray()

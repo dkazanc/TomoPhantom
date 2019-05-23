@@ -28,9 +28,9 @@ import sys
 
 # declare the interface to the C code
 cdef extern float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char* ModelParametersFilename)
-cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
+cdef extern float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object, float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, long tt)
 cdef extern float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Theta_proj, int AngTot, char* ModelParametersFilename)
-cdef extern float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Angl_vector, int AngTot, char *Object,float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, int tt)
+cdef extern float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Angl_vector, int AngTot, char *Object,float C0, float x0, float y0, float z0, float a, float b, float c, float psi1, float psi2, float psi3, long tt)
 cdef extern float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename)
     
 cdef packed struct object_3d:
@@ -43,6 +43,8 @@ cdef packed struct object_3d:
     np.float32_t b
     np.float32_t c
     np.float32_t psi1
+    np.float32_t psi2
+    np.float32_t psi3
 
 class Objects3D(Enum):
     '''Enumeration with the available objects for 3D phantoms'''
@@ -228,27 +230,28 @@ def Object(phantom_size, objlist):
     param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom), or phantom_size[3] = [N1,N2,N3]  
     
     returns: numpy float32 phantom array    
-    """
-#    cdef Py_ssize_t i
+    """  
     cdef long N1,N2,N3
     if type(phantom_size) == tuple:
        N1,N2,N3 = [int(i) for i in phantom_size]
     else:
        N1 = N2 = N3 = phantom_size
-
+    cdef long tt = 0
+    
     cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([N1, N2, N3], dtype='float32')
+    
     cdef float ret_val
     if type(objlist) is dict:
-        objlist = [objlist]
-        
+        objlist = [objlist]      
+    
     for obj in objlist:
         if testParamsPY(obj):
             if sys.version_info.major == 3:
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
-
-            ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, 0l, N1,
+                
+            ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, tt, N1,
                                         objectName, 
                                         float(obj['C0']),
                                         float(obj['y0']),
@@ -258,8 +261,10 @@ def Object(phantom_size, objlist):
                                         float(obj['b']),
                                         float(obj['c']), 
                                         float(obj['phi1']),
-                                        float(0.0), 
-                                        float(0.0), 0)
+                                        float(obj['phi2']),
+                                        float(obj['phi3']),
+                                        tt)
+   
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -462,7 +467,7 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
                 objectName = bytes(obj['Obj'].value)
             
             if (("gaussian" == objectName) or ("paraboloid" == objectName) or ("ellipsoid" == objectName)):
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot,
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
                                         float(obj['C0']),
                                         float(obj['y0']),
@@ -471,11 +476,11 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
                                         float(obj['b']),
                                         float(obj['a']),
                                         float(obj['c']), 
-                                        float(0.0),
+                                        float(0.0), 
                                         float(0.0), 
                                         float(obj['phi1']), 0)
             elif ("elliptical_cylinder" == objectName):
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot,
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
                                         float(obj['C0']),
                                         float(obj['x0']),
@@ -484,11 +489,11 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
                                         float(obj['b']),
                                         float(obj['a']),
                                         float(obj['c']), 
-                                        float(0.0),
+                                        float(0.0), 
                                         float(0.0), 
                                         float(obj['phi1']), 0)
             else:
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot,
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
                                         float(obj['C0']),
                                         float(obj['x0']),
@@ -497,7 +502,7 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
                                         float(obj['a']),
                                         float(obj['b']),
                                         float(obj['c']), 
-                                        float(0.0),
+                                        float(0.0), 
                                         float(0.0), 
                                         float(-obj['phi1']), 0)
     return np.swapaxes(projdata,0,1)
