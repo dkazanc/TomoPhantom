@@ -237,6 +237,7 @@ def Object(phantom_size, objlist):
     else:
        N1 = N2 = N3 = phantom_size
     cdef long tt = 0
+    cdef float C0, y0, x0, z0, a, b, c, phi1, phi2, phi3
     
     cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([N1, N2, N3], dtype='float32')
     
@@ -250,20 +251,20 @@ def Object(phantom_size, objlist):
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
-                
+            C0 = obj['C0']
+            x0 = obj['x0']
+            y0 = obj['y0']
+            z0 = obj['z0']
+            a = obj['a']
+            b = obj['b']
+            c = obj['c']
+            phi1 = obj['phi1']    
+            phi2 = 0.0    
+            phi3 = 0.0
             ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, tt, N1,
-                                        objectName, 
-                                        float(obj['C0']),
-                                        float(obj['y0']),
-                                        float(obj['x0']),
-                                        float(obj['z0']),
-                                        float(obj['a']),
-                                        float(obj['b']),
-                                        float(obj['c']), 
-                                        float(obj['phi1']),
-                                        float(obj['phi2']),
-                                        float(obj['phi3']),
-                                        tt)
+                                        objectName,                                         
+                                        C0,y0,x0,z0,a,b,c,
+                                        phi1,phi2,phi3,tt)
    
     return phantom
 @cython.boundscheck(False)
@@ -458,6 +459,9 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
     cdef float ret_val
     if type(objlist) is dict:
         objlist = [objlist]
+    
+    cdef long tt = 0
+    cdef float C0, y0, x0, z0, a, b, c, phi1, phi2, phi3
         
     for obj in objlist:
         if testParamsPY(obj):
@@ -466,45 +470,29 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
             
+            C0 = obj['C0']
+            x0 = obj['x0']
+            y0 = obj['y0']
+            z0 = obj['z0']
+            a = obj['a']
+            b = obj['b']
+            c = obj['c']
+            phi1 = obj['phi1']    
+            phi2 = 0.0    
+            phi3 = 0.0
+            
             if (("gaussian" == objectName) or ("paraboloid" == objectName) or ("ellipsoid" == objectName)):
                 ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
-                                        float(obj['C0']),
-                                        float(obj['y0']),
-                                        float(-obj['z0']),
-                                        float(-obj['x0']),
-                                        float(obj['b']),
-                                        float(obj['a']),
-                                        float(obj['c']), 
-                                        float(0.0), 
-                                        float(0.0), 
-                                        float(obj['phi1']), 0)
+                                        C0, y0, -z0, -x0, b, a, c, 0.0, 0.0, phi1, tt)
             elif ("elliptical_cylinder" == objectName):
                 ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
-                                        float(obj['C0']),
-                                        float(obj['x0']),
-                                        float(-obj['y0']),
-                                        float(obj['z0']),
-                                        float(obj['b']),
-                                        float(obj['a']),
-                                        float(obj['c']), 
-                                        float(0.0), 
-                                        float(0.0), 
-                                        float(obj['phi1']), 0)
+                                        C0, x0, -y0, z0, b, a, c, 0.0, 0.0, phi1, tt)
             else:
                 ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
-                                        float(obj['C0']),
-                                        float(obj['x0']),
-                                        float(obj['y0']),
-                                        float(obj['z0']),
-                                        float(obj['a']),
-                                        float(obj['b']),
-                                        float(obj['c']), 
-                                        float(0.0), 
-                                        float(0.0), 
-                                        float(-obj['phi1']), 0)
+                                        C0, x0, y0, z0, a, b, c, 0.0, 0.0, -phi1, tt)
     return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
