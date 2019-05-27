@@ -43,8 +43,6 @@ cdef packed struct object_3d:
     np.float32_t b
     np.float32_t c
     np.float32_t psi1
-    np.float32_t psi2
-    np.float32_t psi3
 
 class Objects3D(Enum):
     '''Enumeration with the available objects for 3D phantoms'''
@@ -236,14 +234,15 @@ def Object(phantom_size, objlist):
        N1,N2,N3 = [int(i) for i in phantom_size]
     else:
        N1 = N2 = N3 = phantom_size
-    cdef long tt = 0
+    cdef long tt,Z1
     cdef float C0, y0, x0, z0, a, b, c, phi1, phi2, phi3
-    
+    tt=0
+    Z1=0
     cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([N1, N2, N3], dtype='float32')
     
     cdef float ret_val
     if type(objlist) is dict:
-        objlist = [objlist]      
+        objlist = [objlist]
     
     for obj in objlist:
         if testParamsPY(obj):
@@ -258,11 +257,11 @@ def Object(phantom_size, objlist):
             a = obj['a']
             b = obj['b']
             c = obj['c']
-            phi1 = obj['phi1']    
-            phi2 = 0.0    
+            phi1 = obj['phi1']
+            phi2 = 0.0
             phi3 = 0.0
-            ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, tt, N1,
-                                        objectName,                                         
+            ret_val = TomoP3DObject_core(&phantom[0,0,0], N3, N2, N1, Z1, N1,
+                                        objectName,
                                         C0,y0,x0,z0,a,b,c,
                                         phi1,phi2,phi3,tt)
    
@@ -460,9 +459,10 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
     if type(objlist) is dict:
         objlist = [objlist]
     
-    cdef long tt = 0
+    cdef long tt, Z1
     cdef float C0, y0, x0, z0, a, b, c, phi1, phi2, phi3
-        
+    tt=0
+    Z1=0
     for obj in objlist:
         if testParamsPY(obj):
             if sys.version_info.major == 3:
@@ -477,22 +477,22 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
             a = obj['a']
             b = obj['b']
             c = obj['c']
-            phi1 = obj['phi1']    
-            phi2 = 0.0    
+            phi1 = obj['phi1']
+            phi2 = 0.0
             phi3 = 0.0
-            
-            if (("gaussian" == objectName) or ("paraboloid" == objectName) or ("ellipsoid" == objectName)):
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
+
+            if (("gaussian" in str(objectName)) or ("paraboloid" in str(objectName)) or ("ellipsoid" in str(objectName))):
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], (Horiz_det), (Vert_det), Z1, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
-                                        C0, y0, -z0, -x0, b, a, c, 0.0, 0.0, phi1, tt)
-            elif ("elliptical_cylinder" == objectName):
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
+                                        C0, y0, -z0, -x0, b, a, c, phi3, phi2, phi1, tt)
+            elif ("elliptical_cylinder" in str(objectName)):
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), Z1, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
-                                        C0, x0, -y0, z0, b, a, c, 0.0, 0.0, phi1, tt)
+                                        C0, x0, -y0, z0, b, a, c, phi3, phi2, phi1, tt)
             else:
-                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), 0l, (Vert_det), (phantom_size), &angles[0], AngTot,
+                ret_val = TomoP3DObjectSino_core(&projdata[0,0,0],  (Horiz_det), (Vert_det), Z1, (Vert_det), (phantom_size), &angles[0], AngTot,
                                         objectName, 
-                                        C0, x0, y0, z0, a, b, c, 0.0, 0.0, -phi1, tt)
+                                        C0, x0, y0, z0, a, b, c, phi3, phi2, -phi1, tt)
     return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
