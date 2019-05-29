@@ -8,7 +8,7 @@ build:
   number: 0
   script_env:
     - CIL_VERSION
-  
+
 requirements:
   build:
     - python
@@ -17,17 +17,17 @@ requirements:
     - cython
     - enum34 # [py27]
     - cmake
-    
+
 
   run:
     - {{ pin_compatible('numpy', max_pin='x.x') }}
     - python
     - numpy
-    - vc 14 # [win and py36] 
-    - vc 14 # [win and py35] 
+    - vc 14 # [win and py36]
+    - vc 14 # [win and py35]
     - vc 9  # [win and py27]
     - enum34 # [py27]
-    - libgcc-ng
+    - libgcc-ng # [unix]
 
 about:
   home: https://github.com/dkazanc/TomoPhantom
