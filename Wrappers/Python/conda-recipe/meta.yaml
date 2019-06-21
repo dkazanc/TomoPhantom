@@ -1,7 +1,6 @@
 package:
   name: tomophantom
-  version: {{CIL_VERSION}}
-
+  version: {{ environ.get('CIL_VERSION', '') }}
 
 build:
   preserve_egg_dir: False

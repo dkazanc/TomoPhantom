@@ -105,7 +105,7 @@ git clone https://github.com/dkazanc/TomoPhantom.git
 cd TomoPhantom
 export CIL_VERSION=1.2_1
 conda build Wrappers/Python/conda-recipe --numpy 1.12 --python 3.5
-conda install tomophantom --use-local --force
+conda install tomophantom --use-local --force-reinstall
 ```
 
 ## Package library modules:

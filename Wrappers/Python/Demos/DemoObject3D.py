@@ -17,7 +17,7 @@ N3D_size = 256
 
 # specify object parameters, here we replicate model 
 obj3D_1 = {'Obj': Objects3D.GAUSSIAN, 
-      'C0' : 1.00,
+      'C0' : 1.0,
       'x0' :-0.25,
       'y0' : -0.15,
       'z0' : 0.0,

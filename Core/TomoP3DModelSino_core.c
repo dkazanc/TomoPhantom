@@ -174,6 +174,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                 float AA5, sin_2, cos_2, delta1, delta_sq, first_dr, AA2, AA3, AA6;
                 AA5 = (N*C0*a*b);
                 
+                /*printf("%s %f %f %f %f %f %f %f %f %f %f %ld\n", Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, tt);*/
 #pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,alh,bth,gmh,sin_2, cos_2,delta1,delta_sq,first_dr, AA2, AA3, AA6, p00,ksi00,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS)
                 for(ll=0; ll<AngTot; ll++) {
                     

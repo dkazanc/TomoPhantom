@@ -108,28 +108,6 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
     else:
         ret_val = TomoP2DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
     return phantom
-#@cython.boundscheck(False)
-#@cython.wraparound(False)
-#def Object(int phantom_size, object_2d[:] obj_params):
-#    """
-#    Object (phantom_size,object_parameters)
-#
-#    Takes in a input object description (list) and phantom_size and returns a phantom-object of phantom_size x phantom_size of type float32 numpy array.
-#
-#    param: phantom_size -- a phantom size in each dimension.
-#    param: obj_params -- object parameters list
-#
-#    returns: numpy float32 phantom array
-#
-#    """
-#    cdef Py_ssize_t i
-#    cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
-#    cdef float ret_val
-#    for i in range(obj_params.shape[0]):
-#        ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size, obj_params[i].Obj, obj_params[i].C0,
-#                                     obj_params[i].x0, obj_params[i].y0, obj_params[i].a, obj_params[i].b, obj_params[i].phi_rot, 0)
-#    return phantom
-
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def SinoNum(np.ndarray[np.float32_t, ndim=2, mode="c"] phantom, int detector_size, np.ndarray[np.float32_t, ndim=1, mode="c"] angles):
@@ -235,6 +213,8 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
     cdef Py_ssize_t i
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] sinogram = np.zeros([detector_size,angles.shape[0]], dtype='float32')
     cdef float ret_val
+    cdef int tt = 0
+    cdef float C0, x0, y0, a, b, phi
     cdef int AngTot = angles.shape[0]
     cdef int CenTypeIn = 1 # astra center posit
     if type(objlist) is dict:
@@ -246,14 +226,17 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
+            
+            C0 = obj['C0']
+            x0 = obj['x0']
+            y0 = obj['y0']
+            a = obj['a']
+            b = obj['b']
+            phi = obj['phi'] 
+            
             ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn,
                                         objectName,
-                                        obj['C0'],
-                                        obj['y0'],
-                                        obj['x0'],
-                                        obj['a'],
-                                        obj['b'],
-                                        -obj['phi'], 0)
+                                        C0, y0, x0, a, b, -phi, tt)            
     return sinogram.transpose()
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -291,6 +274,9 @@ def Object(int phantom_size, objlist):
     """
     cdef np.ndarray[np.float32_t, ndim=2, mode="c"] phantom = np.zeros([phantom_size, phantom_size], dtype='float32')
     cdef float ret_val
+    
+    cdef int tt = 0
+    cdef float C0, x0, y0, a, b, phi
 
     if type(objlist) is dict:
         objlist = [objlist]
@@ -302,15 +288,17 @@ def Object(int phantom_size, objlist):
                 objectName = bytes(obj['Obj'].value, 'ascii')
             elif sys.version_info.major == 2:
                 objectName = bytes(obj['Obj'].value)
+            
+            C0 = obj['C0']
+            x0 = obj['x0']
+            y0 = obj['y0']
+            a = obj['a']
+            b = obj['b']
+            phi = obj['phi'] 
 
             ret_val = TomoP2DObject_core(&phantom[0,0], phantom_size,
                                         objectName,
-                                        float(obj['C0']),
-                                        float(obj['x0']),
-                                        float(obj['y0']),
-                                        float(obj['b']),
-                                        float(obj['a']),
-                                        float(obj['phi']), 0)
+                                        C0, x0, y0, b, a, phi, tt)
     return phantom
 
 

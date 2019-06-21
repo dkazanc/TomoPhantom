@@ -117,8 +117,11 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 
 	float xh1[3] = { 0.0f, 0.0f, 0.0f };
 	float xh2[3] = { 0.0f, 0.0f, 0.0f };
-
-	if ((strcmp("gaussian", Object) == 0) || (strcmp("paraboloid", Object) == 0) || (strcmp("ellipsoid", Object) == 0) || (strcmp("cone", Object) == 0)) {
+    
+    /*printf("%s %ld %ld %ld %ld %ld %f %f %f %f %f %f %f %f %f %f %ld\n", Object, N1, N2, N3, Z1, Z2, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, tt);*/
+	
+	if ((strcmp("gaussian", Object) == 0) || (strcmp("paraboloid", Object) == 0) || (strcmp("ellipsoid", Object) == 0) || (strcmp("cone", Object) == 0)) 
+	{
 #pragma omp parallel for shared(A,bs) private(k,i,j,index,aa,bb,cc,T,xh2,xh1)
 		for (k = Z1; k<Z2; k++) {
 			for (i = 0; i<N1; i++) {
@@ -159,7 +162,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 						if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
 						else T = 0.0f;
 					}
-						A[index] += T;
+						A[index] += T;												
 				}
 			}
 		}
