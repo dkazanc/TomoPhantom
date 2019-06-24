@@ -37,7 +37,7 @@
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
  * [CMake](https://cmake.org) (if this installation route is chosen)
 
-### Other dependencies (required for reconstruction mainly):
+### Other dependencies (if the reconstruction is performed):
  * [ToMoBAR](https://github.com/dkazanc/ToMoBAR)
  * [ASTRA-toolbox](http://www.astra-toolbox.com/)
  * [TomoPy](http://tomopy.readthedocs.io)
@@ -103,7 +103,7 @@ See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script
 ```
 git clone https://github.com/dkazanc/TomoPhantom.git
 cd TomoPhantom
-export CIL_VERSION=1.2_1
+export CIL_VERSION=1.3
 conda build Wrappers/Python/conda-recipe --numpy 1.12 --python 3.5
 conda install tomophantom --use-local --force-reinstall
 ```
