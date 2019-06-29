@@ -81,15 +81,15 @@ plt.show()
 #%%
 print ("Simulate flat fields, add noise and normalise projections...")
 flatsnum = 20 # generate 20 flat fields
-flatsSIM = flats(Vert_det, Horiz_det, maxheight = 0.1, maxthickness = 3, sigma_noise = 0.2, sigmasmooth = 3, flatsnum=flatsnum)
+flatsSIM = flats(Vert_det, Horiz_det, maxheight = 0.01, maxthickness = 1, sigma_noise = 0.2, sigmasmooth = 3, flatsnum=flatsnum)
 
 plt.figure() 
 plt.imshow(flatsSIM[0,:,:],vmin=0, vmax=1)
 plt.title('A selected simulated flat-field')
 #%%
 # Apply normalisation of data and add noise
-flux_intensity = 10000 # controls the level of noise 
-sigma_flats = 0.15 # contro the level of noise in flats (higher creates ring artifacts)
+flux_intensity = 10000 # controls the level of noise (Poisson) 
+sigma_flats = 500 # control the level of noise in flats (lower creates more ring artifacts)
 projData3D_norm = normaliser_sim(projData3D_analyt, flatsSIM, sigma_flats, flux_intensity)
 
 intens_max = 70
@@ -146,6 +146,7 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomobar.methodsIR import RecToolsIR
 RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    CenterRotOffset = 0.0, # Center of Rotation (CoR) scalar (for 3D case only)
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)

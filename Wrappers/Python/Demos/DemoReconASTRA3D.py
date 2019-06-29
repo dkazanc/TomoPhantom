@@ -26,7 +26,7 @@ from tomophantom.supp.qualitymetrics import QualityTools
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
 model = 13 # select a model number from the library
-N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
+N_size = 128 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
 #This will generate a N_size x N_size x N_size phantom (3D)
@@ -84,10 +84,10 @@ plt.title('Tangentogram view')
 plt.show()
 #%%
 print ("Adding noise to projection data")
-from tomophantom.supp.artifacts import ArtifactsClass
-artifacts_add = ArtifactsClass(projData3D_analyt)
+from tomophantom.supp.artifacts import _Artifacts_
 
-projData3D_analyt_noisy = artifacts_add.noise(sigma=15000,noisetype='Poisson')
+projData3D_analyt_noisy = _Artifacts_(sinogram = projData3D_analyt, \
+                                  noise_type='Poisson', noise_sigma=15000, noise_seed = 0)
 
 intens_max = 70
 sliceSel = 150
@@ -135,6 +135,7 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 from tomobar.methodsIR import RecToolsIR
 RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    CenterRotOffset = 0.0, # Center of Rotation (CoR) scalar (for 3D case only)
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
