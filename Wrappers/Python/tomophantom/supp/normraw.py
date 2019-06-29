@@ -16,13 +16,13 @@ tested on robustness towards artifacts and errors in data
 import random
 import numpy as np
 #import matplotlib.pyplot as plt
-from tomophantom.supp.artifacts import ArtifactsClass
+from tomophantom.supp.artifacts import noise
 
-def normaliser_sim(projData3D, flatSIM, sigma_flats = 0.05, flux_intensity = 30000):
+def normaliser_sim(projData3D, flatSIM, sigma_flats = 5000, flux_intensity = 30000):
     """
     projData3D - 3D projection data (noiseless) [DetectorsDimV, Proj_angles, DetectorsDimH]
     maxthickness - a value in pixels which controls the width of stripes
-    sigma_flats - a noise level (Gaussian) in flats, do not set too high to avoid outliers
+    sigma_flats - a noise level (Poisson) in flats
     flux_intensity  - controls the level of Posson noise applied to projection data
     """
     [DetectorsDimV, Proj_angles, DetectorsDimH] = np.shape(projData3D)
@@ -31,9 +31,8 @@ def normaliser_sim(projData3D, flatSIM, sigma_flats = 0.05, flux_intensity = 300
         raise("The size of the vertical detector for data and the flat field is different ")
     if (DetectorsDimH != DetectorsDimH_f):
         raise("The size of the horizontal detector for data and the flat field is different ")
-    # add noise to the stack of flat images
-    artifacts_add = ArtifactsClass(flatSIM)
-    flat_all_noise = artifacts_add.noise(sigma=sigma_flats,noisetype='Gaussian')
+    # add noise to the stack of images (flats)
+    flat_all_noise = noise(sinogram = flatSIM, sigma=sigma_flats, noisetype='Poisson', seed = None)
     flat_average_noise = np.average(flat_all_noise,0) # calculate average of all flats
 
     nonzeroInd = np.where(flat_average_noise != 0) # nonzero data
@@ -45,8 +44,7 @@ def normaliser_sim(projData3D, flatSIM, sigma_flats = 0.05, flux_intensity = 300
         norm_proj = np.zeros(np.shape(proj2D))
         randflatind = random.randint(0,flatsnum-1) # generate random flat number
         proj_flat = flatSIM[randflatind,:,:]*proj2D
-        artifacts_add = ArtifactsClass(proj_flat) # adding Poisson noise
-        proj_flat_noisy = artifacts_add.noise(sigma=flux_intensity,noisetype='Poisson')
+        proj_flat_noisy = noise(sinogram = proj_flat, sigma=flux_intensity, noisetype='Poisson', seed = None)
         norm_proj[nonzeroInd]  = proj_flat_noisy[nonzeroInd]/flat_average_noise[nonzeroInd]
         norm_proj[zeroInd] = 1e-13
         projData3D_norm[:,x,:] = np.float32(norm_proj)
