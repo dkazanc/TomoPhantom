@@ -4,7 +4,9 @@
 The TomoPhantom package is released under Apache License, Version 2.0
 
 Script to generate 2D/3D random objects and their projection data
-- foam2D/3D generate a phantom with non-overlapping circles/spheres
+- foam2D/3D generate a phantom with non-overlapping spherical objects,
+for 2D object_type choose: 'ellipse', 'parabola', 'gaussian' or 'mix'
+and for 3D: 'ellipsoid', 'paraboloid', 'gaussian', 'mix'
 
 @author: Daniil Kazantsev
 """
@@ -16,7 +18,7 @@ from tomophantom import TomoP3D
 from tomophantom.randphant.generator import foam2D,foam3D
 
 N_size = 256 # define the grid size
-tot_objects = 100 # the total number of objects to generate
+tot_objects = 300 # the total number of objects to generate
 
 # define ranges for parameters
 x0min = -0.9
@@ -31,7 +33,7 @@ ab_min = 0.01
 ab_max = 0.25
 
 # 2D example
-(Objfoam2D,myObjects) = foam2D(x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max, N_size, tot_objects)
+(Objfoam2D,myObjects) = foam2D(x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max, N_size, tot_objects, object_type = 'mix')
 plt.figure()
 plt.imshow(Objfoam2D,  vmin=0, vmax=0.3, cmap="gray")
 
@@ -48,7 +50,7 @@ plt.imshow(sino_Objfoam2D,  cmap="gray")
 #%%
 # 3D example
 print ("Generating 3D random phantom")
-(Objfoam3D, myObjects) = foam3D(x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, ab_max, N_size, tot_objects)
+(Objfoam3D, myObjects) = foam3D(x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, ab_max, N_size, tot_objects, object_type = 'mix')
 plt.figure()
 sliceSel = int(0.5*N_size)
 plt.subplot(131)
@@ -86,5 +88,3 @@ plt.imshow(ProjData3D[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram view')
 plt.show()
 #%%
-
-
