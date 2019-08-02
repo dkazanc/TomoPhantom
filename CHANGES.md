@@ -1,5 +1,11 @@
 # ChangeLog
 
+## v1.4.1
+* All demos renamed and placed into categories: 2D/3D/4D, Random
+* Random generation of 2D/3D phantoms is initiated using methods from "generator.py" script
+* Foam phantoms can be built
+* Demo 'RandPhantGen.py' shows how phantoms can be generated
+
 ## v1.4
 
 * Artifacts generation have been re-written from the class-based structure to function based structure
