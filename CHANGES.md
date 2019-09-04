@@ -1,5 +1,8 @@
 # ChangeLog
 
+## v1.4.2
+* Jupiter Notebook demo added which uses deep learning algorithms to employ TomoPhantom for data generation
+
 ## v1.4.1
 * All demos renamed and placed into categories: 2D/3D/4D, Random
 * Random generation of 2D/3D phantoms is initiated using methods from "generator.py" script
