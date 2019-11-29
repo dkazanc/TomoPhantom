@@ -7,6 +7,9 @@ What can be simulated:
 -- noise (Poisson or Gaussian)
 -- zingers (result in streaks in the reconstruction)
 -- stripes (result in rings in the reconstruction)
+---- variable intensity
+---- partial
+---- blurred
 -- shifts - data misalignment (result in blur in the reconstruction)
 
 Note that the TomoPhantom package is released under Apache License, Version 2.0
@@ -14,35 +17,128 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 """
 
 def _Artifacts_(sinogram, 
-                noise_type = None, # 'Gaussian', 'Poisson' or None
-                noise_sigma = 10000, # photon intensity (Poisson) or variance for Gaussian 
-                noise_seed = None, # seeds for noise (integers), None means random generation
-                zingers_percentage = None, # percentage the amount of zingers to be added to the data
-                zingers_modulus = 10, # modulus to control the amount of 4/6 pixel clusters to be added
-                stripes_percentage = None, # percentage defines the amount of stripes in the data
-                stripes_maxthickness = 1.0, # maxthickness defines the maximal thickness of a stripe
-                sinoshifts_maxamplitude = None # maxamplitude (in int pixels) defines the maximal amplitude of each angular deviation
+                _noise_, # noise related dictionary
+                _zingers_, # zingers dictionary
+                _stripes_, # stripes dictionary
+                _sinoshifts_ #sinoshifts
                 ):
+    ####### NOISE ########
+    if ('type' not in _noise_):
+        _noise_['type'] = 'Poisson'
+    if ((_noise_['type'] != 'Gaussian') and (_noise_['type'] != 'Poisson')):
+        print("Unknown noise type, select Gaussian or Poisson, now set to Poisson")
+        _noise_['type'] = 'Poisson'
+    if ('sigma' not in _noise_):
+        # photon intensity (Poisson) or variance for Gaussian 
+        _noise_['sigma'] = 10000
+    if ('seed' not in _noise_):
+        # seeds for noise (integers), None means random generation
+        _noise_['seed'] = None
+    ####### ZINGERS ########
+    if ('percentage' not in _zingers_):
+        # # percentage the amount of zingers to be added to the data
+        _zingers_['percentage'] = None
+    if ('modulus' not in _zingers_):
+        # modulus to control the amount of 4/6 pixel clusters to be added
+        _zingers_['modulus'] = 10
+    ####### STRIPES ########
+    if ('percentage' not in _stripes_):
+        # percentage defines the amount of stripes in the data
+        _stripes_['percentage'] = None
+    if ('maxthickness' not in _stripes_):
+        # # maxthickness defines the maximal thickness of a stripe
+        _stripes_['maxthickness'] = 1.0
+    if ('type' not in _stripes_):
+        # stripe types can be 'partial' or 'full'
+        _stripes_['type'] = 'full'
+    if ('offset' not in _stripes_):
+        # offset_type can be 'fixed' or 'variable'
+        _stripes_['offset'] = 'fixed'
+    ####### SINOSHIFTS ########
+    if ('maxamplitude' not in _sinoshifts_):
+        # maxamplitude (in int pixels) defines the maximal amplitude of each angular deviation
+        _sinoshifts_['maxamplitude'] = None
+
     # ZINGERS
-    if zingers_percentage is not None:
-        sino_artifacts = zingers(sinogram=sinogram, percentage=zingers_percentage, modulus = zingers_modulus)
+    if _zingers_['percentage'] is not None:
+        sino_artifacts = zingers(sinogram=sinogram, percentage=_zingers_['percentage'], modulus = _zingers_['modulus'])
         print("Zingers have been added to the data.")
     else:
         sino_artifacts = sinogram
     # STRIPES
-    if stripes_percentage is not None:
-        sino_artifacts = stripes(sinogram=sino_artifacts, percentage=stripes_percentage, maxthickness = stripes_maxthickness)
+    if _stripes_['percentage'] is not None:
+        sino_artifacts = stripes(sinogram=sino_artifacts,\
+                                 percentage=_stripes_['percentage'],\
+                                 maxthickness = _stripes_['maxthickness'],\
+                                 stripe_type = _stripes_['type'],\
+                                 offset_type = _stripes_['offset'])
         print("Stripes have been added to the data.")
     # SINOSHIFTS
-    if sinoshifts_maxamplitude is not None:
-        sino_artifacts = sinoshifts(sinogram=sino_artifacts, maxamplitude = sinoshifts_maxamplitude)
+    if _sinoshifts_['maxamplitude'] is not None:
+        sino_artifacts = sinoshifts(sinogram=sino_artifacts, maxamplitude = _sinoshifts_['maxamplitude'])
         print("Sinogram shifts have been added to the data.")
     # NOISE
-    if noise_type is not None:
-        sino_artifacts = noise(sinogram=sino_artifacts, sigma=noise_sigma, noisetype = noise_type, seed = noise_seed)
-        print("{} noise have been added to the data.".format(noise_type))
+    sino_artifacts = noise(sinogram=sino_artifacts, sigma=_noise_['sigma'], noisetype = _noise_['type'], seed = _noise_['seed'])
+    print("{} noise have been added to the data.".format(_noise_['type']))
     
     return sino_artifacts
+
+def stripes(sinogram, percentage, maxthickness, stripe_type, offset_type):
+    # Function to add stripes (constant offsets) to sinogram which results in rings in the 
+    # reconstructed image
+    # - percentage defines the amount of stripes in the data
+    # - maxthickness defines the maximal thickness of a stripe
+    # - stripe_type can be 'partial' or 'full'
+    # - offset_type can be 'fixed' or 'variable'
+    # - smooth : adds smoothing effect to stripes
+    import numpy as np
+    import random
+    if (sinogram.ndim == 2):
+        (anglesDim, DetectorsDimH) = np.shape(sinogram)
+    else:
+        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(sinogram)
+    if 0 < percentage <= 100:
+        pass
+    else:
+        raise ("percentage must be larger than zero but smaller than 100")
+    if 0 <= maxthickness <= 10:
+        pass
+    else:
+        raise ("maximum thickness must be in [0,10] range")
+    if ((stripe_type != 'partial')):
+        stripe_type = 'full'
+    if ((offset_type != 'variable')):
+        offset_type = 'fixed'
+    sino_stripes = sinogram.copy()
+    max_intensity = np.max(sino_stripes)
+    range_detect = int((np.float32(DetectorsDimH))*(np.float32(percentage)/100.0))
+    if (sinogram.ndim == 2):
+        for x in range(range_detect):
+            randind = random.randint(0,DetectorsDimH) # generate random index
+            if (stripe_type == 'partial'):
+                randind_ang1 =  random.randint(0,anglesDim) 
+                randind_ang2 =  random.randint(0,anglesDim)
+                print(randind_ang1, randind_ang2)
+            else:
+                randind_ang1 = 0
+                randind_ang2 = anglesDim
+            randthickness = random.randint(0,maxthickness) #generate random thickness
+            randintens = random.uniform(-1.0, 0.5) # generate random multiplier
+            intensity = max_intensity*randintens
+            if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
+                for x1 in range(-randthickness,randthickness+1):
+                    sino_stripes[randind_ang1:randind_ang2,randind+x1] += intensity
+    else:
+        for j in range(DetectorsDimV):
+            for x in range(range_detect):
+                randind = random.randint(0,DetectorsDimH) # generate random index
+                randthickness = random.randint(0,maxthickness) #generate random thickness
+                randintens = random.uniform(-1, 0.5) # generate random multiplier
+                intensity = max_intensity*randintens
+                if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
+                    for x1 in range(-randthickness,randthickness+1):
+                        sino_stripes[j,:,randind+x1] += intensity
+    return sino_stripes
 
 def zingers(sinogram, percentage, modulus):
     # adding zingers (zero single pixels or small 4 pixels clusters) to data or 6 voxels to 3D projection data
@@ -113,49 +209,6 @@ def noise(sinogram, sigma, noisetype, seed):
     else:
         print ("Select 'Gaussian' or 'Poisson' for noise type")
     return sino_noisy
-
-def stripes(sinogram, percentage, maxthickness):
-    # Function to add stripes (constant offsets) to sinogram which results in rings in the 
-    # reconstructed image
-    #- percentage defines the amount of stripes in the data
-    #- maxthickness defines the maximal thickness of a stripe
-    import numpy as np
-    import random
-    if (sinogram.ndim == 2):
-        (anglesDim, DetectorsDimH) = np.shape(sinogram)
-    else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(sinogram)
-    if 0 < percentage <= 100:
-        pass
-    else:
-        raise ("percentage must be larger than zero but smaller than 100")
-    if 0 <= maxthickness <= 10:
-        pass
-    else:
-        raise ("maximum thickness must be in [0,10] range")
-    sino_stripes = sinogram.copy()
-    max_intensity = np.max(sino_stripes)
-    range_detect = int((np.float32(DetectorsDimH))*(np.float32(percentage)/100.0))
-    if (sinogram.ndim == 2):
-        for x in range(range_detect):
-            randind = random.randint(0,DetectorsDimH) # generate random index
-            randthickness = random.randint(0,maxthickness) #generate random thickness
-            randintens = random.uniform(-1.0, 0.5) # generate random multiplier
-            intensity = max_intensity*randintens
-            if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
-                for x1 in range(-randthickness,randthickness+1):
-                    sino_stripes[:,randind+x1] += intensity
-    else:
-        for j in range(DetectorsDimV):
-            for x in range(range_detect):
-                randind = random.randint(0,DetectorsDimH) # generate random index
-                randthickness = random.randint(0,maxthickness) #generate random thickness
-                randintens = random.uniform(-1, 0.5) # generate random multiplier
-                intensity = max_intensity*randintens
-                if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
-                    for x1 in range(-randthickness,randthickness+1):
-                        sino_stripes[j,:,randind+x1] += intensity
-    return sino_stripes
 
 def sinoshifts(sinogram, maxamplitude):
     #A  function to add random shifts to sinogram rows (an offset for each angular position)

@@ -57,16 +57,23 @@ plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 # Adding artifacts and noise
 from tomophantom.supp.artifacts import _Artifacts_
 
-# adding noise and data misalignment
-noisy_sino_misalign = _Artifacts_(sinogram = sino_an, \
-                                  noise_type='Poisson', noise_sigma=10000, noise_seed = 0, \
-                                  sinoshifts_maxamplitude = 10)
+# forming dictionaries with artifact types
+_noise_ =  {'type' : 'Poisson',
+            'sigma' : 10000,
+            'seed' : 0}
+# misalignment dictionary
+_sinoshifts_ = {'maxamplitude' : 10}
+noisy_sino_misalign = _Artifacts_(sino_an, _noise_, {}, {}, _sinoshifts_)
 
-# adding zingers, stripes and noise
-noisy_zing_stripe = _Artifacts_(sinogram = sino_an, \
-                                  noise_type='Poisson', noise_sigma=10000, noise_seed = 0, \
-                                  zingers_percentage=0.25, zingers_modulus = 10,
-                                  stripes_percentage = 1.0, stripes_maxthickness = 1.0)
+# adding zingers and stripes
+_zingers_ = {'percentage' : 0.25,
+             'modulus' : 10}
+
+_stripes_ = {'percentage' : 1.0,
+             'maxthickness' : 1.0,
+             'type' : 'full'}
+
+noisy_zing_stripe = _Artifacts_(sino_an, _noise_, _zingers_, _stripes_, _sinoshifts_= {})
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
