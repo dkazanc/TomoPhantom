@@ -59,7 +59,7 @@ from tomophantom.supp.artifacts import _Artifacts_
 
 # forming dictionaries with artifact types
 _noise_ =  {'type' : 'Poisson',
-            'sigma' : 10000,
+            'sigma' : 10000, # noise amplitude
             'seed' : 0}
 # misalignment dictionary
 _sinoshifts_ = {'maxamplitude' : 10}
@@ -69,9 +69,10 @@ noisy_sino_misalign = _Artifacts_(sino_an, _noise_, {}, {}, _sinoshifts_)
 _zingers_ = {'percentage' : 0.25,
              'modulus' : 10}
 
-_stripes_ = {'percentage' : 1.0,
-             'maxthickness' : 1.0,
-             'type' : 'full'}
+_stripes_ = {'percentage' : 1.1,
+             'maxthickness' : 2.0,
+             'type' : 'full',
+             'variability' : 0.03}
 
 noisy_zing_stripe = _Artifacts_(sino_an, _noise_, _zingers_, _stripes_, _sinoshifts_= {})
 
@@ -88,7 +89,7 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimensi
                     CenterRotOffset = None, # Center of Rotation (CoR) scalar (for 3D case only)
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    device='cpu')
+                    device_projector='cpu')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using Fourier Slice method")
@@ -134,17 +135,17 @@ RectoolsIR = RecToolsIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
-                    nonnegativity='ENABLE', # enable nonnegativity constraint (set to 'ENABLE')
-                    OS_number = None, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
-                    tolerance = 1e-06, # tolerance to stop outer iterations earlier
-                    device='gpu')
+                    device_projector='gpu')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using SIRT (tomobar)...")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-iterationsSIRT = 250
-SIRTrec_ideal = RectoolsIR.SIRT(sino_an,iterationsSIRT) # ideal reconstruction
-SIRTrec_error = RectoolsIR.SIRT(noisy_zing_stripe,iterationsSIRT) # error reconstruction
+# prepare dictionaries with parameters:
+_data_ = {'projection_norm_data' : sino_an} # data dictionary
+_algorithm_ = {'iterations' : 250}
+SIRTrec_ideal = RectoolsIR.SIRT(_data_,_algorithm_) # ideal reconstruction
+_data_ = {'projection_norm_data' : noisy_zing_stripe} # data dictionary
+SIRTrec_error = RectoolsIR.SIRT(_data_,_algorithm_) # error reconstruction
 
 plt.figure()
 plt.subplot(121)
@@ -165,31 +166,30 @@ plt.title('SIRT reconsrtuction differences')
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing using FISTA method (tomobar)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-lc = RectoolsIR.powermethod() # calculate Lipschitz constant
+# prepare dictionaries with parameters:
+_data_ = {'projection_norm_data' : noisy_zing_stripe} # data dictionary
+lc = RectoolsIR.powermethod(_data_) # calculate Lipschitz constant (run once to initialise)
+_algorithm_ = {'iterations' : 350,
+               'lipschitz_const' : lc}
 
-# Run FISTA reconstrucion algorithm without regularisation
-RecFISTA = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, lipschitz_const = lc)
+# adding regularisation using the CCPi regularisation toolkit
+_regularisation_ = {'method' : 'PD_TV',
+                    'regul_param' : 0.001,
+                    'iterations' : 150,
+                    'device_regulariser': 'gpu'}
 
 # Run FISTA reconstrucion algorithm with regularisation 
-RecFISTA_reg = RectoolsIR.FISTA(noisy_zing_stripe, iterationsFISTA = 150, regularisation = 'ROF_TV', regularisation_parameter = 0.003, lipschitz_const = lc)
+RecFISTA_reg = RectoolsIR.FISTA(_data_, _algorithm_, _regularisation_)
 
 plt.figure()
-plt.subplot(121)
-plt.imshow(RecFISTA, vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('FISTA reconstruction')
-plt.subplot(122)
 plt.imshow(RecFISTA_reg, vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('TV-Regularised FISTA reconstruction')
 plt.show()
 
 # calculate errors 
-Qtools = QualityTools(phantom_2D, RecFISTA)
-RMSE_FISTA = Qtools.rmse()
 Qtools = QualityTools(phantom_2D, RecFISTA_reg)
 RMSE_FISTA_reg = Qtools.rmse()
-print("RMSE for FISTA is {}".format(RMSE_FISTA))
 print("RMSE for regularised FISTA is {}".format(RMSE_FISTA_reg))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")

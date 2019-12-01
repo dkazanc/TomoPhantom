@@ -51,9 +51,9 @@ def _Artifacts_(sinogram,
     if ('type' not in _stripes_):
         # stripe types can be 'partial' or 'full'
         _stripes_['type'] = 'full'
-    if ('offset' not in _stripes_):
-        # offset_type can be 'fixed' or 'variable'
-        _stripes_['offset'] = 'fixed'
+    # variability multiplier to incorporate change of intensity in the stripe
+    if ('variability' not in _stripes_):
+        _stripes_['variability'] = 0.0
     ####### SINOSHIFTS ########
     if ('maxamplitude' not in _sinoshifts_):
         # maxamplitude (in int pixels) defines the maximal amplitude of each angular deviation
@@ -71,7 +71,7 @@ def _Artifacts_(sinogram,
                                  percentage=_stripes_['percentage'],\
                                  maxthickness = _stripes_['maxthickness'],\
                                  stripe_type = _stripes_['type'],\
-                                 offset_type = _stripes_['offset'])
+                                 variability = _stripes_['variability'])
         print("Stripes have been added to the data.")
     # SINOSHIFTS
     if _sinoshifts_['maxamplitude'] is not None:
@@ -83,13 +83,13 @@ def _Artifacts_(sinogram,
     
     return sino_artifacts
 
-def stripes(sinogram, percentage, maxthickness, stripe_type, offset_type):
+def stripes(sinogram, percentage, maxthickness, stripe_type, variability):
     # Function to add stripes (constant offsets) to sinogram which results in rings in the 
     # reconstructed image
     # - percentage defines the amount of stripes in the data
     # - maxthickness defines the maximal thickness of a stripe
     # - stripe_type can be 'partial' or 'full'
-    # - offset_type can be 'fixed' or 'variable'
+    # - variability multiplier to incorporate change of intensity in the stripe
     # - smooth : adds smoothing effect to stripes
     import numpy as np
     import random
@@ -107,18 +107,18 @@ def stripes(sinogram, percentage, maxthickness, stripe_type, offset_type):
         raise ("maximum thickness must be in [0,10] range")
     if ((stripe_type != 'partial')):
         stripe_type = 'full'
-    if ((offset_type != 'variable')):
-        offset_type = 'fixed'
     sino_stripes = sinogram.copy()
     max_intensity = np.max(sino_stripes)
     range_detect = int((np.float32(DetectorsDimH))*(np.float32(percentage)/100.0))
     if (sinogram.ndim == 2):
         for x in range(range_detect):
-            randind = random.randint(0,DetectorsDimH) # generate random index
+            for mm in range(0,20):
+                randind = random.randint(0,DetectorsDimH) # generate random index
+                if (sino_stripes[0,randind] != 0.0):
+                    break
             if (stripe_type == 'partial'):
                 randind_ang1 =  random.randint(0,anglesDim) 
                 randind_ang2 =  random.randint(0,anglesDim)
-                print(randind_ang1, randind_ang2)
             else:
                 randind_ang1 = 0
                 randind_ang2 = anglesDim
@@ -127,17 +127,39 @@ def stripes(sinogram, percentage, maxthickness, stripe_type, offset_type):
             intensity = max_intensity*randintens
             if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
                 for x1 in range(-randthickness,randthickness+1):
-                    sino_stripes[randind_ang1:randind_ang2,randind+x1] += intensity
+                    if (variability != 0.0):
+                        intensity_off = variability*max_intensity
+                    else:
+                        intensity_off = 0.0
+                    for ll in range(randind_ang1,randind_ang2):
+                        sino_stripes[ll,randind+x1] += intensity + intensity_off
+                        intensity_off += [-1,1][random.randrange(2)]*variability*max_intensity
+                        #sino_stripes[randind_ang1:randind_ang2,randind+x1] += intensity
     else:
         for j in range(DetectorsDimV):
             for x in range(range_detect):
-                randind = random.randint(0,DetectorsDimH) # generate random index
+                for mm in range(0,20):
+                    randind = random.randint(0,DetectorsDimH) # generate random index
+                    if (sino_stripes[0,randind] != 0.0):
+                        break
+                if (stripe_type == 'partial'):
+                    randind_ang1 =  random.randint(0,anglesDim) 
+                    randind_ang2 =  random.randint(0,anglesDim)
+                else:
+                    randind_ang1 = 0
+                    randind_ang2 = anglesDim
                 randthickness = random.randint(0,maxthickness) #generate random thickness
                 randintens = random.uniform(-1, 0.5) # generate random multiplier
                 intensity = max_intensity*randintens
                 if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
                     for x1 in range(-randthickness,randthickness+1):
-                        sino_stripes[j,:,randind+x1] += intensity
+                        if (variability != 0.0):
+                            intensity_off = variability*max_intensity
+                        else:
+                            intensity_off = 0.0
+                        for ll in range(randind_ang1,randind_ang2):
+                            sino_stripes[j,ll,randind+x1] += intensity + intensity_off
+                            intensity_off += [-1,1][random.randrange(2)]*variability*max_intensity
     return sino_stripes
 
 def zingers(sinogram, percentage, modulus):
