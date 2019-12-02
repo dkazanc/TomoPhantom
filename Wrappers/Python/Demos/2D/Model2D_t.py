@@ -69,7 +69,7 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimensi
                     CenterRotOffset = None, # Center of Rotation (CoR) scalar (for 3D case only)
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    device='cpu')
+                    device_projector='cpu')
 
 FBPrec = RectoolsDIR.FBP(sino[15,:,:].transpose()) # reconstruct one frame
 
