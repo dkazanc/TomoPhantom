@@ -3,6 +3,7 @@
 ## v1.4.3
 * Artifacts simulation module has been modified. It is based now on specifying the dictionaries where artifact types are
 described. Stipes can be simulated to be partial and with variable intensity.
+* 2D Model 15 added - DLS phantom
 
 
 ## v1.4.2

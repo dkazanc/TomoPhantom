@@ -24,7 +24,7 @@ import os
 import tomophantom
 from tomophantom.supp.qualitymetrics import QualityTools
 
-model = 4 # select a model
+model = 12 # select a model
 N_size = 512 # set dimension of the phantom
 # one can specify an exact path to the parameters file
 # path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
@@ -43,7 +43,7 @@ plt.title('{}''{}'.format('2D Phantom using model no.',model))
 angles_num = int(0.5*np.pi*N_size); # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32')
 angles_rad = angles*(np.pi/180.0)
-P = int(np.sqrt(2)*N_size) #detectors
+P = N_size #detectors
 
 sino_an = TomoP2D.ModelSino(model, N_size, P, angles, path_library2D)
 
@@ -69,10 +69,11 @@ noisy_sino_misalign = _Artifacts_(sino_an, _noise_, {}, {}, _sinoshifts_)
 _zingers_ = {'percentage' : 0.25,
              'modulus' : 10}
 
-_stripes_ = {'percentage' : 1.1,
+_stripes_ = {'percentage' : 0.8,
              'maxthickness' : 2.0,
+             'intensity' : 0.25,
              'type' : 'full',
-             'variability' : 0.03}
+             'variability' : 0.002}
 
 noisy_zing_stripe = _Artifacts_(sino_an, _noise_, _zingers_, _stripes_, _sinoshifts_= {})
 
@@ -153,7 +154,7 @@ plt.imshow(SIRTrec_ideal, vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('Ideal SIRT reconstruction (ASTRA)')
 plt.subplot(122)
-plt.imshow(SIRTrec_error, vmin=0, vmax=1, cmap="gray")
+plt.imshow(SIRTrec_error, vmin=0, vmax=3, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('Erroneous data SIRT Reconstruction (ASTRA)')
 plt.show()
@@ -164,10 +165,42 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('SIRT reconsrtuction differences')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print ("Reconstructing using ADMM method (tomobar)")
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+# Run ADMM reconstrucion algorithm with regularisation 
+_data_ = {'projection_norm_data' : noisy_zing_stripe} # data dictionary
+_algorithm_ = {'iterations' : 15,
+               'ADMM_rho_const' : 5000.0}
+
+# adding regularisation using the CCPi regularisation toolkit
+_regularisation_ = {'method' : 'PD_TV',
+                    'regul_param' : 0.1,
+                    'iterations' : 150,
+                    'device_regulariser': 'gpu'}
+
+RecADMM_reg = RectoolsIR.ADMM(_data_, _algorithm_, _regularisation_)
+
+plt.figure()
+plt.imshow(RecADMM_reg, vmin=0, vmax=2, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 3], orientation='vertical')
+plt.title('ADMM reconstruction')
+plt.show()
+
+# calculate errors 
+Qtools = QualityTools(phantom_2D, RecADMM_reg)
+RMSE_ADMM_reg = Qtools.rmse()
+print("RMSE for regularised ADMM is {}".format(RMSE_ADMM_reg))
+#%%
+print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing using FISTA method (tomobar)")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # prepare dictionaries with parameters:
-_data_ = {'projection_norm_data' : noisy_zing_stripe} # data dictionary
+_data_ = {'projection_norm_data' : noisy_zing_stripe,
+          'huber_threshold' : 4.5,
+          'ring_weights_threshold' : 10.0,
+          'ring_tuple_halfsizes': (7,5,0)
+          } # data dictionary
+
 lc = RectoolsIR.powermethod(_data_) # calculate Lipschitz constant (run once to initialise)
 _algorithm_ = {'iterations' : 350,
                'lipschitz_const' : lc}
@@ -182,8 +215,8 @@ _regularisation_ = {'method' : 'PD_TV',
 RecFISTA_reg = RectoolsIR.FISTA(_data_, _algorithm_, _regularisation_)
 
 plt.figure()
-plt.imshow(RecFISTA_reg, vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.imshow(RecFISTA_reg, vmin=0, vmax=2, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 2], orientation='vertical')
 plt.title('TV-Regularised FISTA reconstruction')
 plt.show()
 
@@ -191,21 +224,4 @@ plt.show()
 Qtools = QualityTools(phantom_2D, RecFISTA_reg)
 RMSE_FISTA_reg = Qtools.rmse()
 print("RMSE for regularised FISTA is {}".format(RMSE_FISTA_reg))
-#%%
-print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing using ADMM method (tomobar)")
-print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# Run ADMM reconstrucion algorithm with regularisation 
-RecADMM_reg = RectoolsIR.ADMM(noisy_zing_stripe, rho_const = 5000.0, iterationsADMM = 10, regularisation = 'ROF_TV', regularisation_parameter = 0.3)
-
-plt.figure()
-plt.imshow(RecADMM_reg, vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('ADMM reconstruction')
-plt.show()
-
-# calculate errors 
-Qtools = QualityTools(phantom_2D, RecADMM_reg)
-RMSE_ADMM_reg = Qtools.rmse()
-print("RMSE for regularised ADMM is {}".format(RMSE_ADMM_reg))
 #%%

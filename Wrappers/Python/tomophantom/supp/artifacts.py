@@ -9,7 +9,6 @@ What can be simulated:
 -- stripes (result in rings in the reconstruction)
 ---- variable intensity
 ---- partial
----- blurred
 -- shifts - data misalignment (result in blur in the reconstruction)
 
 Note that the TomoPhantom package is released under Apache License, Version 2.0
@@ -46,8 +45,11 @@ def _Artifacts_(sinogram,
         # percentage defines the amount of stripes in the data
         _stripes_['percentage'] = None
     if ('maxthickness' not in _stripes_):
-        # # maxthickness defines the maximal thickness of a stripe
+        # maxthickness defines the maximal thickness of a stripe
         _stripes_['maxthickness'] = 1.0
+    if ('intensity' not in _stripes_):
+        # controls the intensity levels of stripes
+        _stripes_['intensity'] = 0.1
     if ('type' not in _stripes_):
         # stripe types can be 'partial' or 'full'
         _stripes_['type'] = 'full'
@@ -70,6 +72,7 @@ def _Artifacts_(sinogram,
         sino_artifacts = stripes(sinogram=sino_artifacts,\
                                  percentage=_stripes_['percentage'],\
                                  maxthickness = _stripes_['maxthickness'],\
+                                 intensity_thresh = _stripes_['intensity'],\
                                  stripe_type = _stripes_['type'],\
                                  variability = _stripes_['variability'])
         print("Stripes have been added to the data.")
@@ -83,14 +86,13 @@ def _Artifacts_(sinogram,
     
     return sino_artifacts
 
-def stripes(sinogram, percentage, maxthickness, stripe_type, variability):
+def stripes(sinogram, percentage, maxthickness, intensity_thresh, stripe_type, variability):
     # Function to add stripes (constant offsets) to sinogram which results in rings in the 
     # reconstructed image
     # - percentage defines the amount of stripes in the data
     # - maxthickness defines the maximal thickness of a stripe
     # - stripe_type can be 'partial' or 'full'
     # - variability multiplier to incorporate change of intensity in the stripe
-    # - smooth : adds smoothing effect to stripes
     import numpy as np
     import random
     if (sinogram.ndim == 2):
@@ -113,7 +115,7 @@ def stripes(sinogram, percentage, maxthickness, stripe_type, variability):
     if (sinogram.ndim == 2):
         for x in range(range_detect):
             for mm in range(0,20):
-                randind = random.randint(0,DetectorsDimH) # generate random index
+                randind = random.randint(0,DetectorsDimH-1) # generate random index
                 if (sino_stripes[0,randind] != 0.0):
                     break
             if (stripe_type == 'partial'):
@@ -124,7 +126,7 @@ def stripes(sinogram, percentage, maxthickness, stripe_type, variability):
                 randind_ang2 = anglesDim
             randthickness = random.randint(0,maxthickness) #generate random thickness
             randintens = random.uniform(-1.0, 0.5) # generate random multiplier
-            intensity = max_intensity*randintens
+            intensity = max_intensity*randintens*intensity_thresh
             if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
                 for x1 in range(-randthickness,randthickness+1):
                     if (variability != 0.0):
@@ -139,8 +141,8 @@ def stripes(sinogram, percentage, maxthickness, stripe_type, variability):
         for j in range(DetectorsDimV):
             for x in range(range_detect):
                 for mm in range(0,20):
-                    randind = random.randint(0,DetectorsDimH) # generate random index
-                    if (sino_stripes[0,randind] != 0.0):
+                    randind = random.randint(0,DetectorsDimH-1) # generate random index
+                    if (sino_stripes[j,0,randind] != 0.0):
                         break
                 if (stripe_type == 'partial'):
                     randind_ang1 =  random.randint(0,anglesDim) 
@@ -150,7 +152,7 @@ def stripes(sinogram, percentage, maxthickness, stripe_type, variability):
                     randind_ang2 = anglesDim
                 randthickness = random.randint(0,maxthickness) #generate random thickness
                 randintens = random.uniform(-1, 0.5) # generate random multiplier
-                intensity = max_intensity*randintens
+                intensity = max_intensity*randintens*intensity_thresh
                 if ((randind > 0+randthickness) & (randind < DetectorsDimH-randthickness)):
                     for x1 in range(-randthickness,randthickness+1):
                         if (variability != 0.0):

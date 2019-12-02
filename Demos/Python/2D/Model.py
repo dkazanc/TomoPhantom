@@ -22,10 +22,9 @@ import tomophantom
 from tomophantom import TomoP2D
 from tomophantom.supp.qualitymetrics import QualityTools
 
-model = 1 # select a model number from the library
+model = 4 # select a model number from the library
 N_size = 512 # set dimension of the phantom
 # one can specify an exact path to the parameters file
-# path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 path = os.path.dirname(tomophantom.__file__)
 path_library2D = os.path.join(path, "Phantom2DLibrary.dat")
 #This will generate a N_size x N_size phantom (2D)

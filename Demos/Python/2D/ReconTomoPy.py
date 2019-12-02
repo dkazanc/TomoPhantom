@@ -50,26 +50,21 @@ plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 
 #%%
-# Adding artifacts and noise
+# Adding noise
 from tomophantom.supp.artifacts import _Artifacts_
 
-# adding noise and data misalignment
-noisy_sino_misalign = _Artifacts_(sinogram = sino_an, \
-                                  noise_type='Poisson', noise_sigma=10000, noise_seed = 0, \
-                                  sinoshifts_maxamplitude = 10)
+# forming dictionaries with artifact types
+_noise_ =  {'type' : 'Poisson',
+            'sigma' : 10000, # noise amplitude
+            'seed' : 0}
 
-# adding zingers, stripes and noise
-noisy_zing_stripe = _Artifacts_(sinogram = sino_an, \
-                                  noise_type='Poisson', noise_sigma=10000, noise_seed = 0, \
-                                  zingers_percentage=0.25, zingers_modulus = 10,
-                                  stripes_percentage = 1.0, stripes_maxthickness = 1.0)
+noisy_sino = _Artifacts_(sino_an, _noise_, _zingers_={}, _stripes_={}, _sinoshifts_= {})
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
-plt.imshow(noisy_zing_stripe,cmap="gray")
+plt.imshow(noisy_sino,cmap="gray")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
-plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
-
+plt.title('{}''{}'.format('Analytical noisy sinogram.',model))
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using gridrec (TomoPy)...")
@@ -77,20 +72,13 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 import tomopy
 
 sinoTP = np.zeros((angles_num,1,P),dtype='float32')
-sinoTP[:,0,:] = sino_an
+sinoTP[:,0,:] = noisy_sino
 rot_center = tomopy.find_center(sinoTP, angles_rad, init=290, ind=0, tol=0.5)
 reconTomoPy_ideal = tomopy.recon(sinoTP, angles_rad, center=rot_center, algorithm='gridrec')
-sinoTP[:,0,:] = noisy_zing_stripe
-reconTomoPy_noisy = tomopy.recon(sinoTP, angles_rad, center=rot_center, algorithm='gridrec')
 
 plt.figure()
-plt.subplot(121)
 plt.imshow(reconTomoPy_ideal[0,:,:], vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Ideal reconstruction (TomoPy)')
-plt.subplot(122)
-plt.imshow(reconTomoPy_noisy[0,:,:], vmin=0, vmax=1, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
-plt.title('Erroneous Reconstruction (TomoPy)')
+plt.title('GridRec reconstruction (TomoPy)')
 plt.show()
 #%%

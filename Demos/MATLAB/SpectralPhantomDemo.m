@@ -10,8 +10,9 @@
 close all;clc;clear;
 % adding paths
 fsep = '/';
-addpath('compiled'); addpath('supplem'); 
-
+Path1 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/compiled'], 1i);
+Path2 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/supplem'], 1i);
+addpath('Path1'); addpath('Path2'); 
 
 ModelNo = 11; 
 % Define phantom dimension
@@ -20,7 +21,7 @@ N = 512; % x-y size (squared image)
 % generate the 2D phantom:
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
+pathtoLibrary = sprintf(['..' fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom2DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 [G] = TomoP2DModel(ModelNo,N,pathTP);
 
