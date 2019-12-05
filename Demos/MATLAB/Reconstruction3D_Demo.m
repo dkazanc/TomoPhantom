@@ -9,12 +9,14 @@
 clear 
 close all
 fsep = '/';
-addpath('compiled'); addpath('supplem'); 
+Path1 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/compiled'], 1i);
+Path2 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/supplem'], 1i);
+addpath('Path1'); addpath('Path2'); 
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;
 mainDir  = fileparts(curDir);
-pathtoLibrary = sprintf([fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom3DLibrary.dat'], 1i);
+pathtoLibrary = sprintf(['..' fsep '..' fsep 'PhantomLibrary' fsep 'models' fsep 'Phantom3DLibrary.dat'], 1i);
 pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
 disp('Using TomoPhantom to generate 3D phantom');

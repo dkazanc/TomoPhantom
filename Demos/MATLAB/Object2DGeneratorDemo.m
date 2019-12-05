@@ -7,9 +7,10 @@
 close all;clc;clear;
 % adding paths
 fsep = '/';
-pathtoModels = sprintf(['..' fsep 'functions' fsep 'models' fsep], 1i);
-addpath(pathtoModels);
-addpath('compiled'); addpath('supplem'); 
+Path1 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/compiled'], 1i);
+Path2 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/supplem'], 1i);
+addpath('Path1'); addpath('Path2'); 
+
 
 % Define object dimensions
 N = 256; % x-y-z size (cubic image)

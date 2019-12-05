@@ -74,17 +74,16 @@ angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
 print ("Building 3D analytical projection data with TomoPhantom")
 ProjData3D = TomoP3D.ObjectSino(N_size, Horiz_det, Vert_det, angles, myObjects)
 
-intens_max = np.max(ProjData3D)*0.75
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)
-plt.imshow(ProjData3D[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.imshow(ProjData3D[:,sliceSel,:])
 plt.title('2D Projection (analytical)')
 plt.subplot(132)
-plt.imshow(ProjData3D[sliceSel,:,:],vmin=0, vmax=intens_max)
+plt.imshow(ProjData3D[sliceSel,:,:])
 plt.title('Sinogram view')
 plt.subplot(133)
-plt.imshow(ProjData3D[:,:,sliceSel],vmin=0, vmax=intens_max)
+plt.imshow(ProjData3D[:,:,sliceSel])
 plt.title('Tangentogram view')
 plt.show()
 #%%

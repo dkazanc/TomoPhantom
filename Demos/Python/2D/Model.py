@@ -22,10 +22,9 @@ import tomophantom
 from tomophantom import TomoP2D
 from tomophantom.supp.qualitymetrics import QualityTools
 
-model = 1 # select a model number from the library
+model = 4 # select a model number from the library
 N_size = 512 # set dimension of the phantom
 # one can specify an exact path to the parameters file
-# path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
 path = os.path.dirname(tomophantom.__file__)
 path_library2D = os.path.join(path, "Phantom2DLibrary.dat")
 #This will generate a N_size x N_size phantom (2D)
@@ -54,7 +53,7 @@ print("Analytical sinogram has been generated in {} seconds".format(Run_time))
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
-plt.imshow(sino_an,  cmap="BuPu")
+plt.imshow(sino_an, vmin=0, vmax=150, cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
@@ -68,41 +67,38 @@ print("Numerical sinogram has been generated in {} seconds".format(Run_time))
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
-plt.imshow(sino_num,  cmap="BuPu")
+plt.imshow(sino_num, vmin=0, vmax=150, cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Numerical sinogram of model no.',model))
 #%%
 ###################################################################
 # get numerical sinogram (ASTRA-toolbox)
-from tomophantom.supp.astraOP import AstraTools
+# initialise tomobar reconstruction class ONCE
+from tomobar.methodsDIR import RecToolsDIR
+Rectools = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
+                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    CenterRotOffset = 0.0, # Center of Rotation (CoR) scalar (for 3D case only)
+                    AnglesVec = angles_rad, # array of angles in radians
+                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
+                    device_projector = 'cpu')
 
 tic=timeit.default_timer()
-Atools = AstraTools(P, angles_rad, N_size, 'cpu') # initiate a class object
-sino_num_ASTRA = Atools.forwproj(phantom_2D) # generate numerical sino (Ax)
+sino_num_ASTRA = Rectools.FORWPROJ(phantom_2D) # generate numerical sino (Ax)
 toc=timeit.default_timer()
 Run_time = toc - tic
 print("Numerical (ASTRA) sinogram has been generated in {} seconds".format(Run_time))
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
-plt.imshow(sino_num_ASTRA,  cmap="BuPu")
+plt.imshow(sino_num_ASTRA, vmin=0, vmax=150, cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
 plt.title('{}''{}'.format('Numerical sinogram (ASTRA) of model no.',model))
-#%%
-###################################################################
-# initialise tomobar reconstruction class ONCE
-from tomobar.methodsDIR import RecToolsDIR
-RectoolsDIR = RecToolsDIR(DetectorsDimH = P,  # DetectorsDimH # detector dimension (horizontal)
-                    DetectorsDimV = None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-                    AnglesVec = angles_rad, # array of angles in radians
-                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    device='cpu')
 #%%
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print ("Reconstructing analytical sinogram using Fourier Slice method")
 print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-RecFourier = RectoolsDIR.fourier(sino_an,'linear') 
+RecFourier = Rectools.FOURIER(sino_an,'linear') 
 
 plt.figure() 
 plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
@@ -126,14 +122,14 @@ plt.show()
 #rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
 
 print ("Reconstructing analytical sinogram using FBP (astra TB)...")
-FBPrec1 = RectoolsDIR.FBP(sino_an)
+FBPrec1 = Rectools.FBP(sino_an)
 plt.figure() 
 plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
 plt.title('FBP Reconstructed Phantom (analyt)')
 
 print ("Reconstructing numerical sinogram using FBP (astra TB)...")
-FBPrec2 = RectoolsDIR.FBP(sino_num_ASTRA)
+FBPrec2 = Rectools.FBP(sino_num_ASTRA)
 
 plt.figure() 
 plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")

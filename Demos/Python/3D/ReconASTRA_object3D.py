@@ -92,32 +92,11 @@ plt.show()
 from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+                    CenterRotOffset = None, # Center of Rotation (CoR) scalar (for 3D case only)
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N3D_size, # a scalar to define reconstructed object dimensions
-                    device = 'gpu')
-#%%
-"""
-print ("Adding noise to projection data")
-from tomophantom.supp.artifacts import ArtifactsClass
-artifacts_add = ArtifactsClass(projData3D_analyt)
+                    device_projector = 'gpu')
 
-projData3D_analyt_noisy = artifacts_add.noise(sigma=15000,noisetype='Poisson')
-
-intens_max = 70
-sliceSel = 150
-plt.figure() 
-plt.subplot(131)
-plt.imshow(projData3D_analyt_noisy[:,sliceSel,:],vmin=0, vmax=intens_max)
-plt.title('2D noisy Projection (analytical)')
-plt.subplot(132)
-plt.imshow(projData3D_analyt_noisy[sliceSel,:,:],vmin=0, vmax=intens_max)
-plt.title('Noisy sinogram view')
-plt.subplot(133)
-plt.imshow(projData3D_analyt_noisy[:,:,sliceSel],vmin=0, vmax=intens_max)
-plt.title('Noisy tangentogram view')
-plt.show()
-"""
-#%%
 print ("Reconstruction using FBP from tomobar")
 recNumerical= RectoolsDIR.FBP(ProjData3D) # FBP reconstruction
 
@@ -142,46 +121,4 @@ plt.show()
 Qtools = QualityTools(Object3D, recNumerical)
 RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
-#%%
-"""
-print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print ("Reconstructing with FISTA-OS method using tomobar")
-print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# initialise tomobar ITERATIVE reconstruction class ONCE
-from tomobar.methodsIR import RecToolsIR
-RectoolsIR = RecToolsIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
-                    DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-                    CenterRotOffset = 0.0, # Center of Rotation (CoR) scalar (for 3D case only)
-                    AnglesVec = angles_rad, # array of angles in radians
-                    ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    datafidelity='LS',# data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
-                    nonnegativity='ENABLE', # enable nonnegativity constraint (set to 'ENABLE')
-                    OS_number = 12, # the number of subsets, NONE/(or > 1) ~ classical / ordered subsets
-                    tolerance = 1e-07, # tolerance to stop outer iterations earlier
-                    device='gpu')
-
-lc = RectoolsIR.powermethod() # calculate Lipschitz constant
-#%%
-# Run FISTA reconstrucion algorithm without regularisation
-#RecFISTA = RectoolsIR.FISTA(projData3D_analyt_noisy, iterationsFISTA = 5, lipschitz_const = lc)
-
-# Run FISTA reconstrucion algorithm with 3D regularisation
-#RecFISTA_reg = RectoolsIR.FISTA(projData3D_analyt_noisy, iterationsFISTA = 5, regularisation = 'ROF_TV', lipschitz_const = lc)
-
-sliceSel = int(0.5*N_size)
-max_val = 1
-plt.figure() 
-plt.subplot(131)
-plt.imshow(RecFISTA[sliceSel,:,:],vmin=0, vmax=max_val)
-plt.title('3D FISTA Reconstruction, axial view')
-
-plt.subplot(132)
-plt.imshow(RecFISTA[:,sliceSel,:],vmin=0, vmax=max_val)
-plt.title('3D FISTA Reconstruction, coronal view')
-
-plt.subplot(133)
-plt.imshow(RecFISTA[:,:,sliceSel],vmin=0, vmax=max_val)
-plt.title('3D FISTA Reconstruction, sagittal view')
-plt.show()
-"""
 #%%
