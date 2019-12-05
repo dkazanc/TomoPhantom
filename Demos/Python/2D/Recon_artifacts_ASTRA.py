@@ -24,7 +24,7 @@ import os
 import tomophantom
 from tomophantom.supp.qualitymetrics import QualityTools
 
-model = 12 # select a model
+model = 15 # select a model
 N_size = 512 # set dimension of the phantom
 # one can specify an exact path to the parameters file
 # path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
@@ -198,7 +198,7 @@ print ("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 _data_ = {'projection_norm_data' : noisy_zing_stripe,
           'huber_threshold' : 4.5,
           'ring_weights_threshold' : 10.0,
-          'ring_tuple_halfsizes': (7,5,0)
+          'ring_tuple_halfsizes': (9,5,0)
           } # data dictionary
 
 lc = RectoolsIR.powermethod(_data_) # calculate Lipschitz constant (run once to initialise)
