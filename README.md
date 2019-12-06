@@ -8,7 +8,7 @@
 </div>
 
 ****************
-**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data for various image processing (e.g. reconstruction, denoising, deblurring, segmentation, etc.) and machine learning tasks (e.g. deep learning, classification, clustering, etc.).**
+**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel beam geometry) for various image processing (e.g. reconstruction, denoising, deblurring, segmentation, etc.) and machine learning tasks (e.g. deep learning, classification, clustering, etc.).**
 
 <a href="https://doi.org/10.5281/zenodo.1215758"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
 ****************    
@@ -66,7 +66,7 @@ Prerequisites:
 
 1. Clone this repository to a directory, i.e. `TomoPhantom`,
 2. create a build directory.
-3. Issue `cmake` to configure (or `cmake-gui`, or `ccmake`, or `cmake3`). Use additional flags to fine tune the configuration.
+3. Issue `cmake` to configure (or `cmake-gui`, or `cmake`, or `cmake3`). Use additional flags to fine tune the configuration.
 
 #### CMake flags
 Flags used during configuration
