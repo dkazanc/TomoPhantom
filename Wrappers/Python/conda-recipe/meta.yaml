@@ -16,6 +16,7 @@ requirements:
     - cython
     - enum34 # [py27]
     - cmake
+    - blas=*=openblas
 
 
   run:

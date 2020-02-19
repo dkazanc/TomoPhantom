@@ -7,7 +7,7 @@ mkdir build_cmake
 cd build_cmake/
 make clean
 # install Python modules only
-cmake ../ -DPYTHON_EXECUTABLE:FILEPATH=/scratch/anaconda2/envs/py35/bin/python -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
+cmake ../ -DBUILD_PYTHON_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
 # install Matlab modules only
 # cmake ../ -DCONDA_BUILD=OFF -DBUILD_MATLAB_WRAPPER=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=./install
 # install for both Matlab and Python modules only

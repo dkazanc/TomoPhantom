@@ -6,7 +6,7 @@
         </div>
         </td>
         <td>
-        <font size="5">TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel-beam geometry) for various image processing (e.g. tomographic reconstruction, denoising, deblurring, segmentation, etc.) and machine learning tasks (e.g. deep learning, classification, clustering, etc.). </font>
+        <font size="5"><b> TomoPhantom </b> <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel-beam geometry) for various image processing (e.g. tomographic reconstruction, denoising, deblurring, segmentation, etc.) and machine/deep learning tasks (e.g. segmentation, classification, clustering, etc.). </font>
         </td>
     </tr>
 </table>
