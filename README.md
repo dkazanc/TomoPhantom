@@ -1,3 +1,16 @@
+<table>
+    <tr>
+        <td>
+        <div align="left">
+          <img src="docs/img/tomophantom.png" width="300"><br>  
+        </div>
+        </td>
+        <td>
+        <font size="5">TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel-beam geometry) for various image processing (e.g. tomographic reconstruction, denoising, deblurring, segmentation, etc.) and machine learning tasks (e.g. deep learning, classification, clustering, etc.). </font>
+        </td>
+    </tr>
+</table>
+
 | Master | Development | Anaconda binaries |
 |--------|-------------|-------------------|
 | [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom/) | [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom-dev)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom-dev/) | ![conda version](https://anaconda.org/ccpi/tomophantom/badges/version.svg) ![conda last release](https://anaconda.org/ccpi/tomophantom/badges/latest_release_date.svg) [![conda platforms](https://anaconda.org/ccpi/tomophantom/badges/platforms.svg) ![conda dowloads](https://anaconda.org/ccpi/tomophantom/badges/downloads.svg)](https://anaconda.org/ccpi/tomophantom) |
@@ -8,11 +21,6 @@
 </div>
 
 ****************
-**TomoPhantom <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel beam geometry) for various image processing (e.g. reconstruction, denoising, deblurring, segmentation, etc.) and machine learning tasks (e.g. deep learning, classification, clustering, etc.).**
-
-<a href="https://doi.org/10.5281/zenodo.1215758"><img src="https://zenodo.org/badge/95991001.svg" alt="DOI"></a>
-****************    
-
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
         <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects.        
@@ -105,7 +113,7 @@ git clone https://github.com/dkazanc/TomoPhantom.git
 cd TomoPhantom
 export CIL_VERSION=1.4.4
 conda build Wrappers/Python/conda-recipe --numpy 1.12 --python 3.5
-conda install -c file://${CONDA_PREFIX}/conda-bld/ tomophantom --force-reinstall 
+conda install -c file://${CONDA_PREFIX}/conda-bld/ tomophantom --force-reinstall
 ```
 
 ## Package library modules:
