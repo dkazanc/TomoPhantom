@@ -63,7 +63,7 @@ _noise_ =  {'type' : 'Poisson',
             'seed' : 0}
 # misalignment dictionary
 _sinoshifts_ = {'maxamplitude' : 10}
-noisy_sino_misalign = _Artifacts_(sino_an, _noise_, {}, {}, _sinoshifts_)
+[noisy_sino_misalign,shifts] = _Artifacts_(sino_an, _noise_, {}, {}, _sinoshifts_)
 
 # adding zingers and stripes
 _zingers_ = {'percentage' : 0.25,

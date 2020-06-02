@@ -33,6 +33,9 @@ def _Artifacts_(sinogram,
     if ('seed' not in _noise_):
         # seeds for noise (integers), None means random generation
         _noise_['seed'] = None
+    if ('prelog' not in _noise_):
+        # set to True in order to get the prelog (raw) data 
+        _noise_['prelog'] = None
     ####### ZINGERS ########
     if ('percentage' not in _zingers_):
         # # percentage the amount of zingers to be added to the data
@@ -60,7 +63,7 @@ def _Artifacts_(sinogram,
     if ('maxamplitude' not in _sinoshifts_):
         # maxamplitude (in int pixels) defines the maximal amplitude of each angular deviation
         _sinoshifts_['maxamplitude'] = None
-
+    'Applying artifacts and noise to the data'
     # ZINGERS
     if _zingers_['percentage'] is not None:
         sino_artifacts = zingers(sinogram=sinogram, percentage=_zingers_['percentage'], modulus = _zingers_['modulus'])
@@ -78,13 +81,16 @@ def _Artifacts_(sinogram,
         print("Stripes have been added to the data.")
     # SINOSHIFTS
     if _sinoshifts_['maxamplitude'] is not None:
-        sino_artifacts = sinoshifts(sinogram=sino_artifacts, maxamplitude = _sinoshifts_['maxamplitude'])
+        [sino_artifacts, shifts] = sinoshifts(sinogram=sino_artifacts, maxamplitude = _sinoshifts_['maxamplitude'])
         print("Sinogram shifts have been added to the data.")
     # NOISE
-    sino_artifacts = noise(sinogram=sino_artifacts, sigma=_noise_['sigma'], noisetype = _noise_['type'], seed = _noise_['seed'])
+    sino_artifacts = noise(sinogram=sino_artifacts, sigma=_noise_['sigma'], noisetype = _noise_['type'], seed = _noise_['seed'], prelog=_noise_['prelog'])
     print("{} noise have been added to the data.".format(_noise_['type']))
     
-    return sino_artifacts
+    if _sinoshifts_['maxamplitude'] is not None:
+        return [sino_artifacts,shifts]
+    else:
+        return sino_artifacts
 
 def stripes(sinogram, percentage, maxthickness, intensity_thresh, stripe_type, variability):
     # Function to add stripes (constant offsets) to sinogram which results in rings in the 
@@ -207,11 +213,12 @@ def zingers(sinogram, percentage, modulus):
     sino_zingers[:] = sino_zingers_fl.reshape(sino_zingers.shape)
     return sino_zingers
 
-def noise(sinogram, sigma, noisetype, seed):
+def noise(sinogram, sigma, noisetype, seed, prelog):
     # Adding random noise to data
     # noisetype = None, # 'Gaussian', 'Poisson' or None
     # sigma = 10000, # photon intensity (Poisson) or variance for Gaussian 
     # seed = 0, # seeds for noise
+    # prelog: None or True (get the raw pre-log data) 
     import numpy as np
     sino_noisy = sinogram.copy()
     if noisetype == 'Gaussian':
@@ -226,17 +233,20 @@ def noise(sinogram, sigma, noisetype, seed):
         if maxSino > 0:
             sino_noisy = sinogram/maxSino
             dataExp = sigma*np.exp(-sino_noisy)  # noiseless raw data
-            sino_noisy = np.random.poisson(dataExp) #adding Poisson noise
-            div_res = np.float32(sino_noisy)/np.max(sino_noisy)
+            sino_raw = np.random.poisson(dataExp) #adding Poisson noise
+            div_res = np.float32(sino_raw)/np.max(sino_raw)
             sino_noisy = -np.log(div_res)*maxSino # log corrected data -> sinogram
             sino_noisy[sino_noisy<0] = 0
     else:
         print ("Select 'Gaussian' or 'Poisson' for noise type")
-    return sino_noisy
+    if prelog is True:
+        return [sino_noisy,sino_raw]
+    else:
+        return sino_noisy
 
 def sinoshifts(sinogram, maxamplitude):
-    #A  function to add random shifts to sinogram rows (an offset for each angular position)
-    # maxamplitude (in int pixels) defines the maximal amplitude of each angular deviation
+    # A function to add random shifts to sinogram rows (an offset for each angular position)
+    # maxamplitude (integer pixels) defines the maximal amplitude of each angular deviation
     import numpy as np
     import random
     if (sinogram.ndim == 2):
@@ -245,10 +255,12 @@ def sinoshifts(sinogram, maxamplitude):
         (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(sinogram)
 
     sino_shifts = np.zeros(np.shape(sinogram),dtype='float32')
+    shifts = np.zeros(anglesDim, dtype='int8') # the vector of shifts
     non = lambda s: s if s<0 else None
     mom = lambda s: max(0,s)
     for x in range(anglesDim):
         rand_shift = random.randint(-maxamplitude,maxamplitude)  #generate random shift
+        shifts[x] = rand_shift
         if (sinogram.ndim == 2):
             projection = sinogram[x,:] # extract 1D projection
             projection_shift = np.zeros(np.shape(projection),dtype='float32')
@@ -260,4 +272,4 @@ def sinoshifts(sinogram, maxamplitude):
             projection2D_shift = np.zeros(np.shape(projection2D),dtype='float32')
             projection2D_shift[mom(rand_shift):non(rand_shift), mom(rand_shift2):non(rand_shift2)] = projection2D[mom(-rand_shift):non(-rand_shift),mom(-rand_shift2):non(-rand_shift2)]
             sino_shifts[:,x,:] = projection2D_shift
-    return sino_shifts
+    return [sino_shifts,shifts]

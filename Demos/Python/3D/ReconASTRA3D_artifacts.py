@@ -86,7 +86,7 @@ _noise_ =  {'type' : 'Poisson',
 _stripes_ = {'percentage' : 1.5,
              'maxthickness' : 2.0,
              'intensity' : 0.02,
-             'type' : 'full',             
+             'type' : 'full',
              'variability' : 0.01}
 
 projData3D_analyt_noisy = _Artifacts_(projData3D_analyt, _noise_, {}, _stripes_, {})
@@ -110,7 +110,7 @@ print ("Reconstruction using FBP from tomobar")
 from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-                    CenterRotOffset = None, # Center of Rotation (CoR) scalar (for 3D case only)
+                    CenterRotOffset = None, # The Center of Rotation (CoR) scalar
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
                     device_projector = 'gpu')
