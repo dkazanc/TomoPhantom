@@ -251,23 +251,26 @@ def sinoshifts(sinogram, maxamplitude):
     import random
     if (sinogram.ndim == 2):
         (anglesDim, DetectorsDimH) = np.shape(sinogram)
+        shifts = np.zeros(anglesDim, dtype='int8') # the vector of shifts
     else:
         (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(sinogram)
+        shifts = np.zeros([anglesDim,2], dtype='int8') # the 2D vector of shifts
 
     sino_shifts = np.zeros(np.shape(sinogram),dtype='float32')
-    shifts = np.zeros(anglesDim, dtype='int8') # the vector of shifts
     non = lambda s: s if s<0 else None
     mom = lambda s: max(0,s)
     for x in range(anglesDim):
         rand_shift = random.randint(-maxamplitude,maxamplitude)  #generate random shift
-        shifts[x] = rand_shift
         if (sinogram.ndim == 2):
+            shifts[x] = rand_shift
             projection = sinogram[x,:] # extract 1D projection
             projection_shift = np.zeros(np.shape(projection),dtype='float32')
             projection_shift[mom(rand_shift):non(rand_shift)] = projection[mom(-rand_shift):non(-rand_shift)]
             sino_shifts[x,:] = projection_shift
         else:
             rand_shift2 = random.randint(-maxamplitude,maxamplitude)  #generate random shift
+            shifts[x,0] = rand_shift
+            shifts[x,1] = rand_shift2
             projection2D = sinogram[:,x,:] # extract 2D projection
             projection2D_shift = np.zeros(np.shape(projection2D),dtype='float32')
             projection2D_shift[mom(rand_shift):non(rand_shift), mom(rand_shift2):non(rand_shift2)] = projection2D[mom(-rand_shift):non(-rand_shift),mom(-rand_shift2):non(-rand_shift2)]
