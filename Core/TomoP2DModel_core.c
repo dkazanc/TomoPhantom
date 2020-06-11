@@ -210,7 +210,7 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                         //printf("%s %i\n", "TimeSteps:", steps);
                         if (steps == 1) {
                             /**************************************************/                            
-                            printf("\n %s %i %s \n", "Stationary 2D model", ModelSelected, " is selected");
+                            // printf("\n %s %i %s \n", "Stationary 2D model", ModelSelected, " is selected");
                             
                             /* loop over all components */
                             for(ii=0; ii<Components; ii++) {
@@ -230,13 +230,13 @@ float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParameter
                                 else {
                                     //mexErrMsgTxt("Cannot find 'Object' string in parameters file");
                                     break; }   
-                                // printf ("C0 %.2e x0 %.2e y0 %.2e a %.2e b %.2e phi %.2e\n" , C0, x0, y0, a, b, psi_gr1);                            
+                                // printf ("C0 %.2e x0 %.2e y0 %.2e a %.2e b %.2e phi %.2e\n" , C0, x0, y0, a, b, psi_gr1);
                                 TomoP2DObject_core(A, N, tmpstr2, C0, y0, x0, a, b, psi_gr1, 0); /* python */
                             }
                         }
                         else {
                             /**************************************************/                            
-                            printf("\n %s %i %s \n", "Temporal 2D+time model", ModelSelected, " is selected");
+                            //printf("\n %s %i %s \n", "Temporal 2D+time model", ModelSelected, " is selected");
                             /* temporal phantom 2D + time (3D) */
                             
                             float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, a1 = 0.0f, b1 = 0.0f, psi_gr1_1 = 0.0f;

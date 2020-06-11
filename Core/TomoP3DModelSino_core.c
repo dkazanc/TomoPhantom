@@ -387,7 +387,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                             break;
                         }
                         if (strcmp(tmpstr1, "Components") == 0) Components = atoi(tmpstr2);
-                        printf("%s %i\n", "Components:", Components);
+                        //printf("%s %i\n", "Components:", Components);
                         if (Components <= 0) {
                             printf("%s %i\n", "Components cannot be negative, the given value is", Components);
                             break;
@@ -401,7 +401,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                             printf("%s %i\n", "TimeSteps cannot be negative, the given value is", steps);
                             break;
                         }
-                        printf("%s %i\n", "TimeSteps:", steps);
+                        //printf("%s %i\n", "TimeSteps:", steps);
                         if (steps == 1) {
                             /**************************************************/
                             //printf("\n %s %i %s \n", "Stationary 3D model", ModelSelected, " is selected");
