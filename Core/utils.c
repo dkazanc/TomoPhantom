@@ -70,10 +70,10 @@ float checkParams2D(int *params_switch, int ModelSelected, char *ModelParameters
                             params_switch[0] = 0;
                             break; }
                         if  (strcmp(tmpstr1,"Components") == 0) Components = atoi(tmpstr2);
-                        printf("%s %i\n", "Components:", Components);
+                        //printf("%s %i\n", "Components:", Components);
                         if (Components <= 0) {
                             printf("%s %i\n", "Components cannot be negative, the given value is", Components);
-                            params_switch[2] = 0;                           
+                            params_switch[2] = 0;
                             break; }
                         if (fgets(str, MAXCHAR, fp) != NULL) sscanf(str, "%15s : %21[^;];", tmpstr1, tmpstr2);
                         else {
@@ -86,7 +86,7 @@ float checkParams2D(int *params_switch, int ModelSelected, char *ModelParameters
                             params_switch[3] = 0;
                             break; }
                         else {params_switch[3] = steps;}
-                        printf("%s %i\n", "TimeSteps:", steps);
+                        //printf("%s %i\n", "TimeSteps:", steps);
                         if (steps == 1) {
                             /**************************************************/
                             // printf("\n %s %i %s \n", "Stationary 2D model", ModelSelected, " is selected");
@@ -301,7 +301,7 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
                             printf("%s\n", "Unexpected the end of the line (Components) in parameters file");
                             break; }
                         if  (strcmp(tmpstr1,"Components") == 0) Components = atoi(tmpstr2);
-                        printf("%s %i\n", "Components:", Components);
+                        //printf("%s %i\n", "Components:", Components);
                         if (Components <= 0) {
                             params_switch[2] = 0; /*checking components*/
                             printf("%s %i\n", "Components cannot be negative, the given value is", Components);
@@ -317,9 +317,9 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
                             printf("%s %i\n", "TimeSteps cannot be negative, the given value is", steps);
                             break; }
                         else {params_switch[3] = steps;}
-                        printf("%s %i\n", "TimeSteps:", steps);
+                        //printf("%s %i\n", "TimeSteps:", steps);
                         if (steps == 1) {
-                            printf("\n %s %i %s \n", "Stationary 3D model", ModelSelected, " is selected");
+                            //printf("\n %s %i %s \n", "Stationary 3D model", ModelSelected, " is selected");
                             /* loop over all components */
                             for(ii=0; ii<Components; ii++) {
                                 
@@ -379,7 +379,7 @@ float checkParams3D(int *params_switch, int ModelSelected, char *ModelParameters
                             }
                         }
                         else {                            
-                            printf("\n %s %i %s \n", "Temporal 3D+time model", ModelSelected, " is selected");
+                            //printf("\n %s %i %s \n", "Temporal 3D+time model", ModelSelected, " is selected");
                             /* loop over all components */
                             for(ii=0; ii<Components; ii++) {
                                 

@@ -305,7 +305,7 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                             //mexErrMsgTxt("Unexpected the end of the line (Components) in parameters file");
                             break; }
                         if  (strcmp(tmpstr1,"Components") == 0) Components = atoi(tmpstr2);
-                        printf("%s %i\n", "Components:", Components);
+                        //printf("%s %i\n", "Components:", Components);
                         if (Components <= 0) {
                             printf("%s %i\n", "Components cannot be negative, the given value is", Components);
                             //mexErrMsgTxt("Components cannot be negative");
@@ -319,10 +319,10 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                             printf("%s %i\n", "TimeSteps cannot be negative, the given value is", steps);
                             //mexErrMsgTxt("TimeSteps cannot be negative");
                             break; }
-                        printf("%s %i\n", "TimeSteps:", steps);
+                        //printf("%s %i\n", "TimeSteps:", steps);
                         if (steps == 1) {
                             /**************************************************/
-                            printf("\n %s %i %s \n", "Stationary 2D sinogram for model", ModelSelected, " is selected");
+                            //printf("\n %s %i %s \n", "Stationary 2D sinogram for model", ModelSelected, " is selected");
                             
                             /* loop over all components */
                             for(ii=0; ii<Components; ii++) {
@@ -373,7 +373,7 @@ float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th
                         }
                         else {
                             /**************************************************/                            
-                            printf("\n %s %i %s \n", "Temporal 2D+time sinogram for model", ModelSelected, " is selected");
+                            //printf("\n %s %i %s \n", "Temporal 2D+time sinogram for model", ModelSelected, " is selected");
                             /* temporal phantom 2D + time (3D) */                            
                             
                             float C1 = 0.0f, x1 = 0.0f, y1 = 0.0f, a1 = 0.0f, b1 = 0.0f, psi_gr1_1 = 0.0f;
