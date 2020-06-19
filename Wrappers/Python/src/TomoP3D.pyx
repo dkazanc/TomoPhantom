@@ -478,8 +478,8 @@ def ObjectSino(phantom_size, Horiz_det, Vert_det, np.ndarray[np.float32_t, ndim=
             b = obj['b']
             c = obj['c']
             phi1 = obj['phi1']
-            phi2 = 0.0
-            phi3 = 0.0
+            phi2 = obj['phi1']
+            phi3 = obj['phi1']
 
             if (("gaussian" in str(objectName)) or ("paraboloid" in str(objectName)) or ("ellipsoid" in str(objectName))):
                 ret_val = TomoP3DObjectSino_core(&projdata[0,0,0], (Horiz_det), (Vert_det), Z1, (Vert_det), (phantom_size), &angles[0], AngTot,
