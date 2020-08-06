@@ -11,7 +11,7 @@ close all
 fsep = '/';
 Path1 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/compiled'], 1i);
 Path2 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/supplem'], 1i);
-addpath('Path1'); addpath('Path2'); 
+addpath(Path1); addpath(Path2); 
 
 % generate 3D phantom (modify your PATH bellow):
 curDir   = pwd;

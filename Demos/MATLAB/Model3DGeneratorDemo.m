@@ -10,7 +10,7 @@ close all;clc;clear;
 fsep = '/';
 Path1 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/compiled'], 1i);
 Path2 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/supplem'], 1i);
-addpath('Path1'); addpath('Path2'); 
+addpath(Path1); addpath(Path2); 
 
 ModelNo = 13; % Select a model
 % Define phantom dimensions
@@ -63,6 +63,8 @@ Vert_det = N; % detector row count (vertical) (no reason for it to be > N, so fi
 disp('Using TomoPhantom to generate 3D projection data');
 proj3D_tomophant = TomoP3DModelSino(ModelNo, Vert_det, Horiz_det, N, single(angles), pathTP);
 
+slice2 = round(0.5*N);
+max_val = 50;
 figure; 
 subplot(1,3,1); imagesc(squeeze(proj3D_tomophant(:,:,slice2)), [0 max_val]); title('Analytical projection');
 subplot(1,3,2); imagesc(squeeze(proj3D_tomophant(slice2,:,:))', [0 max_val]); title('Tangentogram');

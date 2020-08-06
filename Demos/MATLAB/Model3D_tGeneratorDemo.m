@@ -10,7 +10,7 @@ close all;clc;clear;
 fsep = '/';
 Path1 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/compiled'], 1i);
 Path2 = sprintf(['..' fsep '..' fsep 'Wrappers/MATLAB/supplem'], 1i);
-addpath('Path1'); addpath('Path2'); 
+addpath(Path1); addpath(Path2); 
 
 ModelNo = 100; % Select a model
 % Define phantom dimensions
@@ -44,11 +44,9 @@ pathTP = strcat(mainDir, pathtoLibrary); % path to TomoPhantom parameters file
 
 sliceM = round(0.5*N);
 figure(2);
-ll = 10;
 counter  = 1;
 for ll = 1:5
     imagesc(G(:,:,sliceM, ll), [0 1]); daspect([1 1 1]); title('3D+t phantom'); colormap hot;   
     pause(0.1); 
 end
 %%
-
