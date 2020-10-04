@@ -1,5 +1,11 @@
 # ChangeLog
 
+## v1.4.5
+* Flat field simulation for 3D case has been re-written to conform the traditional imaging scenario. One can modify the 
+inensity of the X-ray source which leads to more imaging artefacts
+* Demo ReconASTRA3D_realistic shows the incorporated changes
+* normraw function has been deleted and replaced with the conventional normaliser from the ToMoBAR software
+
 ## v1.4.3
 * Artifacts simulation module has been modified. It is based now on specifying the dictionaries where artifact types are
 described. Stipes can be simulated to be partial and with variable intensity.
@@ -18,9 +24,9 @@ described. Stipes can be simulated to be partial and with variable intensity.
 ## v1.4
 
 * Artifacts generation have been re-written from the class-based structure to function based structure
-* Each method in Artifacts can be called independently or all artifacts+noise can be simulated using _Artifacts_ method
+* Each method in Artifacts can be called independently or all artefacts+noise can be simulated using _Artifacts_ method
 * Seeding added for noise module
-* Demos changed to adapt new artifacts functions and ToMoBAR changes
+* Demos changed to adapt new artefacts functions and ToMoBAR changes
 
 ## v1.3
 

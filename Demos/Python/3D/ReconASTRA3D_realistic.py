@@ -24,12 +24,11 @@ import numpy as np
 import tomophantom
 from tomophantom import TomoP3D
 from tomophantom.supp.qualitymetrics import QualityTools
-from tomophantom.supp.flatsgen import flats
-from tomophantom.supp.normraw import normaliser_sim
+from tomophantom.supp.flatsgen import synth_flats
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 9 # select a model number from the library
+model = 13 # select a model number from the library
 N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
@@ -65,34 +64,47 @@ angles_rad = angles*(np.pi/180.0)
 print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
 
-intens_max = 70
+intens_max_clean = np.max(projData3D_analyt)
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)
-plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max_clean)
 plt.title('2D Projection (analytical)')
 plt.subplot(132)
-plt.imshow(projData3D_analyt[sliceSel,:,:],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_analyt[sliceSel,:,:],vmin=0, vmax=intens_max_clean)
 plt.title('Sinogram view')
 plt.subplot(133)
-plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_analyt[:,:,sliceSel],vmin=0, vmax=intens_max_clean)
 plt.title('Tangentogram view')
 plt.show()
 #%%
-print ("Simulate flat fields, add noise and normalise projections...")
-flatsnum = 20 # generate 20 flat fields
-flatsSIM = flats(Vert_det, Horiz_det, maxheight = 0.01, maxthickness = 1, sigma_noise = 0.2, sigmasmooth = 3, flatsnum=flatsnum)
+print ("Simulate synthetic flat fields, add flat field background to the projections and add noise")
+I0  = 8000; # Source intensity
+flatsnum = 20 # the number of the flat fields required
 
+[projData3D_noisy, flatsSIM] = synth_flats(projData3D_analyt, 
+                                           source_intensity = I0, source_variation=0.015,\
+                                           arguments_Bessel = (1,10,10,12),\
+                                           strip_height = 0.05, strip_thickness = 1,\
+                                           sigmasmooth = 3, flatsnum=flatsnum)
+del projData3D_analyt
 plt.figure() 
-plt.imshow(flatsSIM[0,:,:],vmin=0, vmax=1)
+plt.subplot(121)
+plt.imshow(projData3D_noisy[:,0,:])
+plt.title('2D Projection (before normalisation)')
+plt.subplot(122)
+plt.imshow(flatsSIM[:,0,:])
 plt.title('A selected simulated flat-field')
+plt.show()
 #%%
-# Apply normalisation of data and add noise
-flux_intensity = 10000 # controls the level of noise (Poisson) 
-sigma_flats = 250 # control the level of noise in flats (lower values generate more prominent stripes aka ring artifacts)
-[projData3D_norm, projData3D_raw] = normaliser_sim(projData3D_analyt, flatsSIM, sigma_flats, flux_intensity)
+print ("Normalise projections using ToMoBAR software")
+from tomobar.supp.suppTools import normaliser
 
-intens_max = 70
+# normalise the data, the required format is [detectorsX, Projections, detectorsY]
+projData3D_norm = normaliser(projData3D_noisy, flatsSIM, darks=None, log='true', method='mean')
+
+del projData3D_noisy
+intens_max = np.max(projData3D_norm)*0.5
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)
@@ -117,6 +129,7 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector
 
 print ("Reconstruction using FBP from tomobar")
 recNumerical= RectoolsDIR.FBP(projData3D_norm) # FBP reconstruction
+recNumerical *= intens_max_clean
 
 sliceSel = int(0.5*N_size)
 max_val = 1
@@ -158,17 +171,18 @@ _data_ = {'projection_norm_data' : projData3D_norm,
           'OS_number' : 10} # data dictionary
 lc = Rectools.powermethod(_data_) # calculate Lipschitz constant (run once to initialise)
 
-# Run FISTA-OS reconstrucion algorithm without regularisation
-_algorithm_ = {'iterations' : 18,
+# algorithm parameters
+_algorithm_ = {'iterations' : 15,
                'lipschitz_const' : lc}
 
 # adding regularisation using the CCPi regularisation toolkit
 _regularisation_ = {'method' : 'PD_TV',
-                    'regul_param' : 0.0005,
+                    'regul_param' : 0.0000035,
                     'iterations' : 80,
                     'device_regulariser': 'gpu'}
 
 RecFISTA_os_reg = Rectools.FISTA(_data_, _algorithm_, _regularisation_)
+RecFISTA_os_reg *= intens_max_clean
 
 sliceSel = int(0.5*N_size)
 max_val = 1

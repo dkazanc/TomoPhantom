@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A function to generate fake flat field images for 3D projection data normalisation
+A function to generate synthetic flat field images for 3D projection data normalisation
 
 @author: Daniil Kazantsev
 """
@@ -11,24 +11,33 @@ from scipy.special import y1
 from scipy.ndimage.filters import gaussian_filter
 import random
 import numpy as np
-# import matplotlib.pyplot as plt
+from tomophantom.supp.artifacts import noise
 
-def flats(DetectorsDimV, DetectorsDimH, maxheight, maxthickness, sigma_noise, sigmasmooth, flatsnum):
+def synth_flats(projData3D_clean, source_intensity, source_variation, arguments_Bessel, strip_height, strip_thickness, sigmasmooth, flatsnum):
     """
-    maxheight - a value between (0,1] which controls the height of stripes
-    maxthickness - a value in pixels which controls the width of stripes
-    sigma_noise - a noise level (Gaussian) which is added to the sripe image
+    the required format of the input (clean) data is [detectorsX, Projections, detectorsY]
+    Parameters: 
+    source_intensity - a source intensity which affects the amount of Poisson noise added to data
+    source_variation - a constant which perturbs the source intensity leading to ring artifacts etc.
+    arguments_Bessel - a tuple of 4 Arguments for 2 Bessel functions to control background variations
+    strip_height - a value between (0,1] which controls the height of the background stripes
+    strip_thickness - a value in pixels which controls the width of stripes
     sigmasmooth - a smoothing parameter for a stripe image with noise (1,3,5,7...)
     flatsnum - a number of flats to generate
     """
-    
+    [DetectorsDimV, projectionsNo, DetectorsDimH] = np.shape(projData3D_clean)
     flatfield = np.zeros((DetectorsDimV,DetectorsDimH))
-    flat_combined3D = np.zeros((flatsnum,DetectorsDimV,DetectorsDimH))
+    flats_combined3D = np.zeros((DetectorsDimV,flatsnum, DetectorsDimH))
+    projData3D_noisy = np.zeros(np.shape(projData3D_clean),dtype='float32')
+    source_intensity_var = source_intensity*np.ones((DetectorsDimV,DetectorsDimH))
+    source_intensity_variable = source_intensity_var
+    maxProj_scalar = np.max(projData3D_clean)
     
-    # using spherical Bessel functions
-    func = spherical_yn(1, np.linspace(3,15,DetectorsDimV,dtype='float32'))
+     
+    # using spherical Bessel functions to emulate the background (scintillator) variations
+    func = spherical_yn(1, np.linspace(arguments_Bessel[0], arguments_Bessel[1], DetectorsDimV,dtype='float32'))
     func = func + abs(np.min(func))
-    func2 = y1(np.linspace(15,5,DetectorsDimH,dtype='float32'))
+    func2 = y1(np.linspace(arguments_Bessel[2],arguments_Bessel[3],DetectorsDimH,dtype='float32'))
     func2 = func2 + abs(np.min(func2))
     
     for i in range(0,DetectorsDimV):
@@ -38,13 +47,13 @@ def flats(DetectorsDimV, DetectorsDimH, maxheight, maxthickness, sigma_noise, si
         flatfield[:,i] += func
     
     # Adding stripes of varying vertical & horizontal sizes
-    maxheight_par = round(maxheight*DetectorsDimV)
+    maxheight_par = round(strip_height*DetectorsDimV)
     max_intensity = np.max(flatfield)
     flatstripes = np.zeros(np.shape(flatfield))
     
     for x in range(0,DetectorsDimH):
         randind = random.randint(0,DetectorsDimV) # generate random index (vertically)
-        randthickness = random.randint(0,maxthickness) #generate random thickness
+        randthickness = random.randint(0,strip_thickness) #generate random thickness
         randheight = random.randint(0,maxheight_par) #generate random height
         randintens = random.uniform(0.1, 2.0) # generate random multiplier
         intensity = max_intensity*randintens
@@ -58,13 +67,22 @@ def flats(DetectorsDimV, DetectorsDimH, maxheight, maxthickness, sigma_noise, si
     for i in range(0,flatsnum):
         # adding noise and normalise
         flatstripes2 = flatstripes.copy()
-        flatstripes2 += np.random.normal(loc = 0.00 ,scale = sigma_noise, size = np.shape(flatstripes2))
-        flatstripes2 /= np.max(flatstripes2)
-        flatstripes2 += abs(np.min(flatstripes2))
-        
-        #blur the result and add to the initial image with bessel background
+        #blur the result and add to the initial image with the Bessel background
         blurred_flatstripes = gaussian_filter(flatstripes2, sigma=sigmasmooth)
         flat_combined = flatfield + blurred_flatstripes
         flat_combined /= np.max(flat_combined)
-        flat_combined3D[i,:,:] = flat_combined
-    return flat_combined3D
+        # make source intensity variable if required
+        if (source_variation is not None or source_variation != 0.0):
+            source_intensity_variable = noise(source_intensity_var, source_variation*source_intensity, noisetype='Gaussian', seed = None, prelog = None)
+
+        #adding Poisson noise to the flat fields
+        flat_noisy = np.random.poisson(np.multiply(source_intensity_variable,flat_combined))
+        flats_combined3D[:,i,:] = flat_noisy
+
+    for i in range(0,projectionsNo):
+        # make source intensity variable if required
+        if (source_variation is not None or source_variation != 0.0):
+            source_intensity_variable = noise(source_intensity_var, source_variation*source_intensity, noisetype='Gaussian', seed = None, prelog = None)
+        projData3D_noisy[:,i,:] = np.random.poisson(np.random.poisson(np.multiply(source_intensity_variable,flat_combined))* np.exp(-projData3D_clean[:,i,:]/maxProj_scalar))
+
+    return [projData3D_noisy, flats_combined3D]
