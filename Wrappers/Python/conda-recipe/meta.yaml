@@ -3,6 +3,7 @@ package:
   version: {{ environ.get('CIL_VERSION', '') }}
 
 build:
+  skip: True # [py==38 and np==115]
   preserve_egg_dir: False
   number: 0
   script_env:
@@ -11,18 +12,16 @@ build:
 requirements:
   build:
     - python
-    - numpy
+    - numpy {{ numpy }}
     - setuptools
     - cython
     - enum34 # [py27]
     - cmake
     - blas=*=openblas # [not win]
 
-
   run:
-    - {{ pin_compatible('numpy', max_pin='x.x') }}
+    - {{ pin_compatible('numpy', min_pin='x.x', max_pin='x.x') }}
     - python
-    - numpy
     - vc 14 # [win and py36]
     - vc 14 # [win and py35]
     - vc 9  # [win and py27]
