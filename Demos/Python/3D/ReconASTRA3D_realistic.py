@@ -28,7 +28,7 @@ from tomophantom.supp.flatsgen import synth_flats
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 13 # select a model number from the library
+model = 17 # select a model number from the library
 N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
@@ -79,15 +79,17 @@ plt.title('Tangentogram view')
 plt.show()
 #%%
 print ("Simulate synthetic flat fields, add flat field background to the projections and add noise")
-I0  = 8000; # Source intensity
+I0  = 15000; # Source intensity
 flatsnum = 20 # the number of the flat fields required
 
 [projData3D_noisy, flatsSIM] = synth_flats(projData3D_analyt, 
-                                           source_intensity = I0, source_variation=0.015,\
+                                           source_intensity = I0, source_variation=0.02,\
                                            arguments_Bessel = (1,10,10,12),\
-                                           strip_height = 0.05, strip_thickness = 1,\
+                                           specklesize = 15,\
+                                           kbar = 0.3,
+                                           jitter = 1.0,
                                            sigmasmooth = 3, flatsnum=flatsnum)
-del projData3D_analyt
+#del projData3D_analyt
 plt.figure() 
 plt.subplot(121)
 plt.imshow(projData3D_noisy[:,0,:])
@@ -103,13 +105,13 @@ from tomobar.supp.suppTools import normaliser
 # normalise the data, the required format is [detectorsX, Projections, detectorsY]
 projData3D_norm = normaliser(projData3D_noisy, flatsSIM, darks=None, log='true', method='mean')
 
-del projData3D_noisy
-intens_max = np.max(projData3D_norm)*0.5
+#del projData3D_noisy
+intens_max = 0.3*np.max(projData3D_norm)
 sliceSel = 150
 plt.figure() 
 plt.subplot(131)
 plt.imshow(projData3D_norm[:,sliceSel,:],vmin=0, vmax=intens_max)
-plt.title('2D Projection (erroneous)')
+plt.title('Normalised 2D Projection (erroneous)')
 plt.subplot(132)
 plt.imshow(projData3D_norm[sliceSel,:,:],vmin=0, vmax=intens_max)
 plt.title('Sinogram view')
