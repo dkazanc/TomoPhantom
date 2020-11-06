@@ -111,7 +111,7 @@ See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script
 ```
 git clone https://github.com/dkazanc/TomoPhantom.git
 cd TomoPhantom
-export CIL_VERSION=1.4.5
+export CIL_VERSION=1.4.7
 conda build Wrappers/Python/conda-recipe --numpy 1.15 --python 3.7
 conda install -c file://${CONDA_PREFIX}/conda-bld/ tomophantom --force-reinstall
 ```

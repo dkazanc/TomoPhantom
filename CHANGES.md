@@ -1,7 +1,12 @@
 # ChangeLog
 
+## v1.4.7
+* Flat field simulator has been modified to be based on a speckle generator of the background
+* Flat fields and the background jitter has been incorporated
+* Model 17 has been added to simulate i23 data
+
 ## v1.4.5
-* Flat field simulation for 3D case has been re-written to conform the traditional imaging scenario. One can modify the 
+* Flat field simulation for 3D case has been re-written to conform the traditional imaging scenario. One can modify the
 inensity of the X-ray source which leads to more imaging artefacts
 * Demo ReconASTRA3D_realistic shows the incorporated changes
 * normraw function has been deleted and replaced with the conventional normaliser from the ToMoBAR software
