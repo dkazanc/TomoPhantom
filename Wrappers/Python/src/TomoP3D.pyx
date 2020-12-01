@@ -51,7 +51,7 @@ class Objects3D(Enum):
     ELLIPSOID = 'ellipsoid'
     CONE   = 'cone'
     CUBOID      = 'cuboid'
-    ELLIPCYLINDER = 'ellipticalcylinder'
+    ELLIPCYLINDER = 'elliptical_cylinder'
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
