@@ -28,9 +28,9 @@
  </div>
 
 ### What **TomoPhantom** can do:         
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones, rectangulars
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones and rectangulars
 
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions of them
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions
 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transform of 2D-4D models and also their numerical projections
 
