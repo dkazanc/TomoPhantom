@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 Various methods to simulate noise and artifacts for sinograms (2D) and for 3D-projection data
- 
-What can be simulated: 
+
+What can be simulated:
 -- noise (Poisson or Gaussian)
 -- zingers (result in streaks in the reconstruction)
 -- stripes (result in rings in the reconstruction)
@@ -15,7 +15,7 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 @author: Daniil Kazantsev
 """
 
-def _Artifacts_(sinogram, 
+def _Artifacts_(sinogram,
                 _noise_, # noise related dictionary
                 _zingers_, # zingers dictionary
                 _stripes_, # stripes dictionary
@@ -28,13 +28,13 @@ def _Artifacts_(sinogram,
         print("Unknown noise type, select Gaussian or Poisson, now set to Poisson")
         _noise_['type'] = 'Poisson'
     if ('sigma' not in _noise_):
-        # photon intensity (Poisson) or variance for Gaussian 
+        # photon intensity (Poisson) or variance for Gaussian
         _noise_['sigma'] = 10000
     if ('seed' not in _noise_):
         # seeds for noise (integers), None means random generation
         _noise_['seed'] = None
     if ('prelog' not in _noise_):
-        # set to True in order to get the prelog (raw) data 
+        # set to True in order to get the prelog (raw) data
         _noise_['prelog'] = None
     ####### ZINGERS ########
     if ('percentage' not in _zingers_):
@@ -86,14 +86,14 @@ def _Artifacts_(sinogram,
     # NOISE
     sino_artifacts = noise(sinogram=sino_artifacts, sigma=_noise_['sigma'], noisetype = _noise_['type'], seed = _noise_['seed'], prelog=_noise_['prelog'])
     print("{} noise have been added to the data.".format(_noise_['type']))
-    
+
     if _sinoshifts_['maxamplitude'] is not None:
         return [sino_artifacts,shifts]
     else:
         return sino_artifacts
 
 def stripes(sinogram, percentage, maxthickness, intensity_thresh, stripe_type, variability):
-    # Function to add stripes (constant offsets) to sinogram which results in rings in the 
+    # Function to add stripes (constant offsets) to sinogram which results in rings in the
     # reconstructed image
     # - percentage defines the amount of stripes in the data
     # - maxthickness defines the maximal thickness of a stripe
@@ -125,7 +125,7 @@ def stripes(sinogram, percentage, maxthickness, intensity_thresh, stripe_type, v
                 if (sino_stripes[0,randind] != 0.0):
                     break
             if (stripe_type == 'partial'):
-                randind_ang1 =  random.randint(0,anglesDim) 
+                randind_ang1 =  random.randint(0,anglesDim)
                 randind_ang2 =  random.randint(0,anglesDim)
             else:
                 randind_ang1 = 0
@@ -151,7 +151,7 @@ def stripes(sinogram, percentage, maxthickness, intensity_thresh, stripe_type, v
                     if (sino_stripes[j,0,randind] != 0.0):
                         break
                 if (stripe_type == 'partial'):
-                    randind_ang1 =  random.randint(0,anglesDim) 
+                    randind_ang1 =  random.randint(0,anglesDim)
                     randind_ang2 =  random.randint(0,anglesDim)
                 else:
                     randind_ang1 = 0
@@ -193,7 +193,7 @@ def zingers(sinogram, percentage, modulus):
     num_values = int((length_sino)*(np.float32(percentage)/100.0))
     sino_zingers_fl = sino_zingers.flatten()
     for x in range(num_values):
-        randind = random.randint(0,length_sino) # generate random index 
+        randind = random.randint(0,length_sino-1) # generate random index
         sino_zingers_fl[randind] = 0
         if ((x % int(modulus)) == 0):
             if (sinogram.ndim == 2):
@@ -216,9 +216,9 @@ def zingers(sinogram, percentage, modulus):
 def noise(sinogram, sigma, noisetype, seed, prelog):
     # Adding random noise to data
     # noisetype = None, # 'Gaussian', 'Poisson' or None
-    # sigma = 10000, # photon intensity (Poisson) or variance for Gaussian 
+    # sigma = 10000, # photon intensity (Poisson) or variance for Gaussian
     # seed = 0, # seeds for noise
-    # prelog: None or True (get the raw pre-log data) 
+    # prelog: None or True (get the raw pre-log data)
     import numpy as np
     sino_noisy = sinogram.copy()
     if noisetype == 'Gaussian':
