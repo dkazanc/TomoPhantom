@@ -62,7 +62,7 @@ _noise_ =  {'type' : 'Poisson',
             'sigma' : 10000, # noise amplitude
             'seed' : 0}
 
-noisy_sino = _Artifacts_(sino_an, _noise_, _zingers_={}, _stripes_={}, _sinoshifts_= {})
+noisy_sino = _Artifacts_(sino_an, _noise_)
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
@@ -132,7 +132,7 @@ _algorithm_ = {'iterations' : 350,
                'lipschitz_const' : lc}
 
 # adding regularisation using the CCPi regularisation toolkit
-_regularisation_ = {'method' : 'PD_TV',
+_regularisation_ = {'method' : 'BM3D',
                     'regul_param' : 0.001,
                     'iterations' : 150,
                     'device_regulariser': 'gpu'}
