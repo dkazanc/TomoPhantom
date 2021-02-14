@@ -56,32 +56,32 @@ plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 #%%
 # Adding artifacts and noise
 from tomophantom.supp.artifacts import _Artifacts_
-
+plt.close('all')
 # forming dictionaries with artifact types
-_noise_ =  {'type' : 'Poisson',
-            'sigma' : 10000, # noise amplitude
-            'seed' : 0}
+_noise_ =  {'noise_type' : 'Poisson',
+            'noise_sigma' : 10000, # noise amplitude
+            'noise_seed' : 0}
 # misalignment dictionary
-_sinoshifts_ = {'maxamplitude' : 10}
-[noisy_sino_misalign,shifts] = _Artifacts_(sino_an, _noise_, {}, {}, _sinoshifts_)
+_sinoshifts_ = {'sinoshifts_maxamplitude' : 10}
+[noisy_sino_misalign,shifts] = _Artifacts_(sino_an, **_noise_, **_sinoshifts_)
 
 # adding zingers and stripes
-_zingers_ = {'percentage' : 0.25,
-             'modulus' : 10}
+_zingers_ = {'zingers_percentage' : 2,
+             'zingers_modulus' : 10}
 
-_stripes_ = {'percentage' : 0.8,
-             'maxthickness' : 2.0,
-             'intensity' : 0.25,
-             'type' : 'full',
-             'variability' : 0.002}
+_stripes_ = {'stripes_percentage' : 0.8,
+             'stripes_maxthickness' : 2.0,
+             'stripes_intensity' : 0.25,
+             'stripes_type' : 'full',
+             'stripes_variability' : 0.002}
 
-noisy_zing_stripe = _Artifacts_(sino_an, _noise_, _zingers_, _stripes_, _sinoshifts_= {})
+noisy_zing_stripe = _Artifacts_(sino_an, **_noise_, **_zingers_, **_stripes_)
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})
 plt.imshow(noisy_zing_stripe,cmap="gray")
 plt.colorbar(ticks=[0, 150, 250], orientation='vertical')
-plt.title('{}''{}'.format('Analytical noisy sinogram with artifacts.',model))
+plt.title('{}''{}'.format('Analytical noisy sinogram with artefacts.',model))
 #%%
 # initialise tomobar DIRECT reconstruction class ONCE
 from tomobar.methodsDIR import RecToolsDIR
@@ -224,4 +224,45 @@ plt.show()
 Qtools = QualityTools(phantom_2D, RecFISTA_reg)
 RMSE_FISTA_reg = Qtools.rmse()
 print("RMSE for regularised FISTA is {}".format(RMSE_FISTA_reg))
+#%%
+from tomophantom.supp.artifacts import _Artifacts_
+# forming dictionaries with artefact types
+_noise_ =  {'noise_type' : 'Poisson',
+            'noise_sigma' : 200000, # noise amplitude
+            'noise_seed' : 0}
+
+# partial volume effect dictionary
+_pve_ = {'pve_strength' : 1}
+_fresnel_propagator_ = {'fresnel_dist_observation' : 10,
+                        'fresnel_scale_factor' : 10,
+                        'fresnel_wavelenght' : 0.003}
+
+noisy_sino_pve = _Artifacts_(sino_an, **_noise_, **_pve_)
+
+FBPrec_pve = RectoolsDIR.FBP(noisy_sino_pve) 
+
+plt.figure()
+plt.imshow(FBPrec_pve, vmin=0, vmax=1, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('FBP reconstruction from PVE sinogram')
+plt.show()
+#%%
+from tomophantom.supp.artifacts import _Artifacts_
+# forming dictionaries with artefact types
+_noise_ =  {'noise_type' : 'Poisson',
+            'noise_sigma' : 200000, # noise amplitude
+            'noise_seed' : 0}
+_fresnel_propagator_ = {'fresnel_dist_observation' : 20,
+                        'fresnel_scale_factor' : 10,
+                        'fresnel_wavelenght' : 0.003}
+
+noisy_sino_fresnel = _Artifacts_(sino_an, **_noise_,  **_fresnel_propagator_)
+
+FBPrec_fresnel = RectoolsDIR.FBP(noisy_sino_fresnel) 
+
+plt.figure()
+plt.imshow(FBPrec_fresnel , vmin=0, vmax=1, cmap="gray")
+plt.colorbar(ticks=[0, 0.5, 1], orientation='vertical')
+plt.title('FBP reconstruction from sinogram with Fresnel propagator')
+plt.show()
 #%%

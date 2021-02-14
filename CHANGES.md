@@ -1,5 +1,10 @@
 # ChangeLog
 
+## v1.4.9
+* Artifacts function syntax has changed. Now the dictionaries with keys can be be provided in a random order. Demos updated to make use of the updated function
+* Partial volume effect generator added to the Artifacts script
+* Fresnel propagator simulator added to the Artifacts script
+
 ## v1.4.7
 * Flat field simulator has been modified to be based on a speckle generator of the background
 * Flat fields and the background jitter has been incorporated

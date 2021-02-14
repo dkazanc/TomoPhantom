@@ -34,7 +34,7 @@
 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transform of 2D-4D models and also their numerical projections
 
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts)
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts, pve and others)
 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Demos provided to perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
 
@@ -111,7 +111,7 @@ See [`run.sh`](https://github.com/dkazanc/TomoPhantom/blob/master/run.sh) script
 ```
 git clone https://github.com/dkazanc/TomoPhantom.git
 cd TomoPhantom
-export CIL_VERSION=1.4.7
+export CIL_VERSION=1.4.9
 conda build Wrappers/Python/conda-recipe --numpy 1.15 --python 3.7
 conda install -c file://${CONDA_PREFIX}/conda-bld/ tomophantom --force-reinstall
 ```
