@@ -1,7 +1,7 @@
 # ChangeLog
 
 ## v1.4.9
-* Artifacts function syntax has been changed. Now the dictionaries with keys can be be provided randomly. Demos updated to make use of the updated function
+* Artifacts function syntax has changed. Now the dictionaries with keys can be be provided in a random order. Demos updated to make use of the updated function
 * Partial volume effect generator added to the Artifacts script
 * Fresnel propagator simulator added to the Artifacts script
 
