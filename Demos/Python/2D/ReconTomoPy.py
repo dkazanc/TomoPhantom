@@ -54,11 +54,11 @@ plt.title('{}''{}'.format('Analytical sinogram of model no.',model))
 from tomophantom.supp.artifacts import _Artifacts_
 
 # forming dictionaries with artifact types
-_noise_ =  {'type' : 'Poisson',
-            'sigma' : 10000, # noise amplitude
-            'seed' : 0}
+_noise_ =  {'noise_type' : 'Poisson',
+            'noise_sigma' : 10000, # noise amplitude
+            'noise_seed' : 0}
 
-noisy_sino = _Artifacts_(sino_an, _noise_, _zingers_={}, _stripes_={}, _sinoshifts_= {})
+noisy_sino = _Artifacts_(sino_an, **_noise_)
 
 plt.figure()
 plt.rcParams.update({'font.size': 21})

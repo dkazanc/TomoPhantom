@@ -79,11 +79,11 @@ print ("Adding noise to projection data")
 from tomophantom.supp.artifacts import _Artifacts_
 
 # forming dictionaries with artifact types
-_noise_ =  {'type' : 'Poisson',
-            'sigma' : 10000, # noise amplitude
-            'seed' : 0}
+_noise_ =  {'noise_type' : 'Poisson',
+            'noise_sigma' : 10000, # noise amplitude
+            'noise_seed' : 0}
 
-projData3D_analyt_noisy = _Artifacts_(projData3D_analyt, _noise_, _zingers_={}, _stripes_={}, _sinoshifts_= {})
+projData3D_analyt_noisy = _Artifacts_(projData3D_analyt, **_noise_)
 
 intens_max = 70
 sliceSel = int(0.5*N_size)
