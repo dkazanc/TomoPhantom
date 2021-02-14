@@ -34,13 +34,13 @@
 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transform of 2D-4D models and also their numerical projections
 
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts, pve and others)
+ ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts, partial volume effect and others)
 
  ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Demos provided to perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
 
 ### **TomoPhantom** prerequisites:
 
- * Python (tested ver. 2.7/3.5/3.6); Cython OR
+ * Python (tested ver. 3.5-3.8); Cython OR
  * [MATLAB](www.mathworks.com/products/matlab/)
  * C compilers: GCC/MinGW/[TDM-GCC](http://tdm-gcc.tdragon.net/)/Visual Studio
  * [CMake](https://cmake.org) (if this installation route is chosen)
