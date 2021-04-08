@@ -2,7 +2,7 @@ name: tomophantom
 channels:
   - conda-forge
   - defaults
-  - dkazanc
+  - savu-dep
 dependencies:
   - numpy
   - tomophantom
