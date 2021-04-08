@@ -1,0 +1,10 @@
+name: tomophantom
+channels:
+  - conda-forge
+  - defaults
+  - dkazanc
+dependencies:
+  - numpy
+  - tomophantom
+  - tomobar
+  - matplotlib-base
