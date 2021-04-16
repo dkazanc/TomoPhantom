@@ -34,6 +34,9 @@
  * Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts, partial volume effect and others)
  * Perform reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.
 
+### Try **TomoPhantom** now:
+Run TomoPhantom in Binder [HERE](https://mybinder.org/v2/gh/dkazanc/TomoPhantom/HEAD)
+
 ### **TomoPhantom** prerequisites:
 
  * Python (tested ver. 3.5-3.8); Cython OR
