@@ -35,7 +35,7 @@
  * Perform reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.
 
 ### Try **TomoPhantom** now:
-Run TomoPhantom in Binder [HERE](https://mybinder.org/v2/gh/dkazanc/TomoPhantom/HEAD)
+Run TomoPhantom in Binder [HERE](https://mybinder.org/v2/gh/dkazanc/TomoPhantom/HEAD) with jupyter-notebooks in Demos/Python/jupyter-notebooks
 
 ### **TomoPhantom** prerequisites:
 
