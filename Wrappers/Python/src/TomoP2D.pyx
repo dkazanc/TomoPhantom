@@ -79,7 +79,7 @@ def Model(int model_id, int phantom_size, str model_parameters_filename):
     if params[3] == 1:
         ret_val = TomoP2DModel_core(&phantom[0,0], model_id, phantom_size, c_string)
     else:
-        print("The selected model is temporal (3D), use 'ModelTemporal' function instead")
+        raise ValueError("The selected model is temporal (3D), use 'ModelTemporal' function instead")
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -104,7 +104,7 @@ def ModelTemporal(int model_id, int phantom_size, str model_parameters_filename)
     testParams2D(params) # check parameters and terminate before running the core
     cdef np.ndarray[np.float32_t, ndim=3, mode="c"] phantom = np.zeros([params[3], phantom_size, phantom_size], dtype='float32')
     if params[3] == 1:
-        print("The selected model is static (2D), use 'Model' function instead")
+        raise ValueError("The selected model is stationary (2D), use 'Model' function instead")
     else:
         ret_val = TomoP2DModel_core(&phantom[0,0,0], model_id, phantom_size, c_string)
     return phantom
@@ -161,7 +161,7 @@ def ModelSino(int model_id, int image_size, int detector_size, np.ndarray[np.flo
     if params[3] == 1:
         ret_val = TomoP2DModelSino_core(&sinogram[0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
     else:
-        print("The selected model is temporal (3D), use 'ModelSinoTemporal' function instead")
+        raise ValueError("The selected model is temporal (3D), use 'ModelSinoTemporal' function instead")
     return sinogram.transpose()
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -191,7 +191,7 @@ def ModelSinoTemporal(int model_id, int image_size, int detector_size, np.ndarra
     testParams2D(params) # check parameters and terminate before running the core
     cdef np.ndarray[np.float32_t, ndim=3, mode="c"] sinogram = np.zeros([params[3], detector_size, angles.shape[0]], dtype='float32')
     if params[3] == 1:
-        print("The selected model is stationary (2D), use 'ModelSino' function instead")
+        raise ValueError("The selected model is stationary (2D), use 'ModelSino' function instead")
     else:
         ret_val = TomoP2DModelSino_core(&sinogram[0,0,0], model_id, image_size, detector_size, &angles[0], AngTot, CenTypeIn, c_string)
     return sinogram
@@ -236,7 +236,7 @@ def ObjectSino(int image_size, int detector_size, np.ndarray[np.float32_t, ndim=
             
             ret_val = TomoP2DObjectSino_core(&sinogram[0,0], image_size, detector_size, &angles[0], AngTot, CenTypeIn,
                                         objectName,
-                                        C0, y0, x0, a, b, -phi, tt)            
+                                        C0, y0, x0, a, b, -phi, tt)
     return sinogram.transpose()
 @cython.boundscheck(False)
 @cython.wraparound(False)
