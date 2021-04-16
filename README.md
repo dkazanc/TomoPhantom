@@ -11,9 +11,9 @@
     </tr>
 </table>
 
-| Master | Development | Anaconda binaries |
-|--------|-------------|-------------------|
-| [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom/) | [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom-dev)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom-dev/) | ![conda version](https://anaconda.org/ccpi/tomophantom/badges/version.svg) ![conda last release](https://anaconda.org/ccpi/tomophantom/badges/latest_release_date.svg) [![conda platforms](https://anaconda.org/ccpi/tomophantom/badges/platforms.svg) ![conda dowloads](https://anaconda.org/ccpi/tomophantom/badges/downloads.svg)](https://anaconda.org/ccpi/tomophantom) |
+| Master | Development | Anaconda binaries | Binder |
+|--------|-------------|-------------------|--------|
+| [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom/) | [![Build Status](https://anvil.softeng-support.ac.uk/jenkins/buildStatus/icon?job=CILsingle/TomoPhantom-dev)](https://anvil.softeng-support.ac.uk/jenkins/job/CILsingle/job/TomoPhantom-dev/) | ![conda version](https://anaconda.org/ccpi/tomophantom/badges/version.svg) ![conda last release](https://anaconda.org/ccpi/tomophantom/badges/latest_release_date.svg) [![conda platforms](https://anaconda.org/ccpi/tomophantom/badges/platforms.svg) ![conda dowloads](https://anaconda.org/ccpi/tomophantom/badges/downloads.svg)](https://anaconda.org/ccpi/tomophantom) | [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dkazanc/TomoPhantom/HEAD) |
 
 <div align="center">
   <img src="docs/img/TomoPhantomLogo.png" height="350"><br>
@@ -23,20 +23,16 @@
 ****************
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
-        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects.        
+        <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. Specifically, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects.
         </p>
  </div>
 
 ### What **TomoPhantom** can do:         
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 2D models made of Gaussians, parabolas, ellipses, cones and rectangulars
-
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Generate 3D models and 4D (temporal) extensions
-
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Calculate analytical Radon transform of 2D-4D models and also their numerical projections
-
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts, partial volume effect and others)
-
- ![#1589F0](https://placehold.it/15/1589F0/000000?text=+) Demos provided to perform 2D-4D reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a>. Using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.  
+ * Generate 2D synthetic phantoms made of Gaussians, parabolas, ellipses, cones and rectangulars.
+ * Generate 3D synthetic phantom and 4D (temporal) extensions.
+ * Calculate analytical Radon transform of 2D-4D models and also their numerical projections.
+ * Model Gaussian or Poisson noise and some typical acquisition artifacts (zingers, rings, shifts, partial volume effect and others)
+ * Perform reconstructions avoiding <a href="http://www.sciencedirect.com/science/article/pii/S0377042705007296">'Inverse Crime'</a> using <a href="https://github.com/dkazanc/ToMoBAR">ToMoBAR</a>, <a href="http://www.astra-toolbox.com/">ASTRA-toolbox</a> or <a href="http://tomopy.readthedocs.io/en">TomoPy</a> packages.
 
 ### **TomoPhantom** prerequisites:
 

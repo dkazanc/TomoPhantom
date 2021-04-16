@@ -1,0 +1,10 @@
+name: tomophantom
+channels:
+  - conda-forge
+  - defaults
+  - savu-dep
+dependencies:
+  - numpy
+  - tomophantom
+  - tomobar
+  - matplotlib-base

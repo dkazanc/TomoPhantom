@@ -84,7 +84,7 @@ def Model(int model_id, phantom_size, str model_parameters_filename):
     if params[3] == 1:
         ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, N3, N2, N1, 0l, N1, c_string)
     else:
-        print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
+        raise ValueError("The selected model is temporal (4D), use 'ModelTemporal' function instead")
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -133,7 +133,7 @@ def ModelSub(int model_id, phantom_size, sub_index, str model_parameters_filenam
     if params[3] == 1:
         ret_val = TomoP3DModel_core(&phantom[0,0,0], model_id, N3, N2, N1, Z1, Z2, c_string)
     else:
-        print("The selected model is temporal (4D), use 'ModelTemporal' function instead")
+        raise ValueError("The selected model is temporal (4D), use 'ModelTemporal' function instead")
     return phantom
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -164,7 +164,7 @@ def ModelTemporal(int model_id, phantom_size, str model_parameters_filename):
     testParams3D(params) # check parameters and terminate before running the core
     cdef np.ndarray[np.float32_t, ndim=4, mode="c"] phantom = np.zeros([params[3], N1, N2, N3], dtype='float32')
     if params[3] == 1:
-        print("The selected model is stationary (3D), use 'Model' function instead")
+        raise ValueError("The selected model is stationary (3D), use 'Model' function instead")
     else:
         ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, N3, N2, N1, 0l, N1, c_string)
     return phantom
@@ -212,7 +212,7 @@ def ModelTemporalSub(int model_id, phantom_size, sub_index, str model_parameters
     testParams3D(params) # check parameters and terminate before running the core
     cdef np.ndarray[np.float32_t, ndim=4, mode="c"] phantom = np.zeros([params[3], sub_size, N2, N3], dtype='float32')
     if params[3] == 1:
-        print("The selected model is stationary (3D), use 'Model' function instead")
+        raise ValueError("The selected model is stationary (3D), use 'Model' function instead")
     else:
         ret_val = TomoP3DModel_core(&phantom[0,0,0,0], model_id, N3, N2, N1, Z1, Z2, c_string)
     return phantom
@@ -227,7 +227,7 @@ def Object(phantom_size, objlist):
     param: obj_params -- object parameters list
     param: phantom_size -- a  scalar or a tuple with phantom dimesnsions. Can be phantom_size[1] (a scalar for the cubic phantom), or phantom_size[3] = [N1,N2,N3]  
     
-    returns: numpy float32 phantom array    
+    returns: numpy float32 phantom array
     """  
     cdef long N1,N2,N3
     if type(phantom_size) == tuple:
@@ -298,7 +298,7 @@ def ModelSino(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarray[np.flo
     if params[3] == 1:
         ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot, c_string)
     else:
-        print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
+        raise ValueError("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
     return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -330,7 +330,7 @@ def ModelSinoTemporal(int model_id, phantom_size, Horiz_det, Vert_det, np.ndarra
     testParams3D(params) # check parameters and terminate before running the core
     cdef np.ndarray[np.float32_t, ndim=4, mode="c"] projdata = np.zeros([params[3], AngTot, Vert_det, Horiz_det], dtype='float32')
     if params[3] == 1:
-        print("The selected model is stationary (3D), use 'ModelSino' function instead")
+        raise ValueError("The selected model is stationary (3D), use 'ModelSino' function instead")
     else:
         ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, 0l, Vert_det, phantom_size, &angles[0], AngTot, c_string)
     return np.swapaxes(projdata,1,2)
@@ -382,7 +382,7 @@ def ModelSinoSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_index, np.
     if params[3] == 1:
         ret_val = TomoP3DModelSino_core(&projdata[0,0,0], model_id, Horiz_det, Vert_det, Z1, Z2, phantom_size, &angles[0], AngTot, c_string)
     else:
-        print("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
+        raise ValueError("The selected model is temporal (4D), use 'ModelTemporalSino' function instead")
     return np.swapaxes(projdata,0,1)
 @cython.boundscheck(False)
 @cython.wraparound(False)
@@ -430,7 +430,7 @@ def ModelSinoTemporalSub(int model_id, phantom_size, Horiz_det, Vert_det, sub_in
     testParams3D(params) # check parameters and terminate before running the core
     cdef np.ndarray[np.float32_t, ndim=4, mode="c"] projdata = np.zeros([params[3], AngTot, sub_size, Horiz_det], dtype='float32')
     if params[3] == 1:
-        print("The selected model is stationary (3D), use 'ModelSino' function instead")
+        raise ValueError("The selected model is stationary (3D), use 'ModelSino' function instead")
     else:
         ret_val = TomoP3DModelSino_core(&projdata[0,0,0,0], model_id, Horiz_det, Vert_det, Z1, Z2, phantom_size, &angles[0], AngTot, c_string)
     return np.swapaxes(projdata,1,2)
