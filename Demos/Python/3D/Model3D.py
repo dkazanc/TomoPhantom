@@ -17,7 +17,7 @@ import tomophantom
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 13 # select a model number from the library
+model = 11 # select a model number from the library
 N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
