@@ -23,6 +23,9 @@ def _Artifacts_(data, **artefacts_dict):
     - ['stripes_variability']: variability multiplier to incorporate the change of intensity in stripe
     - ['sinoshifts_maxamplitude']: misalignment (in int pixels) defines the maximal amplitude of each angular deviation
     - ['pve_strength']: the strength of partial volume effect, responsible for the limited resolution
+    - ['fresnel_dist_observation']: distance for obervation for fresnel propagator
+    - ['fresnel_scale_factor']: fresnel propagator sacaling
+    - ['fresnel_wavelenght']: fresnel propagator wavelenght
     """
     ####### NOISE DICTIONARY########
     _noise_ = {}
@@ -373,7 +376,7 @@ def fresnel_propagator(data, dist_observation, scale_factor, wavelenght):
             #Correct the low and high frequencies
             fshift=np.fft.fftshift(f)
             #multiply both matrices: Fourier transform and the propagator matrices.
-            field=fshift*propagator
+            field=fshift*np.transpose(propagator)
             #Calculate the inverse Fourier transform
             field2=np.fft.ifft2(field)
             data_fresnel[:,x,:] = np.abs(field2)
