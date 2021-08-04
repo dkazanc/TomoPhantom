@@ -6,7 +6,7 @@
         </div>
         </td>
         <td>
-        <font size="5"><b> TomoPhantom </b> <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel-beam geometry) for various image processing (e.g. tomographic reconstruction, denoising, deblurring, segmentation, etc.) and machine/deep learning tasks (e.g. segmentation, classification, clustering, etc.). </font>
+        <font size="5"><b> TomoPhantom </b> <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox written in C language to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical projection data (parallel-beam geometry) for various image processing (e.g. tomographic reconstruction, denoising, deblurring, segmentation, etc.) and machine/<a href="https://github.com/dkazanc/U-Net-tomography">deep learning</a> tasks (e.g. segmentation, classification, clustering, etc.). </font>
         </td>
     </tr>
 </table>
@@ -135,5 +135,6 @@ TomoPhantom is released under [Apache License v.2](http://www.apache.org/license
 ## Applications:
 * [TOmographic MOdel-BAsed Reconstruction (ToMoBAR)](https://github.com/dkazanc/ToMoBAR)
 * [Joint image reconstruction method with correlative multi-channel prior for X-ray spectral computed tomography](https://github.com/dkazanc/multi-channel-X-ray-CT)
+* [Deep learning segmentation of synthetic tomographic data using Pytorch U-net](https://github.com/dkazanc/U-Net-tomography)
 
 Software related questions/comments please e-mail to Daniil Kazantsev at dkazanc@hotmail.com
