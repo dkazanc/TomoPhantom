@@ -9,7 +9,7 @@ import random
 
 def _Artifacts_(data, **artefacts_dict):
     """
-    The following keys in dictionaries can be provided to simulate noise and artefacts for 2D and 3D-projection data:
+    The following keys in dictionaries can be provided to simulate noise and artifacts for 2D and 3D-projection data:
     - ['noise_type']: 'Poisson' or 'Gaussian'
     - ['noise_amplitude']: photon flux (Poisson) or variance for Gaussian
     - ['noise_seed']: seeds for noise (integers), None means random generation
@@ -27,6 +27,11 @@ def _Artifacts_(data, **artefacts_dict):
     - ['fresnel_scale_factor']: fresnel propagator sacaling
     - ['fresnel_wavelenght']: fresnel propagator wavelenght
     """
+    ####### VERBOSE ########
+    if ('verbose' not in artefacts_dict):
+        verbose=True
+    else:
+        verbose=artefacts_dict['verbose']
     ####### NOISE DICTIONARY########
     _noise_ = {}
     if ('noise_type' not in artefacts_dict):
@@ -34,7 +39,7 @@ def _Artifacts_(data, **artefacts_dict):
     else:
         _noise_['noise_type'] = artefacts_dict['noise_type']
     if ('noise_amplitude' not in artefacts_dict):
-        _noise_['noise_amplitude'] = 10000
+        _noise_['noise_amplitude'] = 1e5
     else:
          _noise_['noise_amplitude'] = artefacts_dict['noise_amplitude']
     if ('noise_seed' not in artefacts_dict):
@@ -108,17 +113,20 @@ def _Artifacts_(data, **artefacts_dict):
     # PARTIAL VOLUME EFFECT
     if _pve_['pve_strength'] is not None:
         sino_artifacts = pve(data=data, pve_strength=_pve_['pve_strength'])
-        print("Partial volume effect (PVE) have been simulated.")
+        if verbose is True:
+            print("Partial volume effect (PVE) has been simulated.")
     else:
         sino_artifacts = data
     # FRESNEL PROPAGATOR
     if _fresnel_propagator_['fresnel_dist_observation'] is not None:
         sino_artifacts = fresnel_propagator(data=sino_artifacts, dist_observation=_fresnel_propagator_['fresnel_dist_observation'], scale_factor = _fresnel_propagator_['fresnel_scale_factor'], wavelenght = _fresnel_propagator_['fresnel_wavelenght'])
-        print("Fresnel propagator have been simulated.")
+        if verbose is True:
+            print("Fresnel propagator has been simulated.")
     # ZINGERS
     if _zingers_['zingers_percentage'] is not None:
         sino_artifacts = zingers(data=sino_artifacts, percentage=_zingers_['zingers_percentage'], modulus = _zingers_['zingers_modulus'])
-        print("Zingers have been added to the data.")
+        if verbose is True:
+            print("Zingers have been added to the data.")
     # STRIPES
     if _stripes_['stripes_percentage'] is not None:
         sino_artifacts = stripes(data=sino_artifacts,\
@@ -127,15 +135,18 @@ def _Artifacts_(data, **artefacts_dict):
                                  intensity_thresh = _stripes_['stripes_intensity'],\
                                  stripe_type = _stripes_['stripes_type'],\
                                  variability = _stripes_['stripes_variability'])
-        print("Stripes have been simulated.")
+        if verbose is True:
+            print("Stripes leading to ring artefacts have been simulated.")
     # SINOSHIFTS
     if _sinoshifts_['sinoshifts_maxamplitude'] is not None:
         [sino_artifacts, shifts] = sinoshifts(data=sino_artifacts, maxamplitude = _sinoshifts_['sinoshifts_maxamplitude'])
-        print("Sinogram shifts have been simulated.")
+        if verbose is True:
+            print("Sinogram shifts have been simulated.")
     # NOISE
     if _noise_['noise_type']  is not None:
         sino_artifacts = noise(data=sino_artifacts, sigma=_noise_['noise_amplitude'], noisetype = _noise_['noise_type'], seed = _noise_['noise_seed'], prelog=_noise_['noise_prelog'])
-        print("{} noise have been added to the data.".format(_noise_['noise_type']))
+        if verbose is True:
+            print("{} noise has been added to the data.".format(_noise_['noise_type']))
 
     if _sinoshifts_['sinoshifts_maxamplitude'] is not None:
         return [sino_artifacts,shifts]
@@ -260,9 +271,9 @@ def zingers(data, percentage, modulus):
     return sino_zingers
 
 def noise(data, sigma, noisetype, seed, prelog):
-    # Adding random noise to data
+    # Adding random noise to data (adapted from LD-CT simulator)
     # noisetype = None, # 'Gaussian', 'Poisson' or None
-    # sigma = 10000, # photon intensity (Poisson) or variance for Gaussian
+    # sigma = 10000, # photon flux (Poisson) or variance for Gaussian
     # seed = 0, # seeds for noise
     # prelog: None or True (get the raw pre-log data)
     sino_noisy = data.copy()
@@ -275,13 +286,16 @@ def noise(data, sigma, noisetype, seed, prelog):
     elif noisetype == 'Poisson':
         # add Poisson noise
         maxSino = np.max(data)
-        if maxSino > 0:
-            sino_noisy = data/maxSino
-            dataExp = sigma*np.exp(-sino_noisy)  # noiseless raw data
-            sino_raw = np.random.poisson(dataExp) #adding Poisson noise
-            div_res = np.float32(sino_raw)/np.max(sino_raw)
-            sino_noisy = -np.log(div_res)*maxSino # log corrected data
-            sino_noisy[sino_noisy<0] = 0
+        if maxSino > 0: 
+            ri = 1.0
+            k = 0.1924 # low-dose 17 mAs it can be determined by 2015 TNS paper
+            sig = np.sqrt(11) #standard variance of electronic noise, a characteristic of CT scanner
+            sino_noisy=data/maxSino
+            yb = k*sigma*np.exp(-sino_noisy) + ri # exponential transform to incident flux
+            sino_raw = np.random.poisson(yb) + np.sqrt(sig)*np.reshape(np.random.randn(np.size(yb)),np.shape(yb))
+            li_hat = -np.log((sino_raw-ri)/sigma)*maxSino # log corrected data
+            li_hat[(sino_raw-ri)<=0] = 0.0
+            sino_noisy = li_hat.copy()
     else:
         print ("Select 'Gaussian' or 'Poisson' for noise type")
     if prelog is True:
