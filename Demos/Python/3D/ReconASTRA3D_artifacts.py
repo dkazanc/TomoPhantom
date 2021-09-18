@@ -80,7 +80,7 @@ from tomophantom.supp.artifacts import _Artifacts_
 
 # forming dictionaries with artifact types
 _noise_ =  {'noise_type' : 'Poisson',
-            'noise_sigma' : 10000, # noise amplitude
+            'noise_amplitude' : 10000, # noise amplitude
             'noise_seed' : 0}
 
 _stripes_ = {'stripes_percentage' : 1.2,
@@ -92,7 +92,7 @@ _stripes_ = {'stripes_percentage' : 1.2,
 
 projData3D_analyt_noisy = _Artifacts_(projData3D_analyt, **_noise_, **_stripes_)
 
-intens_max = 70
+intens_max = np.max(projData3D_analyt_noisy)
 sliceSel = int(0.5*N_size)
 plt.figure() 
 plt.subplot(131)

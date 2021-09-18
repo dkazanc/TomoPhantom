@@ -80,7 +80,7 @@ from tomophantom.supp.artifacts import _Artifacts_
 
 # forming dictionaries with artifact types
 _noise_ =  {'noise_type' : 'Poisson',
-            'noise_sigma' : 10000, # noise amplitude
+            'noise_amplitude' : 10000, # noise amplitude
             'noise_seed' : 0}
 
 projData3D_analyt_noisy = _Artifacts_(projData3D_analyt, **_noise_)

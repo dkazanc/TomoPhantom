@@ -59,7 +59,7 @@ from tomophantom.supp.artifacts import _Artifacts_
 plt.close('all')
 # forming dictionaries with artifact types
 _noise_ =  {'noise_type' : 'Poisson',
-            'noise_sigma' : 10000, # noise amplitude
+            'noise_amplitude' : 10000, # noise amplitude
             'noise_seed' : 0}
 # misalignment dictionary
 _sinoshifts_ = {'sinoshifts_maxamplitude' : 10}
@@ -250,7 +250,7 @@ plt.show()
 from tomophantom.supp.artifacts import _Artifacts_
 # forming dictionaries with artefact types
 _noise_ =  {'noise_type' : 'Poisson',
-            'noise_sigma' : 200000, # noise amplitude
+            'noise_amplitude' : 200000, # noise amplitude
             'noise_seed' : 0}
 _fresnel_propagator_ = {'fresnel_dist_observation' : 20,
                         'fresnel_scale_factor' : 10,
