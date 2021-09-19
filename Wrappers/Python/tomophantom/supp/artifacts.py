@@ -288,10 +288,9 @@ def noise(data, sigma, noisetype, seed, prelog):
         maxSino = np.max(data)
         if maxSino > 0: 
             ri = 1.0
-            k = 0.1924 # low-dose 17 mAs it can be determined by 2015 TNS paper
             sig = np.sqrt(11) #standard variance of electronic noise, a characteristic of CT scanner
             sino_noisy=data/maxSino
-            yb = k*sigma*np.exp(-sino_noisy) + ri # exponential transform to incident flux
+            yb = sigma*np.exp(-sino_noisy) + ri # exponential transform to incident flux
             sino_raw = np.random.poisson(yb) + np.sqrt(sig)*np.reshape(np.random.randn(np.size(yb)),np.shape(yb))
             li_hat = -np.log((sino_raw-ri)/sigma)*maxSino # log corrected data
             li_hat[(sino_raw-ri)<=0] = 0.0
