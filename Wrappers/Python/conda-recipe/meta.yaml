@@ -3,7 +3,6 @@ package:
   version: {{ environ.get('CIL_VERSION', '') }}
 
 build:
-  skip: True # [py==38 and np==115]
   preserve_egg_dir: False
   number: 0
   script_env:
@@ -21,8 +20,7 @@ requirements:
   run:
     - {{ pin_compatible('numpy', min_pin='x.x', max_pin='x.x') }}
     - python
-    - vc 14 # [win and py36]
-    - vc 14 # [win and py35]
+    - vc 14 # [win]
     - libgcc-ng # [unix]
 
 about:
