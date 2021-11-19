@@ -3,7 +3,6 @@ package:
   version: {{ environ.get('CIL_VERSION', '') }}
 
 build:
-  skip: True # [py==36 and np!=115]
   preserve_egg_dir: False
   number: 0
   script_env:
