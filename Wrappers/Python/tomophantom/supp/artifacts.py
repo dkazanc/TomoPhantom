@@ -176,11 +176,11 @@ def stripes(data, percentage, maxthickness, intensity_thresh, stripe_type, varia
     if 0 < percentage <= 100:
         pass
     else:
-        raise ("percentage must be larger than zero but smaller than 100")
+        raise ValueError ("percentage must be larger than zero but smaller than 100")
     if 0 <= maxthickness <= 10:
         pass
     else:
-        raise ("maximum thickness must be in [0,10] range")
+        raise ValueError ("maximum thickness must be in [0,10] range")
     if ((stripe_type != 'partial')):
         stripe_type = 'full'
     sino_stripes = data.copy()
@@ -249,11 +249,11 @@ def zingers(data, percentage, modulus):
     if 0.0 < percentage <= 100.0:
         pass
     else:
-        raise ("percentage must be larger than zero but smaller than 100")
+        raise ValueError ("percentage must be larger than zero but smaller than 100")
     if (modulus > 0):
         pass
     else:
-        raise ("Modulus integer must be positive")
+        raise ValueError ("Modulus integer must be positive")
     sino_zingers = data.copy()
     length_sino = np.size(sino_zingers)
     num_values = int((length_sino)*(np.float32(percentage)/100.0))
@@ -374,7 +374,7 @@ def pve(data, pve_strength):
     if (pve_strength > 0):
         pass
     else:
-        raise ("Smoothing kernel must be positive")
+        raise ValueError ("Smoothing kernel must be positive")
     if (data.ndim == 2):
         (anglesDim, DetectorsDimH) = np.shape(data)
         for x in range(anglesDim):

@@ -37,7 +37,7 @@ plt.show()
 # Projection geometry related parameters:
 Horiz_det = int(2*N_size) # detector column count (horizontal)
 Vert_det = N_size # detector row count (vertical) (no reason for it to be > N)
-angles_num = int(0.5*np.pi*N_size); # angles number
+angles_num = int(0.5*np.pi*N_size) # angles number
 angles = np.linspace(0.0,179.9,angles_num,dtype='float32') # in degrees
 angles_rad = angles*(np.pi/180.0)
 
