@@ -86,7 +86,86 @@ plt.imshow(prj[:,:,sliceSel],vmin=0, vmax=intens_max)
 plt.title('Tangentogram shifted view')
 plt.show()
 #%%
-# perform reconstruction
+# scale the data first
+scl = max(abs(prj.max()), abs(prj.min()))
+prj /= scl
+#%%
+from tomobar.methodsDIR import RecToolsDIR
+RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det, # Horizontal detector dimension
+                    DetectorsDimV = Vert_det,        # Vertical detector dimension (3D case)
+                    CenterRotOffset = 0.0,           # Center of Rotation scalar
+                    AnglesVec = angles_rad,          # A vector of projection angles in radians
+                    ObjSize = N_size,                # Reconstructed object dimensions (scalar)
+                    device_projector='gpu')
+
+recon_nocorr = RectoolsDIR.FBP(prj)
+
+sliceSel = int(0.5*N_size)
+plt.figure() 
+plt.subplot(131)
+plt.imshow(recon_nocorr[sliceSel,:,:])
+plt.title('3D Recon no correction, axial view')
+
+plt.subplot(132)
+plt.imshow(recon_nocorr[:,sliceSel,:])
+plt.title('3D Recon no correction, coronal view')
+
+plt.subplot(133)
+plt.imshow(recon_nocorr[:,:,sliceSel])
+plt.title('3D Recon no correction, sagittal view')
+plt.show()
+
+#%%
+######################################################
+############# Identify projection shifts #############
+######################################################
+# Based on alignment algorithm by D. Gursoy (see TomoPy package)
+# use phase cross correlation to identify shifts
+from skimage.registration import phase_cross_correlation
+
+iter_number = 20 # the number of algorithm iterations
+shifts_estimated = np.zeros([angles_rad.size, 2], dtype='float32')
+recon = recon_nocorr.copy()
+for iteration in range(0, iter_number):    
+
+    # re-project the reconstructed image
+    reproj = RectoolsDIR.FORWPROJ(recon)   
+
+    for m in range(0, angles_rad.size):    
+        # Register current projection in sub-pixel precision
+        shift, error, diffphase = phase_cross_correlation(prj[:,m,:], reproj[:,m,:], upsample_factor=20)        
+        shifts_estimated[m,0] += shift[1]
+        shifts_estimated[m,1] += shift[0]
+   
+    # reconstruct with the estimated shifts
+    RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,     # Horizontal detector dimension
+                        DetectorsDimV = Vert_det,            # Vertical detector dimension (3D case)
+                        CenterRotOffset = -shifts_estimated, # Center of Rotation scalar + shifts passed
+                        AnglesVec = angles_rad,              # A vector of projection angles in radians
+                        ObjSize = N_size,                    # Reconstructed object dimensions (scalar)
+                        device_projector='gpu')
+    
+    recon = RectoolsDIR.FBP(prj)
+
+sliceSel = int(0.5*N_size)
+plt.figure() 
+plt.subplot(131)
+plt.imshow(recon[sliceSel,:,:])
+plt.title('3D estimated Recon, axial view')
+
+plt.subplot(132)
+plt.imshow(recon[:,sliceSel,:])
+plt.title('3D estimated Recon, coronal view')
+
+plt.subplot(133)
+plt.imshow(recon[:,:,sliceSel])
+plt.title('3D estimated Recon, sagittal view')
+plt.show()
+#%%
+# scale back the data 
+prj *= scl
+#%%
+# perform reconstruction with EXACT shifts 
 from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det, # Horizontal detector dimension
                     DetectorsDimV = Vert_det,        # Vertical detector dimension (3D case)
@@ -95,21 +174,20 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det, # Horizontal detector dimen
                     ObjSize = N_size,                # Reconstructed object dimensions (scalar)
                     device_projector='gpu')
 
-FBPrec = RectoolsDIR.FBP(prj)
+FBPrec_exact = RectoolsDIR.FBP(prj)
 
 sliceSel = int(0.5*N_size)
-#plt.gray()
 plt.figure() 
 plt.subplot(131)
-plt.imshow(FBPrec[sliceSel,:,:])
-plt.title('3D Recon, axial view')
+plt.imshow(FBPrec_exact[sliceSel,:,:])
+plt.title('3D exact Recon, axial view')
 
 plt.subplot(132)
-plt.imshow(FBPrec[:,sliceSel,:])
-plt.title('3D Recon, coronal view')
+plt.imshow(FBPrec_exact[:,sliceSel,:])
+plt.title('3D exact Recon, coronal view')
 
 plt.subplot(133)
-plt.imshow(FBPrec[:,:,sliceSel])
-plt.title('3D Recon, sagittal view')
+plt.imshow(FBPrec_exact[:,:,sliceSel])
+plt.title('3D exact Recon, sagittal view')
 plt.show()
 #%%
