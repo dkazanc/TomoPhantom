@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #    Note that the TomoPhantom package is released under Apache License, Version 2.0
 #    @author: Daniil Kazantsev
-#    latest update: 26.01.2021
+#    latest update: 29.11.2021
 
 import numpy as np
 import random
@@ -21,7 +21,8 @@ def _Artifacts_(data, **artefacts_dict):
     - ['stripes_intensity']: controls the intensity levels of stripes
     - ['stripe_type']: stripe types can be 'partial' or 'full'
     - ['stripes_variability']: variability multiplier to incorporate the change of intensity in stripe
-    - ['sinoshifts_maxamplitude']: misalignment (in int pixels) defines the maximal amplitude of each angular deviation
+    - ['datashifts_maxamplitude_pixel']: controls pixel-wise (integer) misalignment in data
+    - ['datashifts_maxamplitude_subpixel']: controls sub-pixel (floating point) misalignment in data
     - ['pve_strength']: the strength of partial volume effect, responsible for the limited resolution
     - ['fresnel_dist_observation']: distance for obervation for fresnel propagator
     - ['fresnel_scale_factor']: fresnel propagator sacaling
@@ -82,12 +83,16 @@ def _Artifacts_(data, **artefacts_dict):
         _stripes_['stripes_variability'] = 0.0
     else:
         _stripes_['stripes_variability'] = artefacts_dict['stripes_variability']
-    ####### SINOSHIFTS ########
-    _sinoshifts_ = {}
-    if ('sinoshifts_maxamplitude' not in artefacts_dict):
-        _sinoshifts_['sinoshifts_maxamplitude'] = None
+    ####### DATASHIFTS ########
+    _datashifts_ = {}
+    if ('datashifts_maxamplitude_pixel' not in artefacts_dict):
+        _datashifts_['datashifts_maxamplitude_pixel'] = None
     else:
-        _sinoshifts_['sinoshifts_maxamplitude'] = artefacts_dict['sinoshifts_maxamplitude']
+        _datashifts_['datashifts_maxamplitude_pixel'] = artefacts_dict['datashifts_maxamplitude_pixel']
+    if ('datashifts_maxamplitude_subpixel' not in artefacts_dict):
+        _datashifts_['datashifts_maxamplitude_subpixel'] = None
+    else:
+        _datashifts_['datashifts_maxamplitude_subpixel'] = artefacts_dict['datashifts_maxamplitude_subpixel']
     ####### PVE ########
     _pve_ = {}
     if ('pve_strength' not in artefacts_dict):
@@ -137,18 +142,22 @@ def _Artifacts_(data, **artefacts_dict):
                                  variability = _stripes_['stripes_variability'])
         if verbose is True:
             print("Stripes leading to ring artefacts have been simulated.")
-    # SINOSHIFTS
-    if _sinoshifts_['sinoshifts_maxamplitude'] is not None:
-        [sino_artifacts, shifts] = sinoshifts(data=sino_artifacts, maxamplitude = _sinoshifts_['sinoshifts_maxamplitude'])
+    # DATASHIFTS
+    if _datashifts_['datashifts_maxamplitude_pixel'] is not None:
+        [sino_artifacts, shifts] = datashifts(data=sino_artifacts, maxamplitude = _datashifts_['datashifts_maxamplitude_pixel'])
         if verbose is True:
-            print("Sinogram shifts have been simulated.")
+            print("Data shifts have been simulated.")
+    if _datashifts_['datashifts_maxamplitude_subpixel'] is not None:
+        [sino_artifacts, shifts] = datashifts_subpixel(data=sino_artifacts, maxamplitude = _datashifts_['datashifts_maxamplitude_subpixel'])
+        if verbose is True:
+            print("Data shifts (in subpixel precision) have been simulated.")
     # NOISE
     if _noise_['noise_type']  is not None:
         sino_artifacts = noise(data=sino_artifacts, sigma=_noise_['noise_amplitude'], noisetype = _noise_['noise_type'], seed = _noise_['noise_seed'], prelog=_noise_['noise_prelog'])
         if verbose is True:
             print("{} noise has been added to the data.".format(_noise_['noise_type']))
 
-    if _sinoshifts_['sinoshifts_maxamplitude'] is not None:
+    if (_datashifts_['datashifts_maxamplitude_pixel']) or (_datashifts_['datashifts_maxamplitude_subpixel']) is not None:
         return [sino_artifacts,shifts]
     else:
         return sino_artifacts
@@ -167,11 +176,11 @@ def stripes(data, percentage, maxthickness, intensity_thresh, stripe_type, varia
     if 0 < percentage <= 100:
         pass
     else:
-        raise ("percentage must be larger than zero but smaller than 100")
+        raise ValueError ("percentage must be larger than zero but smaller than 100")
     if 0 <= maxthickness <= 10:
         pass
     else:
-        raise ("maximum thickness must be in [0,10] range")
+        raise ValueError ("maximum thickness must be in [0,10] range")
     if ((stripe_type != 'partial')):
         stripe_type = 'full'
     sino_stripes = data.copy()
@@ -240,11 +249,11 @@ def zingers(data, percentage, modulus):
     if 0.0 < percentage <= 100.0:
         pass
     else:
-        raise ("percentage must be larger than zero but smaller than 100")
+        raise ValueError ("percentage must be larger than zero but smaller than 100")
     if (modulus > 0):
         pass
     else:
-        raise ("Modulus integer must be positive")
+        raise ValueError ("Modulus integer must be positive")
     sino_zingers = data.copy()
     length_sino = np.size(sino_zingers)
     num_values = int((length_sino)*(np.float32(percentage)/100.0))
@@ -286,7 +295,7 @@ def noise(data, sigma, noisetype, seed, prelog):
     elif noisetype == 'Poisson':
         # add Poisson noise
         maxSino = np.max(data)
-        if maxSino > 0: 
+        if maxSino > 0:
             ri = 1.0
             sig = np.sqrt(11) #standard variance of electronic noise, a characteristic of CT scanner
             sino_noisy=data/maxSino
@@ -302,9 +311,10 @@ def noise(data, sigma, noisetype, seed, prelog):
     else:
         return sino_noisy
 
-def sinoshifts(data, maxamplitude):
+def datashifts(data, maxamplitude):
     # A function to add random shifts to sinogram rows (an offset for each angular position)
-    # maxamplitude (integer pixels) defines the maximal amplitude of each angular deviation
+    # or shift 2D projections
+    # maxamplitude defines the maximal amplitude of each shift in pixels
     if (data.ndim == 2):
         (anglesDim, DetectorsDimH) = np.shape(data)
         shifts = np.zeros(anglesDim, dtype='int8') # the vector of shifts
@@ -316,7 +326,7 @@ def sinoshifts(data, maxamplitude):
     non = lambda s: s if s<0 else None
     mom = lambda s: max(0,s)
     for x in range(anglesDim):
-        rand_shift = random.randint(-maxamplitude,maxamplitude)  #generate random shift
+        rand_shift = random.randint(-maxamplitude,maxamplitude)  #generate random shift (int)
         if (data.ndim == 2):
             shifts[x] = rand_shift
             projection = data[x,:] # extract 1D projection
@@ -324,15 +334,39 @@ def sinoshifts(data, maxamplitude):
             projection_shift[mom(rand_shift):non(rand_shift)] = projection[mom(-rand_shift):non(-rand_shift)]
             sino_shifts[x,:] = projection_shift
         else:
-            rand_shift2 = random.randint(-maxamplitude,maxamplitude)  #generate random shift
-            shifts[x,0] = rand_shift
-            shifts[x,1] = rand_shift2
+            rand_shift2 = random.randint(-maxamplitude,maxamplitude)  #generate random shift (int)
+            shifts[x,0] = rand_shift2
+            shifts[x,1] = rand_shift
             projection2D = data[:,x,:] # extract 2D projection
             projection2D_shift = np.zeros(np.shape(projection2D),dtype='float32')
             projection2D_shift[mom(rand_shift):non(rand_shift), mom(rand_shift2):non(rand_shift2)] = projection2D[mom(-rand_shift):non(-rand_shift),mom(-rand_shift2):non(-rand_shift2)]
             sino_shifts[:,x,:] = projection2D_shift
     return [sino_shifts,shifts]
 
+def datashifts_subpixel(data, maxamplitude):
+    # A function to add random subpixel shifts to 3D projection data
+    # maxamplitude defines the maximal amplitude of each shift in subpixel resolution
+    from skimage import transform as tf
+    if (data.ndim == 2):
+        print ("Available for 3D data only, skipped applying")
+    else:
+        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        shifts = np.zeros([anglesDim,2], dtype='float32') # the 2D vector of shifts
+
+    sino_shifts = np.zeros(np.shape(data),dtype='float32')
+    for x in range(anglesDim):
+        random_shift_x = random.uniform(-maxamplitude,maxamplitude)  #generate a random floating point number
+        random_shift_y = random.uniform(-maxamplitude,maxamplitude)  #generate a random floating point number
+
+        projection2D = data[:,x,:] # extract 2D projection
+        tform = tf.SimilarityTransform(translation=(-random_shift_x, -random_shift_y))
+        projection_shifted = tf.warp(projection2D, tform, order=5)
+
+        shifts[x,0] = random_shift_x
+        shifts[x,1] = random_shift_y
+
+        sino_shifts[:,x,:] = projection_shifted
+    return [sino_shifts,shifts]
 
 def pve(data, pve_strength):
     from scipy.ndimage import gaussian_filter
@@ -340,7 +374,7 @@ def pve(data, pve_strength):
     if (pve_strength > 0):
         pass
     else:
-        raise ("Smoothing kernel must be positive")
+        raise ValueError ("Smoothing kernel must be positive")
     if (data.ndim == 2):
         (anglesDim, DetectorsDimH) = np.shape(data)
         for x in range(anglesDim):
@@ -383,7 +417,7 @@ def fresnel_propagator(data, dist_observation, scale_factor, wavelenght):
         U,V = np.meshgrid(u,v)
         #Define the propagation matrix
         propagator=np.exp(2*np.pi*1j*(dist_observation/scale_factor)*np.sqrt((1/wavelenght)**2-(U/scale_factor)**2-(V/scale_factor)**2))
-        #### Compute the Fast Fourier Transform of each 1D projection
+        #### Compute the Fast Fourier Transform of each 2D projection
         for x in range(anglesDim):
             f=np.fft.fft2(data_fresnel[:,x,:])
             #Correct the low and high frequencies
