@@ -348,24 +348,28 @@ def datashifts_subpixel(data, maxamplitude):
     # maxamplitude defines the maximal amplitude of each shift in subpixel resolution
     from skimage import transform as tf
     if (data.ndim == 2):
-        print ("Available for 3D data only, skipped applying")
-    else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
-        shifts = np.zeros([anglesDim,2], dtype='float32') # the 2D vector of shifts
-
-    sino_shifts = np.zeros(np.shape(data),dtype='float32')
-    for x in range(anglesDim):
+        shifts = np.zeros([1,2], dtype='float32')
         random_shift_x = random.uniform(-maxamplitude,maxamplitude)  #generate a random floating point number
         random_shift_y = random.uniform(-maxamplitude,maxamplitude)  #generate a random floating point number
 
-        projection2D = data[:,x,:] # extract 2D projection
         tform = tf.SimilarityTransform(translation=(-random_shift_x, -random_shift_y))
-        projection_shifted = tf.warp(projection2D, tform, order=5)
+        sino_shifts = tf.warp(data, tform, order=5)
+    else:
+        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        shifts = np.zeros([anglesDim,2], dtype='float32') # the 2D vector of shifts
+        sino_shifts = np.zeros(np.shape(data),dtype='float32')
+        for x in range(anglesDim):
+            random_shift_x = random.uniform(-maxamplitude,maxamplitude)  #generate a random floating point number
+            random_shift_y = random.uniform(-maxamplitude,maxamplitude)  #generate a random floating point number
 
-        shifts[x,0] = random_shift_x
-        shifts[x,1] = random_shift_y
+            projection2D = data[:,x,:] # extract 2D projection
+            tform = tf.SimilarityTransform(translation=(-random_shift_x, -random_shift_y))
+            projection_shifted = tf.warp(projection2D, tform, order=5)
 
-        sino_shifts[:,x,:] = projection_shifted
+            shifts[x,0] = random_shift_x
+            shifts[x,1] = random_shift_y
+
+            sino_shifts[:,x,:] = projection_shifted
     return [sino_shifts,shifts]
 
 def pve(data, pve_strength):
