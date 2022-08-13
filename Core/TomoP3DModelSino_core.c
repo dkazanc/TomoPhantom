@@ -58,7 +58,8 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
         
 {
     int ll;
-    long i, j, k, index, sub_vol_size;
+    long long i, j, k, sub_vol_size;
+    size_t index;
     float *DetectorRange_Horiz_ar=NULL, DetectorRange_Horiz_min, DetectorRange_Horiz_max, *DetectorRange_Vert_ar=NULL, DetectorRange_Vert_min, DetectorRange_Vert_max, U_step, V_step, a22, b22, c2, *Tomorange_Z_Ar = NULL, *Zdel = NULL;
     
     float *AnglesRad=NULL;
@@ -205,7 +206,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                         // for(k=0; k<Vert_det; k++) {
                         for(k=Z1; k<Z2; k++) {
                             //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
-                            index = tt*Horiz_det*AngTot*sub_vol_size + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
+                            index = (size_t)tt*Horiz_det*AngTot*sub_vol_size + (size_t)ll*sub_vol_size*Horiz_det + (size_t)((k - Z1)*Horiz_det + j);                            
                             
                             vh1[2]=DetectorRange_Horiz_ar[j];
                             vh1[1]=DetectorRange_Vert_ar[k];
