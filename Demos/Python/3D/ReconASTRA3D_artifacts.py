@@ -114,7 +114,7 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector
                     CenterRotOffset = None, # The Center of Rotation (CoR) scalar
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N_size, # a scalar to define reconstructed object dimensions
-                    device_projector = 0)
+                    device_projector = 'gpu')
 
 recNumerical= RectoolsDIR.FBP(projData3D_analyt_noisy) # FBP reconstruction
 
