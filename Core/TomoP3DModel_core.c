@@ -55,7 +55,8 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 	long tt /*temporal index, 0 - for stationary */)
 {
 
-	long i, j, k, index, sub_vol_size;
+	long long i, j, k, sub_vol_size;
+	size_t index;
 	float Tomorange_min, Tomorange_max, H_x, H_y, H_z, C1, a2, b2, c2, phi_rot_radian, sin_phi, cos_phi, aa, bb, cc, psi1, psi2, psi3, T;
 	float *Tomorange_X_Ar = NULL, *Tomorange_Y_Ar = NULL, *Tomorange_Z_Ar = NULL, *Xdel = NULL, *Ydel = NULL, *Zdel = NULL;
 
@@ -126,7 +127,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 		for (k = Z1; k<Z2; k++) {
 			for (i = 0; i<N1; i++) {
 				for (j = 0; j<N2; j++) {
-                index = tt*N1*N2*sub_vol_size + (k - Z1)*N1*N2 + j*N1 + i;
+                	index = (size_t)tt*N1*N2*sub_vol_size + (size_t)(k - Z1)*N1*N2 + (size_t)(j*N1 + i);
 					if ((psi1 != 0.0f) || (psi2 != 0.0f) || (psi3 != 0.0f)) {
 						xh1[0] = Tomorange_X_Ar[i];
 						xh1[1] = Tomorange_Y_Ar[j];
