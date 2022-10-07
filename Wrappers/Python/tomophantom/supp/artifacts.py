@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #    Note that the TomoPhantom package is released under Apache License, Version 2.0
 #    @author: Daniil Kazantsev
-#    latest update: 29.11.2021
+#    latest update: 07.10.2022
 
 import numpy as np
 import random
@@ -279,37 +279,38 @@ def zingers(data, percentage, modulus):
     sino_zingers[:] = sino_zingers_fl.reshape(sino_zingers.shape)
     return sino_zingers
 
-def noise(data, sigma, noisetype, seed, prelog):
+def noise(data, sigma, noisetype, seed=True, prelog=False):
     # Adding random noise to data (adapted from LD-CT simulator)
-    # noisetype = None, # 'Gaussian', 'Poisson' or None
-    # sigma = 10000, # photon flux (Poisson) or variance for Gaussian
-    # seed = 0, # seeds for noise
-    # prelog: None or True (get the raw pre-log data)
-    sino_noisy = data.copy()
+    # noisetype = 'Gaussian' or 'Poisson'
+    # sigma = 10000, # photon flux (Poisson) or the variance for Gaussian
+    # seed = 0, # initiate random seed with True
+    # prelog: True or False
+    data_noisy = data.copy()
+    maxData = np.max(data)
+    data_noisy=data/maxData #normalising
+    if seed is True:
+        np.random.seed(int(seed))
     if noisetype == 'Gaussian':
         # add normal Gaussian noise
-        if seed is not None:
-            np.random.seed(int(seed))
-        sino_noisy += np.random.normal(loc = 0.0, scale = sigma, size = np.shape(sino_noisy))
-        sino_noisy[sino_noisy<0] = 0
+        data_noisy += np.random.normal(loc = 0.0, scale = sigma, size = np.shape(data_noisy))
+        data_noisy[data_noisy<0] = 0
+        data_noisy *= maxData
     elif noisetype == 'Poisson':
         # add Poisson noise
-        maxSino = np.max(data)
-        if maxSino > 0:
+        if maxData > 0:
             ri = 1.0
-            sig = np.sqrt(11) #standard variance of electronic noise, a characteristic of CT scanner
-            sino_noisy=data/maxSino
-            yb = sigma*np.exp(-sino_noisy) + ri # exponential transform to incident flux
-            sino_raw = np.random.poisson(yb) + np.sqrt(sig)*np.reshape(np.random.randn(np.size(yb)),np.shape(yb))
-            li_hat = -np.log((sino_raw-ri)/sigma)*maxSino # log corrected data
-            li_hat[(sino_raw-ri)<=0] = 0.0
-            sino_noisy = li_hat.copy()
+            sig = np.sqrt(11) #standard variance of electronic noise, a characteristic of a CT scanner
+            yb = sigma*np.exp(-data_noisy) + ri # exponential transform to incident flux
+            data_raw = np.random.poisson(yb) + np.sqrt(sig)*np.reshape(np.random.randn(np.size(yb)),np.shape(yb))
+            li_hat = -np.log((data_raw-ri)/sigma)*maxData # log corrected data
+            li_hat[(data_raw-ri)<=0] = 0.0
+            data_noisy = li_hat.copy()
     else:
-        print ("Select 'Gaussian' or 'Poisson' for noise type")
+        print ("Select 'Gaussian' or 'Poisson' for the noise type")
     if prelog is True:
-        return [sino_noisy,sino_raw]
+        return [data_noisy,data_raw]
     else:
-        return sino_noisy
+        return data_noisy
 
 def datashifts(data, maxamplitude):
     # A function to add random shifts to sinogram rows (an offset for each angular position)
