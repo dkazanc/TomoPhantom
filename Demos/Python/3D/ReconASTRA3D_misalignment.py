@@ -140,7 +140,7 @@ for iteration in range(0, iter_number):
     # reconstruct with the estimated shifts
     RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,     # Horizontal detector dimension
                         DetectorsDimV = Vert_det,            # Vertical detector dimension (3D case)
-                        CenterRotOffset = -shifts_estimated, # Center of Rotation scalar + shifts passed
+                        CenterRotOffset = shifts_estimated, # Center of Rotation scalar + shifts passed
                         AnglesVec = angles_rad,              # A vector of projection angles in radians
                         ObjSize = N_size,                    # Reconstructed object dimensions (scalar)
                         device_projector='gpu')

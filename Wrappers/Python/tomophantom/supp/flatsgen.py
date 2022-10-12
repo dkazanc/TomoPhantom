@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A function to generate synthetic flat field images and raw data for projection data normalisation
-
 @author: Daniil Kazantsev
 """
 
@@ -17,7 +15,10 @@ from tomophantom.supp.speckle_routines import simulate_speckles_with_shot_noise
 
 def synth_flats(projData3D_clean, source_intensity, detectors_miscallibration = 0.05, variations_number = 3, arguments_Bessel=(1,25), specklesize = 2, kbar = 2, sigmasmooth = 2, jitter_projections = 0.0, flatsnum=20):
     """
-    the required format of the input (clean) data is [detectorsX, Projections, detectorsY]
+    A function to generate synthetic flat field images and raw data for projection data normalisation.
+    This is a way to more realistic modelling of stripes leading to ring artifacts
+    the format of the input (clean) data is [detectorsX, Projections, detectorsY]
+    
     Parameters:
     source_intensity - source intensity which affects the amount of the Poisson noise added to data
     variations_number - the number of functions to control stripe type (1 - linear, 2, - sinusoidal, 3 - exponential)
@@ -30,24 +31,24 @@ def synth_flats(projData3D_clean, source_intensity, detectors_miscallibration = 
     flatsnum - a number of flats to generate
     """
     [DetectorsDimV, projectionsNo, DetectorsDimH] = np.shape(projData3D_clean)
-
+    
     # output datasets
     flats_combined3D = np.zeros((DetectorsDimV,flatsnum, DetectorsDimH),dtype='uint16')
     projData3D_raw = np.zeros(np.shape(projData3D_clean),dtype='float32')
-
+    
     # normalise the data
     projData3D_clean /= np.max(projData3D_clean)
-
+    
     # using spherical Bessel functions to emulate the background (scintillator) variations
     func = spherical_yn(1, np.linspace(arguments_Bessel[0], arguments_Bessel[1], DetectorsDimV,dtype='float32'))
     func += abs(np.min(func))
-
+    
     flatfield = np.zeros((DetectorsDimV,DetectorsDimH))
     for i in range(0,DetectorsDimH):
         flatfield[:,i] = func
     for i in range(0,DetectorsDimH):
         flatfield[:,i] += np.flipud(func)
-
+    
     if (specklesize != 0.0):
         # using speckle generator routines to create a photon count texture in the background
         speckle_background = simulate_speckles_with_shot_noise([DetectorsDimV, DetectorsDimH], 1, specklesize, kbar)
@@ -64,7 +65,7 @@ def synth_flats(projData3D_clean, source_intensity, detectors_miscallibration = 
         blurred_speckles[blurred_speckles < 0.6*np.max(blurred_speckles)] = 0
         blurred_speckles_map[:,:,i] = blurred_speckles
     blurred_speckles_map /= np.max(blurred_speckles_map)
-
+    
     sinusoidal_response = np.sin(np.linspace(0,1.5*np.pi,projectionsNo)) + np.random.random(projectionsNo) * 0.1
     sinusoidal_response /= np.max(sinusoidal_response)
     exponential_response = np.exp(np.linspace(0,np.pi,projectionsNo)) + np.random.random(projectionsNo) * 0.1
@@ -75,7 +76,7 @@ def synth_flats(projData3D_clean, source_intensity, detectors_miscallibration = 
         # add speckled background to the initial image with the Bessel background
         flatfield_combined = flatfield.copy() + 0.5*(speckle_background/np.max(speckle_background))
         flatfield_combined /= np.max(flatfield_combined)
-
+        
         #adding Poisson noise to flat fields
         flatfield_poisson = noise(flatfield_combined*source_intensity, source_intensity, noisetype='Poisson')
         flatfield_poisson /= np.max(flatfield_poisson)
@@ -95,7 +96,7 @@ def synth_flats(projData3D_clean, source_intensity, detectors_miscallibration = 
             if j == 2:
                 # adding an exponential response offset for certain detectors
                 proj_exp += exponential_response[i]*blurred_speckles_map[:,:,j]*detectors_miscallibration*source_intensity
-
+                
         projection_poisson = noise(proj_exp, source_intensity, noisetype='Poisson')
 
         # apply jitter to projections
