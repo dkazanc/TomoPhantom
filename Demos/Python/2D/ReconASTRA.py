@@ -62,6 +62,7 @@ _noise_ =  {'noise_type' : 'Poisson',
             'noise_amplitude' : 1e5, # noise amplitude
             'noise_seed' : 0}
 
+
 noisy_sino = _Artifacts_(sino_an, **_noise_)
 
 plt.figure()

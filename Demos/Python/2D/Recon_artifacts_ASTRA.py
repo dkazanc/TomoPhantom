@@ -25,9 +25,7 @@ import tomophantom
 from tomophantom.supp.qualitymetrics import QualityTools
 
 model = 15 # select a model
-N_size = 512 # set dimension of the phantom
-# one can specify an exact path to the parameters file
-# path_library2D = '../../../PhantomLibrary/models/Phantom2DLibrary.dat'
+N_size = 256 # set dimension of the phantom
 path = os.path.dirname(tomophantom.__file__)
 path_library2D = os.path.join(path, "Phantom2DLibrary.dat")
 phantom_2D = TomoP2D.Model(model, N_size, path_library2D)
@@ -59,11 +57,10 @@ from tomophantom.supp.artifacts import _Artifacts_
 plt.close('all')
 # forming dictionaries with artifact types
 _noise_ =  {'noise_type' : 'Poisson',
-            'noise_amplitude' : 10000, # noise amplitude
-            'noise_seed' : 0}
+            'noise_amplitude' : 10000}
 # misalignment dictionary
-_sinoshifts_ = {'sinoshifts_maxamplitude' : 10}
-[noisy_sino_misalign,shifts] = _Artifacts_(sino_an, **_noise_, **_sinoshifts_)
+_sinoshifts_ = {'datashifts_maxamplitude_pixel' : 10}
+[noisy_sino_misalign, shifts] = _Artifacts_(sino_an, **_noise_, **_sinoshifts_)
 
 # adding zingers and stripes
 _zingers_ = {'zingers_percentage' : 2,

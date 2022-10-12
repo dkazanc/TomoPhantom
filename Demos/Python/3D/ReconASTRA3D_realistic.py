@@ -28,7 +28,7 @@ from tomophantom.supp.flatsgen import synth_flats
 
 print ("Building 3D phantom using TomoPhantom software")
 tic=timeit.default_timer()
-model = 17 # select a model number from the library
+model = 13 # select a model number from the library
 N_size = 256 # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "Phantom3DLibrary.dat")
@@ -65,7 +65,7 @@ print ("Building 3D analytical projection data with TomoPhantom")
 projData3D_analyt= TomoP3D.ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
 
 intens_max_clean = np.max(projData3D_analyt)
-sliceSel = 150
+sliceSel = (int)(N_size*0.5)
 plt.figure() 
 plt.subplot(131)
 plt.imshow(projData3D_analyt[:,sliceSel,:],vmin=0, vmax=intens_max_clean)
@@ -79,23 +79,26 @@ plt.title('Tangentogram view')
 plt.show()
 #%%
 print ("Simulate synthetic flat fields, add flat field background to the projections and add noise")
-I0  = 15000; # Source intensity
+I0  = 50000; # full-beam photon flux intensity
 flatsnum = 20 # the number of the flat fields required
 
-[projData3D_noisy, flatsSIM] = synth_flats(projData3D_analyt, 
-                                           source_intensity = I0, source_variation=0.02,\
-                                           arguments_Bessel = (1,10,10,12),\
-                                           specklesize = 15,\
-                                           kbar = 0.3,
-                                           jitter = 1.0,
-                                           sigmasmooth = 3, flatsnum=flatsnum)
+[projData3D_raw, flats_combined3D, speckel_map] = synth_flats(projData3D_analyt, 
+                                           source_intensity = I0, 
+                                           detectors_miscallibration=0.05,
+                                           variations_number = 3,
+                                           arguments_Bessel = (1,25),
+                                           specklesize = 2,
+                                           kbar = 2,
+                                           jitter_projections = 0.0,
+                                           sigmasmooth = 3,
+                                           flatsnum=flatsnum)
 #del projData3D_analyt
-plt.figure() 
+plt.figure()
 plt.subplot(121)
-plt.imshow(projData3D_noisy[:,0,:])
+plt.imshow(projData3D_raw[:,0,:])
 plt.title('2D Projection (before normalisation)')
 plt.subplot(122)
-plt.imshow(flatsSIM[:,0,:])
+plt.imshow(flats_combined3D[:,0,:])
 plt.title('A selected simulated flat-field')
 plt.show()
 #%%
@@ -103,20 +106,20 @@ print ("Normalise projections using ToMoBAR software")
 from tomobar.supp.suppTools import normaliser
 
 # normalise the data, the required format is [detectorsX, Projections, detectorsY]
-projData3D_norm = normaliser(projData3D_noisy, flatsSIM, darks=None, log='true', method='mean')
+projData3D_norm = normaliser(projData3D_raw, flats_combined3D, darks=None, log='true', method='mean')
+projData3D_norm *= intens_max_clean
 
 #del projData3D_noisy
-intens_max = 0.3*np.max(projData3D_norm)
-sliceSel = 150
+sliceSel = (int)(N_size*0.5)
 plt.figure() 
 plt.subplot(131)
-plt.imshow(projData3D_norm[:,sliceSel,:],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_norm[:,sliceSel,:],vmin=0, vmax=intens_max_clean)
 plt.title('Normalised 2D Projection (erroneous)')
 plt.subplot(132)
-plt.imshow(projData3D_norm[sliceSel,:,:],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_norm[sliceSel,:,:],vmin=0, vmax=intens_max_clean)
 plt.title('Sinogram view')
 plt.subplot(133)
-plt.imshow(projData3D_norm[:,:,sliceSel],vmin=0, vmax=intens_max)
+plt.imshow(projData3D_norm[:,:,sliceSel],vmin=0, vmax=intens_max_clean)
 plt.title('Tangentogram view')
 plt.show()
 #%%
@@ -131,7 +134,6 @@ RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector
 
 print ("Reconstruction using FBP from tomobar")
 recNumerical= RectoolsDIR.FBP(projData3D_norm) # FBP reconstruction
-recNumerical *= intens_max_clean
 
 sliceSel = int(0.5*N_size)
 max_val = 1
@@ -184,7 +186,6 @@ _regularisation_ = {'method' : 'PD_TV',
                     'device_regulariser': 'gpu'}
 
 RecFISTA_os_reg = Rectools.FISTA(_data_, _algorithm_, _regularisation_)
-RecFISTA_os_reg *= intens_max_clean
 
 sliceSel = int(0.5*N_size)
 max_val = 1

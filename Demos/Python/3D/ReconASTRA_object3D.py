@@ -20,8 +20,10 @@ import numpy as np
 from tomophantom.supp.qualitymetrics import QualityTools
 from tomophantom import TomoP3D
 from tomophantom.TomoP3D import Objects3D
+import timeit
 
-N3D_size = 256
+
+N3D_size = 512
 
 # specify object parameters, here we replicate model 
 obj3D_1 = {'Obj': Objects3D.GAUSSIAN, 
@@ -92,13 +94,17 @@ plt.show()
 from tomobar.methodsDIR import RecToolsDIR
 RectoolsDIR = RecToolsDIR(DetectorsDimH = Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
                     DetectorsDimV = Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-                    CenterRotOffset = None, # Center of Rotation (CoR) scalar (for 3D case only)
+                    CenterRotOffset = 0.0, # Center of Rotation (CoR) scalar (for 3D case only)
                     AnglesVec = angles_rad, # array of angles in radians
                     ObjSize = N3D_size, # a scalar to define reconstructed object dimensions
                     device_projector = 'gpu')
 
 print ("Reconstruction using FBP from tomobar")
+tic=timeit.default_timer()
 recNumerical= RectoolsDIR.FBP(ProjData3D) # FBP reconstruction
+toc=timeit.default_timer()
+Run_time = toc - tic
+print("Reconstruction in {} seconds".format(Run_time))
 
 sliceSel = int(0.5*N3D_size)
 max_val = 1
