@@ -199,6 +199,7 @@ def c_model3d(
     )
     return output
 
+
 def c_object3d(
     output,
     N1,
@@ -242,6 +243,7 @@ def c_object3d(
     )
     return output
 
+
 def c_model_sino3d(
     output,
     model_no,
@@ -259,7 +261,7 @@ def c_model_sino3d(
         dtype.as_c_float_p(output),
         dtype.as_c_int(model_no),
         dtype.as_c_long(detector_horiz),
-        dtype.as_c_long(detector_vert),        
+        dtype.as_c_long(detector_vert),
         dtype.as_c_long(Z1),
         dtype.as_c_long(Z2),
         dtype.as_c_long(phantom_size),
@@ -268,6 +270,7 @@ def c_model_sino3d(
         dtype.as_c_char_p(models_library_path),
     )
     return output
+
 
 def c_object_sino3d(
     output,
@@ -292,7 +295,11 @@ def c_object_sino3d(
     tt,
 ):
     LIB_TOMOPHANTOM.TomoP3DObjectSino_core.restype = dtype.as_c_void_p()
-    if (("gaussian" in str(objectName)) or ("paraboloid" in str(objectName)) or ("ellipsoid" in str(objectName))):
+    if (
+        ("gaussian" in str(objectName))
+        or ("paraboloid" in str(objectName))
+        or ("ellipsoid" in str(objectName))
+    ):
         LIB_TOMOPHANTOM.TomoP3DObjectSino_core(
             dtype.as_c_float_p(output),
             dtype.as_c_long(detector_horiz),
@@ -315,7 +322,7 @@ def c_object_sino3d(
             dtype.as_c_float(phi1),
             dtype.as_c_long(tt),
         )
-    elif ("elliptical_cylinder" in str(objectName)):
+    elif "elliptical_cylinder" in str(objectName):
         LIB_TOMOPHANTOM.TomoP3DObjectSino_core(
             dtype.as_c_float_p(output),
             dtype.as_c_long(detector_horiz),

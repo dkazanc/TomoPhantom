@@ -8,16 +8,17 @@ import numpy as np
 import random
 from typing import Union, Any
 
+
 def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, list]:
-    """A module to generate and apply a mix of various typical imaging artefacts to add to the simulated data. 
-       One can build various dictionaries with keywords arguments specified 
+    """A module to generate and apply a mix of various typical imaging artefacts to add to the simulated data.
+       One can build various dictionaries with keywords arguments specified
        bellow and pass it to the function as: `artefacts_mix(data, **noise_dict, **zingers, **etc)`.
-       
-       DISCLAIMER: Note that most of the features are experimental and do not always reflect the 
-       accurate modelling of the inaccuracies. 
+
+       DISCLAIMER: Note that most of the features are experimental and do not always reflect the
+       accurate modelling of the inaccuracies.
 
     Args:
-        data (np.ndarray): 2D or 3D numpy array (sinogram or 3D projection data). 
+        data (np.ndarray): 2D or 3D numpy array (sinogram or 3D projection data).
         The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),
         3D projection data (DetectorsVert, anglesDim, DetectorsHoriz).
         **artefacts_dict (dict): A dictionary with keyword arguments related to different artefact type.
@@ -43,9 +44,9 @@ def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, 
         verbose (bool): Make the output of modules verbose.
 
     Returns:
-        np.ndarray: 2D/3D numpy array with artefacts applied to input data. 
-        [np.ndarray, shifts]: a list of 2D/3D numpy array and simulated shifts. 
-    """        
+        np.ndarray: 2D/3D numpy array with artefacts applied to input data.
+        [np.ndarray, shifts]: a list of 2D/3D numpy array and simulated shifts.
+    """
     ####### VERBOSE ########
     if "verbose" not in artefacts_dict:
         verbose = True
@@ -205,12 +206,12 @@ def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, 
     # NOISE
     if _noise_["noise_type"] is not None:
         sino_artifacts = noise(
-                data=sino_artifacts,
-                sigma=_noise_["noise_amplitude"],
-                noisetype=_noise_["noise_type"],
-                seed=_noise_["noise_seed"],
-                prelog=_noise_["noise_prelog"],
-            )
+            data=sino_artifacts,
+            sigma=_noise_["noise_amplitude"],
+            noisetype=_noise_["noise_type"],
+            seed=_noise_["noise_seed"],
+            prelog=_noise_["noise_prelog"],
+        )
         if verbose is True:
             print("{} noise has been added to the data.".format(_noise_["noise_type"]))
 
@@ -222,7 +223,14 @@ def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, 
         return np.float32(sino_artifacts)
 
 
-def stripes(data: np.ndarray, percentage: float, maxthickness: int, intensity_thresh: float, stripe_type: str, variability: float) -> np.ndarray:
+def stripes(
+    data: np.ndarray,
+    percentage: float,
+    maxthickness: int,
+    intensity_thresh: float,
+    stripe_type: str,
+    variability: float,
+) -> np.ndarray:
     """Function to add stripes (constant offsets) to sinograms or 3D projection data which results in rings in the
     reconstructed image.
 
@@ -235,7 +243,7 @@ def stripes(data: np.ndarray, percentage: float, maxthickness: int, intensity_th
         variability (float): Variability multiplier to incorporate change of intensity in the stripe.
 
     Raises:
-        ValueError: Percentage is out of range. 
+        ValueError: Percentage is out of range.
         ValueError: Thickness is out of range.
 
     Returns:
@@ -329,7 +337,7 @@ def stripes(data: np.ndarray, percentage: float, maxthickness: int, intensity_th
 
 def zingers(data: np.ndarray, percentage: float, modulus: int) -> np.ndarray:
     """Adding zingers (zero single pixels or small 4 pixels clusters)
-     to sinograms or 6 voxels to 3D projection data.      
+     to sinograms or 6 voxels to 3D projection data.
 
     Args:
         data (np.ndarray): 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),
@@ -338,7 +346,7 @@ def zingers(data: np.ndarray, percentage: float, modulus: int) -> np.ndarray:
         modulus (int): Modulus to control the amount of 4/6 pixel clusters to be added.
 
     Raises:
-        ValueError: Percentage is out of range. 
+        ValueError: Percentage is out of range.
         ValueError: Modulus must be positive.
 
     Returns:
@@ -384,7 +392,13 @@ def zingers(data: np.ndarray, percentage: float, modulus: int) -> np.ndarray:
     return sino_zingers
 
 
-def noise(data: np.ndarray, sigma: Union[int, float], noisetype: str, seed: bool=True, prelog: bool=False) -> Union[list, np.ndarray]:
+def noise(
+    data: np.ndarray,
+    sigma: Union[int, float],
+    noisetype: str,
+    seed: bool = True,
+    prelog: bool = False,
+) -> Union[list, np.ndarray]:
     """Adding random noise to data (adapted from LD-CT simulator)
 
     Args:
@@ -440,7 +454,7 @@ def datashifts(data: np.ndarray, maxamplitude: int) -> list:
         maxamplitude (int): The misilighnment ammplitude. Defines the maximal amplitude of each shift in pixels.
 
     Returns:
-        list: 2D or 3d data with misalignment and shifts vectors [data, shifts]. 
+        list: 2D or 3d data with misalignment and shifts vectors [data, shifts].
     """
     if data.ndim == 2:
         (anglesDim, DetectorsDimH) = np.shape(data)
@@ -491,9 +505,10 @@ def datashifts_subpixel(data: np.ndarray, maxamplitude: float) -> list:
         maxamplitude (float): The misilighnment ammplitude. Defines the maximal amplitude of each shift.
 
     Returns:
-        list: 2D or 3d data with misalignment and shifts vectors [data, shifts]. 
+        list: 2D or 3d data with misalignment and shifts vectors [data, shifts].
     """
     from skimage import transform as tf
+
     if data.ndim == 2:
         shifts = np.zeros([1, 2], dtype="float32")
         random_shift_x = random.uniform(
@@ -531,7 +546,7 @@ def datashifts_subpixel(data: np.ndarray, maxamplitude: float) -> list:
 
 
 def pve(data: np.ndarray, pve_strength: int) -> np.ndarray:
-    """Applying Partial Volume effect (smoothing) to data. 
+    """Applying Partial Volume effect (smoothing) to data.
 
     Args:
         data (np.ndarray): 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),
@@ -563,8 +578,10 @@ def pve(data: np.ndarray, pve_strength: int) -> np.ndarray:
     return data_pve
 
 
-def fresnel_propagator(data:np.ndarray, dist_observation: int, scale_factor: float, wavelenght:float) -> np.ndarray:
-    """Fresnel propagator applied to data. 
+def fresnel_propagator(
+    data: np.ndarray, dist_observation: int, scale_factor: float, wavelenght: float
+) -> np.ndarray:
+    """Fresnel propagator applied to data.
        Adapted from the script by Adrián Carbajal-Domínguez, adrian.carbajal@ujat.mx
 
     Args:
@@ -575,7 +592,7 @@ def fresnel_propagator(data:np.ndarray, dist_observation: int, scale_factor: flo
         wavelenght (float): Wavelength.
 
     Returns:
-        np.ndarray: 2D or 3D data with propagation. 
+        np.ndarray: 2D or 3D data with propagation.
     """
 
     data_fresnel = data.copy()

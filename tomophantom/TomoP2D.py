@@ -31,7 +31,7 @@ __all__ = [
     "Model",
     "ModelTemporal",
     "ModelSino",
-    "ModelSinoTemporal",    
+    "ModelSinoTemporal",
     "Object",
     "ObjectSino",
     "SinoNum",
@@ -138,12 +138,13 @@ def ModelTemporal(
     )
     return phantom
 
+
 def ModelSino(
     model_no: int,
     phantom_size: int,
     detector_size: int,
     angles: np.ndarray,
-    models_library_path: Path,   
+    models_library_path: Path,
 ) -> np.ndarray:
     """Generate 2D analytical sinogram for corresponding models in
     the library file Phantom2DLibrary.dat.
@@ -181,6 +182,7 @@ def ModelSino(
         models_library_path,
     )
     return sino2d.transpose()
+
 
 def ModelSinoTemporal(
     model_no: int,
@@ -228,6 +230,7 @@ def ModelSinoTemporal(
     )
     return sino2d_t
 
+
 def Object(phantom_size: int, obj_params: Union[list, dict]) -> np.ndarray:
     """Generate a 2D analytical phantom for the standalone
        geometrical object that is parametrised in the "obj_params" dictionary.
@@ -267,8 +270,12 @@ def Object(phantom_size: int, obj_params: Union[list, dict]) -> np.ndarray:
             )
     return object2d
 
+
 def ObjectSino(
-    phantom_size: int, detector_size: int, angles: np.ndarray, obj_params:  Union[list, dict]
+    phantom_size: int,
+    detector_size: int,
+    angles: np.ndarray,
+    obj_params: Union[list, dict],
 ) -> np.ndarray:
     """Generate a 2D analytical sinogram for the standalone
        geometrical object that is parametrised in the "obj_params" dictionary.
@@ -311,6 +318,7 @@ def ObjectSino(
             )
     return sino2d.transpose()
 
+
 def SinoNum(input: np.ndarray, detector_X: int, angles: np.ndarray) -> np.ndarray:
     """Numerical calculation of 2D sinogram from the 2D input.
 
@@ -341,6 +349,7 @@ def SinoNum(input: np.ndarray, detector_X: int, angles: np.ndarray) -> np.ndarra
         angles_total,
     )
     return sinogram.transpose()
+
 
 def __testParams(obj):
     """Performs a simple type check of the input parameters and a range check"""

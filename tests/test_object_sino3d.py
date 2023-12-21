@@ -3,6 +3,7 @@ from numpy.testing import assert_allclose
 
 from tomophantom.TomoP3D import Objects3D, ObjectSino
 
+
 def test_3d_object_sino():
     N3D_size = 64  # set the desired dimension of the phantom
     Horiz_det = int(np.sqrt(2) * N3D_size)  # detector column count (horizontal)

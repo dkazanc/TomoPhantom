@@ -6,6 +6,7 @@ from tomophantom.artefacts import artefacts_mix
 
 eps = 1e-05
 
+
 @pytest.mark.parametrize("noise_type", ["Poisson", "Gaussian"])
 def test_2d_sino_noise(noise_type, sino_model11_64):
     sino_an, angles_num, P = sino_model11_64

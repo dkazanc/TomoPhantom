@@ -34,13 +34,13 @@ __all__ = [
     "Model",
     "ModelSub",
     "ModelTemporal",
-    "ModelTemporalSub",    
+    "ModelTemporalSub",
     "ModelSino",
     "ModelSinoSub",
-    'ModelSinoTemporal',
-    'ModelSinoTemporalSub',
+    "ModelSinoTemporal",
+    "ModelSinoTemporalSub",
     "Object",
-    'ObjectSino',
+    "ObjectSino",
 ]
 
 
@@ -178,6 +178,7 @@ def ModelSub(
     )
     return phantom
 
+
 def ModelTemporal(
     model_no: int,
     phantom_size: Union[int, Tuple[int, int, int]],
@@ -283,6 +284,7 @@ def ModelTemporalSub(
     )
     return phantom
 
+
 def ModelSino(
     model_no: int,
     phantom_size: int,
@@ -306,8 +308,10 @@ def ModelSino(
         np.ndarray: The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].
     """
     if type(phantom_size) == tuple:
-        raise ValueError('Please give a scalar for the phantom size (2d slice), if one needs non-cubic data generator please see ModelSinoSub function')    
-    
+        raise ValueError(
+            "Please give a scalar for the phantom size (2d slice), if one needs non-cubic data generator please see ModelSinoSub function"
+        )
+
     # check the validity of model's parameters
     params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
     params = _check_params3d(model_no, models_library_path)
@@ -335,7 +339,8 @@ def ModelSino(
         angles_total,
         models_library_path,
     )
-    return np.swapaxes(sino3d,0,1)
+    return np.swapaxes(sino3d, 0, 1)
+
 
 def ModelSinoSub(
     model_no: int,
@@ -362,7 +367,9 @@ def ModelSinoSub(
         np.ndarray: The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].
     """
     if type(phantom_size) == tuple:
-       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom')
+        raise ValueError(
+            "Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom"
+        )
 
     Z1, Z2 = [int(i) for i in sub_index]
 
@@ -377,7 +384,7 @@ def ModelSinoSub(
         raise ValueError("Range of the higher index is incorrect")
 
     sub_size = Z2 - Z1  # the size of the vertical slab
-    
+
     # check the validity of model's parameters
     params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
     params = _check_params3d(model_no, models_library_path)
@@ -405,7 +412,8 @@ def ModelSinoSub(
         angles_total,
         models_library_path,
     )
-    return np.swapaxes(sino3d,0,1)
+    return np.swapaxes(sino3d, 0, 1)
+
 
 def ModelSinoTemporal(
     model_no: int,
@@ -431,7 +439,9 @@ def ModelSinoTemporal(
     """
 
     if type(phantom_size) == tuple:
-        raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom')
+        raise ValueError(
+            "Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom"
+        )
 
     # check the validity of model's parameters
     params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
@@ -441,13 +451,15 @@ def ModelSinoTemporal(
     angles_total = len(angles)
     if params[3] == 1:
         raise ValueError(
-                    "The selected model is stationary (3D), use 'ModelSino' function instead"
-                )
+            "The selected model is stationary (3D), use 'ModelSino' function instead"
+        )
     else:
         sino4d = np.zeros(
-            [params[3], angles_total, detector_vert, detector_horiz], dtype="float32", order="C"
+            [params[3], angles_total, detector_vert, detector_horiz],
+            dtype="float32",
+            order="C",
         )
-        
+
     external.c_model_sino3d(
         np.ascontiguousarray(sino4d),
         model_no,
@@ -460,7 +472,8 @@ def ModelSinoTemporal(
         angles_total,
         models_library_path,
     )
-    return np.swapaxes(sino4d,1,2)
+    return np.swapaxes(sino4d, 1, 2)
+
 
 def ModelSinoTemporalSub(
     model_no: int,
@@ -487,7 +500,9 @@ def ModelSinoTemporalSub(
         np.ndarray: The generated 3D projection data of the following shape [time, detector_vert, AngTot, detector_horiz].
     """
     if type(phantom_size) == tuple:
-       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom')
+        raise ValueError(
+            "Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom"
+        )
 
     Z1, Z2 = [int(i) for i in sub_index]
 
@@ -502,7 +517,7 @@ def ModelSinoTemporalSub(
         raise ValueError("Range of the higher index is incorrect")
 
     sub_size = Z2 - Z1  # the size of the vertical slab
-    
+
     # check the validity of model's parameters
     params = np.ascontiguousarray(np.zeros([12], dtype=ctypes.c_int))
     params = _check_params3d(model_no, models_library_path)
@@ -512,11 +527,13 @@ def ModelSinoTemporalSub(
     if params[3] == 1:
         raise ValueError(
             "The selected model is stationary (3D), use 'ModelSino' function instead"
-        )        
+        )
     else:
         sino4d = np.zeros(
-            [params[3], angles_total, sub_size, detector_horiz], dtype="float32", order="C"
-        )        
+            [params[3], angles_total, sub_size, detector_horiz],
+            dtype="float32",
+            order="C",
+        )
 
     external.c_model_sino3d(
         np.ascontiguousarray(sino4d),
@@ -530,7 +547,7 @@ def ModelSinoTemporalSub(
         angles_total,
         models_library_path,
     )
-    return np.swapaxes(sino4d,1,2)
+    return np.swapaxes(sino4d, 1, 2)
 
 
 def Object(
@@ -599,7 +616,7 @@ def ObjectSino(
     detector_horiz: int,
     detector_vert: int,
     angles: np.ndarray,
-    obj_params: Union[list, dict]
+    obj_params: Union[list, dict],
 ) -> np.ndarray:
     """Generates a 3D analytical projection data for the standalone geometrical figure
     that is parametrised in the "obj_params" dictionary.
@@ -607,22 +624,26 @@ def ObjectSino(
     Args:
         phantom_size (int): A scalar for phantom dimensions.
         detector_horiz (int): Size of the horizontal detector in pixels.
-        detector_vert (int): Size of the vertical detector in pixels.        
-        angles (np.ndarray): Angles vector in degrees.        
+        detector_vert (int): Size of the vertical detector in pixels.
+        angles (np.ndarray): Angles vector in degrees.
         obj_params (a list of dicts or dict): A dictionary with parameters of an object, see demos.
 
     Returns:
         np.ndarray: The generated 3D projection data for an object.
     """
     if type(phantom_size) == tuple:
-       raise ValueError('Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom')
+        raise ValueError(
+            "Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom"
+        )
 
     if type(obj_params) is dict:
         obj_params = [obj_params]
-    
+
     angles_total = len(angles)
     tt = 0
-    sino3d = np.zeros([angles_total, detector_vert, detector_horiz], dtype="float32", order="C")
+    sino3d = np.zeros(
+        [angles_total, detector_vert, detector_horiz], dtype="float32", order="C"
+    )
     # unpacking obj_params dictionary
     for obj in obj_params:
         if __testParams3d(obj):
@@ -660,7 +681,7 @@ def ObjectSino(
                 phi3,
                 tt,
             )
-    return np.swapaxes(sino3d,0,1)
+    return np.swapaxes(sino3d, 0, 1)
 
 
 def __testParams3d(obj):

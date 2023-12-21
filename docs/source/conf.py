@@ -94,7 +94,7 @@ html_theme_options = {
 html_theme_options = {
     "logo": {
         "image_dark": "_static/tomophantom_logo_dark.png",
-    },    
+    },
     "show_toc_level": 1,
     "navbar_align": "left",  # [left, content, right] For testing that the navbar items align properly
 }
