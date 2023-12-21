@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=42", "wheel", "setuptools-git-versioning"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["tomophantom",
+            "tomophantom.ctypes",            
+            "tomophantom.supp",
+            ]
+
+[tool.setuptools-git-versioning]
+enabled = true
+template = "{tag}"
+dev_template = "{tag}"
+
+[project]
+name = "tomophantom"
+description = "Tomography Phantom Data generator"
+readme = "README.rst"
+license = {text = "BSD-3-Clause"}
+authors = [
+    {name = "Daniil Kazantsev", email = "daniil.kazantsev@diamond.ac.uk"},
+    {name = "Edoardo Pasca", email = "edoardo.pasca@stfc.ac.uk"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: BSD 3-clause",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.9",
+]
+requires-python = ">=3.9"
+dynamic = ["version"]
+dependencies = [
+    "numpy",
+    "scipy",
+    "pillow",
+    "scikit-image"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-cov",
+  "pytest-xdist",
+  "flake8",
+  "pyproject-flake8",
+  "pydocstyle",
+  "toml",
+  "imageio",
+  "setuptools-git-versioning",
+]
+
+[project.urls]
+"Repository" = "https://github.com/dkazanc/TomoPhantom"
+
+[tool.mypy]
+# Ignore missing stubs for modules we use
+ignore_missing_imports = true
+
+[tool.isort]
+profile = "black"
+float_to_top = true
+
+[tool.flake8]
+# Make flake8 respect black's line length (default 88),
+max-line-length = 88
+extend-ignore = [
+    "E203",  
+    "F811"  
+]
+per-file-ignores = [
+    "*pyi:E302"
+]
+
+[tool.pydocstyle]
+convention = "google"
+add-ignore = [
+    "D100", # Ignore missing docstrings in public modules
+    "D104", # Ignore missing docstrings in public packages
+    "D418", # Ignore missing docstrings in dunder methods; See: https://github.com/PyCQA/pydocstyle/issues/525
+]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+   "-vv",
+   "-ra",
+   "-q",
+   "--tb=native",
+]
+testpaths = [
+    "tests",
+]
+filterwarnings = [
+    "ignore::ImportWarning"
+]

@@ -1,0 +1,13 @@
+name: tomophantom-docs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - sphinx
+  - sphinx-book-theme
+  - jinja2
+  - sphinx-panels
+  - sphinx-copybuttonpyyaml
+  - pyyaml
+  - ghp-import

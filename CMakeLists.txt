@@ -12,10 +12,9 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
-project(TomoPhantom)
-#https://stackoverflow.com/questions/13298504/using-cmake-with-setup-py
+project(tomophantom)
 
 # The version number.
 set (CIL_VERSION_MAJOR 0)
@@ -24,14 +23,11 @@ set (CIL_VERSION_PATCH 0)
 
 set (CIL_VERSION '${CIL_VERSION_MAJOR}.${CIL_VERSION_MINOR}.${CIL_VERSION_PATCH}' CACHE INTERNAL "Core Imaging Library version" FORCE)
 
-# set the Python variables for the Conda environment
-#include(${CMAKE_SOURCE_DIR}/CMake/FindAnacondaEnvironment.cmake)
-
 set(CMAKE_BUILD_TYPE "Release")
 
 option (BUILD_MATLAB_WRAPPER "Build Matlab Wrappers" OFF)
-option (BUILD_PYTHON_WRAPPER "Build Python Wrappers" ON)
+option (BUILD_PYTHON_WRAPPER "Build Python Wrappers" OFF)
 option (CONDA_BUILD "Conda Build" OFF)
 
 add_subdirectory(Core)
-add_subdirectory(Wrappers)
+
