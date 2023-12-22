@@ -3,11 +3,14 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.10
+  - python=3.9
   - sphinx
   - sphinx-book-theme
+  - nbsphinx
+  - pandoc
   - jinja2
   - sphinx-panels
-  - sphinx-copybuttonpyyaml
+  - sphinx-copybutton
   - pyyaml
+  - ipython
   - ghp-import

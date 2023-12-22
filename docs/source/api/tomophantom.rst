@@ -20,6 +20,7 @@ Submodules
    tomophantom.TomoP3D
    tomophantom.artefacts
    tomophantom.flatsgen
+   tomophantom.generator
    tomophantom.qualitymetrics
 
 Module contents
