@@ -2,8 +2,10 @@ name: tomophantom-docs
 channels:
   - conda-forge
   - defaults
+  - httomo
 dependencies:
-  - python=3.9
+  - python=3.10
+  - tomophantom
   - sphinx
   - sphinx-book-theme
   - nbsphinx
