@@ -6,17 +6,21 @@
         </div>
         </td>
         <td>
-        <font size="5"><b> TomoPhantom </b> <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical tomographic projection data (parallel-beam geometry). It can be used for testing various tomographic reconstruction methods, as well as image processing methods, such as, denoising, deblurring, segmentation, and machine/deep learning tasks. </font>
+        <font size="5"><b> TomoPhantom </b> <a href="https://doi.org/10.1016/j.softx.2018.05.003">[1]</a> is a toolbox to generate customisable 2D-4D phantoms (with a temporal capability) and their analytical tomographic projection data for parallel-beam geometry. It can be used for testing various tomographic reconstruction methods, as well as image processing methods, such as, denoising, deblurring, segmentation, and machine/deep learning tasks. </font>
         </td>
     </tr>
 </table>
 
 <div align="center">
-  <img src="docs/source/_static/tomophantom_logo_transp.png" height="350"><br>
-  <img src="docs/source/_static/models2Dtime/2DtModel14.gif" height="175"><img src="docs/img/models4D/model11_4D.gif "height="175" width="200"><br>
+  <img src="docs/source/_static/tomophantom_apps.png" height="350"><br>
+  <img src="docs/source/_static/models2Dtime/2DtModel14.gif" height="175"><img src="docs/source/_static/models4D/model11_4D.gif "height="175" width="200"><br>
 </div>
 
 ****************
+
+### NEW! VERSION 3.0
+TomoPhantom has been refactored, please see [changes](CHANGES.md). Everyone is welcome to <a href="https://dkazanc.github.io/TomoPhantom/index.html">Documentation</a> page.
+
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
         <p> TomoPhantom is recommended for various image processing tasks that require extensive numerical testing: image reconstruction, denoising, deblurring, etc. In particular, TomoPhantom is best-suited for testing various tomographic image reconstruction (TIR) methods. For TIR algorithms testing, the popular <a href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan phantom</a> is not always a good choice due to its piecewise-constant nature. This toolbox provides a simple modular approach to efficiently build customisable 2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth analytical objects as well as their analytical <a href="https://en.wikipedia.org/wiki/Radon_transform">Radon transforms</a> .
@@ -34,11 +38,7 @@ Tomophantom is distributed as a Python conda package for Linux/Windows/Mac OS's:
 ```
 conda install -c httomo tomophantom
 ```
-Please see more detailed information on [installation](INSTALLATION.md) and development environments. 
-
-
-#### License:
-TomoPhantom is released under [Apache License v.2](http://www.apache.org/licenses/LICENSE-2.0). Note that some demos where ['ASTRA-toolbox'](http://www.astra-toolbox.com/) is used are of GPLv3 license and also BSD-3 license for [TomoPy](http://tomopy.readthedocs.io/en) package.
+Please see more detailed information on <a href="https://dkazanc.github.io/TomoPhantom/howto/installation.html">Installation</a> and development environments.
 
 ### Related software projects on GitHub:
 - [xdesign](https://github.com/tomography/xdesign) XDesign is an open-source Python package for generating configurable simulation phantoms for benchmarking tomographic image reconstruction.

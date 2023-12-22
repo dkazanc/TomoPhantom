@@ -32,7 +32,7 @@ jobs:
             environment-file: ./docs/source/doc-conda-requirements.yml
 
         - name: Build api docs
-          run: sphinx-apidoc -feT -t=./docs/source/_templates -o ./docs/source/api ./httomo
+          run: sphinx-apidoc -feT -t=./docs/source/_templates -o ./docs/source/api ./tomophantom
 
         - name: Generate yml docs
           run: python ./docs/source/yaml_doc_generator.py
