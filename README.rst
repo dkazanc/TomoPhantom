@@ -38,7 +38,7 @@ Tomophantom is distributed as a Python conda package for Linux/Windows/Mac OS's:
 
    $ conda install -c httomo tomophantom
    
-See the detailed page on :ref:`ref_installation`.
+See the detailed page on `Installation <https://dkazanc.github.io/TomoPhantom/howto/installation.html>`_.
 
 .. [SX2018] D. Kazantsev et al. 2018, TomoPhantom, a software package to 
    generate 2D-4D analytical phantoms for CT image reconstruction 
