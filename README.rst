@@ -1,3 +1,8 @@
+|Generic badge|
+
+.. |Generic badge| image:: https://github.com/dkazanc/TomoPhantom/actions/workflows/tomophantom_conda_upload/badge.svg
+   :target:
+
 **TomoPhantom** (cite [SX2018]_) is a toolbox to generate customisable 2D-4D phantoms 
 (with a temporal capability) and their analytical tomographic projections
 for parallel-beam geometry. It can be used for testing various tomographic 
