@@ -1,0 +1,4 @@
+/* Colour dropdown for dark mode */
+.sphinx-bs.dropdown.card{
+    background-color: var(--pst-color-surface);
+}

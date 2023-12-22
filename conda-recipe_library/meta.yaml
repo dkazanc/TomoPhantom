@@ -1,0 +1,27 @@
+package:
+  name: libtomophantom
+  version: {{ environ.get('CIL_VERSION', '') }}
+
+build:
+  preserve_egg_dir: False
+  number: {{ environ.get('GIT_DESCRIBE_NUMBER', 0) }}
+  script_env:
+    - CIL_VERSION
+
+
+requirements:
+  build:
+    - python
+    - numpy
+    - setuptools
+    - cmake
+    - blas=*=openblas # [not win]
+
+  run:
+    - python
+    - libgcc-ng # [unix]
+
+about:
+  home: https://github.com/dkazanc/TomoPhantom
+  license:  Apache 2.0 license
+  summary: 'Tomography Phantom Data generator'

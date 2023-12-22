@@ -1,0 +1,46 @@
+package:
+  name: tomophantom
+  version: {{ environ.get('CIL_VERSION', '') }}
+
+source:
+  path: ../
+  
+build:
+  noarch: python
+  number: 0
+  script: python -m pip install --no-deps --ignore-installed .
+
+test:
+  files:
+    - tomophantom/phantomlib/*
+  requires:
+    - pip
+    - pytest
+  imports:
+    - tomophantom
+  source_files:
+    - tests/*
+  commands:
+    - pip check
+    - pytest
+
+requirements:
+  build:
+    - python>=3.9
+    - numpy
+    - setuptools
+    
+  run:
+    - python>=3.9
+    - numpy
+    - libtomophantom
+    - setuptools
+    - scipy
+    - pillow
+    - scikit-image
+    - pytest    
+
+about:
+  home: https://github.com/dkazanc/TomoPhantom
+  license:  Apache 2.0 license
+  summary: 'Tomography Phantom Data generator'
