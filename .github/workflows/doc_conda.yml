@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-      - main
+      - master
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-linux:
@@ -33,9 +33,6 @@ jobs:
 
         - name: Build api docs
           run: sphinx-apidoc -feT -t=./docs/source/_templates -o ./docs/source/api ./tomophantom
-
-        - name: Generate yml docs
-          run: python ./docs/source/yaml_doc_generator.py
 
         - name: Build html
           run: sphinx-build -a -E -b html ./docs/source/ ./docs/build/
