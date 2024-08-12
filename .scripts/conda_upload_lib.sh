@@ -13,7 +13,7 @@ export CIL_VERSION=3.0.1
 $CONDA/bin/conda build conda-recipe_library . -c httomo
 
 # upload packages to conda
-find $CONDA_BLD_PATH/$OS -name *.tar.bz2 | while read file
+find $CONDA_BLD_PATH/$OS -name *.tar.bz2 | while read -r file
 do
     echo $file
     $CONDA/bin/anaconda -v --show-traceback --token $CONDA_TOKEN upload $file --force

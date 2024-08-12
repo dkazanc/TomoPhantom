@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: Checkout repository code
         uses: actions/checkout@v4
-        with:
-          ref: "master"
-          fetch-depth: 0
 
       # setup Python 3.11
       - name: Setup Python 3.11
