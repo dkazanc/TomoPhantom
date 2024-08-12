@@ -23,6 +23,7 @@ jobs:
       - name: Install dependencies with Conda
         run: |
           $CONDA/bin/conda install -c conda-forge conda-build anaconda-client
+          $CONDA/bin/conda install --solver=classic conda-forge::conda-libmamba-solver conda-forge::libmamba conda-forge::libmambapy conda-forge::libarchive
           $CONDA/bin/conda install -c conda-forge cmake
           $CONDA/bin/conda update conda
           $CONDA/bin/conda update conda-build
