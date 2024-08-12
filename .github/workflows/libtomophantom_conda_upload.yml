@@ -1,4 +1,4 @@
-name: tomophantom_conda_upload
+name: libtomophantom_conda_upload
 
 on: [push]
 
@@ -26,6 +26,7 @@ jobs:
       - name: Install dependencies with Conda
         run: |
           $CONDA/bin/conda install -c conda-forge conda-build anaconda-client
+          $CONDA/bin/conda install -c conda-forge cmake
           $CONDA/bin/conda update conda
           $CONDA/bin/conda update conda-build
           $CONDA/bin/conda list
@@ -37,5 +38,5 @@ jobs:
 
       - name: Upload the tested package to conda cloud
         run: |
-          chmod +x ./.scripts/conda_upload.sh
-          ./.scripts/conda_upload.sh
+          chmod +x ./.scripts/conda_upload_lib.sh
+          ./.scripts/conda_upload_lib.sh
