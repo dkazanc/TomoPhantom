@@ -14,11 +14,11 @@ jobs:
       - name: Checkout repository code
         uses: actions/checkout@v4
 
-      # setup Python 3.11
-      - name: Setup Python 3.11
-        uses: actions/setup-python@v2
+      # setup Python 3.10
+      - name: Setup Python 3.10
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.10'
 
       - name: Install dependencies with Conda
         run: |
