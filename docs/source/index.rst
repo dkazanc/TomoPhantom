@@ -20,6 +20,16 @@
     howto/libraries
     howto/simulate
 
+
+.. _tutorials_content:
+
+.. toctree::
+    :caption: Tutorials
+    :maxdepth: 2
+    
+    tutorials/model_tutorial
+    tutorials/object_tutorial
+
 .. _reference_content:
 
 .. toctree::

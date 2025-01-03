@@ -1,6 +1,9 @@
 name: libtomophantom_conda_upload
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build-linux:

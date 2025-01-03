@@ -33,8 +33,8 @@ Object blabla
 Library files
 -------------
 
-Library files are the text files which are provided to users with the downloaded repository or installation. Different phantoms are hardcoded using parameters 
-in the files. 2D phantoms and their dynamic extenstions are stored in the :data:`Phantom2DLibrary.dat` file, while 3D phantoms and their dynamic
-extensions are stored in the :data:`Phantom3DLibrary.dat` file. The files are located in the `tomophantom/phantomlib` folder.
+The library files are the text files which are provided to users with the downloaded repository or an installation. Different phantoms are hardcoded using parameters 
+for objects in those files. 2D phantoms and (2D + time) *dynamic* phantoms are stored in the :data:`Phantom2DLibrary.dat` file, while 3D phantoms and (3D + time)  dynamic
+phantoms are stored in the :data:`Phantom3DLibrary.dat` file. The files are located in the :data:`tomophantom/phantomlib` folder.
 
 

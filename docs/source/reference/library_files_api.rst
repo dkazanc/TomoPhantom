@@ -3,7 +3,7 @@
 Library files API
 =================
 
-There is a certain API protocol how the user should define objects in the :ref:`ref_glossary_library`. 
+There is a certain API protocol how the user should define objects in the :ref:`ref_glossary_library`. If one is interested to learn about parameters of the objects, it is better to skip to :ref:`ref_object_api` directly.
 
 
 .. _ref_library_files_api2d:
@@ -57,7 +57,7 @@ TomoPhantom converts this string of 7 parameters [#f2]_ into the following behin
     b=0.92
     angle=0.0
 
-As we move here into the :ref:`ref_glossary_object` API territory, it is best to re-direct the reader to the  :ref:`ref_object_2d` section. There the meaning of each parameter of a 2D object is explained in detail. 
+As we move here into the :ref:`ref_glossary_object` API territory, it is best to re-direct the reader to the  :ref:`ref_object_2d` section. The meaning of each parameter for a 2D object is explained in detail there. 
 
 
 .. _ref_library_files_api3d:
@@ -112,7 +112,7 @@ Again, for more in-depth read about parameters of 3D objects see :ref:`ref_objec
 
 .. rubric:: Footnotes
 
-.. [#f2] The developers do understand that the choice of the text format to represent configuration files for libraries might not be the best choice. Potentially choosing YAML language instead would make parameters for objects more informative and readable. However, the choice of text file libraries was historically inherited from the initial implementation of software in C. Of course, it would be great to refactor it at some point.   
+.. [#f2] Arguably, the choice of the text format to represent configuration library files might not be the best choice. Potentially, choosing the YAML language instead would make parameters for objects more informative and readable. However, the choice of text file libraries was historically inherited from the initial implementation of software in C language. We understand that it would be great to refactor it at some point.   
 
 
 
