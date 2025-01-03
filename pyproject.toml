@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 include-package-data = true
 packages = ["tomophantom",
-            "tomophantom.ctypes",            
+            "tomophantom.ctypes",
             "tomophantom.supp",
             ]
 
@@ -27,9 +27,8 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "License :: OSI Approved :: BSD 3-clause",
     "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.9",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dynamic = ["version"]
 dependencies = [
     "numpy",

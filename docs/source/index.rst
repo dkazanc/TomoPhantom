@@ -7,8 +7,7 @@
     :maxdepth: 2
     :glob:
 
-    introduction/about
-    introduction/libraries
+    introduction/about    
 
 .. _how_to_content:
 
@@ -16,7 +15,10 @@
     :caption: How To's
     :maxdepth: 2
 
-    howto/installation
+    howto/installation    
+    howto/build_phantoms
+    howto/libraries
+    howto/simulate
 
 .. _reference_content:
 
@@ -24,4 +26,7 @@
     :caption: Reference guides
     :maxdepth: 2
     
+    reference/library_files_api
+    reference/object_api
+    reference/glossary
     reference/api

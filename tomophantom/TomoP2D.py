@@ -1,21 +1,15 @@
-"""
-Copyright 2023
-The University of Manchester & Diamond Light Source
-Licensed under the Apache License, Version 2.0.
-
-
-These are modules for generation of 2D and 3D (dynamic extensions)
-phantoms and their analytical data.
+"""Modules for generating 2D synthetic phantoms and their analytical projection data. The dynamic extensions of 2D phantoms (resulting in 3D arrays) can also be generated.
 
 API Summary:
 
-* Model - generates a 2D phantom from the Library (Phantom2DLibrary)
-* ModelTemporal - generates a (2D+t) 3D model from the Library (Phantom2DLibrary)
-* ModelSino - generates 2D sinogram for a model from the Library (Phantom2DLibrary)
-* ModelSinoTemporal - generates (2D+t) sinogram for a temporal model from the Library (Phantom2DLibrary)
-* Object - generates a 2D phantom from a given object described in the dictionary.
+* :func:`Model` - generates a 2D phantom from :ref:`howto_2d_libs`.
+* :func:`ModelTemporal` - generates a dynamic (2D+t) phantom from :ref:`howto_2d_libs`.
+* :func:`ModelSino` - generates a 2D sinogram for a model from :ref:`howto_2d_libs`.
+* :func:`ModelSinoTemporal` - generates a dynamic (2D+t) sinogram for a temporal model from :ref:`howto_2d_libs`.
+* :func:`Object` - generates one elementary object from the provided parameters, see .
 * ObjectSino - generates a 2D sinogram from a given object described in the dictionary.
 * SinoNum - calculates a sinogram numerically from any given 2D array.
+
 """
 
 import ctypes
@@ -232,15 +226,16 @@ def ModelSinoTemporal(
 
 
 def Object(phantom_size: int, obj_params: Union[list, dict]) -> np.ndarray:
-    """Generate a 2D analytical phantom for the standalone
-       geometrical object that is parametrised in the "obj_params" dictionary.
+    """Generates a 2D analytical phantom for the standalone
+       geometrical object that is parametrised in the "obj_params" dictionary. Multiple objects can be stacked together
+       by providing a list of dictionaries, where each dictionary associated with an object. See more in
 
     Args:
         phantom_size (int): A size of the phantom (squared).
-        obj_params (list of dict or a dict): A dictionary with parameters of an object, see Demos.
+        obj_params (a dict or a list of dict): A dictionary or a list of dictionaries with the parameters for object(s), see Demos.
 
     Returns:
-        np.ndarray: The generated 2D analytical object.
+        np.ndarray: The generated 2D analytical phantom.
     """
     if type(obj_params) is dict:
         obj_params = [obj_params]

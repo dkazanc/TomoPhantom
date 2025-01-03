@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
+"""Modules to generate a variety of imaging artefacts.
 """
-Copyright 2023
-The University of Manchester & Diamond Light Source
-Licensed under the Apache License, Version 2.0.
-"""
+
 import numpy as np
 import random
 from typing import Union, Any
