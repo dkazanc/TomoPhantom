@@ -1,0 +1,1149 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tomophantom.TomoP3D &#8212; Tomophantom Documentation page</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/general.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=31ed26e0"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/tomophantom/TomoP3D';</script>
+    <link rel="icon" href="../../_static/tomophantom_logo_light.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Jan 06, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/tomophantom_logo_light.png" class="logo__image only-light" alt="Tomophantom Documentation page - Home"/>
+    <img src="../../_static/tomophantom_logo_dark.png" class="logo__image only-dark pst-js-only" alt="Tomophantom Documentation page - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/about.html">About TomoPhantom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../introduction/start.html">Where to start?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How To's</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../howto/installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/build_phantoms.html">Build Phantoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/libraries.html">Use Phantom Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../howto/simulate.html">Use Artefacts Simulator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/model_tutorial.html">Phantoms using models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jup_notebooks/model2D.html">Model 2D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jup_notebooks/model3D.html">Model 3D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/object_tutorial.html">Phantoms using objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../jup_notebooks/Random2Dphantom_artifacts.html">Stochastic phantom 2D and reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../reference/library_files_api.html">Library files API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/object_api.html">Object API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../reference/api.html">API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/tomophantom.TomoP2D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP2D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/tomophantom.TomoP3D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/tomophantom.artefacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/tomophantom.flatsgen.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.flatsgen</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/tomophantom.generator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.generator</span></code></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for tomophantom.TomoP3D</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Modules for generating 3D synthetic phantoms and their analytical projection data. </span>
+<span class="sd">The dynamic phantoms (resulting in 4D arrays) can also be generated.</span>
+
+<span class="sd">API Summary:</span>
+
+<span class="sd">* :func:`Model` - generates a 3D phantom using a :ref:`ref_glossary_model` from :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelSub` - generates a vertical subset (a cutoff) for a :ref:`ref_glossary_model` from :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelTemporal` - generates a :ref:`ref_glossary_dynamic_model` (3D + t) from the from :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelTemporalSub` - generates a vertical subset (cutoff) of a 4D :ref:`ref_glossary_dynamic_model` from the :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelSino` - generates 3D projection data for a :ref:`ref_glossary_model` from the :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelSinoSub` - generates a vertical subset (cutoff) for 3D projection data for a :ref:`ref_glossary_model` from the :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelSinoTemporal` - generates (3D + t) 4D projection data for a temporal model from the :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`ModelSinoTemporalSub` - generates (3D + t) 4D projection data (subset) for a temporal model from the :ref:`howto_3d_libs`.</span>
+<span class="sd">* :func:`Object` - generates one elementary 3D :ref:`ref_glossary_object` from the provided parameters, see :ref:`ref_object_api`.</span>
+<span class="sd">* :func:`ObjectSino` - generates a 3D projection data for one :ref:`ref_glossary_object` from the provided parameters, see :ref:`ref_object_api`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">ctypes</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numbers</span> <span class="kn">import</span> <span class="n">Number</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">tomophantom.ctypes.external</span> <span class="k">as</span> <span class="nn">external</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Model&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelSub&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelTemporal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelTemporalSub&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelSino&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelSinoSub&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelSinoTemporal&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ModelSinoTemporalSub&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ObjectSino&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">Objects3D</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration with the available objects for 3D phantoms&quot;&quot;&quot;</span>
+
+    <span class="n">GAUSSIAN</span> <span class="o">=</span> <span class="s2">&quot;gaussian&quot;</span>
+    <span class="n">PARABOLOID</span> <span class="o">=</span> <span class="s2">&quot;paraboloid&quot;</span>
+    <span class="n">ELLIPSOID</span> <span class="o">=</span> <span class="s2">&quot;ellipsoid&quot;</span>
+    <span class="n">CONE</span> <span class="o">=</span> <span class="s2">&quot;cone&quot;</span>
+    <span class="n">CUBOID</span> <span class="o">=</span> <span class="s2">&quot;cuboid&quot;</span>
+    <span class="n">ELLIPCYLINDER</span> <span class="o">=</span> <span class="s2">&quot;elliptical_cylinder&quot;</span>
+
+
+<span class="k">def</span> <span class="nf">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check parameters before executing the generation script.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: a list of integers</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_checkParams3D</span><span class="p">(</span>
+        <span class="n">params</span><span class="p">,</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">params</span>
+
+
+<div class="viewcode-block" id="Model">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.Model">[docs]</a>
+<span class="k">def</span> <span class="nf">Model</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 3D phantom based on the model no. in the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D phantom.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">phantom_size</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N1</span> <span class="o">=</span> <span class="n">N2</span> <span class="o">=</span> <span class="n">N3</span> <span class="o">=</span> <span class="n">phantom_size</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is temporal (3D+time), use &#39;ModelTemporal&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">phantom</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">N1</span><span class="p">,</span>
+        <span class="n">N2</span><span class="p">,</span>
+        <span class="n">N3</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="n">N1</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">phantom</span></div>
+
+
+
+<div class="viewcode-block" id="ModelSub">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelSub">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelSub</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+    <span class="n">sub_index</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a subset of 3D phantom (vertical cutoff) based on the model no. in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.</span>
+<span class="sd">        sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D phantom.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">phantom_size</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N1</span> <span class="o">=</span> <span class="n">N2</span> <span class="o">=</span> <span class="n">N3</span> <span class="o">=</span> <span class="n">phantom_size</span>
+
+    <span class="n">Z1</span><span class="p">,</span> <span class="n">Z2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sub_index</span><span class="p">]</span>
+
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;</span> <span class="n">Z1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Upper index must be larger than the lower one&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z1</span> <span class="o">&lt;</span> <span class="n">N3</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the lower index is incorrect&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z2</span> <span class="o">&lt;=</span> <span class="n">N3</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the higher index is incorrect&quot;</span><span class="p">)</span>
+
+    <span class="n">sub_size</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">-</span> <span class="n">Z1</span>  <span class="c1"># the size of the vertical slab</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">sub_size</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is temporal (3D+time), use &#39;ModelTemporal&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">phantom</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">N1</span><span class="p">,</span>
+        <span class="n">N2</span><span class="p">,</span>
+        <span class="n">N3</span><span class="p">,</span>
+        <span class="n">Z1</span><span class="p">,</span>
+        <span class="n">Z2</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">phantom</span></div>
+
+
+
+<div class="viewcode-block" id="ModelTemporal">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelTemporal">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelTemporal</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates 4D (3D+time) phantom based on the model no. in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 4D phantom.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">phantom_size</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N1</span> <span class="o">=</span> <span class="n">N2</span> <span class="o">=</span> <span class="n">N3</span> <span class="o">=</span> <span class="n">phantom_size</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is stationary (3D), use &#39;Model&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">phantom</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">N1</span><span class="p">,</span>
+        <span class="n">N2</span><span class="p">,</span>
+        <span class="n">N3</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="n">N1</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">phantom</span></div>
+
+
+
+<div class="viewcode-block" id="ModelTemporalSub">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelTemporalSub">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelTemporalSub</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span>
+    <span class="n">sub_index</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a subset of 4D phantom (vertical cutoff) based on the model no. in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.</span>
+<span class="sd">        sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 4D phantom.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">phantom_size</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N1</span> <span class="o">=</span> <span class="n">N2</span> <span class="o">=</span> <span class="n">N3</span> <span class="o">=</span> <span class="n">phantom_size</span>
+
+    <span class="n">Z1</span><span class="p">,</span> <span class="n">Z2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sub_index</span><span class="p">]</span>
+
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;</span> <span class="n">Z1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Upper index must be larger than the lower one&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z1</span> <span class="o">&lt;</span> <span class="n">N3</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the lower index is incorrect&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z2</span> <span class="o">&lt;=</span> <span class="n">N3</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the higher index is incorrect&quot;</span><span class="p">)</span>
+
+    <span class="n">sub_size</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">-</span> <span class="n">Z1</span>  <span class="c1"># the size of the vertical slab</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is temporal (3D+time), use &#39;ModelTemporal&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">phantom</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">sub_size</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">phantom</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">N1</span><span class="p">,</span>
+        <span class="n">N2</span><span class="p">,</span>
+        <span class="n">N3</span><span class="p">,</span>
+        <span class="n">Z1</span><span class="p">,</span>
+        <span class="n">Z2</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">phantom</span></div>
+
+
+
+<div class="viewcode-block" id="ModelSino">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelSino">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelSino</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_horiz</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_vert</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">angles</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 3D analytical sinogram for corresponding models in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int): A scalar for squared phantom dimensions (2D slice).</span>
+<span class="sd">        detector_horiz (int): Size of the horizontal detector in pixels.</span>
+<span class="sd">        detector_vert (int): Size of the vertical detector in pixels.</span>
+<span class="sd">        angles (np.ndarray): Angles vector in degrees.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Please give a scalar for the phantom size (2d slice), if one needs non-cubic data generator please see ModelSinoSub function&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="n">angles_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># execute the model building function</span>
+        <span class="n">sino3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">angles_total</span><span class="p">,</span> <span class="n">detector_vert</span><span class="p">,</span> <span class="n">detector_horiz</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is temporal (4D), use &#39;ModelTemporalSino&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model_sino3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sino3d</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">detector_horiz</span><span class="p">,</span>
+        <span class="n">detector_vert</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="n">detector_vert</span><span class="p">,</span>
+        <span class="n">phantom_size</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span>
+        <span class="n">angles_total</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sino3d</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ModelSinoSub">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelSinoSub">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelSinoSub</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_horiz</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_vert</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">sub_index</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">angles</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 3D analytical sinogram with vertical cutoff using sub_index tuple for corresponding models in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int): A scalar for squared phantom dimensions (2D slice).</span>
+<span class="sd">        detector_horiz (int): Size of the horizontal detector in pixels.</span>
+<span class="sd">        detector_vert (int): Size of the vertical detector in pixels.</span>
+<span class="sd">        sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.</span>
+<span class="sd">        angles (np.ndarray): Angles vector in degrees.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">Z1</span><span class="p">,</span> <span class="n">Z2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sub_index</span><span class="p">]</span>
+
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;</span> <span class="n">Z1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Upper index must be larger than the lower one&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z1</span> <span class="o">&lt;</span> <span class="n">detector_vert</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the lower index is incorrect&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z2</span> <span class="o">&lt;=</span> <span class="n">detector_vert</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the higher index is incorrect&quot;</span><span class="p">)</span>
+
+    <span class="n">sub_size</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">-</span> <span class="n">Z1</span>  <span class="c1"># the size of the vertical slab</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="n">angles_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="c1"># execute the model building function</span>
+        <span class="n">sino3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">angles_total</span><span class="p">,</span> <span class="n">sub_size</span><span class="p">,</span> <span class="n">detector_horiz</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is temporal (4D), use &#39;ModelTemporalSino&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model_sino3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sino3d</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">detector_horiz</span><span class="p">,</span>
+        <span class="n">detector_vert</span><span class="p">,</span>
+        <span class="n">Z1</span><span class="p">,</span>
+        <span class="n">Z2</span><span class="p">,</span>
+        <span class="n">phantom_size</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span>
+        <span class="n">angles_total</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sino3d</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ModelSinoTemporal">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelSinoTemporal">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelSinoTemporal</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_horiz</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_vert</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">angles</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 4D (3D+time) analytical sinogram for corresponding models in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Temporal model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int): A scalar for squared phantom dimensions (2D slice).</span>
+<span class="sd">        detector_horiz (int): Size of the horizontal detector in pixels.</span>
+<span class="sd">        detector_vert (int): Size of the vertical detector in pixels.</span>
+<span class="sd">        angles (np.ndarray): Angles vector in degrees.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 4D projection data of the following shape [time_frames, detector_vert, AngTot, detector_horiz].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="n">angles_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is stationary (3D), use &#39;ModelSino&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sino4d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">angles_total</span><span class="p">,</span> <span class="n">detector_vert</span><span class="p">,</span> <span class="n">detector_horiz</span><span class="p">],</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+            <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model_sino3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sino4d</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">detector_horiz</span><span class="p">,</span>
+        <span class="n">detector_vert</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="n">detector_vert</span><span class="p">,</span>
+        <span class="n">phantom_size</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span>
+        <span class="n">angles_total</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sino4d</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ModelSinoTemporalSub">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ModelSinoTemporalSub">[docs]</a>
+<span class="k">def</span> <span class="nf">ModelSinoTemporalSub</span><span class="p">(</span>
+    <span class="n">model_no</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_horiz</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_vert</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">sub_index</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">,</span>
+    <span class="n">angles</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">models_library_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 4D analytical sinogram with vertical cutoff using sub_index tuple for corresponding models in</span>
+<span class="sd">    the library file Phantom3DLibrary.dat.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_no (int): Temporal model number from the Phantom3DLibrary.dat library file.</span>
+<span class="sd">        phantom_size (int): A scalar for squared phantom dimensions (2D slice).</span>
+<span class="sd">        detector_horiz (int): Size of the horizontal detector in pixels.</span>
+<span class="sd">        detector_vert (int): Size of the vertical detector in pixels.</span>
+<span class="sd">        sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.</span>
+<span class="sd">        angles (np.ndarray): Angles vector in degrees.</span>
+<span class="sd">        models_library_path (Path): A path to the library file.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D projection data of the following shape [time, detector_vert, AngTot, detector_horiz].</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">Z1</span><span class="p">,</span> <span class="n">Z2</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sub_index</span><span class="p">]</span>
+
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;</span> <span class="n">Z1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Upper index must be larger than the lower one&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z1</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z1</span> <span class="o">&lt;</span> <span class="n">detector_vert</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the lower index is incorrect&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">Z2</span> <span class="o">&lt;=</span> <span class="n">detector_vert</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Range of the higher index is incorrect&quot;</span><span class="p">)</span>
+
+    <span class="n">sub_size</span> <span class="o">=</span> <span class="n">Z2</span> <span class="o">-</span> <span class="n">Z1</span>  <span class="c1"># the size of the vertical slab</span>
+
+    <span class="c1"># check the validity of model&#39;s parameters</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="mi">12</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">))</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">_check_params3d</span><span class="p">(</span><span class="n">model_no</span><span class="p">,</span> <span class="n">models_library_path</span><span class="p">)</span>
+    <span class="n">__testParams3D</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>  <span class="c1"># check parameters and terminate if incorrect</span>
+
+    <span class="n">angles_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;The selected model is stationary (3D), use &#39;ModelSino&#39; function instead&quot;</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sino4d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">params</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">angles_total</span><span class="p">,</span> <span class="n">sub_size</span><span class="p">,</span> <span class="n">detector_horiz</span><span class="p">],</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+            <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">external</span><span class="o">.</span><span class="n">c_model_sino3d</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sino4d</span><span class="p">),</span>
+        <span class="n">model_no</span><span class="p">,</span>
+        <span class="n">detector_horiz</span><span class="p">,</span>
+        <span class="n">detector_vert</span><span class="p">,</span>
+        <span class="n">Z1</span><span class="p">,</span>
+        <span class="n">Z2</span><span class="p">,</span>
+        <span class="n">phantom_size</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">angles</span><span class="p">),</span>
+        <span class="n">angles_total</span><span class="p">,</span>
+        <span class="n">models_library_path</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sino4d</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Object">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.Object">[docs]</a>
+<span class="k">def</span> <span class="nf">Object</span><span class="p">(</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]],</span> <span class="n">obj_params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 3D object for the standalone geometrical figure</span>
+<span class="sd">    that is parametrised in the &quot;obj_params&quot; dictionary, see :ref:`ref_object_api`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.</span>
+<span class="sd">        obj_params (a list of dicts or dict): A dictionary with parameters of an object, see :ref:`ref_object_api`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">phantom_size</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">N1</span> <span class="o">=</span> <span class="n">N2</span> <span class="o">=</span> <span class="n">N3</span> <span class="o">=</span> <span class="n">phantom_size</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj_params</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">obj_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj_params</span><span class="p">]</span>
+
+    <span class="n">object3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">N1</span><span class="p">,</span> <span class="n">N2</span><span class="p">,</span> <span class="n">N3</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+    <span class="c1"># unpacking obj_params dictionary</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">obj_params</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">__testParams3d</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="n">objectName</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;Obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">C0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;C0&quot;</span><span class="p">]</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">]</span>
+            <span class="n">y0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;y0&quot;</span><span class="p">]</span>
+            <span class="n">z0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;z0&quot;</span><span class="p">]</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+            <span class="n">phi1</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;phi1&quot;</span><span class="p">]</span>
+            <span class="n">phi2</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">phi3</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">external</span><span class="o">.</span><span class="n">c_object3d</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">object3d</span><span class="p">),</span>
+                <span class="n">N1</span><span class="p">,</span>
+                <span class="n">N2</span><span class="p">,</span>
+                <span class="n">N3</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">N1</span><span class="p">,</span>
+                <span class="n">objectName</span><span class="p">,</span>
+                <span class="n">C0</span><span class="p">,</span>
+                <span class="n">x0</span><span class="p">,</span>
+                <span class="n">y0</span><span class="p">,</span>
+                <span class="n">z0</span><span class="p">,</span>
+                <span class="n">a</span><span class="p">,</span>
+                <span class="n">b</span><span class="p">,</span>
+                <span class="n">c</span><span class="p">,</span>
+                <span class="n">phi1</span><span class="p">,</span>
+                <span class="n">phi2</span><span class="p">,</span>
+                <span class="n">phi3</span><span class="p">,</span>
+                <span class="n">tt</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">object3d</span></div>
+
+
+
+<div class="viewcode-block" id="ObjectSino">
+<a class="viewcode-back" href="../../api/tomophantom.TomoP3D.html#tomophantom.TomoP3D.ObjectSino">[docs]</a>
+<span class="k">def</span> <span class="nf">ObjectSino</span><span class="p">(</span>
+    <span class="n">phantom_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_horiz</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">detector_vert</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">angles</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="n">obj_params</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">],</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generates a 3D analytical projection data for the standalone geometrical figure</span>
+<span class="sd">    that is parametrised in the &quot;obj_params&quot; dictionary, see :ref:`ref_object_api`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        phantom_size (int): A scalar for phantom dimensions.</span>
+<span class="sd">        detector_horiz (int): Size of the horizontal detector in pixels.</span>
+<span class="sd">        detector_vert (int): Size of the vertical detector in pixels.</span>
+<span class="sd">        angles (np.ndarray): Angles vector in degrees.</span>
+<span class="sd">        obj_params (a list of dicts or dict): A dictionary with parameters of an object,  see :ref:`ref_object_api`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        np.ndarray: The generated 3D projection data for an object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Please give a scalar for phantom size, projection data cannot be obtained for non-cubic phantom&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj_params</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="n">obj_params</span> <span class="o">=</span> <span class="p">[</span><span class="n">obj_params</span><span class="p">]</span>
+
+    <span class="n">angles_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+    <span class="n">tt</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">sino3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">angles_total</span><span class="p">,</span> <span class="n">detector_vert</span><span class="p">,</span> <span class="n">detector_horiz</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># unpacking obj_params dictionary</span>
+    <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="n">obj_params</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">__testParams3d</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="n">objectName</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;Obj&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">C0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;C0&quot;</span><span class="p">]</span>
+            <span class="n">x0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">]</span>
+            <span class="n">y0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;y0&quot;</span><span class="p">]</span>
+            <span class="n">z0</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;z0&quot;</span><span class="p">]</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span>
+            <span class="n">phi1</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;phi1&quot;</span><span class="p">]</span>
+            <span class="n">phi2</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">phi3</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">tt</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">external</span><span class="o">.</span><span class="n">c_object_sino3d</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sino3d</span><span class="p">),</span>
+                <span class="n">detector_horiz</span><span class="p">,</span>
+                <span class="n">detector_vert</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">detector_vert</span><span class="p">,</span>
+                <span class="n">phantom_size</span><span class="p">,</span>
+                <span class="n">angles</span><span class="p">,</span>
+                <span class="n">angles_total</span><span class="p">,</span>
+                <span class="n">objectName</span><span class="p">,</span>
+                <span class="n">C0</span><span class="p">,</span>
+                <span class="n">x0</span><span class="p">,</span>
+                <span class="n">y0</span><span class="p">,</span>
+                <span class="n">z0</span><span class="p">,</span>
+                <span class="n">a</span><span class="p">,</span>
+                <span class="n">b</span><span class="p">,</span>
+                <span class="n">c</span><span class="p">,</span>
+                <span class="n">phi1</span><span class="p">,</span>
+                <span class="n">phi2</span><span class="p">,</span>
+                <span class="n">phi3</span><span class="p">,</span>
+                <span class="n">tt</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="n">sino3d</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">__testParams3d</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Performs a simple type check of the input parameters and a range check&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;obj is not a dict </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="p">)))</span>
+    <span class="c1"># type check</span>
+    <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">obj</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">Number</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;Obj&quot;</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="s2">&quot;is not a Number&quot;</span><span class="p">)</span>
+    <span class="n">typecheck</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># range check</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;x0 is out of range. Must be between -1 and 1&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">rangecheck</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;y0&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;y0&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;y0 is out of range. Must be between -1 and 1&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">rangecheck</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;z0&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;z0&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;z0 is out of range. Must be between -1 and 1&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">rangecheck</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;a (object size) must be positive in [0,2] range&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">rangecheck</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;b (object size) must be positive in [0,2] range&quot;</span><span class="p">)</span>
+    <span class="n">rangecheck</span> <span class="o">=</span> <span class="n">rangecheck</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">obj</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">rangecheck</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;c (object size) must be positive in [0,2] range&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rangecheck</span> <span class="ow">and</span> <span class="n">typecheck</span>
+
+
+<span class="k">def</span> <span class="nf">__testParams3D</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Check if the library file &lt;Phantom3DLibrary.dat&gt; exists, the given path is correct and the syntax is valid&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;The given model is not found, check available models in &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Components number cannot be negative, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;TimeSteps cannot be negative, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unknown name of the object, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;C0 should not be equal to zero, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;x0 (object position) must be in [-1,1] range, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;y0 (object position) must be in [-1,1] range, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;z0 (object position) must be in [-1,1] range, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;a (object size) must be positive in [0,2] range, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;b (object size) must be positive in [0,2] range, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">obj</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;c (object size) must be positive in [0,2] range, check &lt;Phantom3DLibrary.dat&gt; file&quot;</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Daniil Kazantsev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Diamond Light Source and Manchester University, UK.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jan 06, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

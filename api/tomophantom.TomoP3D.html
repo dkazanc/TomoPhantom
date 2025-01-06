@@ -1,0 +1,722 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tomophantom.TomoP3D &#8212; Tomophantom Documentation page</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/general.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=31ed26e0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/tomophantom.TomoP3D';</script>
+    <link rel="icon" href="../_static/tomophantom_logo_light.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tomophantom.artefacts" href="tomophantom.artefacts.html" />
+    <link rel="prev" title="tomophantom.TomoP2D" href="tomophantom.TomoP2D.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Jan 06, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/tomophantom_logo_light.png" class="logo__image only-light" alt="Tomophantom Documentation page - Home"/>
+    <img src="../_static/tomophantom_logo_dark.png" class="logo__image only-dark pst-js-only" alt="Tomophantom Documentation page - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/about.html">About TomoPhantom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/start.html">Where to start?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How To's</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../howto/installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/build_phantoms.html">Build Phantoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/libraries.html">Use Phantom Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/simulate.html">Use Artefacts Simulator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/model_tutorial.html">Phantoms using models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/model2D.html">Model 2D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/model3D.html">Model 3D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/object_tutorial.html">Phantoms using objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/Random2Dphantom_artifacts.html">Stochastic phantom 2D and reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/library_files_api.html">Library files API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/object_api.html">Object API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../reference/api.html">API reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.TomoP2D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP2D</span></code></a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.artefacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.flatsgen.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.flatsgen</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.generator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.generator</span></code></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/tomophantom.TomoP3D.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>tomophantom.TomoP3D</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.Model"><code class="docutils literal notranslate"><span class="pre">Model()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSino"><code class="docutils literal notranslate"><span class="pre">ModelSino()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSinoSub"><code class="docutils literal notranslate"><span class="pre">ModelSinoSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSinoTemporal"><code class="docutils literal notranslate"><span class="pre">ModelSinoTemporal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSinoTemporalSub"><code class="docutils literal notranslate"><span class="pre">ModelSinoTemporalSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSub"><code class="docutils literal notranslate"><span class="pre">ModelSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelTemporal"><code class="docutils literal notranslate"><span class="pre">ModelTemporal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelTemporalSub"><code class="docutils literal notranslate"><span class="pre">ModelTemporalSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.Object"><code class="docutils literal notranslate"><span class="pre">Object()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ObjectSino"><code class="docutils literal notranslate"><span class="pre">ObjectSino()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-tomophantom.TomoP3D">
+<span id="tomophantom-tomop3d"></span><h1><a class="reference internal" href="#module-tomophantom.TomoP3D" title="tomophantom.TomoP3D"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></a><a class="headerlink" href="#module-tomophantom.TomoP3D" title="Link to this heading">#</a></h1>
+<p>Modules for generating 3D synthetic phantoms and their analytical projection data.
+The dynamic phantoms (resulting in 4D arrays) can also be generated.</p>
+<p>API Summary:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.Model" title="tomophantom.TomoP3D.Model"><code class="xref py py-func docutils literal notranslate"><span class="pre">Model()</span></code></a> - generates a 3D phantom using a <a class="reference internal" href="../reference/glossary.html#ref-glossary-model"><span class="std std-ref">Model</span></a> from <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelSub" title="tomophantom.TomoP3D.ModelSub"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelSub()</span></code></a> - generates a vertical subset (a cutoff) for a <a class="reference internal" href="../reference/glossary.html#ref-glossary-model"><span class="std std-ref">Model</span></a> from <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelTemporal" title="tomophantom.TomoP3D.ModelTemporal"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelTemporal()</span></code></a> - generates a <a class="reference internal" href="../reference/glossary.html#ref-glossary-dynamic-model"><span class="std std-ref">Dynamic model</span></a> (3D + t) from the from <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelTemporalSub" title="tomophantom.TomoP3D.ModelTemporalSub"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelTemporalSub()</span></code></a> - generates a vertical subset (cutoff) of a 4D <a class="reference internal" href="../reference/glossary.html#ref-glossary-dynamic-model"><span class="std std-ref">Dynamic model</span></a> from the <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelSino" title="tomophantom.TomoP3D.ModelSino"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelSino()</span></code></a> - generates 3D projection data for a <a class="reference internal" href="../reference/glossary.html#ref-glossary-model"><span class="std std-ref">Model</span></a> from the <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelSinoSub" title="tomophantom.TomoP3D.ModelSinoSub"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelSinoSub()</span></code></a> - generates a vertical subset (cutoff) for 3D projection data for a <a class="reference internal" href="../reference/glossary.html#ref-glossary-model"><span class="std std-ref">Model</span></a> from the <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelSinoTemporal" title="tomophantom.TomoP3D.ModelSinoTemporal"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelSinoTemporal()</span></code></a> - generates (3D + t) 4D projection data for a temporal model from the <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ModelSinoTemporalSub" title="tomophantom.TomoP3D.ModelSinoTemporalSub"><code class="xref py py-func docutils literal notranslate"><span class="pre">ModelSinoTemporalSub()</span></code></a> - generates (3D + t) 4D projection data (subset) for a temporal model from the <a class="reference internal" href="../howto/libraries.html#howto-3d-libs"><span class="std std-ref">Library file for 3D phantoms</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.Object" title="tomophantom.TomoP3D.Object"><code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code></a> - generates one elementary 3D <a class="reference internal" href="../reference/glossary.html#ref-glossary-object"><span class="std std-ref">Object</span></a> from the provided parameters, see <a class="reference internal" href="../reference/object_api.html#ref-object-api"><span class="std std-ref">Object API</span></a>.</p></li>
+<li><p><a class="reference internal" href="#tomophantom.TomoP3D.ObjectSino" title="tomophantom.TomoP3D.ObjectSino"><code class="xref py py-func docutils literal notranslate"><span class="pre">ObjectSino()</span></code></a> - generates a 3D projection data for one <a class="reference internal" href="../reference/glossary.html#ref-glossary-object"><span class="std std-ref">Object</span></a> from the provided parameters, see <a class="reference internal" href="../reference/object_api.html#ref-object-api"><span class="std std-ref">Object API</span></a>.</p></li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.Model">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">Model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#Model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.Model" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 3D phantom based on the model no. in the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em><em>, </em><em>Tuple</em><em>(</em><em>int</em><em>)</em>) – A scalar or a tuple with phantom dimensions.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D phantom.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelSino">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelSino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_horiz:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_vert:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path:</span> <span class="pre">~pathlib._local.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelSino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelSino" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 3D analytical sinogram for corresponding models in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em>) – A scalar for squared phantom dimensions (2D slice).</p></li>
+<li><p><strong>detector_horiz</strong> (<em>int</em>) – Size of the horizontal detector in pixels.</p></li>
+<li><p><strong>detector_vert</strong> (<em>int</em>) – Size of the vertical detector in pixels.</p></li>
+<li><p><strong>angles</strong> (<em>np.ndarray</em>) – Angles vector in degrees.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelSinoSub">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelSinoSub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_horiz:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_vert:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_index:</span> <span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path:</span> <span class="pre">~pathlib._local.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelSinoSub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelSinoSub" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 3D analytical sinogram with vertical cutoff using sub_index tuple for corresponding models in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em>) – A scalar for squared phantom dimensions (2D slice).</p></li>
+<li><p><strong>detector_horiz</strong> (<em>int</em>) – Size of the horizontal detector in pixels.</p></li>
+<li><p><strong>detector_vert</strong> (<em>int</em>) – Size of the vertical detector in pixels.</p></li>
+<li><p><strong>sub_index</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a tuple containing 2 indeces (lower, upper) to select a vertical subset.</p></li>
+<li><p><strong>angles</strong> (<em>np.ndarray</em>) – Angles vector in degrees.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelSinoTemporal">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelSinoTemporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_horiz:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_vert:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path:</span> <span class="pre">~pathlib._local.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelSinoTemporal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelSinoTemporal" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 4D (3D+time) analytical sinogram for corresponding models in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Temporal model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em>) – A scalar for squared phantom dimensions (2D slice).</p></li>
+<li><p><strong>detector_horiz</strong> (<em>int</em>) – Size of the horizontal detector in pixels.</p></li>
+<li><p><strong>detector_vert</strong> (<em>int</em>) – Size of the vertical detector in pixels.</p></li>
+<li><p><strong>angles</strong> (<em>np.ndarray</em>) – Angles vector in degrees.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 4D projection data of the following shape [time_frames, detector_vert, AngTot, detector_horiz].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelSinoTemporalSub">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelSinoTemporalSub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_horiz:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_vert:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_index:</span> <span class="pre">tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path:</span> <span class="pre">~pathlib._local.Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelSinoTemporalSub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelSinoTemporalSub" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 4D analytical sinogram with vertical cutoff using sub_index tuple for corresponding models in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Temporal model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em>) – A scalar for squared phantom dimensions (2D slice).</p></li>
+<li><p><strong>detector_horiz</strong> (<em>int</em>) – Size of the horizontal detector in pixels.</p></li>
+<li><p><strong>detector_vert</strong> (<em>int</em>) – Size of the vertical detector in pixels.</p></li>
+<li><p><strong>sub_index</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a tuple containing 2 indeces (lower, upper) to select a vertical subset.</p></li>
+<li><p><strong>angles</strong> (<em>np.ndarray</em>) – Angles vector in degrees.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D projection data of the following shape [time, detector_vert, AngTot, detector_horiz].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelSub">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelSub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelSub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelSub" title="Link to this definition">#</a></dt>
+<dd><p>Generates a subset of 3D phantom (vertical cutoff) based on the model no. in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em><em>, </em><em>Tuple</em><em>(</em><em>int</em><em>)</em>) – A scalar or a tuple with phantom dimensions.</p></li>
+<li><p><strong>sub_index</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a tuple containing 2 indeces (lower, upper) to select a vertical subset.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D phantom.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelTemporal">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelTemporal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelTemporal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelTemporal" title="Link to this definition">#</a></dt>
+<dd><p>Generates 4D (3D+time) phantom based on the model no. in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em><em>, </em><em>Tuple</em><em>(</em><em>int</em><em>)</em>) – A scalar or a tuple with phantom dimensions.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 4D phantom.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ModelTemporalSub">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ModelTemporalSub</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_no</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phantom_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models_library_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ModelTemporalSub"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ModelTemporalSub" title="Link to this definition">#</a></dt>
+<dd><p>Generates a subset of 4D phantom (vertical cutoff) based on the model no. in
+the library file Phantom3DLibrary.dat.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>model_no</strong> (<em>int</em>) – Model number from the Phantom3DLibrary.dat library file.</p></li>
+<li><p><strong>phantom_size</strong> (<em>int</em><em>, </em><em>Tuple</em><em>(</em><em>int</em><em>)</em>) – A scalar or a tuple with phantom dimensions.</p></li>
+<li><p><strong>sub_index</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – a tuple containing 2 indeces (lower, upper) to select a vertical subset.</p></li>
+<li><p><strong>models_library_path</strong> (<em>Path</em>) – A path to the library file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 4D phantom.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.Object">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">Object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#Object"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.Object" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 3D object for the standalone geometrical figure
+that is parametrised in the “obj_params” dictionary, see <a class="reference internal" href="../reference/object_api.html#ref-object-api"><span class="std std-ref">Object API</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phantom_size</strong> (<em>int</em><em>, </em><em>Tuple</em><em>(</em><em>int</em><em>)</em>) – A scalar or a tuple with phantom dimensions.</p></li>
+<li><p><strong>obj_params</strong> (<em>a list</em><em> of </em><em>dicts</em><em> or </em><em>dict</em>) – A dictionary with parameters of an object, see <a class="reference internal" href="../reference/object_api.html#ref-object-api"><span class="std std-ref">Object API</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.TomoP3D.ObjectSino">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.TomoP3D.</span></span><span class="sig-name descname"><span class="pre">ObjectSino</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phantom_size:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_horiz:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detector_vert:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angles:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_params:</span> <span class="pre">list</span> <span class="pre">|</span> <span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/TomoP3D.html#ObjectSino"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.TomoP3D.ObjectSino" title="Link to this definition">#</a></dt>
+<dd><p>Generates a 3D analytical projection data for the standalone geometrical figure
+that is parametrised in the “obj_params” dictionary, see <a class="reference internal" href="../reference/object_api.html#ref-object-api"><span class="std std-ref">Object API</span></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phantom_size</strong> (<em>int</em>) – A scalar for phantom dimensions.</p></li>
+<li><p><strong>detector_horiz</strong> (<em>int</em>) – Size of the horizontal detector in pixels.</p></li>
+<li><p><strong>detector_vert</strong> (<em>int</em>) – Size of the vertical detector in pixels.</p></li>
+<li><p><strong>angles</strong> (<em>np.ndarray</em>) – Angles vector in degrees.</p></li>
+<li><p><strong>obj_params</strong> (<em>a list</em><em> of </em><em>dicts</em><em> or </em><em>dict</em>) – A dictionary with parameters of an object,  see <a class="reference internal" href="../reference/object_api.html#ref-object-api"><span class="std std-ref">Object API</span></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The generated 3D projection data for an object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tomophantom.TomoP2D.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP2D</span></code></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tomophantom.artefacts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.Model"><code class="docutils literal notranslate"><span class="pre">Model()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSino"><code class="docutils literal notranslate"><span class="pre">ModelSino()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSinoSub"><code class="docutils literal notranslate"><span class="pre">ModelSinoSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSinoTemporal"><code class="docutils literal notranslate"><span class="pre">ModelSinoTemporal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSinoTemporalSub"><code class="docutils literal notranslate"><span class="pre">ModelSinoTemporalSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelSub"><code class="docutils literal notranslate"><span class="pre">ModelSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelTemporal"><code class="docutils literal notranslate"><span class="pre">ModelTemporal()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ModelTemporalSub"><code class="docutils literal notranslate"><span class="pre">ModelTemporalSub()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.Object"><code class="docutils literal notranslate"><span class="pre">Object()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.TomoP3D.ObjectSino"><code class="docutils literal notranslate"><span class="pre">ObjectSino()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Daniil Kazantsev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Diamond Light Source and Manchester University, UK.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jan 06, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

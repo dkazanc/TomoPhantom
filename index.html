@@ -1,0 +1,573 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Documentation &#8212; Tomophantom Documentation page</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/css/general.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="_static/documentation_options.js?v=31ed26e0"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <link rel="icon" href="_static/tomophantom_logo_light.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="About TomoPhantom" href="introduction/about.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Jan 06, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/tomophantom_logo_light.png" class="logo__image only-light" alt="Tomophantom Documentation page - Home"/>
+    <img src="_static/tomophantom_logo_dark.png" class="logo__image only-dark pst-js-only" alt="Tomophantom Documentation page - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="introduction/about.html">About TomoPhantom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/start.html">Where to start?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How To's</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="howto/installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/build_phantoms.html">Build Phantoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/libraries.html">Use Phantom Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/simulate.html">Use Artefacts Simulator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials/model_tutorial.html">Phantoms using models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jup_notebooks/model2D.html">Model 2D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jup_notebooks/model3D.html">Model 3D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/object_tutorial.html">Phantoms using objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jup_notebooks/Random2Dphantom_artifacts.html">Stochastic phantom 2D and reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="reference/library_files_api.html">Library files API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/object_api.html">Object API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="reference/api.html">API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/tomophantom.TomoP2D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP2D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tomophantom.TomoP3D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tomophantom.artefacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tomophantom.flatsgen.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.flatsgen</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/tomophantom.generator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.generator</span></code></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/index.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Documentation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Documentation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#install-tomophantom">Install TomoPhantom</a><ul class="visible nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <p><strong>TomoPhantom</strong> (cite <a class="reference internal" href="#sx2018" id="id1"><span>[SX2018]</span></a>) is a toolbox to generate customisable 2D-4D phantoms
+(with a temporal capability) and their analytical tomographic projections
+for parallel-beam geometry. It can be used for testing various tomographic
+reconstruction methods, as well as for image processing methods,
+such as, denoising, deblurring, segmentation, and machine/deep
+learning tasks.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/tomophantom_apps.png"><img alt="Different phantoms and data" src="_images/tomophantom_apps.png" style="width: 522.4px; height: 226.8px;" />
+</a>
+</figure>
+<p><strong>TomoPhantom</strong> is best-suited for testing various tomographic
+image reconstruction (TIR) methods. For TIR algorithms testing,
+the popular <a class="reference external" href="https://en.wikipedia.org/wiki/Shepp%E2%80%93Logan_phantom">Shepp-Logan</a>
+is not always a good choice due to its piecewise-constant nature. This
+toolbox provides a simple modular approach to efficiently build customisable
+2D-4D phantoms consisting of piecewise-constant, piecewise-smooth, and smooth
+analytical objects as well as their analytical <a class="reference external" href="https://en.wikipedia.org/wiki/Radon_transform">Radon transforms</a>
+for parallel-beam scanning geometry.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="_images/2DtModel14.gif"><img alt="Animation of phantoms" src="_images/2DtModel14.gif" style="width: 404.0px; height: 140.0px;" />
+</a>
+</figure>
+<section id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://dkazanc.github.io/Tomophantom/">Documentation</a> is a good place to start.</p>
+</section>
+<section id="install-tomophantom">
+<h1>Install TomoPhantom<a class="headerlink" href="#install-tomophantom" title="Link to this heading">#</a></h1>
+<p>TomoPhantom is distributed as a conda package in Python for Linux &amp; Windows:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>httomo<span class="w"> </span>tomophantom
+</pre></div>
+</div>
+<p>See the detailed installation page on <a class="reference internal" href="howto/installation.html#ref-installation"><span class="std std-ref">Installation Guide</span></a>.</p>
+<div role="list" class="citation-list">
+<div class="citation" id="sx2018" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">SX2018</a><span class="fn-bracket">]</span></span>
+<p>D. Kazantsev et al. 2018, TomoPhantom, a software package to
+generate 2D-4D analytical phantoms for CT image reconstruction
+algorithm benchmarks, Software X, Volume 7, 2018, Pages 150-155. Download <a class="reference external" href="https://github.com/dkazanc/TomoPhantom/blob/master/docs/Softwarex_Kazantsev_preprint.pdf">here</a>.</p>
+</div>
+</div>
+<div class="toctree-wrapper compound" id="intro-content">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction/about.html">About TomoPhantom</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="introduction/about.html#the-general-concept">The general concept</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction/about.html#what-tomophantom-can-do">What TomoPhantom can do</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/start.html">Where to start?</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound" id="how-to-content">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How To's</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="howto/installation.html">Installation Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto/installation.html#python">Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto/installation.html#matlab">Matlab</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="howto/build_phantoms.html">Build Phantoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="howto/libraries.html">Use Phantom Libraries</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="howto/libraries.html#library-file-for-2d-phantoms">Library file for 2D phantoms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="howto/libraries.html#library-file-for-3d-phantoms">Library file for 3D phantoms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="howto/simulate.html">Use Artefacts Simulator</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound" id="tutorials-content">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/model_tutorial.html">Phantoms using models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jup_notebooks/model2D.html">Model 2D and reconstruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jup_notebooks/model2D.html#Using-TomoPhantom-to:">Using TomoPhantom to:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jup_notebooks/model3D.html">Model 3D and reconstruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jup_notebooks/model3D.html#Using-TomoPhantom-to:">Using TomoPhantom to:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/object_tutorial.html">Phantoms using objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jup_notebooks/Random2Dphantom_artifacts.html">Stochastic phantom 2D and reconstruction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="jup_notebooks/Random2Dphantom_artifacts.html#Using-TomoPhantom-to:">Using TomoPhantom to:</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound" id="reference-content">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/library_files_api.html">Library files API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/library_files_api.html#library-files-for-2d-models">Library files for 2D models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/library_files_api.html#library-files-for-3d-models">Library files for 3D models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/library_files_api.html#dynamic-phantoms-api">Dynamic phantoms API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/object_api.html">Object API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/object_api.html#parameters-of-2d-objects-explained">Parameters of 2D objects explained</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/object_api.html#parameters-of-2d-objects-in-library-file">Parameters of 2D objects in library file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/object_api.html#defining-2d-objects-in-python">Defining 2D objects in Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/object_api.html#parameters-of-3d-objects-explained">Parameters of 3D objects explained</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/object_api.html#parameters-of-3d-objects-in-library-file">Parameters of 3D objects in library file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/object_api.html#defining-3d-objects-in-python">Defining 3D objects in Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/glossary.html">Glossary</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/glossary.html#model">Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/glossary.html#dynamic-model">Dynamic model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/glossary.html#object">Object</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/glossary.html#random-phantoms">Random Phantoms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/glossary.html#library-files">Library files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/api.html">API reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/api.html#tomophantom-modules">Tomophantom Modules</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="introduction/about.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">About TomoPhantom</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Documentation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#install-tomophantom">Install TomoPhantom</a><ul class="visible nav section-nav flex-column">
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Daniil Kazantsev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Diamond Light Source and Manchester University, UK.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jan 06, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

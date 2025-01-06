@@ -1,0 +1,728 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Object API &#8212; Tomophantom Documentation page</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/general.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=31ed26e0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/object_api';</script>
+    <link rel="icon" href="../_static/tomophantom_logo_light.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Glossary" href="glossary.html" />
+    <link rel="prev" title="Library files API" href="library_files_api.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Jan 06, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/tomophantom_logo_light.png" class="logo__image only-light" alt="Tomophantom Documentation page - Home"/>
+    <img src="../_static/tomophantom_logo_dark.png" class="logo__image only-dark pst-js-only" alt="Tomophantom Documentation page - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/about.html">About TomoPhantom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/start.html">Where to start?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How To's</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../howto/installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/build_phantoms.html">Build Phantoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/libraries.html">Use Phantom Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/simulate.html">Use Artefacts Simulator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/model_tutorial.html">Phantoms using models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/model2D.html">Model 2D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/model3D.html">Model 3D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/object_tutorial.html">Phantoms using objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/Random2Dphantom_artifacts.html">Stochastic phantom 2D and reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="library_files_api.html">Library files API</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Object API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api.html">API reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/tomophantom.TomoP2D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP2D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tomophantom.TomoP3D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tomophantom.artefacts.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tomophantom.flatsgen.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.flatsgen</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/tomophantom.generator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.generator</span></code></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/reference/object_api.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Object API</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-2d-objects-explained">Parameters of 2D objects explained</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-2d-objects-in-library-file">Parameters of 2D objects in library file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-2d-objects-in-python">Defining 2D objects in Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-3d-objects-explained">Parameters of 3D objects explained</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-3d-objects-in-library-file">Parameters of 3D objects in library file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-3d-objects-in-python">Defining 3D objects in Python</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="object-api">
+<span id="ref-object-api"></span><h1>Object API<a class="headerlink" href="#object-api" title="Link to this heading">#</a></h1>
+<p>In TomoPhantom, we have a dedicated functionality that allows the user to build bespoke phantoms by stacking multiple objects together.
+One should look into the <code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code> function of <a class="reference internal" href="../api/tomophantom.TomoP2D.html#module-tomophantom.TomoP2D" title="tomophantom.TomoP2D"><code class="xref py py-func docutils literal notranslate"><span class="pre">tomophantom.TomoP2D()</span></code></a> or <a class="reference internal" href="../api/tomophantom.TomoP3D.html#module-tomophantom.TomoP3D" title="tomophantom.TomoP3D"><code class="xref py py-func docutils literal notranslate"><span class="pre">tomophantom.TomoP3D()</span></code></a> modules if one wishes to build a 2D or 3D phantom, respectively.
+If one needs also projection data to be generated, then please see the <code class="xref py py-func docutils literal notranslate"><span class="pre">ObjectSino()</span></code> function in the same modules.</p>
+<p>One can notice that one of the input parameters for <code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code> and <code class="xref py py-func docutils literal notranslate"><span class="pre">ObjectSino()</span></code> functions is <code class="xref py py-data docutils literal notranslate"><span class="pre">obj_params</span></code> (<em>a dictionary or a list of dictionaries with the parameters for object(s)</em>).
+The <a class="reference internal" href="#ref-object-2d"><span class="std std-ref">Parameters of 2D objects explained</span></a> section gives the details about the meaning of parameters for 2D objects and <a class="reference internal" href="#ref-object-api-python2d"><span class="std std-ref">Defining 2D objects in Python</span></a> explains how to
+use it in Python. For 3D phantoms, see also <a class="reference internal" href="#ref-object-3d"><span class="std std-ref">Parameters of 3D objects explained</span></a> and <a class="reference internal" href="#ref-object-api-python3d"><span class="std std-ref">Defining 3D objects in Python</span></a> sections, respectively.</p>
+<section id="parameters-of-2d-objects-explained">
+<span id="ref-object-2d"></span><h2>Parameters of 2D objects explained<a class="headerlink" href="#parameters-of-2d-objects-explained" title="Link to this heading">#</a></h2>
+<p>There are 7 parameters in total to describe a 2D object. Please refer to <a class="reference internal" href="#fig-objects2d-notations"><span class="std std-numref">Fig. 1</span></a> when exploring parameters bellow.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">1. object’s name, type: string</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">For 2D phantoms the accepted objects names are <code class="code docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="code docutils literal notranslate"><span class="pre">parabola</span></code>, <code class="code docutils literal notranslate"><span class="pre">parabola1</span></code>, <code class="code docutils literal notranslate"><span class="pre">ellipse</span></code>, <code class="code docutils literal notranslate"><span class="pre">cone</span></code> and <code class="code docutils literal notranslate"><span class="pre">rectangle</span></code>. See more in the TomoPhantom paper <a class="reference internal" href="../index.html#sx2018" id="id1"><span>[SX2018]</span></a> for analytical formulae. Please note that when working with <code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code> functions, the object names need to be defined in capital letters, see <a class="reference internal" href="#ref-object-api-python2d"><span class="std std-ref">Defining 2D objects in Python</span></a>.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">2. <span class="math notranslate nohighlight">\(C_{0}\)</span>: intensity level, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(C_{0}\)</span> defines the grayscale intensity level, given as a floating point number. <span class="math notranslate nohighlight">\(C_{0}\)</span> can be either negative or positive. Objects in the model are concatenated by summation, so one can do a subtraction of objects by defining negative intensities.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">3. <span class="math notranslate nohighlight">\(x_{0}\)</span> : object’s center along the <span class="math notranslate nohighlight">\(X\)</span> axis, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(x_{0}\)</span>  defines the location of the object’s center along the <span class="math notranslate nohighlight">\(X\)</span> axis. The range of the parameter is normally within [-0.5, 0.5].</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">4. <span class="math notranslate nohighlight">\(y_{0}\)</span> : object’s center along the <span class="math notranslate nohighlight">\(Y\)</span> axis, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(y_{0}\)</span> defines the location of the object’s center along the <span class="math notranslate nohighlight">\(Y\)</span> axis. The range of the parameter is normally within [-0.5, 0.5].</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">5. <span class="math notranslate nohighlight">\(a\)</span> : object’s half-width, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(a\)</span>  defines the half-width of the object. The range of the parameter is normally within (0, 2).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">6. <span class="math notranslate nohighlight">\(b\)</span> : object’s half-length, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(b\)</span>  defines the half-length of the object. The range of the parameter is normally within (0, 2).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">7. <span class="math notranslate nohighlight">\(\phi\)</span> : object’s rotation angle in degrees, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(\phi\)</span> defines the object’s rotation angle in degrees. Positive values lead to clockwise rotation.</p>
+</div>
+</details><figure class="align-default" id="id3">
+<span id="fig-objects2d-notations"></span><a class="reference internal image-reference" href="../_images/objects2d_notations.png"><img alt="Notation for a 2D object" src="../_images/objects2d_notations.png" style="width: 675.0px; height: 627.0px;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">The coordinate system in which the objects are defined and an ellipsoid object as an example. Note the position of <span class="math notranslate nohighlight">\(X\)</span> and <span class="math notranslate nohighlight">\(Y\)</span> axes and the ranges for the visible field of view. Parameters describing a 2D object are: object’s name, <span class="math notranslate nohighlight">\(C_{0}\)</span>, <span class="math notranslate nohighlight">\(x_{0}\)</span>, <span class="math notranslate nohighlight">\(y_{0}\)</span>, <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(b\)</span> and the rotation angle <span class="math notranslate nohighlight">\(\phi\)</span>, see detailed description above.</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="parameters-of-2d-objects-in-library-file">
+<span id="ref-object-api2d"></span><h2>Parameters of 2D objects in library file<a class="headerlink" href="#parameters-of-2d-objects-in-library-file" title="Link to this heading">#</a></h2>
+<p>More general information about what the library file can contain is given in <a class="reference internal" href="library_files_api.html#ref-library-files-api"><span class="std std-ref">Library files API</span></a>. Here we look at the part where the object is described:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Object : ellipse 1.0 0.0 0.0 0.69 0.92 0.0;
+</pre></div>
+</div>
+<p>TomoPhantom converts this string for a 2D model into the following behind the scenes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">objects_name</span><span class="o">=</span><span class="s2">&quot;ellipse&quot;</span> <span class="c1"># object&#39;s name</span>
+<span class="n">C0</span><span class="o">=</span><span class="mf">1.0</span> <span class="c1"># object&#39;s intensity level</span>
+<span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s center along the X-axis</span>
+<span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s center along the Y-axis</span>
+<span class="n">a</span><span class="o">=</span><span class="mf">0.69</span> <span class="c1"># object&#39;s half-width</span>
+<span class="n">b</span><span class="o">=</span><span class="mf">0.92</span> <span class="c1"># object&#39;s half-length</span>
+<span class="n">phi</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s rotation angle</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-2d-objects-in-python">
+<span id="ref-object-api-python2d"></span><h2>Defining 2D objects in Python<a class="headerlink" href="#defining-2d-objects-in-python" title="Link to this heading">#</a></h2>
+<p>In order to create a 2D object in Python one should use <code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code> function of <a class="reference internal" href="../api/tomophantom.TomoP2D.html#module-tomophantom.TomoP2D" title="tomophantom.TomoP2D"><code class="xref py py-func docutils literal notranslate"><span class="pre">tomophantom.TomoP2D()</span></code></a> to create a phantom-object and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ObjectSino()</span></code> function to generate sinogram data for that object.</p>
+<p>You will need to create a dictionary for one object or a list of dictionaries for multiple objects. For example, to create a phantom with one object one can do:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tomophantom</span> <span class="kn">import</span> <span class="n">TomoP2D</span>
+<span class="kn">from</span> <span class="nn">tomophantom.TomoP2D</span> <span class="kn">import</span> <span class="n">Objects2D</span>
+<span class="n">phantom_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">object1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Obj&quot;</span><span class="p">:</span> <span class="n">Objects2D</span><span class="o">.</span><span class="n">GAUSSIAN</span><span class="p">,</span>
+    <span class="s2">&quot;C0&quot;</span><span class="p">:</span> <span class="mf">1.00</span><span class="p">,</span>
+    <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="s2">&quot;y0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">30.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">TomoP2D</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">,</span> <span class="n">object1</span><span class="p">)</span> <span class="c1"># which will generate 256^2 phantom</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To define object’s name in the enum class <code class="code docutils literal notranslate"><span class="pre">Objects2D</span></code> one need to use capital letters for objects: <code class="code docutils literal notranslate"><span class="pre">GAUSSIAN</span></code>, <code class="code docutils literal notranslate"><span class="pre">PARABOLA</span></code>, <code class="code docutils literal notranslate"><span class="pre">PARABOLA1</span></code>, <code class="code docutils literal notranslate"><span class="pre">ELLIPSE</span></code>, <code class="code docutils literal notranslate"><span class="pre">CONE</span></code>, <code class="code docutils literal notranslate"><span class="pre">RECTANGLE</span></code>.</p>
+</div>
+<p>And for multiple objects stacked together, one can do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tomophantom</span> <span class="kn">import</span> <span class="n">TomoP2D</span>
+<span class="kn">from</span> <span class="nn">tomophantom.TomoP2D</span> <span class="kn">import</span> <span class="n">Objects2D</span>
+<span class="n">phantom_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">object1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Obj&quot;</span><span class="p">:</span> <span class="n">Objects2D</span><span class="o">.</span><span class="n">GAUSSIAN</span><span class="p">,</span>
+    <span class="s2">&quot;C0&quot;</span><span class="p">:</span> <span class="mf">1.00</span><span class="p">,</span>
+    <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="s2">&quot;y0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">30.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">object2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Obj&quot;</span><span class="p">:</span> <span class="n">Objects2D</span><span class="o">.</span><span class="n">RECTANGLE</span><span class="p">,</span>
+    <span class="s2">&quot;C0&quot;</span><span class="p">:</span> <span class="mf">1.00</span><span class="p">,</span>
+    <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;y0&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.4</span><span class="p">,</span>
+    <span class="s2">&quot;phi&quot;</span><span class="p">:</span> <span class="mf">60.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">myObjects</span> <span class="o">=</span> <span class="p">[</span><span class="n">object1</span><span class="p">,</span> <span class="n">object2</span><span class="p">]</span>  <span class="c1"># dictionary of objects</span>
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">TomoP2D</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">,</span> <span class="n">myObjects</span><span class="p">)</span> <span class="c1"># which will generate 256^2 phantom</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters-of-3d-objects-explained">
+<span id="ref-object-3d"></span><h2>Parameters of 3D objects explained<a class="headerlink" href="#parameters-of-3d-objects-explained" title="Link to this heading">#</a></h2>
+<p>3D object is an extension of a 2D object to a third dimension.
+Most of the parameters remain as in <a class="reference internal" href="#ref-object-2d"><span class="std std-ref">Parameters of 2D objects explained</span></a>, but we will list them bellow for clarity as we have now 11 parameters in total:</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">1. object’s name, type: string</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">For 3D phantoms the accepted objects names are <code class="code docutils literal notranslate"><span class="pre">gaussian</span></code>, <code class="code docutils literal notranslate"><span class="pre">paraboloid</span></code>, <code class="code docutils literal notranslate"><span class="pre">ellipsoid</span></code>, <code class="code docutils literal notranslate"><span class="pre">cone</span></code>, <code class="code docutils literal notranslate"><span class="pre">cuboid</span></code> and <code class="code docutils literal notranslate"><span class="pre">elliptical_cylinder</span></code>. See more in the TomoPhantom paper <a class="reference internal" href="../index.html#sx2018" id="id2"><span>[SX2018]</span></a> for analytical formulae. Please note that when working with <code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code> functions, the object names need to be defined in capital letters, see <a class="reference internal" href="#ref-object-api-python3d"><span class="std std-ref">Defining 3D objects in Python</span></a>.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">2. <span class="math notranslate nohighlight">\(C_{0}\)</span>: intensity level, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(C_{0}\)</span> defines the grayscale intensity level, given as a floating point number. <span class="math notranslate nohighlight">\(C_{0}\)</span> can be either negative or positive. Objects in the model are concatenated by summation, so one can do a subtraction of objects by defining negative intensities.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">3. <span class="math notranslate nohighlight">\(x_{0}\)</span> : object’s center along the <span class="math notranslate nohighlight">\(X\)</span> axis, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(x_{0}\)</span>  defines the location of the object’s center along the <span class="math notranslate nohighlight">\(X\)</span> axis. The range of the parameter is normally within [-0.5, 0.5].</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">4. <span class="math notranslate nohighlight">\(y_{0}\)</span> : object’s center along the <span class="math notranslate nohighlight">\(Y\)</span> axis, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(y_{0}\)</span> defines the location of the object’s center along the <span class="math notranslate nohighlight">\(Y\)</span> axis. The range of the parameter is normally within [-0.5, 0.5].</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">5. <span class="math notranslate nohighlight">\(z_{0}\)</span> : object’s center along the <span class="math notranslate nohighlight">\(Z\)</span> axis, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(z_{0}\)</span> defines the location of the object’s center along the <span class="math notranslate nohighlight">\(Z\)</span> axis. The range of the parameter is normally within [-0.5, 0.5].</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">6. <span class="math notranslate nohighlight">\(a\)</span> : object’s half-width, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(a\)</span>  defines the half-width of the object. The range of the parameter is normally within (0, 2).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">7. <span class="math notranslate nohighlight">\(b\)</span> : object’s half-length, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(b\)</span>  defines the half-length of the object. The range of the parameter is normally within (0, 2).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">8. <span class="math notranslate nohighlight">\(c\)</span> : object’s half-depth, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(c\)</span>  defines the half-depth of the object. The range of the parameter is normally within (0, 2).</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">9. <span class="math notranslate nohighlight">\(\phi_{1}\)</span> : object’s rotation angle in degrees, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(\phi_{1}\)</span> First Euler angle in degrees. Positive values lead to clockwise rotation.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">10. <span class="math notranslate nohighlight">\(\phi_{2}\)</span> : object’s rotation angle in degrees, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(\phi_{2}\)</span> Second Euler angle in degrees. For 3D objects one can use the Euler angles to describe object’s orientation. Please note, that although you can use that angle to control the rotation of the object, for projection data it will be ignored.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">11. <span class="math notranslate nohighlight">\(\phi_{3}\)</span> : object’s rotation angle in degrees, type: float</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">Parameter <span class="math notranslate nohighlight">\(\phi_{3}\)</span> Third Euler angle in degrees. For 3D objects one can use the Euler angles to describe object’s orientation. Please note, that although you can use that angle to control the rotation of the object, for projection data it will be ignored.</p>
+</div>
+</details><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The phantom objects can be controlled using all three Euler angles <span class="math notranslate nohighlight">\(\phi_{1-3}\)</span>. However, if one also would like to generate projection data analytically, please use <span class="math notranslate nohighlight">\(\phi_{2-3} = 0\)</span>. The full support of all three angles is not working currently, you still can use <span class="math notranslate nohighlight">\(\phi_{1}\)</span> for both phantom and data generation.</p>
+</div>
+</section>
+<section id="parameters-of-3d-objects-in-library-file">
+<span id="ref-object-api3d"></span><h2>Parameters of 3D objects in library file<a class="headerlink" href="#parameters-of-3d-objects-in-library-file" title="Link to this heading">#</a></h2>
+<p>More general information about what the library file can contain is given in <a class="reference internal" href="library_files_api.html#ref-library-files-api"><span class="std std-ref">Library files API</span></a>. Here we look at the part where the object is described:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Object : ellipsoid 1.0 0.0 0.0 0.0 0.69 0.92 0.81 0.0 0.0 0.0
+</pre></div>
+</div>
+<p>TomoPhantom converts this string for a 3D model into the following behind the scenes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">objects_name</span><span class="o">=</span><span class="s2">&quot;ellipsoid&quot;</span> <span class="c1"># object&#39;s name</span>
+<span class="n">C0</span><span class="o">=</span><span class="mf">1.0</span> <span class="c1"># object&#39;s intensity level</span>
+<span class="n">x0</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s center along the X-axis</span>
+<span class="n">y0</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s center along the Y-axis</span>
+<span class="n">z0</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s center along the Z-axis</span>
+<span class="n">a</span><span class="o">=</span><span class="mf">0.69</span> <span class="c1"># object&#39;s half-width</span>
+<span class="n">b</span><span class="o">=</span><span class="mf">0.92</span> <span class="c1"># object&#39;s half-length</span>
+<span class="n">c</span><span class="o">=</span><span class="mf">0.81</span> <span class="c1"># object&#39;s half-depth</span>
+<span class="n">phi1</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s rotation angle</span>
+<span class="n">phi2</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s rotation angle</span>
+<span class="n">phi3</span><span class="o">=</span><span class="mf">0.0</span> <span class="c1"># object&#39;s rotation angle</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-3d-objects-in-python">
+<span id="ref-object-api-python3d"></span><h2>Defining 3D objects in Python<a class="headerlink" href="#defining-3d-objects-in-python" title="Link to this heading">#</a></h2>
+<p>In order to create a 3D object in Python one should use <code class="xref py py-func docutils literal notranslate"><span class="pre">Object()</span></code> function of <a class="reference internal" href="../api/tomophantom.TomoP3D.html#module-tomophantom.TomoP3D" title="tomophantom.TomoP3D"><code class="xref py py-func docutils literal notranslate"><span class="pre">tomophantom.TomoP3D()</span></code></a> to create a phantom-object and
+<code class="xref py py-func docutils literal notranslate"><span class="pre">ObjectSino()</span></code> function to generate projection data for that object.</p>
+<p>You will need to create a dictionary for one object or a list of dictionaries for multiple objects. For example, to create a phantom with one object one can do:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tomophantom</span> <span class="kn">import</span> <span class="n">TomoP3D</span>
+<span class="kn">from</span> <span class="nn">tomophantom.TomoP3D</span> <span class="kn">import</span> <span class="n">Objects3D</span>
+<span class="n">phantom_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">object1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Obj&quot;</span><span class="p">:</span> <span class="n">Objects3D</span><span class="o">.</span><span class="n">GAUSSIAN</span><span class="p">,</span>
+    <span class="s2">&quot;C0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="s2">&quot;y0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="s2">&quot;z0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;phi1&quot;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span> <span class="c1"># note that phi2,3 are not set here. They are equal to zero by default.</span>
+<span class="p">}</span>
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">TomoP3D</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">,</span> <span class="n">object1</span><span class="p">)</span> <span class="c1"># which will generate 256^3 phantom</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To define object’s name in the enum class <code class="code docutils literal notranslate"><span class="pre">Objects3D</span></code> one need to use capital letters for objects: <code class="code docutils literal notranslate"><span class="pre">GAUSSIAN</span></code>, <code class="code docutils literal notranslate"><span class="pre">PARABOLOID</span></code>, <code class="code docutils literal notranslate"><span class="pre">ELLIPSOID</span></code>, <code class="code docutils literal notranslate"><span class="pre">CONE</span></code>, <code class="code docutils literal notranslate"><span class="pre">CUBOID</span></code>, <code class="code docutils literal notranslate"><span class="pre">ELLIPCYLINDER</span></code>.</p>
+</div>
+<p>And for multiple 3D objects stacked together, one can do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">tomophantom</span> <span class="kn">import</span> <span class="n">TomoP3D</span>
+<span class="kn">from</span> <span class="nn">tomophantom.TomoP3D</span> <span class="kn">import</span> <span class="n">Objects3D</span>
+<span class="n">phantom_size</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">object1</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Obj&quot;</span><span class="p">:</span> <span class="n">Objects3D</span><span class="o">.</span><span class="n">GAUSSIAN</span><span class="p">,</span>
+    <span class="s2">&quot;C0&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="s2">&quot;y0&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.15</span><span class="p">,</span>
+    <span class="s2">&quot;z0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+    <span class="s2">&quot;phi1&quot;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">object2</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;Obj&quot;</span><span class="p">:</span> <span class="n">Objects3D</span><span class="o">.</span><span class="n">CUBOID</span><span class="p">,</span>
+    <span class="s2">&quot;C0&quot;</span><span class="p">:</span> <span class="mf">1.00</span><span class="p">,</span>
+    <span class="s2">&quot;x0&quot;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s2">&quot;y0&quot;</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span>
+    <span class="s2">&quot;z0&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="s2">&quot;a&quot;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+    <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mf">0.35</span><span class="p">,</span>
+    <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
+    <span class="s2">&quot;phi1&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">60.0</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">myObjects</span> <span class="o">=</span> <span class="p">[</span><span class="n">object1</span><span class="p">,</span> <span class="n">object2</span><span class="p">]</span>  <span class="c1"># dictionary of objects</span>
+<span class="n">phantom</span> <span class="o">=</span> <span class="n">TomoP3D</span><span class="o">.</span><span class="n">Object</span><span class="p">(</span><span class="n">phantom_size</span><span class="p">,</span> <span class="n">myObjects</span><span class="p">)</span> <span class="c1"># which will generate 256^3 phantom</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="library_files_api.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Library files API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="glossary.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Glossary</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-2d-objects-explained">Parameters of 2D objects explained</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-2d-objects-in-library-file">Parameters of 2D objects in library file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-2d-objects-in-python">Defining 2D objects in Python</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-3d-objects-explained">Parameters of 3D objects explained</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-of-3d-objects-in-library-file">Parameters of 3D objects in library file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#defining-3d-objects-in-python">Defining 3D objects in Python</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Daniil Kazantsev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Diamond Light Source and Manchester University, UK.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jan 06, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

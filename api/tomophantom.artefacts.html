@@ -1,0 +1,696 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>tomophantom.artefacts &#8212; Tomophantom Documentation page</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/general.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=31ed26e0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/tomophantom.artefacts';</script>
+    <link rel="icon" href="../_static/tomophantom_logo_light.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tomophantom.flatsgen" href="tomophantom.flatsgen.html" />
+    <link rel="prev" title="tomophantom.TomoP3D" href="tomophantom.TomoP3D.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Jan 06, 2025"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/tomophantom_logo_light.png" class="logo__image only-light" alt="Tomophantom Documentation page - Home"/>
+    <img src="../_static/tomophantom_logo_dark.png" class="logo__image only-dark pst-js-only" alt="Tomophantom Documentation page - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../introduction/about.html">About TomoPhantom</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/start.html">Where to start?</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How To's</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../howto/installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/build_phantoms.html">Build Phantoms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/libraries.html">Use Phantom Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../howto/simulate.html">Use Artefacts Simulator</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/model_tutorial.html">Phantoms using models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/model2D.html">Model 2D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/model3D.html">Model 3D and reconstruction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/object_tutorial.html">Phantoms using objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jup_notebooks/Random2Dphantom_artifacts.html">Stochastic phantom 2D and reconstruction</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference guides</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../reference/library_files_api.html">Library files API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/object_api.html">Object API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/glossary.html">Glossary</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../reference/api.html">API reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.TomoP2D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP2D</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.TomoP3D.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.flatsgen.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.flatsgen</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="tomophantom.generator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.generator</span></code></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/tomophantom.artefacts.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>tomophantom.artefacts</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.artefacts_mix"><code class="docutils literal notranslate"><span class="pre">artefacts_mix()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.datashifts"><code class="docutils literal notranslate"><span class="pre">datashifts()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.datashifts_subpixel"><code class="docutils literal notranslate"><span class="pre">datashifts_subpixel()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.fresnel_propagator"><code class="docutils literal notranslate"><span class="pre">fresnel_propagator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.noise"><code class="docutils literal notranslate"><span class="pre">noise()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.pve"><code class="docutils literal notranslate"><span class="pre">pve()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.stripes"><code class="docutils literal notranslate"><span class="pre">stripes()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.zingers"><code class="docutils literal notranslate"><span class="pre">zingers()</span></code></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-tomophantom.artefacts">
+<span id="tomophantom-artefacts"></span><h1><a class="reference internal" href="#module-tomophantom.artefacts" title="tomophantom.artefacts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.artefacts</span></code></a><a class="headerlink" href="#module-tomophantom.artefacts" title="Link to this heading">#</a></h1>
+<p>Modules to generate different imaging artefacts.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.artefacts_mix">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">artefacts_mix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**artefacts_dict:</span> <span class="pre">~typing.Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span> <span class="pre">|</span> <span class="pre">list</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#artefacts_mix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.artefacts_mix" title="Link to this definition">#</a></dt>
+<dd><dl>
+<dt>A module to generate and apply a mix of various typical imaging artefacts to add to the simulated data.</dt><dd><p>One can build various dictionaries with keywords arguments specified
+bellow and pass it to the function as: <cite>artefacts_mix(data, **noise_dict, **zingers, **etc)</cite>.</p>
+<p>DISCLAIMER: Note that most of the features are experimental and do not always reflect the
+accurate modelling of the real imaging artefacts.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>3D projection</em>) – 2D or 3D numpy array (sinogram or 3D projection data).</p></li>
+<li><p><strong>shape</strong> (<em>The input data must be</em><em> of </em><em>the following</em>) – 2D sinogram (anglesDim, DetectorsHoriz),</p></li>
+<li><p><strong>data</strong></p></li>
+<li><p><strong>**artefacts_dict</strong> (<em>dict</em>) – A dictionary with keyword arguments related to different artefact type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Keyword Arguments<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>noise_type</strong> (<em>str</em>) – Define noise type as  ‘Poisson’ or ‘Gaussian’.</p></li>
+<li><p><strong>noise_amplitude</strong> (<em>int</em><em>, </em><em>float</em>) – Photon flux for Poisson or variance for Gaussian noise.</p></li>
+<li><p><strong>noise_seed</strong> (<em>int</em>) – Seeds for noise generator. ‘None’ defines random generation.</p></li>
+<li><p><strong>noise_prelog</strong> (<em>bool</em>) – Set to True if pre-log (raw) data required.</p></li>
+<li><p><strong>zingers_percentage</strong> (<em>float</em>) – The amount of zingers (dead pixels, outliers) to be added to the data.</p></li>
+<li><p><strong>zingers_modulus</strong> (<em>int</em>) – Modulus to control the amount of 4/6 pixel clusters to be added.</p></li>
+<li><p><strong>stripes_percentage</strong> (<em>float</em>) – The amount of stripes in the data (rings in reconstruction).</p></li>
+<li><p><strong>stripes_maxthickness</strong> (<em>int</em>) – Maxthickness defines the maximal thickness of a stripe.</p></li>
+<li><p><strong>stripes_intensity</strong> (<em>float</em>) – Controls the intensity levels of stripes.</p></li>
+<li><p><strong>stripe_type</strong> (<em>str</em>) – Stripe types can be ‘partial’ or ‘full’.</p></li>
+<li><p><strong>stripes_variability</strong> (<em>float</em>) – Variability multiplier to incorporate the change of intensity in stripe.</p></li>
+<li><p><strong>datashifts_maxamplitude_pixel</strong> (<em>int</em>) – Controls pixel-wise (integer) misalignment in data.</p></li>
+<li><p><strong>datashifts_maxamplitude_subpixel</strong> (<em>float</em>) – Controls subpixel misalignment in data.</p></li>
+<li><p><strong>pve_strength</strong> (<em>int</em>) – The strength of partial volume effect, responsible for the limited resolution of a scanner.</p></li>
+<li><p><strong>fresnel_dist_observation</strong> (<em>int</em>) – The distance for observation for fresnel propagator.</p></li>
+<li><p><strong>fresnel_scale_factor</strong> (<em>float</em>) – Fresnel propagator scaling.</p></li>
+<li><p><strong>fresnel_wavelenght</strong> (<em>float</em>) – Fresnel propagator wavelength.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Make the output of modules verbose.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2D/3D numpy array with artefacts applied to input data.
+[np.ndarray, shifts]: a list of 2D/3D numpy array and simulated shifts.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.datashifts">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">datashifts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxamplitude:</span> <span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#datashifts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.datashifts" title="Link to this definition">#</a></dt>
+<dd><p>Function to add random pixel shifts to 3D or 3D data as an offset for each angular position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>3D projection</em>) – 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),</p></li>
+<li><p><strong>data</strong></p></li>
+<li><p><strong>maxamplitude</strong> (<em>int</em>) – The misilighnment ammplitude. Defines the maximal amplitude of each shift in pixels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>2D or 3d data with misalignment and shifts vectors [data, shifts].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.datashifts_subpixel">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">datashifts_subpixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxamplitude:</span> <span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#datashifts_subpixel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.datashifts_subpixel" title="Link to this definition">#</a></dt>
+<dd><p>Function to add random sub-pixel shifts to 3D or 3D data as an offset for each angular position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>3D projection</em>) – 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),</p></li>
+<li><p><strong>data</strong></p></li>
+<li><p><strong>maxamplitude</strong> (<em>float</em>) – The misilighnment ammplitude. Defines the maximal amplitude of each shift.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>2D or 3d data with misalignment and shifts vectors [data, shifts].</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.fresnel_propagator">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">fresnel_propagator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dist_observation:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wavelenght:</span> <span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#fresnel_propagator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.fresnel_propagator" title="Link to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>Fresnel propagator applied to data.</dt><dd><p>Adapted from the script by Adrián Carbajal-Domínguez, <a class="reference external" href="mailto:adrian&#46;carbajal&#37;&#52;&#48;ujat&#46;mx">adrian<span>&#46;</span>carbajal<span>&#64;</span>ujat<span>&#46;</span>mx</a></p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>3D projection</em>) – 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),</p></li>
+<li><p><strong>data</strong></p></li>
+<li><p><strong>dist_observation</strong> (<em>int</em>) – The distance for obervation for fresnel propagator.</p></li>
+<li><p><strong>scale_factor</strong> (<em>float</em>) – Scaling.</p></li>
+<li><p><strong>wavelenght</strong> (<em>float</em>) – Wavelength.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>2D or 3D data with propagation.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.noise">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma:</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noisetype:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prelog:</span> <span class="pre">bool</span> <span class="pre">=</span> <span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span> <span class="pre">|</span> <span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#noise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.noise" title="Link to this definition">#</a></dt>
+<dd><p>Adding random noise to data (adapted from LD-CT simulator)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – N-d array</p></li>
+<li><p><strong>sigma</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>float</em><em>]</em>) – int for Poisson or float for Gaussian</p></li>
+<li><p><strong>noisetype</strong> (<em>str</em>) – ‘Gaussian’ or ‘Poisson’</p></li>
+<li><p><strong>seed</strong> (<em>bool</em><em>, </em><em>optional</em>) – Initiate random seed with True. Defaults to True.</p></li>
+<li><p><strong>prelog</strong> (<em>bool</em><em>, </em><em>optional</em>) – get raw data if true, returns a list [noisy, raw]!. Defaults to False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>N-d array</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.pve">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">pve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pve_strength:</span> <span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#pve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.pve" title="Link to this definition">#</a></dt>
+<dd><p>Applying Partial Volume effect (smoothing) to data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>3D projection</em>) – 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),</p></li>
+<li><p><strong>data</strong></p></li>
+<li><p><strong>pve_strength</strong> (<em>int</em>) – The level of smoothing, defined by kernel size.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Smoothing kernel must be positive</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Smoothed 2D or 3D data.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.stripes">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">stripes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxthickness:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">intensity_thresh:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stripe_type:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variability:</span> <span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#stripes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.stripes" title="Link to this definition">#</a></dt>
+<dd><p>Function to add stripes (constant offsets) to sinograms or 3D projection data which results in rings in the
+reconstructed image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>np.ndarray</em>) – 2D sinogram (anglesDim, DetectorsHoriz) or 3D projection data (DetectorsVert, anglesDim, DetectorsHoriz).</p></li>
+<li><p><strong>percentage</strong> (<em>float</em>) – Percentage defines the amount of stripes in the data.</p></li>
+<li><p><strong>maxthickness</strong> (<em>int</em>) – Defines the maximal thickness of a stripe.</p></li>
+<li><p><strong>intensity_thresh</strong> (<em>float</em>) – Controls the intensity levels of stripes.</p></li>
+<li><p><strong>stripe_type</strong> (<em>str</em>) – Choose between ‘partial’ or ‘full’.</p></li>
+<li><p><strong>variability</strong> (<em>float</em>) – Variability multiplier to incorporate change of intensity in the stripe.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – Percentage is out of range.</p></li>
+<li><p><strong>ValueError</strong> – Thickness is out of range.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2D sinogram or 3D projection data with stripes</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="tomophantom.artefacts.zingers">
+<span class="sig-prename descclassname"><span class="pre">tomophantom.artefacts.</span></span><span class="sig-name descname"><span class="pre">zingers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data:</span> <span class="pre">&lt;np.ndarray&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentage:</span> <span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modulus:</span> <span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">&lt;np.ndarray&gt;</span></span></span><a class="reference internal" href="../_modules/tomophantom/artefacts.html#zingers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#tomophantom.artefacts.zingers" title="Link to this definition">#</a></dt>
+<dd><dl class="simple">
+<dt>Adding zingers (zero single pixels or small 4 pixels clusters)</dt><dd><p>to sinograms or 6 voxels to 3D projection data.</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>3D projection</em>) – 2D sinogram or 3D projection data. The input data must be of the following shape: 2D sinogram (anglesDim, DetectorsHoriz),</p></li>
+<li><p><strong>data</strong></p></li>
+<li><p><strong>percentage</strong> (<em>float</em>) – The amount of zingers to be added to the data.</p></li>
+<li><p><strong>modulus</strong> (<em>int</em>) – Modulus to control the amount of 4/6 pixel clusters to be added.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – Percentage is out of range.</p></li>
+<li><p><strong>ValueError</strong> – Modulus must be positive.</p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>2D or 3D array with zingers.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>np.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tomophantom.TomoP3D.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.TomoP3D</span></code></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tomophantom.flatsgen.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tomophantom.flatsgen</span></code></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.artefacts_mix"><code class="docutils literal notranslate"><span class="pre">artefacts_mix()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.datashifts"><code class="docutils literal notranslate"><span class="pre">datashifts()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.datashifts_subpixel"><code class="docutils literal notranslate"><span class="pre">datashifts_subpixel()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.fresnel_propagator"><code class="docutils literal notranslate"><span class="pre">fresnel_propagator()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.noise"><code class="docutils literal notranslate"><span class="pre">noise()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.pve"><code class="docutils literal notranslate"><span class="pre">pve()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.stripes"><code class="docutils literal notranslate"><span class="pre">stripes()</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tomophantom.artefacts.zingers"><code class="docutils literal notranslate"><span class="pre">zingers()</span></code></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Daniil Kazantsev
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025, Diamond Light Source and Manchester University, UK.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on Jan 06, 2025.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
