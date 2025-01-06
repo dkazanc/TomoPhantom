@@ -7,7 +7,8 @@
     :maxdepth: 2
     :glob:
 
-    introduction/about    
+    introduction/about
+    introduction/start
 
 .. _how_to_content:
 
@@ -28,7 +29,11 @@
     :maxdepth: 2
     
     tutorials/model_tutorial
+    jup_notebooks/model2D
+    jup_notebooks/model3D
     tutorials/object_tutorial
+    jup_notebooks/Random2Dphantom_artifacts
+
 
 .. _reference_content:
 

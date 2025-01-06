@@ -15,4 +15,5 @@ Tomophantom Modules
    ../api/tomophantom.TomoP2D
    ../api/tomophantom.TomoP3D  
    ../api/tomophantom.artefacts  
-   ../api/tomophantom.flatsgen  
+   ../api/tomophantom.flatsgen
+   ../api/tomophantom.generator  

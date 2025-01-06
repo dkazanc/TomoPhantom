@@ -45,17 +45,17 @@ Let us look at this line in detail:
 
     Object : ellipse 1.0 0.0 0.0 0.69 0.92 0.0;
 
-TomoPhantom converts this string of 7 parameters [#f2]_ into the following behind the scenes:
+TomoPhantom converts this string [#f2]_ into the following behind the scenes:
 
-.. code-block:: text
+.. code-block:: python
 
-    objects_name="ellipse"
-    C0=1.0
-    x0=0.0
-    y0=0.0
-    a=0.69
-    b=0.92
-    angle=0.0
+    objects_name="ellipse" # object's name
+    C0=1.0 # object's intensity level
+    x0=0.0 # object's center along the X-axis
+    y0=0.0 # object's center along the Y-axis
+    a=0.69 # object's half-width
+    b=0.92 # object's half-length
+    phi=0.0 # object's rotation angle
 
 As we move here into the :ref:`ref_glossary_object` API territory, it is best to re-direct the reader to the  :ref:`ref_object_2d` section. The meaning of each parameter for a 2D object is explained in detail there. 
 
@@ -65,7 +65,7 @@ As we move here into the :ref:`ref_glossary_object` API territory, it is best to
 Library files for 3D models
 ---------------------------
 
-3D models and the dynamic phantoms from the :data:`Phantom3DLibrary.dat` file are similar to 2D, but with the addition of few parameters. For instance, the 3D model 13 is given as: 
+3D models and the dynamic phantoms from the :data:`Phantom3DLibrary.dat` file are similar to 2D, but with an addition of few parameters. For instance, the 3D model 13 is given as: 
 
 .. code-block:: text
 
@@ -94,21 +94,26 @@ and the objects definition is getting longer:
 
 Which is converted into the following:
 
-.. code-block:: text
+.. code-block:: python
 
-    objects_name="ellipsoid"
-    C0=1.0
-    x0=0.0
-    y0=0.0
-    z0=0.0   
-    a=0.69
-    b=0.92
-    c=0.81 
-    angle1=0.0
-    angle2=0.0
-    angle3=0.0
+    objects_name="ellipsoid" # object's name
+    C0=1.0 # object's intensity level
+    x0=0.0 # object's center along the X-axis
+    y0=0.0 # object's center along the Y-axis
+    z0=0.0 # object's center along the Z-axis
+    a=0.69 # object's half-width
+    b=0.92 # object's half-length
+    c=0.81 # object's half-depth
+    phi1=0.0 # object's rotation angle
+    phi2=0.0 # object's rotation angle
+    phi3=0.0 # object's rotation angle
 
 Again, for more in-depth read about parameters of 3D objects see :ref:`ref_object_api3d`.
+
+.. _ref_library_dynamic_extensions:
+
+Dynamic phantoms API
+---------------------
 
 .. rubric:: Footnotes
 

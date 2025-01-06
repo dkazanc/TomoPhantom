@@ -1,14 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-The set of functions to generate random 2D/3D phantoms
-
-The TomoPhantom package is released under Apache License, Version 2.0
-@author: Daniil Kazantsev
+"""The set of modules to generate 2D/3D :ref:`ref_glossary_random_phantoms`. Specifically "foam"-like phantoms.
 """
 
+import numpy as np
+import math
+import random
 
-def rand_init2D(x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max):
+
+def _rand_init2D(x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max):
     import numpy as np
 
     x0 = np.random.uniform(low=x0min, high=x0max)
@@ -18,7 +16,9 @@ def rand_init2D(x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max):
     return (x0, y0, c0, ab)
 
 
-def rand_init3D(x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, ab_max):
+def _rand_init3D(
+    x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, ab_max
+):
     import numpy as np
 
     x0 = np.random.uniform(low=x0min, high=x0max)
@@ -29,7 +29,6 @@ def rand_init3D(x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, 
     return (x0, y0, z0, c0, ab)
 
 
-# Function to generate 2D foam-like structures using randomly located circles
 def foam2D(
     x0min,
     x0max,
@@ -43,10 +42,9 @@ def foam2D(
     tot_objects,
     object_type,
 ):
-    import numpy as np
-    import math
-    import random
-
+    """
+    Function to generate 2D foam-like structures using different object types (ellipse, parabola, gaussian) with random parameters.
+    """
     # 2D functions
     from tomophantom import TomoP2D
     from tomophantom.TomoP2D import Objects2D
@@ -69,14 +67,14 @@ def foam2D(
     AB = np.float32(np.zeros(tot_objects))
     C0_var = np.float32(np.zeros(tot_objects))
     for i in range(0, tot_objects):
-        (x0, y0, c0, ab) = rand_init2D(
+        (x0, y0, c0, ab) = _rand_init2D(
             x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max
         )
         if i > 0:
             breakj = False
             for j in range(0, attemptsNo):
                 if breakj == True:
-                    (x0, y0, c0, ab) = rand_init2D(
+                    (x0, y0, c0, ab) = _rand_init2D(
                         x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max
                     )
                     breakj = False
@@ -142,10 +140,9 @@ def foam3D(
     tot_objects,
     object_type,
 ):
-    import numpy as np
-    import math
-    import random
-
+    """
+    Function to generate 3D foam-like structures using different object types (ellipsoids, paraboloids, gaussians) with random parameters.
+    """
     # 3D functions
     from tomophantom import TomoP3D
     from tomophantom.TomoP3D import Objects3D
@@ -169,14 +166,14 @@ def foam3D(
     AB = np.float32(np.zeros(tot_objects))
     C0_var = np.float32(np.zeros(tot_objects))
     for i in range(0, tot_objects):
-        (x0, y0, z0, c0, ab) = rand_init3D(
+        (x0, y0, z0, c0, ab) = _rand_init3D(
             x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, ab_max
         )
         if i > 0:
             breakj = False
             for j in range(0, attemptsNo):
                 if breakj:
-                    (x0, y0, z0, c0, ab) = rand_init3D(
+                    (x0, y0, z0, c0, ab) = _rand_init3D(
                         x0min,
                         x0max,
                         y0min,
