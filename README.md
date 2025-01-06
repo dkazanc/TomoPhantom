@@ -2,7 +2,7 @@
     <tr>
         <td>
         <div align="left">
-          <img src="docs/source/_static/tomophantom.png" width="550"><br>  
+          <img src="docs/source/_static/tomophantom_logo.png" width="550"><br>  
         </div>
         </td>
         <td>
