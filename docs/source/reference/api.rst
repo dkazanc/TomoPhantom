@@ -4,12 +4,10 @@
 API reference
 ==========================
 
-This section contains the API reference and usage information for Tomophantom.
+This section contains the references to Tomophantom's API.
 
 Tomophantom Modules
 --------------------
-v.3.0
-'''''
 
 .. toctree::
    :glob:
@@ -17,4 +15,5 @@ v.3.0
    ../api/tomophantom.TomoP2D
    ../api/tomophantom.TomoP3D  
    ../api/tomophantom.artefacts  
-   ../api/tomophantom.flatsgen  
+   ../api/tomophantom.flatsgen
+   ../api/tomophantom.generator  

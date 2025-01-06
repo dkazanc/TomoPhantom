@@ -1,24 +1,18 @@
-"""
-Copyright 2023
-The University of Manchester & Diamond Light Source
-Licensed under the Apache License, Version 2.0.
-
-
-These are modules for generation of 3D and 4D (dynamic extensions) phantoms and
-their analytical data.
+"""Modules for generating 3D synthetic phantoms and their analytical projection data. 
+The dynamic phantoms (resulting in 4D arrays) can also be generated.
 
 API Summary:
 
-* Model - generates a 3D phantom from the Library (Phantom3DLibrary)
-* ModelSub - generates a vertical subset (cutoff) for model from the Library (Phantom3DLibrary)
-* ModelTemporal - generates a (3D + t) 4D model from the Library (Phantom3DLibrary)
-* ModelTemporalSub - generates a vertical subset (cutoff) of 4D model from the Library (Phantom3DLibrary)
-* ModelSino - generates 3D projection data for a model from the Library (Phantom3DLibrary)
-* ModelSinoSub - generates a vertical subset (cutoff) for 3D projection data for a model from the Library (Phantom3DLibrary)
-* ModelSinoTemporal - generates (3D + t) 4D projection data for a temporal model from the Library (Phantom3DLibrary)
-* ModelSinoTemporalSub - generates (3D + t) 4D projection data (subset) for a temporal model from the Library (Phantom3DLibrary)
-* Object - generates a 3D phantom from a given object described in the dictionary.
-* ObjectSino - generates a 3D projection data from a given object described in the dictionary.
+* :func:`Model` - generates a 3D phantom using a :ref:`ref_glossary_model` from :ref:`howto_3d_libs`.
+* :func:`ModelSub` - generates a vertical subset (a cutoff) for a :ref:`ref_glossary_model` from :ref:`howto_3d_libs`.
+* :func:`ModelTemporal` - generates a :ref:`ref_glossary_dynamic_model` (3D + t) from the from :ref:`howto_3d_libs`.
+* :func:`ModelTemporalSub` - generates a vertical subset (cutoff) of a 4D :ref:`ref_glossary_dynamic_model` from the :ref:`howto_3d_libs`.
+* :func:`ModelSino` - generates 3D projection data for a :ref:`ref_glossary_model` from the :ref:`howto_3d_libs`.
+* :func:`ModelSinoSub` - generates a vertical subset (cutoff) for 3D projection data for a :ref:`ref_glossary_model` from the :ref:`howto_3d_libs`.
+* :func:`ModelSinoTemporal` - generates (3D + t) 4D projection data for a temporal model from the :ref:`howto_3d_libs`.
+* :func:`ModelSinoTemporalSub` - generates (3D + t) 4D projection data (subset) for a temporal model from the :ref:`howto_3d_libs`.
+* :func:`Object` - generates one elementary 3D :ref:`ref_glossary_object` from the provided parameters, see :ref:`ref_object_api`.
+* :func:`ObjectSino` - generates a 3D projection data for one :ref:`ref_glossary_object` from the provided parameters, see :ref:`ref_object_api`.
 """
 
 import ctypes
@@ -554,11 +548,11 @@ def Object(
     phantom_size: Union[int, Tuple[int, int, int]], obj_params: Union[list, dict]
 ) -> np.ndarray:
     """Generates a 3D object for the standalone geometrical figure
-    that is parametrised in the "obj_params" dictionary.
+    that is parametrised in the "obj_params" dictionary, see :ref:`ref_object_api`.
 
     Args:
         phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.
-        obj_params (a list of dicts or dict): A dictionary with parameters of an object, see demos.
+        obj_params (a list of dicts or dict): A dictionary with parameters of an object, see :ref:`ref_object_api`.
 
     Returns:
         np.ndarray: The generated 3D object.
@@ -619,14 +613,14 @@ def ObjectSino(
     obj_params: Union[list, dict],
 ) -> np.ndarray:
     """Generates a 3D analytical projection data for the standalone geometrical figure
-    that is parametrised in the "obj_params" dictionary.
+    that is parametrised in the "obj_params" dictionary, see :ref:`ref_object_api`.
 
     Args:
         phantom_size (int): A scalar for phantom dimensions.
         detector_horiz (int): Size of the horizontal detector in pixels.
         detector_vert (int): Size of the vertical detector in pixels.
         angles (np.ndarray): Angles vector in degrees.
-        obj_params (a list of dicts or dict): A dictionary with parameters of an object, see demos.
+        obj_params (a list of dicts or dict): A dictionary with parameters of an object,  see :ref:`ref_object_api`.
 
     Returns:
         np.ndarray: The generated 3D projection data for an object.

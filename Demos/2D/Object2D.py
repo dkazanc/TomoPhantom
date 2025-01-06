@@ -7,11 +7,6 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate 2D/3D analytical objects and their sinograms
 Recursively adding objects and sinos one can build a required model
 
->>>>> Optional dependencies (reconstruction mainly): <<<<<
-1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. tomobar: conda install -c dkazanc tomobar
-or install from https://github.com/dkazanc/ToMoBAR
-
 @author: Daniil Kazantsev
 """
 import numpy as np

@@ -8,7 +8,7 @@
     :glob:
 
     introduction/about
-    introduction/libraries
+    introduction/start
 
 .. _how_to_content:
 
@@ -16,7 +16,24 @@
     :caption: How To's
     :maxdepth: 2
 
-    howto/installation
+    howto/installation    
+    howto/build_phantoms
+    howto/libraries
+    howto/simulate
+
+
+.. _tutorials_content:
+
+.. toctree::
+    :caption: Tutorials
+    :maxdepth: 2
+    
+    tutorials/model_tutorial
+    jup_notebooks/model2D
+    jup_notebooks/model3D
+    tutorials/object_tutorial
+    jup_notebooks/Random2Dphantom_artifacts
+
 
 .. _reference_content:
 
@@ -24,4 +41,7 @@
     :caption: Reference guides
     :maxdepth: 2
     
+    reference/library_files_api
+    reference/object_api
+    reference/glossary
     reference/api

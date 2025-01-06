@@ -5,8 +5,7 @@
 import os
 import sys
 from datetime import date
-
-# from unittest import mock
+from unittest import mock
 
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -16,25 +15,42 @@ from datetime import date
 sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Mock imports -------------------------------------------------------------
+MOCK_MODULES = [
+    "ctypes",
+    "tomophantom.ctypes",
+    "tomophantom.ctypes.dtype",
+    "tomophantom.ctypes.external",
+    "scipy.special",
+    "scipy.ndimage",
+    "tomophantom.supp.speckle_routines",
+]
+
+for mod_name in MOCK_MODULES:
+    sys.modules[mod_name] = mock.Mock()
+
+autodoc_mock_imports = [
+    "ctypes",
+    "tomophantom.ctypes",
+    "tomophantom.ctypes.dtype",
+    "tomophantom.ctypes.external",
+    "scipy.special",
+    "scipy.ndimage",
+    "tomophantom.supp.speckle_routines",
+]
 
 
-# Mock imports instead of full environment in readthedocs
-# MOCK_MODULES = [
-#    "numpy",
-#    "PIL",
-#    "skimage",
-#    "scipy",
-#    "scipy.fft",
-#    "scipy.ndimage",
-# ]
+class CustomMock(mock.Mock):
+    def __repr__(self):
+        return "<np.ndarray>"
 
-# for mod_name in MOCK_MODULES:
-#    sys.modules[mod_name] = mock.Mock()
+
+sys.modules["numpy"] = CustomMock()
 
 # ------------------------------------------------------------------------------
 
 project = "Tomophantom"
-# copyright = f"{date.today().year}, Diamond Light Source"
+author = "Daniil Kazantsev"
+copyright = f"{date.today().year}, Diamond Light Source and Manchester University, UK"
 
 # Specify a base language to help assistive technology
 language = "en"
@@ -57,9 +73,11 @@ extensions = [
     # Add links to highlighted source code
     "sphinx.ext.viewcode",
     # Allows a grid layout and dropdown boxes
-    "sphinx_panels",
+    "sphinx_design",
     # copy to clipboard button
     "sphinx_copybutton",
+    # use jupyter notebooks
+    "nbsphinx",
     #'IPython.sphinxext.ipython_console_highlighting',
     "sphinx.ext.githubpages",
     # Generate .nojekyll file for git pages build
@@ -83,13 +101,6 @@ html_last_updated_fmt = ""
 html_static_path = ["_static"]
 html_use_smartypants = True
 
-"""
-html_theme_options = {
-    "logo_only": True,
-    "display_version": False,
-    "githuburl": "https://github.com/dkazanc/TomoPhantom",
-}
-"""
 
 html_theme_options = {
     "logo": {

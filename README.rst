@@ -28,17 +28,19 @@ for parallel-beam scanning geometry.
 
 Documentation
 -------------
-Please check the full `documentation <https://dkazanc.github.io/Tomophantom/>`_.
+
+`Documentation <https://dkazanc.github.io/Tomophantom/>`_ is a good place to start.
 
 Install TomoPhantom
---------------------------------------------------------
-Tomophantom is distributed as a Python conda package for Linux/Windows/Mac OS's:
+-------------------
+
+TomoPhantom is distributed as a conda package in Python for Linux & Windows:
 
 .. code-block:: console
 
    $ conda install -c httomo tomophantom
    
-See the detailed page on :ref:`ref_installation`.
+See the detailed installation page on :ref:`ref_installation`.
 
 .. [SX2018] D. Kazantsev et al. 2018, TomoPhantom, a software package to 
    generate 2D-4D analytical phantoms for CT image reconstruction 

@@ -1,14 +1,8 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Copyright 2023
-The University of Manchester & Diamond Light Source
-Licensed under the Apache License, Version 2.0.
+"""Modules to generate synthetic flats/darks and data.
 """
 
 from scipy.special import spherical_yn
-from scipy.ndimage import gaussian_filter
-from scipy.ndimage import shift
+from scipy.ndimage import gaussian_filter, shift
 import random
 import numpy as np
 from tomophantom.artefacts import noise
@@ -28,7 +22,7 @@ def synth_flats(
     flatsnum: int = 20,
 ) -> list:
     """Function to generate synthetic flat field images and raw data for projection data normalisation.
-    This is more realistic modelling of stripes and various normalisation artefacts.
+    This is more realistic modelling of stripes and various artefacts rising after normalisation operation.
 
     Args:
         projData3D_clean (np.ndarray):  3D projection data of the following shape: (DetectorsVert, anglesDim, DetectorsHoriz).

@@ -18,8 +18,9 @@
 
 ****************
 
-### NEW! VERSION 3.0
-TomoPhantom has been refactored, please see [changes](CHANGES.md). Everyone is welcome to <a href="https://dkazanc.github.io/TomoPhantom/index.html">Documentation</a> page.
+### NEW!
+Please see [changes](CHANGES.md). <a href="https://dkazanc.github.io/TomoPhantom/index.html">Documentation</a> has been updated in January 2025 with 
+a lot of additional information, API links, tutorials, etc.
 
  <div class="post-content">
         <h3 class="post-title">About TomoPhantom </h3>
@@ -34,7 +35,7 @@ TomoPhantom has been refactored, please see [changes](CHANGES.md). Everyone is w
  * Model a variety of tomographic data artefacts (noise models, zingers, rings, shifts, partial volume effect and others). 
  
 ### Installation:
-Tomophantom is distributed as a Python conda package for Linux/Windows/Mac OS's:
+TomoPhantom is distributed as a conda package in Python for Linux & Windows:
 ```
 conda install -c httomo tomophantom
 ```

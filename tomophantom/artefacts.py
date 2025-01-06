@@ -1,9 +1,6 @@
-#!/usr/bin/env python3
+"""Modules to generate different imaging artefacts.
 """
-Copyright 2023
-The University of Manchester & Diamond Light Source
-Licensed under the Apache License, Version 2.0.
-"""
+
 import numpy as np
 import random
 from typing import Union, Any
@@ -15,7 +12,7 @@ def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, 
        bellow and pass it to the function as: `artefacts_mix(data, **noise_dict, **zingers, **etc)`.
 
        DISCLAIMER: Note that most of the features are experimental and do not always reflect the
-       accurate modelling of the inaccuracies.
+       accurate modelling of the real imaging artefacts.
 
     Args:
         data (np.ndarray): 2D or 3D numpy array (sinogram or 3D projection data).
@@ -27,7 +24,7 @@ def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, 
         noise_type (str): Define noise type as  'Poisson' or 'Gaussian'.
         noise_amplitude (int, float): Photon flux for Poisson or variance for Gaussian noise.
         noise_seed (int): Seeds for noise generator. 'None' defines random generation.
-        noise_prelog (bool): Set to True if  prelog (raw) data required.
+        noise_prelog (bool): Set to True if pre-log (raw) data required.
         zingers_percentage (float):  The amount of zingers (dead pixels, outliers) to be added to the data.
         zingers_modulus (int):  Modulus to control the amount of 4/6 pixel clusters to be added.
         stripes_percentage (float): The amount of stripes in the data (rings in reconstruction).
@@ -38,8 +35,8 @@ def artefacts_mix(data: np.ndarray, **artefacts_dict: Any) -> Union[np.ndarray, 
         datashifts_maxamplitude_pixel (int): Controls pixel-wise (integer) misalignment in data.
         datashifts_maxamplitude_subpixel (float): Controls subpixel misalignment in data.
         pve_strength (int): The strength of partial volume effect, responsible for the limited resolution of a scanner.
-        fresnel_dist_observation (int): The distance for obervation for fresnel propagator.
-        fresnel_scale_factor (float): Fresnel propagator sacaling.
+        fresnel_dist_observation (int): The distance for observation for fresnel propagator.
+        fresnel_scale_factor (float): Fresnel propagator scaling.
         fresnel_wavelenght (float): Fresnel propagator wavelength.
         verbose (bool): Make the output of modules verbose.
 

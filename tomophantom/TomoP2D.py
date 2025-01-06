@@ -1,21 +1,15 @@
-"""
-Copyright 2023
-The University of Manchester & Diamond Light Source
-Licensed under the Apache License, Version 2.0.
-
-
-These are modules for generation of 2D and 3D (dynamic extensions)
-phantoms and their analytical data.
+"""Modules for generating 2D synthetic phantoms and their analytical projection data. 
+The dynamic phantoms (resulting in 3D arrays) can also be generated.
 
 API Summary:
 
-* Model - generates a 2D phantom from the Library (Phantom2DLibrary)
-* ModelTemporal - generates a (2D+t) 3D model from the Library (Phantom2DLibrary)
-* ModelSino - generates 2D sinogram for a model from the Library (Phantom2DLibrary)
-* ModelSinoTemporal - generates (2D+t) sinogram for a temporal model from the Library (Phantom2DLibrary)
-* Object - generates a 2D phantom from a given object described in the dictionary.
-* ObjectSino - generates a 2D sinogram from a given object described in the dictionary.
-* SinoNum - calculates a sinogram numerically from any given 2D array.
+* :func:`Model` - generates a 2D phantom using a :ref:`ref_glossary_model` from :ref:`howto_2d_libs`.
+* :func:`ModelTemporal` - generates a :ref:`ref_glossary_dynamic_model` (2D+t) phantom from :ref:`howto_2d_libs`.
+* :func:`ModelSino` - generates a 2D sinogram for a :ref:`ref_glossary_model` from :ref:`howto_2d_libs`.
+* :func:`ModelSinoTemporal` - generates a :ref:`ref_glossary_dynamic_model` (2D+t) sinogram from :ref:`howto_2d_libs`.
+* :func:`Object` - generates one elementary :ref:`ref_glossary_object` from the provided parameters, see :ref:`ref_object_api`.
+* :func:`ObjectSino` - generates a 2D sinogram for one :ref:`ref_glossary_object` from the provided parameters, see :ref:`ref_object_api`.
+* :func:`SinoNum` - calculates a parallel-beam sinogram numerically from any given 2D array.
 """
 
 import ctypes
@@ -70,10 +64,10 @@ def _check_params2d(model_no: int, models_library_path: Path) -> np.ndarray:
 
 def Model(model_no: int, phantom_size: int, models_library_path: Path) -> np.ndarray:
     """Generate 2D phantoms based on the model no. in
-    the library file Phantom2DLibrary.dat.
+    the library file :ref:`howto_2d_libs`.
 
     Args:
-        model_no (int): Model number from the Phantom2DLibrary.dat library file.
+        model_no (int): Model number from the :ref:`howto_2d_libs`.
         phantom_size (int): A size of the generated phantom (squared).
         models_library_path (Path): A path to the library file.
 
@@ -105,11 +99,11 @@ def ModelTemporal(
     model_no: int, phantom_size: int, models_library_path: Path
 ) -> np.ndarray:
     """Generate 2D+time temporal phantoms based on the model no. in
-    the library file Phantom2DLibrary.dat. Note that temporal phantom
+    the :ref:`howto_2d_libs`. Note that temporal phantom
     numbers begin at 100 onwards.
 
     Args:
-        model_no (int): Temporal model number from the Phantom2DLibrary.dat library file.
+        model_no (int): Temporal model number from the :ref:`howto_2d_libs`.
         phantom_size (int): A size of the generated phantom (squared).
         models_library_path (Path): A path to the library file.
 
@@ -147,10 +141,10 @@ def ModelSino(
     models_library_path: Path,
 ) -> np.ndarray:
     """Generate 2D analytical sinogram for corresponding models in
-    the library file Phantom2DLibrary.dat.
+    the :ref:`howto_2d_libs`.
 
     Args:
-        model_no (int): Model number from the Phantom2DLibrary.dat library file.
+        model_no (int): Model number from the :ref:`howto_2d_libs`.
         phantom_size (int): A size of the phantom (squared).
         detector_size (int): A size of the horizontal detector.
         angles (np.ndarray): Angles vector in degrees.
@@ -192,10 +186,10 @@ def ModelSinoTemporal(
     models_library_path: Path,
 ) -> np.ndarray:
     """Generate 2D+time (temporal )analytical sinogram for
-    corresponding models in the library file Phantom2DLibrary.dat.
+    corresponding models in the :ref:`howto_2d_libs`.
 
     Args:
-        model_no (int): Temporal model number from the Phantom2DLibrary.dat library file.
+        model_no (int): Temporal model number from the :ref:`howto_2d_libs`.
         phantom_size (int): A size of the phantom (squared).
         detector_size (int): A size of the horizontal detector.
         angles (np.ndarray): Angles vector in degrees.
@@ -232,15 +226,16 @@ def ModelSinoTemporal(
 
 
 def Object(phantom_size: int, obj_params: Union[list, dict]) -> np.ndarray:
-    """Generate a 2D analytical phantom for the standalone
-       geometrical object that is parametrised in the "obj_params" dictionary.
+    """Generates a 2D analytical phantom for the standalone
+       geometrical object that is parametrised in the "obj_params" dictionary, see :ref:`ref_object_api`. Multiple objects can be stacked together
+       by providing a list of dictionaries, where each dictionary associated with an object. See more in
 
     Args:
         phantom_size (int): A size of the phantom (squared).
-        obj_params (list of dict or a dict): A dictionary with parameters of an object, see Demos.
+        obj_params (a dict or a list of dict): A dictionary or a list of dictionaries with the parameters for object(s), see :ref:`ref_object_api`.
 
     Returns:
-        np.ndarray: The generated 2D analytical object.
+        np.ndarray: The generated 2D analytical phantom.
     """
     if type(obj_params) is dict:
         obj_params = [obj_params]
@@ -284,7 +279,7 @@ def ObjectSino(
         phantom_size (int): A size of the phantom (squared).
         detector_size (int): A size of the horizontal detector.
         angles (np.ndarray): Angles vector in degrees.
-        obj_params (list of dicts or a dict): A dictionary with parameters of an object, see Demos.
+        obj_params (list of dicts or a dict): A dictionary with parameters of an object, see :ref:`ref_object_api`.
 
     Returns:
         np.ndarray: The generated 2D analytical sinogram of an object.
