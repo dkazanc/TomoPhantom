@@ -33,7 +33,7 @@
  */
 
 /* function to build a single sinogram - object */
-float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
+float TomoP2DObjectSino_core(nb::ndarray<float> A, int N, int P, nb::ndarray<float> Th, int AngTot, int CenTypeIn, char *Object, float C0, float x0, float y0, float a, float b, float phi_rot, int tt)
 {
     int i, j;
     float *Tomorange_X_Ar=NULL, Tomorange_Xmin, Tomorange_Xmax, Sinorange_Pmax, Sinorange_Pmin, H_p, H_x, C1, a22, b22, phi_rot_radian;
@@ -53,7 +53,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
     H_x = (Tomorange_Xmax - Tomorange_Xmin)/(N);
     for(i=0; i<N; i++)  {Tomorange_X_Ar[i] = Tomorange_Xmin + (float)i*H_x;}
     AnglesRad = malloc(AngTot*sizeof(float));
-    for(i=0; i<AngTot; i++)  AnglesRad[i] = (Th[i])*((float)M_PI/180.0f) + M_PI;
+    for(i=0; i<AngTot; i++)  AnglesRad[i] = (Th.data()[i])*((float)M_PI/180.0f) + M_PI;
     
     C1 = -4.0f*logf(2.0f);
     
@@ -78,7 +78,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
     if (strcmp("gaussian",Object) == 0) {
         /* The object is a gaussian */
         AA5 = (N/2.0f)*(C0*(a)*(b)/2.0f)*sqrtf((float)M_PI/logf(2.0f));
-#pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3)
+#pragma omp parallel for shared(A.data()) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,under_exp,AA2,AA3)
         for(i=0; i<AngTot; i++) {
             sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
             cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
@@ -89,7 +89,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
             for(j=0; j<P; j++) {
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 under_exp = (C1*AA3)*delta1;
-                A[tt*AngTot*P + j*AngTot+i] += first_dr*expf(under_exp);
+                A.data()[tt*AngTot*P + j*AngTot+i] += first_dr*expf(under_exp);
             }}
     }
     else if (strcmp("parabola",Object) == 0) {
@@ -114,7 +114,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
     else if (strcmp("ellipse",Object) == 0) {
         /* the object is an elliptical disk */
         AA5 = (N*C0*a*b);
-#pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
+#pragma omp parallel for shared(A.data()) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
         for(i=0; i<AngTot; i++) {
             sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
             cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
@@ -126,14 +126,14 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 AA6 = (AA3)*delta1;
                 if (AA6 < 1.0f) {
-                    A[tt*AngTot*P + j*AngTot+i] += first_dr*sqrtf(1.0f - AA6);
+                    A.data()[tt*AngTot*P + j*AngTot+i] += first_dr*sqrtf(1.0f - AA6);
                 }
             }}
     }
     else if (strcmp("parabola1",Object) == 0) {
         /* the object is a parabola Lambda = 1 (12)*/
         AA5 = (N/2.0f)*(4.0f*((0.25f*(a)*(b)*C0)/2.5f));
-#pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
+#pragma omp parallel for shared(A.data()) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6)
         for(i=0; i<AngTot; i++) {
             sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
             cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
@@ -145,7 +145,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
                 AA3 = powf((Sinorange_P_Ar[j] - AA2),2); /*(p-p0)^2*/
                 AA6 = AA3*delta1;
                 if (AA6 < 1.0f) {
-                    A[tt*AngTot*P + j*AngTot+i] += first_dr*(1.0f - AA6);
+                    A.data()[tt*AngTot*P + j*AngTot+i] += first_dr*(1.0f - AA6);
                 }
             }}
     }
@@ -153,7 +153,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
         /* the object is a cone */
         float pps2,rlogi,ty1;
         AA5 = (N/2.0f)*(a*b*C0);
-#pragma omp parallel for shared(A) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6,pps2,rlogi,ty1)
+#pragma omp parallel for shared(A.data()) private(i,j,sin_2,cos_2,delta1,delta_sq,first_dr,AA2,AA3,AA6,pps2,rlogi,ty1)
         for(i=0; i<AngTot; i++) {
             sin_2 = powf((sinf((AnglesRad[i]) - phi_rot_radian)),2);
             cos_2 = powf((cosf((AnglesRad[i]) - phi_rot_radian)),2);
@@ -174,7 +174,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
                     ty1 = (1.0f + pps2)/(1.0f - pps2);
                     if (ty1 > 0.0f) rlogi = 0.5f*AA6*logf(ty1);
                 }
-                A[tt*AngTot*P+ j*AngTot+i] += first_dr*(pps2 - rlogi);
+                A.data()[tt*AngTot*P+ j*AngTot+i] += first_dr*(pps2 - rlogi);
             }}
     }
     else if (strcmp("rectangle",Object) == 0) {
@@ -199,7 +199,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
         if (phi_rot_radian < 0)  {ksi1 = (float)M_PI + phi_rot_radian;}
         else ksi1 = phi_rot_radian;
         
-#pragma omp parallel for shared(A) private(i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)
+#pragma omp parallel for shared(A.data()) private(i,j,PI2,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS,p00,ksi00)
         for(i=0; i<AngTot; i++) {
             ksi00 = AnglesRad[(AngTot-1)-i] - M_PI;
             for(j=0; j<P; j++) {
@@ -258,7 +258,7 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
                 }
                 else SS = xwid/CF*C0;
                 if (PC >= QP) SS=0.0f;
-                A[tt*AngTot*P+ j*AngTot+i] += (N/2.0f)*SS;
+                A.data()[tt*AngTot*P+ j*AngTot+i] += (N/2.0f)*SS;
             }}
     }
     else {        
@@ -266,10 +266,10 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
     }
     /************************************************/
     free(Tomorange_X_Ar); free(Sinorange_P_Ar); free(AnglesRad);
-    return *A;
+    return *A.data();
 }
 
-float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
+float TomoP2DModelSino_core(nb::ndarrat< float > A, int ModelSelected, int N, int P, nb::ndarray< float > Th, int AngTot, int CenTypeIn, char *ModelParametersFilename)
 {    
     int Model=0, Components=0, steps = 0, counter=0, ii;
     float C0 = 0.0f, x0 = 0.0f, y0 = 0.0f, a = 0.0f, b = 0.0f, psi_gr1 = 0.0f;

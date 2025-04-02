@@ -42,7 +42,7 @@
  */
  
 
-float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys)
+float TomoP2DSinoNum_core(nb::ndarray< float > Sinogram, nb::ndarray< float > Phantom, int dimX, int DetSize, nb::ndarray< float > Theta, int ThetaLength, int sys)
 {    
 	int i, j, k, padXY;
 	float *Phantom_pad=NULL, *B=NULL,  angC, ct, st, sumSin;
@@ -51,15 +51,15 @@ float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize
     
     /*Perform padding of the phantom to the size [DetSize x DetSize] */
     Phantom_pad = (float*) calloc(DetSize*DetSize,sizeof(float));  /*allocating space*/
-    padding(Phantom, Phantom_pad, DetSize, dimX, padXY, sys);
+    padding(Phantom.data(), Phantom_pad, DetSize, dimX, padXY, sys);
     
     /* setting OMP here */
-    #pragma omp parallel for shared (Phantom_pad, Sinogram, dimX, DetSize, Theta, ThetaLength) private(B, k, j, i, sumSin, angC, ct, st)    
+    #pragma omp parallel for shared (Phantom_pad, Sinogram.data(), dimX, DetSize, Theta.data(), ThetaLength) private(B, k, j, i, sumSin, angC, ct, st)    
     for (k=0; k < ThetaLength; k++) {
         
         B = (float*) calloc(DetSize*DetSize,sizeof(float));
         
-        angC = Theta[k]*M_PI/180.0f;
+        angC = Theta.data()[k]*M_PI/180.0f;
         ct = cos(angC + 0.5f*M_PI);
         st = sin(angC + 0.5f*M_PI);
         
@@ -67,19 +67,19 @@ float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize
         
         for (j=0; j < DetSize; j++) {
             sumSin = 0.0f;
-            Sinogram[j*ThetaLength + k] = 0.0f;
+            Sinogram.data()[j*ThetaLength + k] = 0.0f;
             for (i=0; i < DetSize; i++) sumSin += B[i*DetSize+j];
-            Sinogram[j*ThetaLength + k] = sumSin;
+            Sinogram.data()[j*ThetaLength + k] = sumSin;
         }
         free(B);
     }    
     
     /*freeing the memory*/
    free(Phantom_pad);
-   return  *Sinogram;     
+   return  *Sinogram.data();     
 }    
 
-float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct, float st)
+float BilinearInterpolation(nb::ndarray < float > Phantom_pad, nd::ndarray< float > B, int DetSize, float ct, float st)
 {
     int i, j, k, i0, j0, i1, j1;
     float *xs, H_x, s_min, s_max, stepS, x_rs, y_rs, dhalf, xbar, ybar;
@@ -110,24 +110,24 @@ float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct,
             i0 = i0+1; j0=j0+1;
             
             if ((i0 < DetSize) && (j0 < DetSize)) {
-                B[i*DetSize+j] = Phantom_pad[i0*DetSize+j0]*(1.-xbar)*(1.-ybar)+Phantom_pad[(i0+1)*DetSize+j0]*ybar*(1.-xbar)+Phantom_pad[i0*DetSize+(j0+1)]*xbar*(1.-ybar)+Phantom_pad[(i0+1)*DetSize+(j0+1)]*xbar*ybar;
+                B.data()[i*DetSize+j] = Phantom_pad.data()[i0*DetSize+j0]*(1.-xbar)*(1.-ybar)+Phantom_pad.data()[(i0+1)*DetSize+j0]*ybar*(1.-xbar)+Phantom_pad.data()[i0*DetSize+(j0+1)]*xbar*(1.-ybar)+Phantom_pad.data()[(i0+1)*DetSize+(j0+1)]*xbar*ybar;
             }
         }}
     free(xs);
-    return *B;
+    return *B.data();
 }
 
-float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY, int sys)
+float padding(nb::ndarray< float > Phantom, nb::ndarray< float > Phantom_pad, int DetSize, int PhantSize, int padXY, int sys)
 {
     int i,j;   
-    #pragma omp parallel for shared (Phantom_pad, Phantom) private(i, j)
+    #pragma omp parallel for shared (Phantom_pad.data(), Phantom.data()) private(i, j)
     for (i=0; i < DetSize; i++) {
         for (j=0; j < DetSize; j++) {
-            Phantom_pad[j*DetSize+i] = 0.0f;
+            Phantom_pad.data()[j*DetSize+i] = 0.0f;
              if (((i >= padXY+1) && (i < DetSize-padXY)) &&  ((j >= padXY) && (j < DetSize-padXY))) {
-                  if (sys == 0) Phantom_pad[j*DetSize+i] = Phantom[(i-padXY)*PhantSize + (j-padXY)];
-                  else Phantom_pad[j*DetSize+i] = Phantom[(j-padXY)*PhantSize + (i-padXY)];
+                  if (sys == 0) Phantom_pad.data()[j*DetSize+i] = Phantom.data()[(i-padXY)*PhantSize + (j-padXY)];
+                  else Phantom_pad.data()[j*DetSize+i] = Phantom.data()[(j-padXY)*PhantSize + (i-padXY)];
              }
         }}
-    return *Phantom_pad;
+    return *Phantom_pad.data();
 }

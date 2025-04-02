@@ -16,6 +16,15 @@ project(tomophantom)
 
 message("CIL_VERSION ${CIL_VERSION}")
 
+find_package(Python 3.8 COMPONENTS Interpreter ${DEV_MODULE} REQUIRED)
+
+# Detect the installed nanobind package and import it into CMake
+# Remove execute_process when scipy-build-core is used
+execute_process(
+  COMMAND "${Python_EXECUTABLE}" -m nanobind --cmake_dir
+  OUTPUT_STRIP_TRAILING_WHITESPACE OUTPUT_VARIABLE nanobind_ROOT)
+find_package(nanobind CONFIG REQUIRED)
+
 find_package(OpenMP REQUIRED)
 if (OPENMP_FOUND)
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
@@ -33,67 +42,18 @@ message("CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS}")
 message("CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}")
 message("CMAKE_STATIC_LINKER_FLAGS ${CMAKE_STATIC_LINKER_FLAGS}")
 
-set(CMAKE_BUILD_TYPE "Release")
-
-if(WIN32)
-  set (FLAGS "/DWIN32 /EHsc /DCCPi_EXPORTS /openmp:experimental")
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-  set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-  set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT.lib")  
-  set (EXTRA_LIBRARIES)		
-  message("library lib: ${LIBRARY_LIB}")  
-elseif(UNIX)
-   set (FLAGS "-O2 -funsigned-char -Wall -Wl,--no-undefined  -DCCPiReconstructionIterative_EXPORTS")  
-   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-   set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-   if (OPENMP_FOUND)
-     set (EXTRA_LIBRARIES 
-		"gomp"
-		"m"
-		)
-    else()
-       set (EXTRA_LIBRARIES 
-		"m"
-		)
-    endif()
-endif()
-message("CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}")
-
 message("Building TomoPhantom as a shared library")
-add_library(tomophantom "SHARED"
+nanobind_add_module(tomophantom "SHARED"
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DModel_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DModelSino_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP3DModel_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP3DModelSino_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DSinoNum_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
+	    ${CMAKE_CURRENT_SOURCE_DIR}/bindings.c
 		)
 target_link_libraries(tomophantom ${EXTRA_LIBRARIES} )
 include_directories(tomophantom PUBLIC 
                       ${LIBRARY_INC}/include 
            	      ${CMAKE_CURRENT_SOURCE_DIR}
 		              )
-
-## Install
-set(PYTHON_SITE_DIR ${CMAKE_INSTALL_PREFIX}/source)
-set(CMAKE_POSITION_INDEPENDENT_CODE
-    ON
-    CACHE BOOL "Position independent code" FORCE)
-#set(INSTALL_BIN_DIR ${CMAKE_INSTALL_PREFIX}/bin)
-#set(INSTALL_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib)
-#set(INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include)
-
-if (UNIX)
-message ("I'd install into ${CMAKE_INSTALL_PREFIX}/lib")
-install(TARGETS tomophantom
-	LIBRARY DESTINATION lib
-	CONFIGURATIONS ${CMAKE_BUILD_TYPE} 
-	)
-elseif(WIN32)
-message ("I'd install into ${CMAKE_INSTALL_PREFIX} lib bin")
-  install(TARGETS tomophantom 
-	RUNTIME DESTINATION bin
-	ARCHIVE DESTINATION lib
-	CONFIGURATIONS ${CMAKE_BUILD_TYPE} 
-	)
-endif()

@@ -43,7 +43,7 @@
  *
  */
 
-float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Theta_proj, int AngTot, char *Object,
+float TomoP3DObjectSino_core(nb::ndarray< float > A, long Horiz_det, long Vert_det, long Z1, long Z2, long N, nb::ndarray< float > Theta_proj, int AngTot, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -93,7 +93,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
     
     /* convert to radians */
     AnglesRad = malloc(AngTot*sizeof(float));
-    for(ll=0; ll<AngTot; ll++)  AnglesRad[ll] = (Theta_proj[ll])*((float)M_PI/180.0f);
+    for(ll=0; ll<AngTot; ll++)  AnglesRad[ll] = (Theta_proj.data()[ll])*((float)M_PI/180.0f);
     
     float alog2 = logf(2.0f);
     multiplier = (C0*(N/2.0f));
@@ -176,7 +176,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                 AA5 = (N*C0*a*b);
                 
                 /*printf("%s %f %f %f %f %f %f %f %f %f %f %ld\n", Object, C0, x0, y0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, tt);*/
-#pragma omp parallel for shared(A) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,alh,bth,gmh,sin_2, cos_2,delta1,delta_sq,first_dr, AA2, AA3, AA6, p00,ksi00,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS)
+#pragma omp parallel for shared(A.data()) private(index,k,j,ll,TETAs,FIs,PSIs,aa1,aa,FI1,TETA1,PSI1,ai,bsai,vh1,al,a_v,b_v,c_v,d_v,p1,p2,alh,bth,gmh,sin_2, cos_2,delta1,delta_sq,first_dr, AA2, AA3, AA6, p00,ksi00,p,ksi,C,S,A2,B2,FI,CF,SF,P0,TF,PC,QM,DEL,XSYC,QP,SS)
                 for(ll=0; ll<AngTot; ll++) {
                     
                     TETAs = AnglesRad[ll]; /* the variable projection angle (AnglesRad) */
@@ -222,7 +222,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                 if(d_v > 0) {
                                     p1 = -(sqrtf(d_v)+b_v)/a_v;
                                     p2 = (sqrtf(d_v)-b_v)/a_v;
-                                    A[index] += (p2-p1)*multiplier;
+                                    A.data()[index] += (p2-p1)*multiplier;
                                 }
                             }
                             if (strcmp("paraboloid",Object) == 0) {
@@ -235,7 +235,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                 if(d_v > 0) {
                                     p1 = -(sqrtf(d_v)+b_v)/a_v;
                                     p2 = (sqrtf(d_v)-b_v)/a_v;
-                                    A[index] += multiplier*(a_v/3.0f*(pow(p1,3.0f) - pow(p2,3.0f)) +  b_v*(pow(p1,2.0f) - pow(p2,2.0f)) + c_v*(p1-p2));
+                                    A.data()[index] += multiplier*(a_v/3.0f*(pow(p1,3.0f) - pow(p2,3.0f)) +  b_v*(pow(p1,2.0f) - pow(p2,2.0f)) + c_v*(p1-p2));
                                 }
                             }
                             if (strcmp("gaussian",Object) == 0) {
@@ -248,7 +248,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                 b_v = aa[0]*alh*(al[0]-xh[0]) + aa[1]*bth*(al[1]-xh[1]) + aa[2]*gmh*(al[2]-xh[2]);
                                 c_v = alh*powf(((al[0]-xh[0])),2) + bth*powf(((al[1]-xh[1])),2) + gmh*powf(((al[2]-xh[2])),2);
                                 
-                                A[index] += multiplier*sqrtf(M_PI*a_v)*expf((pow(b_v,2))*a_v-c_v);
+                                A.data()[index] += multiplier*sqrtf(M_PI*a_v)*expf((pow(b_v,2))*a_v-c_v);
                             }
                         }} /*main for j-k loop*/
                     
@@ -267,7 +267,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                     AA6 = (AA3)*delta1;
                                     //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
                                     index = tt*sub_vol_size*Horiz_det*AngTot + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
-                                    if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
+                                    if (AA6 < 1.0f) A.data()[index] += first_dr*sqrtf(1.0f - AA6);
                                 }
                             }
                         }
@@ -331,7 +331,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                     else SS = xwid/CF*C0;
                                     if (PC >= QP) SS=0.0f;
                                     
-                                    A[index] += (N/2.0f)*SS;
+                                    A.data()[index] += (N/2.0f)*SS;
                                 } /*j-loop*/
                             }
                         } /*k-loop*/
@@ -343,11 +343,11 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                 free(DetectorRange_Vert_ar);
                 free(Tomorange_Z_Ar);
                 free(Zdel);
-                return *A;
+                return *A.data();
 }
 
 /********************Core Function*****************************/
-float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Vert_det, long Z1, long Z2, long N, float *Angl_vector, int AngTot, char* ModelParametersFilename)
+float TomoP3DModelSino_core(nb::ndarray< float > A, int ModelSelected, long Horiz_det, long Vert_det, long Z1, long Z2, long N, nb::ndarray< float > Angl_vector, int AngTot, char* ModelParametersFilename)
 {
     
     int Model = 0, Components = 0, steps = 0, counter = 0, ii;
@@ -554,7 +554,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
         }
     }
     fclose(fp);
-    return *A;
+    return *A.data();
 }
 
 

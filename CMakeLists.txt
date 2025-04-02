@@ -12,7 +12,13 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15...3.27)
+
+if (CMAKE_VERSION VERSION_LESS 3.18)
+  set(DEV_MODULE Development)
+else()
+  set(DEV_MODULE Development.Module)
+endif()
 
 project(tomophantom)
 
@@ -23,7 +29,10 @@ set (CIL_VERSION_PATCH 0)
 
 set (CIL_VERSION '${CIL_VERSION_MAJOR}.${CIL_VERSION_MINOR}.${CIL_VERSION_PATCH}' CACHE INTERNAL "Core Imaging Library version" FORCE)
 
-set(CMAKE_BUILD_TYPE "Release")
+if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
+endif()
 
 option (BUILD_MATLAB_WRAPPER "Build Matlab Wrappers" OFF)
 option (BUILD_PYTHON_WRAPPER "Build Python Wrappers" OFF)

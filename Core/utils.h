@@ -18,14 +18,8 @@ limitations under the License.
 #include "omp.h"
 #include "CCPiDefines.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-CCPI_EXPORT float checkParams2D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
-CCPI_EXPORT float checkParams3D(int *params_switch, int ModelSelected, char *ModelParametersFilename);
-CCPI_EXPORT float matrot3(float Ad[3][3], float psi1, float psi2, float psi3);
-CCPI_EXPORT float matvet3(float Ad[3][3], float V1[3], float V2[3]);
-CCPI_EXPORT float matmat3(float Am[3][3], float Bm[3][3], float Cm[3][3]);
-#ifdef __cplusplus
-}
-#endif
+float checkParams2D(nb::ndarray<int> params_switch, int ModelSelected, char *ModelParametersFilename);
+float checkParams3D(nb::ndarray<int> params_switch, int ModelSelected, char *ModelParametersFilename);
+float matrot3(nb::ndarray<float, nb::shape<3, 3>> Ad, float psi1, float psi2, float psi3);
+float matvet3(nb::ndarray<float, nb::shape<3, 3>> Ad, nb::ndarray<float, nb::shape<3>> V1, nb::ndarray<float, nb::shape<3>> V2);
+float matmat3(nb::ndarray<float, nb::shape<3, 3>> Am, nb::ndarray<float, nb::shape<3, 3>> Bm, nb::ndarray<float, nb::shape<3, 3>> Cm);

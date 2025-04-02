@@ -21,8 +21,8 @@ limitations under the License.
 #include "CCPiDefines.h"
 #include "utils.h"
 
-CCPI_EXPORT float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char *ModelParametersFilename);
-CCPI_EXPORT float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object,
+float TomoP3DModel_core(nb::ndarray<float> A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char *ModelParametersFilename);
+float TomoP3DObject_core(nb::ndarray<float> A, long N1, long N2, long N3, long Z1, long Z2, char *Object,
 	float C0, /* intensity */
 	float x0, /* x0 position */
 	float y0, /* y0 position */

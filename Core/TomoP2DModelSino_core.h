@@ -19,5 +19,9 @@ limitations under the License.
 #include "omp.h"
 #include "CCPiDefines.h"
 
-CCPI_EXPORT float TomoP2DModelSino_core(float *A, int ModelSelected, int N, int P, float *Th, int AngTot, int CenTypeIn, char* ModelParametersFilename);
-CCPI_EXPORT float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int CenTypeIn, char* Obj, float C0, float x0, float y0, float a, float b, float phi_rot, int tt);
+#include <nanobind/ndarray.h>
+
+
+
+float TomoP2DModelSino_core(nb::ndarray<float> A, int ModelSelected, int N, int P, nb::ndarray<float> Th, int AngTot, int CenTypeIn, char* ModelParametersFilename);
+float TomoP2DObjectSino_core(nb::ndarray<float> A, int N, int P, nb::ndarray<float> Th, int AngTot, int CenTypeIn, char* Obj, float C0, float x0, float y0, float a, float b, float phi_rot, int tt);
