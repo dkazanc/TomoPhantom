@@ -100,7 +100,7 @@ if __name__ == "__main__":
         "--sinogram-shape",
         nargs=3,
         metavar=("detector height", "projection count", "detector width"),
-        type=float,
+        type=int,
         default=(2368, 256, 4416),
     )
     parser.add_argument(
