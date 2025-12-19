@@ -13,7 +13,7 @@ def main(args: argparse.Namespace):
     path = pathlib.Path(tomophantom.__file__).parent
     path_library3D = str(path / "phantomlib" / "Phantom3DLibrary.dat")
 
-    sinogram_dtype = np.float16()
+    sinogram_dtype = np.uint16()
     Horiz_det = args.sinogram_shape[2]
     Vert_det = args.sinogram_shape[0]
     angles_num = args.sinogram_shape[1]
@@ -73,7 +73,9 @@ def main(args: argparse.Namespace):
                 angles,
                 path_library3D,
             )
-            projData3D_analyt = projData3D_analyt.astype(np.float16)
+
+            f_min, f_max = projData3D_analyt.min(), projData3D_analyt.max()
+            projData3D_analyt = ((projData3D_analyt - f_min) / (f_max - f_min) * 65535).astype(np.uint16)
 
             swapped_projData3D_analyt = np.swapaxes(projData3D_analyt, 0, 1)
             sinogram_dataset[:angles_num, chunk_start:chunk_end, :Horiz_det] = (
