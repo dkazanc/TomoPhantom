@@ -1,5 +1,4 @@
-"""The set of modules to generate 2D/3D :ref:`ref_glossary_random_phantoms`. Specifically "foam"-like phantoms.
-"""
+"""The set of modules to generate 2D/3D :ref:`ref_glossary_random_phantoms`. Specifically "foam"-like phantoms."""
 
 import numpy as np
 import math

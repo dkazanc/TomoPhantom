@@ -72,7 +72,7 @@ _noise_ = {
     "noise_seed": 0,
 }
 
-_datashifts_ = {"datashifts_maxamplitude_subpixel": 10}  # subpixel misalignment
+_datashifts_ = {"datashifts_maxamplitude_subpixel": 3.5}  # subpixel misalignment
 
 [prj, shifts_exact] = artefacts_mix(projData3D_analyt, **_noise_, **_datashifts_)
 
@@ -98,6 +98,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=Horiz_det,  # Horizontal detector dimension
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # Vertical detector dimension (3D case)
     CenterRotOffset=0.0,  # Center of Rotation scalar
     AnglesVec=angles_rad,  # A vector of projection angles in radians
@@ -128,11 +129,28 @@ plt.show()
 ######################################################
 # Based on alignment algorithm by D. Gursoy (see TomoPy package)
 # use phase cross correlation to identify shifts
+# TODO: Needs more work to get it working!
 from skimage.registration import phase_cross_correlation
+from tomobar.methodsDIR import RecToolsDIR
+
+scl = max(abs(prj.max()), abs(prj.min()))
+prj /= scl
 
 iter_number = 20  # the number of algorithm iterations
 shifts_estimated = np.zeros([angles_rad.size, 2], dtype="float32")
-recon = recon_nocorr.copy()
+
+RectoolsDIR = RecToolsDIR(
+    DetectorsDimH=Horiz_det,  # Horizontal detector dimension
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
+    DetectorsDimV=Vert_det,  # Vertical detector dimension (3D case)
+    CenterRotOffset=shifts_estimated,  # Center of Rotation scalar
+    AnglesVec=angles_rad,  # A vector of projection angles in radians
+    ObjSize=N_size,  # Reconstructed object dimensions (scalar)
+    device_projector="gpu",
+)
+
+recon = RectoolsDIR.FBP(prj)
+
 for iteration in range(0, iter_number):
     # re-project the reconstructed image
     reproj = RectoolsDIR.FORWPROJ(recon)
@@ -140,7 +158,7 @@ for iteration in range(0, iter_number):
     for m in range(0, angles_rad.size):
         # Register current projection in sub-pixel precision
         shift, error, diffphase = phase_cross_correlation(
-            prj[:, m, :], reproj[:, m, :], upsample_factor=20
+            prj[:, m, :], reproj[:, m, :], upsample_factor=2
         )
         shifts_estimated[m, 0] += shift[1]
         shifts_estimated[m, 1] += shift[0]
@@ -148,6 +166,7 @@ for iteration in range(0, iter_number):
     # reconstruct with the estimated shifts
     RectoolsDIR = RecToolsDIR(
         DetectorsDimH=Horiz_det,  # Horizontal detector dimension
+        DetectorsDimH_pad=0,  # Padding size of horizontal detector
         DetectorsDimV=Vert_det,  # Vertical detector dimension (3D case)
         CenterRotOffset=shifts_estimated,  # Center of Rotation scalar + shifts passed
         AnglesVec=angles_rad,  # A vector of projection angles in radians
@@ -180,6 +199,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=Horiz_det,  # Horizontal detector dimension
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # Vertical detector dimension (3D case)
     CenterRotOffset=-shifts_exact,  # Center of Rotation scalar
     AnglesVec=angles_rad,  # A vector of projection angles in radians

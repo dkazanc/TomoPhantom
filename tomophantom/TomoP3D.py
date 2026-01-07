@@ -1,4 +1,4 @@
-"""Modules for generating 3D synthetic phantoms and their analytical projection data. 
+"""Modules for generating 3D synthetic phantoms and their analytical projection data.
 The dynamic phantoms (resulting in 4D arrays) can also be generated.
 
 API Summary:

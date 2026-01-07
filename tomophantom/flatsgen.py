@@ -1,5 +1,4 @@
-"""Modules to generate synthetic flats/darks and data.
-"""
+"""Modules to generate synthetic flats/darks and data."""
 
 from scipy.special import spherical_yn
 from scipy.ndimage import gaussian_filter, shift

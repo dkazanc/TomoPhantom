@@ -1,5 +1,4 @@
-"""Modules to generate different imaging artefacts.
-"""
+"""Modules to generate different imaging artefacts."""
 
 import numpy as np
 import random

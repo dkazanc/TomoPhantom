@@ -7,7 +7,7 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 Script to generate temporal (2D + time)  analytical phantoms and their sinograms
 If one needs to modify/add phantoms, please edit Phantom2DLibrary.dat or
 Phantom3DLibrary.dat
-! Note that all temporal phantoms start from no. 100 
+! Note that all temporal phantoms start from no. 100
 
 >>>>> Optional dependencies (reconstruction mainly): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
@@ -66,6 +66,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians

@@ -195,6 +195,7 @@ P = N_size  # detectors
 
 Rectools = RecToolsDIR(
     DetectorsDimH=P,  # Horizontal detector dimension
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=None,  # Vertical detector dimension (3D case)
     CenterRotOffset=0.0,  # Center of Rotation scalar
     AnglesVec=angles_rad,  # A vector of projection angles in radians
@@ -237,6 +238,7 @@ from tomobar.methodsIR import RecToolsIR
 
 RectoolsIR = RecToolsIR(
     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
@@ -476,6 +478,7 @@ P = N_size  # detectors
 
 Rectools = RecToolsDIR(
     DetectorsDimH=P,  # Horizontal detector dimension
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=N_size,  # Vertical detector dimension (3D case)
     CenterRotOffset=0.0,  # Center of Rotation scalar
     AnglesVec=angles_rad,  # A vector of projection angles in radians
@@ -534,6 +537,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=N_size,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians

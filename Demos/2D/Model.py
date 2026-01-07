@@ -52,110 +52,110 @@ plt.imshow(sino_an, vmin=0, vmax=300, cmap="BuPu")
 plt.colorbar(ticks=[0, 150, 300], orientation="vertical")
 plt.title("{}" "{}".format("Analytical sinogram of model no.", model))
 plt.show()
-# # %%
-# # generate numerical sinogram
-# angles_num = int(0.5 * np.pi * N_size)
-# # angles number
-# angles = np.linspace(0.0, 179.9, angles_num, dtype="float32")
-# P = int(np.sqrt(2) * N_size)  # detectors
+# %%
+# generate numerical sinogram
+angles_num = int(0.5 * np.pi * N_size)
+# angles number
+angles = np.linspace(0.0, 179.9, angles_num, dtype="float32")
+P = int(np.sqrt(2) * N_size)  # detectors
 
-# tic = timeit.default_timer()
-# sino_num = TomoP2D.SinoNum(phantom_2D, P, angles)
-# toc = timeit.default_timer()
-# Run_time = toc - tic
-# print("Numerical sinogram has been generated in {} seconds".format(Run_time))
+tic = timeit.default_timer()
+sino_num = TomoP2D.SinoNum(phantom_2D, P, angles)
+toc = timeit.default_timer()
+Run_time = toc - tic
+print("Numerical sinogram has been generated in {} seconds".format(Run_time))
 
-# plt.figure()
-# plt.rcParams.update({"font.size": 21})
-# plt.imshow(sino_num, vmin=0, vmax=300, cmap="BuPu")
-# plt.colorbar(ticks=[0, 150, 300], orientation="vertical")
-# plt.title("{}" "{}".format("Numerical sinogram of model no.", model))
-
-# # plt.figure()
-# # plt.imshow(abs(sino_an-sino_num), vmin=0, vmax=0.001, cmap="BuPu")
-# # plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
-# # plt.title('Analytical vs Numerical singograms')
-# # %%
-
-
-# ###################################################################
-# from tomobar.methodsDIR import RecToolsDIR
-
-# angles_rad = angles * (np.pi / 180.0)
-
-# # get numerical sinogram (ASTRA-toolbox)
-# Rectools = RecToolsDIR(
-#     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
-#     DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-#     CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
-#     AnglesVec=angles_rad,  # array of angles in radians
-#     ObjSize=N_size,  # a scalar to define reconstructed object dimensions
-#     device_projector="cpu",
-# )
-
-# tic = timeit.default_timer()
-# sino_num_ASTRA = Rectools.FORWPROJ(phantom_2D)  # generate numerical sino (Ax)
-# toc = timeit.default_timer()
-# Run_time = toc - tic
-# print("Numerical (ASTRA) sinogram has been generated in {} seconds".format(Run_time))
+plt.figure()
+plt.rcParams.update({"font.size": 21})
+plt.imshow(sino_num, vmin=0, vmax=300, cmap="BuPu")
+plt.colorbar(ticks=[0, 150, 300], orientation="vertical")
+plt.title("{}" "{}".format("Numerical sinogram of model no.", model))
 
 # plt.figure()
-# plt.rcParams.update({"font.size": 21})
-# plt.imshow(sino_num_ASTRA, vmin=0, vmax=150, cmap="BuPu")
-# plt.colorbar(ticks=[0, 150, 250], orientation="vertical")
-# plt.title("{}" "{}".format("Numerical sinogram (ASTRA) of model no.", model))
-# # %%
-# print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# print("Reconstructing analytical sinogram using Fourier Slice method")
-# print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+# plt.imshow(abs(sino_an-sino_num), vmin=0, vmax=0.001, cmap="BuPu")
+# plt.colorbar(ticks=[0, 0.02, 0.05], orientation='vertical')
+# plt.title('Analytical vs Numerical singograms')
+# %%
 
-# RecFourier = Rectools.FOURIER(sino_an, "linear")
+###################################################################
+from tomobar.methodsDIR import RecToolsDIR
 
-# plt.figure()
-# plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
-# plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
-# plt.title("Fourier slice reconstruction")
-# # %%
-# print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# print("Reconstructing analytical sinogram using FBP (tomobar)...")
-# print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# # x = Atools.backproj(sino_an) # generate backprojection (A'b)
+angles_rad = angles * (np.pi / 180.0)
 
-# plt.figure()
-# plt.subplot(121)
-# plt.imshow(sino_an, cmap="BuPu")
-# plt.title("Analytical sinogram")
-# plt.subplot(122)
-# plt.imshow(sino_num_ASTRA, cmap="BuPu")
-# plt.title("Numerical sinogram")
-# plt.show()
-# # calculate norm
-# # rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
+# get numerical sinogram (ASTRA-toolbox)
+Rectools = RecToolsDIR(
+    DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
+    DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+    CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
+    AnglesVec=angles_rad,  # array of angles in radians
+    ObjSize=N_size,  # a scalar to define reconstructed object dimensions
+    device_projector="cpu",
+)
 
-# print("Reconstructing analytical sinogram using FBP (astra TB)...")
-# FBPrec1 = Rectools.FBP(sino_an)
-# plt.figure()
-# plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
-# plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
-# plt.title("FBP Reconstructed Phantom (analyt)")
+tic = timeit.default_timer()
+sino_num_ASTRA = Rectools.FORWPROJ(phantom_2D)  # generate numerical sino (Ax)
+toc = timeit.default_timer()
+Run_time = toc - tic
+print("Numerical (ASTRA) sinogram has been generated in {} seconds".format(Run_time))
 
-# print("Reconstructing numerical sinogram using FBP (astra TB)...")
-# FBPrec2 = Rectools.FBP(sino_num_ASTRA)
+plt.figure()
+plt.rcParams.update({"font.size": 21})
+plt.imshow(sino_num_ASTRA, vmin=0, vmax=250, cmap="BuPu")
+plt.colorbar(ticks=[0, 150, 250], orientation="vertical")
+plt.title("{}" "{}".format("Numerical sinogram (ASTRA) of model no.", model))
+# %%
+print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print("Reconstructing analytical sinogram using Fourier Slice method")
+print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 
-# plt.figure()
-# plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")
-# plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
-# plt.title("FBP Reconstructed Phantom (numeric)")
+RecFourier = Rectools.FOURIER(sino_an, method="linear")
 
-# plt.figure()
-# plt.imshow(abs(FBPrec1 - FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
-# plt.colorbar(ticks=[0, 0.02, 0.05], orientation="vertical")
-# plt.title("FBP rec differences")
-# # rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
+plt.figure()
+plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
+plt.title("Fourier slice reconstruction")
+# %%
+print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+print("Reconstructing analytical sinogram using FBP (tomobar)...")
+print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
+# x = Atools.backproj(sino_an) # generate backprojection (A'b)
 
-# Qtools = QualityTools(phantom_2D, FBPrec1)
-# RMSE_FBP1 = Qtools.rmse()
-# Qtools = QualityTools(phantom_2D, FBPrec2)
-# RMSE_FBP2 = Qtools.rmse()
-# print("RMSE for FBP (analyt) {}".format(RMSE_FBP1))
-# print("RMSE for FBP (numeric) {}".format(RMSE_FBP2))
+plt.figure()
+plt.subplot(121)
+plt.imshow(sino_an, cmap="BuPu")
+plt.title("Analytical sinogram")
+plt.subplot(122)
+plt.imshow(sino_num_ASTRA, cmap="BuPu")
+plt.title("Numerical sinogram")
+plt.show()
+# calculate norm
+# rmse1 = np.linalg.norm(sino_an - sino_num_ASTRA)/np.linalg.norm(sino_num_ASTRA)
+
+print("Reconstructing analytical sinogram using FBP (astra TB)...")
+FBPrec1 = Rectools.FBP(sino_an)
+plt.figure()
+plt.imshow(FBPrec1, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
+plt.title("FBP Reconstructed Phantom (analyt)")
+
+print("Reconstructing numerical sinogram using FBP (astra TB)...")
+FBPrec2 = Rectools.FBP(sino_num_ASTRA)
+
+plt.figure()
+plt.imshow(FBPrec2, vmin=0, vmax=1, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
+plt.title("FBP Reconstructed Phantom (numeric)")
+
+plt.figure()
+plt.imshow(abs(FBPrec1 - FBPrec2), vmin=0, vmax=0.05, cmap="BuPu")
+plt.colorbar(ticks=[0, 0.02, 0.05], orientation="vertical")
+plt.title("FBP rec differences")
+# rmse2 = np.linalg.norm(FBPrec1 - FBPrec2)/np.linalg.norm(FBPrec2)
+
+Qtools = QualityTools(phantom_2D, FBPrec1)
+RMSE_FBP1 = Qtools.rmse()
+Qtools = QualityTools(phantom_2D, FBPrec2)
+RMSE_FBP2 = Qtools.rmse()
+print("RMSE for FBP (analyt) {}".format(RMSE_FBP1))
+print("RMSE for FBP (numeric) {}".format(RMSE_FBP2))

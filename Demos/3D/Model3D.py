@@ -104,6 +104,7 @@ plt.imshow(phantom_tm[:, :, 128], vmin=0, vmax=1)
 plt.title("3D Phantom, sagittal view")
 plt.show()
 
+# %%
 
 print("Building a subset of 3D projection data using TomoPhantom software")
 Horiz_det = int(np.sqrt(2) * N_size)  # detector column count (horizontal)

@@ -90,6 +90,7 @@ angles_rad = angles * (np.pi / 180.0)
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians

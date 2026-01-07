@@ -5,7 +5,7 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts
-Sinograms then reconstructed using ASTRA TOOLBOX 
+Sinograms then reconstructed using ASTRA TOOLBOX
 
 >>>>> Dependencies (reconstruction): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
@@ -68,7 +68,7 @@ _zingers_ = {"zingers_percentage": 2, "zingers_modulus": 10}
 
 _stripes_ = {
     "stripes_percentage": 0.8,
-    "stripes_maxthickness": 2.0,
+    "stripes_maxthickness": 2,
     "stripes_intensity": 0.25,
     "stripes_type": "full",
     "stripes_variability": 0.002,
@@ -87,6 +87,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
@@ -97,7 +98,7 @@ RectoolsDIR = RecToolsDIR(
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print("Reconstructing analytical sinogram using Fourier Slice method")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-RecFourier = RectoolsDIR.FOURIER(sino_an, "linear")
+RecFourier = RectoolsDIR.FOURIER(sino_an, method="linear")
 plt.figure()
 plt.imshow(RecFourier, vmin=0, vmax=1, cmap="BuPu")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
@@ -137,6 +138,7 @@ from tomobar.methodsIR import RecToolsIR
 
 RectoolsIR = RecToolsIR(
     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians

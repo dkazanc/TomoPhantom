@@ -5,8 +5,8 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 * Script to generate 3D analytical phantoms and their projection data using TomoPhantom
-* Projection data is also generated numerically and reconstructed using 
-* tomobar/ ASTRA TOOLBOX 
+* Projection data is also generated numerically and reconstructed using
+* tomobar/ ASTRA TOOLBOX
 
 >>>>> Dependencies (reconstruction): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
@@ -26,7 +26,7 @@ from tomophantom.qualitymetrics import QualityTools
 print("Building 3D phantom using TomoPhantom software")
 tic = timeit.default_timer()
 model = 13  # select a model number from the library
-N_size = 128  # Define phantom dimensions using a scalar value (cubic phantom)
+N_size = 256  # Define phantom dimensions using a scalar value (cubic phantom)
 path = os.path.dirname(tomophantom.__file__)
 path_library3D = os.path.join(path, "phantomlib", "Phantom3DLibrary.dat")
 # This will generate a N_size x N_size x N_size phantom (3D)
@@ -90,7 +90,7 @@ _noise_ = {
 
 _stripes_ = {
     "stripes_percentage": 1.2,
-    "stripes_maxthickness": 3.0,
+    "stripes_maxthickness": 3,
     "stripes_intensity": 0.25,
     "stripes_type": "mix",
     "stripes_variability": 0.005,
@@ -119,6 +119,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # The Center of Rotation (CoR) scalar
     AnglesVec=angles_rad,  # array of angles in radians
@@ -158,6 +159,7 @@ from tomobar.methodsIR import RecToolsIR
 
 Rectools = RecToolsIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians

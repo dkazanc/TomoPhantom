@@ -5,8 +5,8 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 * Script to generate 3D analytical phantoms and their projection data using TomoPhantom
-* Projection data is also generated numerically and reconstructed using 
-* tomobar/ ASTRA TOOLBOX 
+* Projection data is also generated numerically and reconstructed using
+* tomobar/ ASTRA TOOLBOX
 
 >>>>> Dependencies (reconstruction): <<<<<
 1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
@@ -111,6 +111,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
@@ -150,6 +151,7 @@ from tomobar.methodsIR import RecToolsIR
 
 Rectools = RecToolsIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians

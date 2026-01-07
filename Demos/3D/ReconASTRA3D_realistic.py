@@ -5,8 +5,8 @@ GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 * Script to generate 3D analytical phantoms and their projection data using TomoPhantom
-* Synthetic flat fields are also genererated and noise incorporated into data 
-together with normalisation errors. This simulates more challeneging data for 
+* Synthetic flat fields are also genererated and noise incorporated into data
+together with normalisation errors. This simulates more challeneging data for
 reconstruction.
 * tomobar is required for reconstruction
 
@@ -115,7 +115,7 @@ from tomobar.supp.suppTools import normaliser
 
 # normalise the data, the required format is [detectorsX, Projections, detectorsY]
 projData3D_norm = normaliser(
-    projData3D_raw, flats_combined3D, darks=None, log="true", method="mean"
+    projData3D_raw, flats_combined3D, darks=None, log="true", method="mean", axis=1
 )
 projData3D_norm *= intens_max_clean
 
@@ -138,6 +138,7 @@ from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
@@ -178,6 +179,7 @@ from tomobar.methodsIR import RecToolsIR
 
 Rectools = RecToolsIR(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
