@@ -7,6 +7,16 @@ import pathlib
 import psutil
 import tomophantom
 
+"""
+This script uses TomoPhantom to generate an NXtomo-compliant NeXus file, with HDF5 as the underlying storage format. Users can specify the model number, phantom shape, and angular range.
+
+The script generates the phantom incrementally in chunks, based on the available system memory, and writes each chunk directly to the output file. This approach enables the creation of extremely large phantom datasets, even on systems with limited CPU memory.
+
+Because the resulting NeXus file conforms to the NXtomo data standard, it can be read by multiple data-processing and reconstruction frameworks. This work was carried out to support testing of high-resolution datasets within the HTTomo big-data processing framework developed at Diamond Light Source:
+https://github.com/DiamondLightSource/httomo
+
+Example to generate (128 x 256 x 362) data file from the model no. 13 using the command line: python nxs_generator.py -m 13 -s 128 256 362
+"""
 
 def main(args: argparse.Namespace):
     model = args.model_number
