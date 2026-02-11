@@ -1,3 +1,4 @@
+{% set python_min = "3.9" %}
 package:
   name: tomophantom
   version: {{ environ.get('CIL_VERSION', '') }}
@@ -26,12 +27,12 @@ test:
 
 requirements:
   build:
-    - python>=3.9
+    - python >={{ python_min }}
     - numpy
     - setuptools
     
   run:
-    - python>=3.9
+    - python >={{ python_min }}
     - numpy
     - libtomophantom
     - setuptools
