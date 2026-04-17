@@ -238,6 +238,32 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                     A[index] += multiplier*(a_v/3.0f*(pow(p1,3.0f) - pow(p2,3.0f)) +  b_v*(pow(p1,2.0f) - pow(p2,2.0f)) + c_v*(p1-p2));
                                 }
                             }
+                            if (strcmp("cone",Object) == 0) {
+                                /* the object is a cone */
+                                float cone_min, cone_sqrt_a, cone_half_width, cone_sqrt_term, cone_integral;
+                                a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) + powf((aa[2]/c),2);
+                                b_v = aa[0]*(al[0]-xh[0])*a2 + aa[1]*(al[1]-xh[1])*b2 + aa[2]*(al[2]-xh[2])*c2;
+                                c_v = powf(((al[0]-xh[0])/a),2) + powf(((al[1]-xh[1])/b), 2) + powf(((al[2]-xh[2])/c),2) - 1.0f;
+                                d_v = b_v*b_v - a_v*c_v;
+
+                                if(d_v > 0) {
+                                    p1 = -(sqrtf(d_v)+b_v)/a_v;
+                                    p2 = (sqrtf(d_v)-b_v)/a_v;
+                                    cone_min = 1.0f - d_v/a_v;
+                                    if (cone_min < 0.0f) cone_min = 0.0f;
+                                    if (cone_min <= 1.0e-7f) {
+                                        cone_integral = 0.5f*(p2 - p1);
+                                    }
+                                    else {
+                                        cone_sqrt_a = sqrtf(a_v);
+                                        cone_half_width = sqrtf(d_v)/a_v;
+                                        cone_sqrt_term = sqrtf(cone_min);
+                                        cone_integral = (p2 - p1) - cone_half_width -
+                                                        (cone_min/cone_sqrt_a)*asinhf((cone_sqrt_a*cone_half_width)/cone_sqrt_term);
+                                    }
+                                    A[index] += multiplier*cone_integral;
+                                }
+                            }
                             if (strcmp("gaussian",Object) == 0) {
                                 /* The object is a volumetric gaussian */
                                 alh=alog2*a2;
