@@ -18,6 +18,7 @@
 #define M_PI 3.14159265358979323846
 #define M_PI2 1.57079632679
 #define EPS 0.000000001
+#define DIV_EPS 0.000001
 #define MAXCHAR 1000
 
 /* Function to create 3D analytical projection data (parallel beam geometry) for 3D models
@@ -303,17 +304,20 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                     SF = sinf(FI);
                                     P0 = fabs(p-XSYC);
                                     
-                                    SS = xwid/CF*C0;
-                                    
-                                    if (fabs(CF) <= (float)EPS) {
+                                    if (fabs(CF) <= DIV_EPS) {
                                         SS = ywid*C0;
                                         if ((P0 - A2) > (float)EPS) SS=0.0f;
+                                        A[index] += (N/2.0f)*SS;
+                                        continue;
                                     }
-                                    if (fabs(SF) <= (float)EPS) {
+                                    if (fabs(SF) <= DIV_EPS) {
                                         SS = xwid*C0;
                                         if ((P0 - B2) > (float)EPS) SS=0.0f;
+                                        A[index] += (N/2.0f)*SS;
+                                        continue;
                                     }
                                     
+                                    SS = xwid/CF*C0;
                                     TF = SF/CF;
                                     PC = P0/CF;
                                     QP = B2+A2*TF;
