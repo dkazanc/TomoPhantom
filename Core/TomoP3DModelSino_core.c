@@ -455,7 +455,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                     break;
                                 }
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
-                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0) || (strcmp("cone",tmpstr2) == 0)) {
                                     TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
                                 }
                                 else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
@@ -540,7 +540,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                 /*loop over time frames*/
                                 for (tt = 0; tt < (long)steps; tt++) {
                                     
-                                    if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                                    if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0) || (strcmp("cone",tmpstr2) == 0)) {
                                         TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2,  N, Angl_vector, AngTot, tmpstr2, C_t, y_t, -z_t, -x_t, b_t, a_t, c_t, phi3_t, phi2_t, phi1_t, tt); //python
                                     }
                                     else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
