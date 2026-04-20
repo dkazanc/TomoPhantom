@@ -35,7 +35,7 @@
  */
 
 /* function to build a single object */
-float TomoP2DObject_core(float *A, int N, char *Object,
+float TomoP2DObject_core(nb::ndarray<float> A, int N, char *Object,
         float C0, /* intensity */
         float x0, /* x0 position */
         float y0, /* y0 position */
@@ -73,55 +73,55 @@ float TomoP2DObject_core(float *A, int N, char *Object,
     /* all parameters of an object have been extracted, now run the building modules */
     if (strcmp("gaussian",Object) == 0) {
         /* The object is a gaussian */
-#pragma omp parallel for shared(A) private(i,j,T)
+#pragma omp parallel for shared(A.data()) private(i,j,T)
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = C1*(a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2));
-                A[tt*N*N + j*N+i] += C0*expf(T);
+                A.data()[tt*N*N + j*N+i] += C0*expf(T);
             }}
     }
     else if (strcmp("parabola",Object) == 0) {
         /* the object is a parabola Lambda = 1/2 */
-#pragma omp parallel for shared(A) private(i,j,T)
+#pragma omp parallel for shared(A.data()) private(i,j,T)
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                 if (T <= 1) T = C0*sqrtf(1.0f - T);
                 else T = 0.0f;
-                A[tt*N*N + j*N+i] += T;
+                A.data()[tt*N*N + j*N+i] += T;
             }}
     }
     else if (strcmp("ellipse",Object) == 0) {
         /* the object is an elliptical disk */
-#pragma omp parallel for shared(A) private(i,j,T)
+#pragma omp parallel for shared(A.data()) private(i,j,T)
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                 if (T <= 1) T = C0;
                 else T = 0.0f;
-                A[tt*N*N + j*N+i] += T;
+                A.data()[tt*N*N + j*N+i] += T;
             }}
     }
     else if (strcmp("parabola1",Object) == 0) {
         /* the object is a parabola Lambda = 1*/
-#pragma omp parallel for shared(A) private(i,j,T)
+#pragma omp parallel for shared(A.data()) private(i,j,T)
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = (4.0f*a2)*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + (4.0f*b2)*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                 if (T <= 1) T = C0*sqrtf(1.0f - T);
                 else T = 0.0f;
-                A[tt*N*N + j*N+i] += T;
+                A.data()[tt*N*N + j*N+i] += T;
             }}
     }
     else if (strcmp("cone",Object) == 0) {
         /*the object is a cone*/
-#pragma omp parallel for shared(A) private(i,j,T)
+#pragma omp parallel for shared(A.data()) private(i,j,T)
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 T = a2*powf((Xdel[i]*cos_phi + Ydel[j]*sin_phi),2) + b2*powf((-Xdel[i]*sin_phi + Ydel[j]*cos_phi),2);
                 if (T <= 1) T = C0*(1.0f - sqrtf(T));
                 else T = 0.0f;
-                A[tt*N*N + j*N+i] += T;
+                A.data()[tt*N*N + j*N+i] += T;
             }}
     }
     else if (strcmp("rectangle",Object) == 0) {
@@ -136,7 +136,7 @@ float TomoP2DObject_core(float *A, int N, char *Object,
             sin_phi=sinf(phi_rot_radian);
             cos_phi=cosf(phi_rot_radian);
         }
-#pragma omp parallel for shared(A) private(i,j,HX,HY,T)
+#pragma omp parallel for shared(A.data()) private(i,j,HX,HY,T)
         for(i=0; i<N; i++) {
             for(j=0; j<N; j++) {
                 HX = fabsf((Xdel[i] - x0r)*sin_phi + (Ydel[j] - y0r)*cos_phi);
@@ -145,7 +145,7 @@ float TomoP2DObject_core(float *A, int N, char *Object,
                     HY = fabsf((Ydel[j] - y0r)*sin_phi - (Xdel[i] - x0r)*cos_phi);
                     if (HY <= b2) {T = C0;}
                 }
-                A[tt*N*N + j*N+i] += T;
+                A.data()[tt*N*N + j*N+i] += T;
             }}
     }
     else {        
@@ -157,7 +157,7 @@ float TomoP2DObject_core(float *A, int N, char *Object,
     return *A;
 }
 
-float TomoP2DModel_core(float *A, int ModelSelected, int N, char *ModelParametersFilename)
+float TomoP2DModel_core(nb::ndarray<float> A, int ModelSelected, int N, char *ModelParametersFilename)
 {
     FILE *fp = fopen(ModelParametersFilename, "r"); // read parameters file    
     int Model=0, Components=0, steps = 0, counter=0, ii;

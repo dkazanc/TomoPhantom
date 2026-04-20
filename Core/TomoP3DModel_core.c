@@ -41,7 +41,7 @@
 */
 
 /* function to build a single (stationary) object */
-float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, char *Object,
+float TomoP3DObject_core(nb::ndarray< float > A, long N1, long N2, long N3, long Z1, long Z2, char *Object,
 	float C0, /* intensity */
 	float x0, /* x0 position */
 	float y0, /* y0 position */
@@ -123,7 +123,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 	
 	if ((strcmp("gaussian", Object) == 0) || (strcmp("paraboloid", Object) == 0) || (strcmp("ellipsoid", Object) == 0) || (strcmp("cone", Object) == 0)) 
 	{
-#pragma omp parallel for shared(A,bs) private(k,i,j,index,aa,bb,cc,T,xh2,xh1)
+#pragma omp parallel for shared(A.data(),bs) private(k,i,j,index,aa,bb,cc,T,xh2,xh1)
 		for (k = Z1; k<Z2; k++) {
 			for (i = 0; i<N1; i++) {
 				for (j = 0; j<N2; j++) {
@@ -163,7 +163,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 						if (T <= 1.0f) T = C0*(1.0f - sqrtf(T));
 						else T = 0.0f;
 					}
-						A[index] += T;												
+						A.data()[index] += T;												
 				}
 			}
 		}
@@ -181,7 +181,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 			sin_phi = sinf(phi_rot_radian);
 			cos_phi = cosf(phi_rot_radian);
 		}
-#pragma omp parallel for shared(A,Zdel) private(k,i,j,HX,HY,T)
+#pragma omp parallel for shared(A.data(),Zdel) private(k,i,j,HX,HY,T)
 		for (k = Z1; k<Z2; k++) {
 			if (fabs(Zdel[k]) < c2) {
 				for (i = 0; i<N1; i++) {
@@ -193,7 +193,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 							if (HY <= b2) { T = C0; }
 						}
 						
-							A[tt*N1*N2*sub_vol_size + (k - Z1)*N1*N2 + j*N1 + i] += T;
+							A.data()[tt*N1*N2*sub_vol_size + (k - Z1)*N1*N2 + j*N1 + i] += T;
 						
 					}
 				}
@@ -202,7 +202,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 	}
 	if (strcmp("elliptical_cylinder", Object) == 0) {
 		/* the object is an elliptical cylinder  */
-#pragma omp parallel for shared(A) private(k,i,j,T)
+#pragma omp parallel for shared(A.data()) private(k,i,j,T)
 		for (k = Z1; k<Z2; k++) {
 			if (fabs(Zdel[k]) < c) {
 				for (i = 0; i<N1; i++) {
@@ -211,7 +211,7 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 						if (T <= 1) T = C0;
 						else T = 0.0f;
 						
-							A[tt*N1*N2*sub_vol_size + (k - Z1)*N1*N2 + j*N1 + i] += T;
+							A.data()[tt*N1*N2*sub_vol_size + (k - Z1)*N1*N2 + j*N1 + i] += T;
 						
 					}
 				}
@@ -221,11 +221,11 @@ float TomoP3DObject_core(float *A, long N1, long N2, long N3, long Z1, long Z2, 
 	/****************************************************/
 	free(Xdel); free(Ydel); free(Zdel);
 	free(Tomorange_X_Ar); free(Tomorange_Y_Ar); free(Tomorange_Z_Ar);
-	return *A;
+	return *A.data();
 }
 
 /********************Core Function*****************************/
-float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char *ModelParametersFilename)
+float TomoP3DModel_core(nb::ndarray< float > A, int ModelSelected, long N1, long N2, long N3, long Z1, long Z2, char *ModelParametersFilename)
 {
 
 	int Model = 0, Components = 0, steps = 0, counter = 0, ii;
@@ -308,7 +308,7 @@ float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, 
 								}
 								// printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);                                                          
 
-								TomoP3DObject_core(A, N1, N2, N3, Z1, Z2, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0l); /* python */
+								TomoP3DObject_core(A.data(), N1, N2, N3, Z1, Z2, tmpstr2, C0, y0, x0, z0, a, b, c, psi_gr1, psi_gr2, psi_gr3, 0l); /* python */
 							}
 						}
 						else {
@@ -419,5 +419,5 @@ float TomoP3DModel_core(float *A, int ModelSelected, long N1, long N2, long N3, 
 		}
 	}
 	fclose(fp);
-	return *A;
+	return *A.data();
 }

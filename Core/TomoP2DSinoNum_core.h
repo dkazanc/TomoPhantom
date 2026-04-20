@@ -19,6 +19,6 @@ limitations under the License.
 #include "omp.h"
 #include "CCPiDefines.h"
 
-CCPI_EXPORT float TomoP2DSinoNum_core(float *Sinogram, float *Phantom, int dimX, int DetSize, float *Theta, int ThetaLength, int sys);
-CCPI_EXPORT float BilinearInterpolation(float *Phantom_pad, float *B, int DetSize, float ct, float st);
-CCPI_EXPORT float padding(float *Phantom, float *Phantom_pad, int DetSize, int PhantSize, int padXY, int sys);
+float TomoP2DSinoNum_core(nb::ndarray<float> Sinogram, nb::ndarray<float> Phantom, int dimX, int DetSize, nb::ndarray<float> Theta, int ThetaLength, int sys);
+float BilinearInterpolation(nb::ndarray<float> Phantom_pad, nb::ndarray<float> B, int DetSize, float ct, float st);
+float padding(nb::ndarray<float> Phantom, nb::ndarray<float> Phantom_pad, int DetSize, int PhantSize, int padXY, int sys);
