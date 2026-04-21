@@ -16,6 +16,7 @@
 
 #define M_PI 3.14159265358979323846
 #define EPS 0.000000001
+#define DIV_EPS 0.000001
 #define MAXCHAR 1000
 
 /* Function to create 2D analytical sinograms (parallel beam geometry) to from models using Phantom2DLibrary.dat
@@ -227,20 +228,23 @@ float TomoP2DObjectSino_core(float *A, int N, int P, float *Th, int AngTot, int 
                 SF = sinf(FI);
                 P0 = fabs(p-XSYC);
                 
-                SS = xwid/CF*C0;
-                
-                if (fabs(CF) <= (float)EPS) {
+                if (fabs(CF) <= DIV_EPS) {
                     SS = ywid*C0;
                     if ((P0 - A2) > (float)EPS) {
                         SS=0.0f;
                     }
+                    A[tt*AngTot*P+ j*AngTot+i] += (N/2.0f)*SS;
+                    continue;
                 }
-                if (fabs(SF) <= (float)EPS) {
+                if (fabs(SF) <= DIV_EPS) {
                     SS = xwid*C0;
                     if ((P0 - B2) > (float)EPS) {
                         SS=0.0f;
                     }
+                    A[tt*AngTot*P+ j*AngTot+i] += (N/2.0f)*SS;
+                    continue;
                 }
+                SS = xwid/CF*C0;
                 TF = SF/CF;
                 PC = P0/CF;
                 QP = B2+A2*TF;
