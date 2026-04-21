@@ -27,7 +27,7 @@ test:
 
 requirements:
   build:
-    - python >={{ python_min }}
+    - python {{ python_min }}
     - numpy
     - setuptools
     
