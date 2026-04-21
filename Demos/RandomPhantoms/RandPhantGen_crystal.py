@@ -3,6 +3,7 @@
 """
 i23 reandom phantoms generator
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -12,7 +13,6 @@ from scipy.ndimage import gaussian_filter
 from tomobar.methodsDIR import RecToolsDIR
 from tomophantom.artefacts import artefacts_mix
 import random
-
 
 # create a 2D object explicitly without using parameters file
 N_size = 512  # define the grid
@@ -286,7 +286,6 @@ from scipy.ndimage import gaussian_filter
 from tomobar.methodsDIR import RecToolsDIR
 from tomophantom.artefacts import artefacts_mix
 import random
-
 
 N_size = 256
 # A PHANTOM WITHOUT ARTEFACTS

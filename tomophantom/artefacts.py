@@ -246,9 +246,9 @@ def stripes(
         np.ndarray: 2D sinogram or 3D projection data with stripes
     """
     if data.ndim == 2:
-        (anglesDim, DetectorsDimH) = np.shape(data)
+        anglesDim, DetectorsDimH = np.shape(data)
     else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        DetectorsDimV, anglesDim, DetectorsDimH = np.shape(data)
     if 0 < percentage <= 100:
         pass
     else:
@@ -349,9 +349,9 @@ def zingers(data: np.ndarray, percentage: float, modulus: int) -> np.ndarray:
         np.ndarray: 2D or 3D array with zingers.
     """
     if data.ndim == 2:
-        (anglesDim, DetectorsDimH) = np.shape(data)
+        anglesDim, DetectorsDimH = np.shape(data)
     else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        DetectorsDimV, anglesDim, DetectorsDimH = np.shape(data)
     if 0.0 < percentage <= 100.0:
         pass
     else:
@@ -453,10 +453,10 @@ def datashifts(data: np.ndarray, maxamplitude: int) -> list:
         list: 2D or 3d data with misalignment and shifts vectors [data, shifts].
     """
     if data.ndim == 2:
-        (anglesDim, DetectorsDimH) = np.shape(data)
+        anglesDim, DetectorsDimH = np.shape(data)
         shifts = np.zeros(anglesDim, dtype="int8")  # the vector of shifts
     else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        DetectorsDimV, anglesDim, DetectorsDimH = np.shape(data)
         shifts = np.zeros([anglesDim, 2], dtype="int8")  # the 2D vector of shifts
 
     sino_shifts = np.zeros(np.shape(data), dtype="float32")
@@ -517,7 +517,7 @@ def datashifts_subpixel(data: np.ndarray, maxamplitude: float) -> list:
         tform = tf.SimilarityTransform(translation=(-random_shift_x, -random_shift_y))
         sino_shifts = tf.warp(data, tform, order=5)
     else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        DetectorsDimV, anglesDim, DetectorsDimH = np.shape(data)
         shifts = np.zeros([anglesDim, 2], dtype="float32")  # the 2D vector of shifts
         sino_shifts = np.zeros(np.shape(data), dtype="float32")
         for x in range(anglesDim):
@@ -564,11 +564,11 @@ def pve(data: np.ndarray, pve_strength: int) -> np.ndarray:
     else:
         raise ValueError("Smoothing kernel must be positive")
     if data.ndim == 2:
-        (anglesDim, DetectorsDimH) = np.shape(data)
+        anglesDim, DetectorsDimH = np.shape(data)
         for x in range(anglesDim):
             data_pve[x, :] = gaussian_filter(data_pve[x, :], pve_strength)
     else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        DetectorsDimV, anglesDim, DetectorsDimH = np.shape(data)
         for x in range(anglesDim):
             data_pve[:, x, :] = gaussian_filter(data_pve[:, x, :], pve_strength)
     return data_pve
@@ -593,7 +593,7 @@ def fresnel_propagator(
 
     data_fresnel = data.copy()
     if data.ndim == 2:
-        (anglesDim, DetectorsDimH) = np.shape(data)
+        anglesDim, DetectorsDimH = np.shape(data)
         n1 = DetectorsDimH * 0.5
         # Define the angular spectrum coordinates
         u = np.arange(-n1, n1, 1)
@@ -616,7 +616,7 @@ def fresnel_propagator(
             field2 = np.fft.ifft(field)
             data_fresnel[x, :] = np.abs(field2)
     else:
-        (DetectorsDimV, anglesDim, DetectorsDimH) = np.shape(data)
+        DetectorsDimV, anglesDim, DetectorsDimH = np.shape(data)
         ####Define the size of the propagation function p(u,v). It has to be of the same size of the image.
         n1 = DetectorsDimV * 0.5
         n2 = DetectorsDimH * 0.5

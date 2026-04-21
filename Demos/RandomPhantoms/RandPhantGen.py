@@ -10,6 +10,7 @@ and for 3D: 'ellipsoid', 'paraboloid', 'gaussian', 'mix'
 
 @author: Daniil Kazantsev
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -33,7 +34,7 @@ ab_min = 0.01
 ab_max = 0.25
 
 # 2D example
-(Objfoam2D, myObjects) = foam2D(
+Objfoam2D, myObjects = foam2D(
     x0min,
     x0max,
     y0min,
@@ -63,7 +64,7 @@ plt.imshow(sino_Objfoam2D, cmap="gray")
 # %%
 # 3D example
 print("Generating 3D random phantom")
-(Objfoam3D, myObjects) = foam3D(
+Objfoam3D, myObjects = foam3D(
     x0min,
     x0max,
     y0min,

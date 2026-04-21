@@ -29,7 +29,9 @@ def test_2d_models_sino(model):
 
     # Generate a N_size x N_size phantom (2D)
     sino_an = ModelSino(model, N_size, P, angles, path_library2D)
-    assert 0.0 <= np.max(sino_an) <= 1000
+
+    assert np.min(sino_an) >= 0.0
+    assert 0.0 < np.max(sino_an) <= 1000
     assert sino_an.dtype == np.float32
     assert sino_an.shape == (angles_num, P)
 
@@ -67,6 +69,8 @@ def test_2d_temporal_sinos(model):
     params = _check_params2d(model, path_library2D)
     # Generate a time_frame x N_size x N_size phantom (3D)
     sino2d_t = ModelSinoTemporal(model, N_size, P, angles, path_library2D)
-    assert 0.001 <= np.max(sino2d_t) <= 1000
+
+    assert np.min(sino2d_t) >= 0.0
+    assert 0.0 < np.max(sino2d_t) <= 1000
     assert sino2d_t.dtype == np.float32
     assert sino2d_t.shape == (params[3], P, angles_num)

@@ -26,11 +26,6 @@ for parallel-beam scanning geometry.
     :scale: 80 %
     :alt: Animation of phantoms
 
-Documentation
--------------
-
-`Documentation <https://dkazanc.github.io/Tomophantom/>`_ is a good place to start.
-
 Install TomoPhantom
 -------------------
 

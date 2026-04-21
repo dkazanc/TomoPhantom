@@ -17,7 +17,6 @@ import numpy as np
 from numbers import Number
 from enum import Enum
 from typing import Union
-from pathlib import Path
 
 import tomophantom.ctypes.external as external
 
@@ -43,12 +42,12 @@ class Objects2D(Enum):
     RECTANGLE = "rectangle"
 
 
-def _check_params2d(model_no: int, models_library_path: Path) -> np.ndarray:
+def _check_params2d(model_no: int, models_library_path: str) -> np.ndarray:
     """Check parameters before executing the generation script.
 
     Args:
         model_no (int): Model number from the Phantom2DLibrary.dat library file.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         list: a list of integers
@@ -62,14 +61,14 @@ def _check_params2d(model_no: int, models_library_path: Path) -> np.ndarray:
     return params
 
 
-def Model(model_no: int, phantom_size: int, models_library_path: Path) -> np.ndarray:
+def Model(model_no: int, phantom_size: int, models_library_path: str) -> np.ndarray:
     """Generate 2D phantoms based on the model no. in
     the library file :ref:`howto_2d_libs`.
 
     Args:
         model_no (int): Model number from the :ref:`howto_2d_libs`.
         phantom_size (int): A size of the generated phantom (squared).
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 2D phantom (N x N).
@@ -96,7 +95,7 @@ def Model(model_no: int, phantom_size: int, models_library_path: Path) -> np.nda
 
 
 def ModelTemporal(
-    model_no: int, phantom_size: int, models_library_path: Path
+    model_no: int, phantom_size: int, models_library_path: str
 ) -> np.ndarray:
     """Generate 2D+time temporal phantoms based on the model no. in
     the :ref:`howto_2d_libs`. Note that temporal phantom
@@ -105,7 +104,7 @@ def ModelTemporal(
     Args:
         model_no (int): Temporal model number from the :ref:`howto_2d_libs`.
         phantom_size (int): A size of the generated phantom (squared).
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 2D+time phantom (time_frames x N x N).
@@ -138,7 +137,7 @@ def ModelSino(
     phantom_size: int,
     detector_size: int,
     angles: np.ndarray,
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generate 2D analytical sinogram for corresponding models in
     the :ref:`howto_2d_libs`.
@@ -148,7 +147,7 @@ def ModelSino(
         phantom_size (int): A size of the phantom (squared).
         detector_size (int): A size of the horizontal detector.
         angles (np.ndarray): Angles vector in degrees.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 2D analytical sinogram (angles_total x detector_size).
@@ -183,7 +182,7 @@ def ModelSinoTemporal(
     phantom_size: int,
     detector_size: int,
     angles: np.ndarray,
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generate 2D+time (temporal )analytical sinogram for
     corresponding models in the :ref:`howto_2d_libs`.
@@ -193,7 +192,7 @@ def ModelSinoTemporal(
         phantom_size (int): A size of the phantom (squared).
         detector_size (int): A size of the horizontal detector.
         angles (np.ndarray): Angles vector in degrees.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 2D+time analytical sinogram (time_frames x detector_size x angles_total).

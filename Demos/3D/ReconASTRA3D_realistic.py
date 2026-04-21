@@ -8,15 +8,15 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 * Synthetic flat fields are also genererated and noise incorporated into data
 together with normalisation errors. This simulates more challeneging data for
 reconstruction.
-* tomobar is required for reconstruction
 
 >>>>> Dependencies (reconstruction): <<<<<
-1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. tomobar: conda install -c dkazanc tomobar
-or install from https://github.com/dkazanc/ToMoBAR
+1. ASTRA toolbox
+2. ToMoBAR
+3. CuPy
 
 @author: Daniil Kazantsev
 """
+
 import timeit
 import os
 import matplotlib.pyplot as plt
@@ -114,8 +114,10 @@ print("Normalise projections using ToMoBAR software")
 from tomobar.supp.suppTools import normaliser
 
 # normalise the data, the required format is [detectorsX, Projections, detectorsY]
-projData3D_norm = normaliser(
-    projData3D_raw, flats_combined3D, darks=None, log="true", method="mean", axis=1
+projData3D_norm = np.float32(
+    normaliser(
+        projData3D_raw, flats_combined3D, darks=None, log="true", method="mean", axis=1
+    )
 )
 projData3D_norm *= intens_max_clean
 
@@ -133,7 +135,6 @@ plt.imshow(projData3D_norm[:, :, sliceSel], vmin=0, vmax=intens_max_clean)
 plt.title("Tangentogram view")
 plt.show()
 # %%
-# initialise tomobar DIRECT reconstruction class ONCE
 from tomobar.methodsDIR import RecToolsDIR
 
 RectoolsDIR = RecToolsDIR(
@@ -172,24 +173,33 @@ RMSE = Qtools.rmse()
 print("Root Mean Square Error is {}".format(RMSE))
 # %%
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print("Reconstructing with FISTA-OS method using tomobar")
+print("Reconstructing with FISTA-OS-TV method using tomobar")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# initialise tomobar ITERATIVE reconstruction class ONCE
-from tomobar.methodsIR import RecToolsIR
+# ! you will need to have CuPy installed to be able to run iterative methods
+import cupy as cp
+from tomobar.methodsIR_CuPy import RecToolsIRCuPy
 
-Rectools = RecToolsIR(
+input_data_labels = ["detY", "angles", "detX"]
+
+
+Rectools = RecToolsIRCuPy(
     DetectorsDimH=Horiz_det,  # DetectorsDimH # detector dimension (horizontal)
     DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=Vert_det,  # DetectorsDimV # detector dimension (vertical) for 3D case only
     CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
     ObjSize=N_size,  # a scalar to define reconstructed object dimensions
-    datafidelity="LS",  # data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
-    device_projector="gpu",
+    device_projector=0,
+    OS_number=10,  # The number of ordered subsets
 )
-# %%
+
 # prepare dictionaries with parameters:
-_data_ = {"projection_norm_data": projData3D_norm, "OS_number": 10}  # data dictionary
+_data_ = {
+    "data_fidelity": "LS",
+    "projection_data": cp.asarray(projData3D_norm),  # Normalised projection data
+    "data_axes_labels_order": input_data_labels,
+}
+
 lc = Rectools.powermethod(
     _data_
 )  # calculate Lipschitz constant (run once to initialise)
@@ -197,16 +207,17 @@ lc = Rectools.powermethod(
 # algorithm parameters
 _algorithm_ = {"iterations": 15, "lipschitz_const": lc}
 
-# adding regularisation using the CCPi regularisation toolkit
 _regularisation_ = {
-    "method": "PD_TV",
-    "regul_param": 0.0000035,
-    "iterations": 80,
-    "device_regulariser": "gpu",
+    "method": "PD_TV",  # Selected regularisation method
+    "regul_param": 0.00005,  # Regularisation parameter
+    "iterations": 40,  # The number of regularisation iterations
+    "half_precision": True,  # enabling half-precision calculation
 }
 
 RecFISTA_os_reg = Rectools.FISTA(_data_, _algorithm_, _regularisation_)
 
+
+RecFISTA_os_reg = cp.asnumpy(RecFISTA_os_reg)
 sliceSel = int(0.5 * N_size)
 max_val = 1
 plt.figure()

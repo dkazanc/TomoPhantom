@@ -40,6 +40,7 @@ def test_2d_object_sino():
     myObjects = [pp, pp1]  # list of dicts
     sino_an = ObjectSino(N_size, P, angles, myObjects)
 
+    assert np.min(sino_an) == 0.0
     assert 0.0 <= np.max(sino_an) <= 1000
     assert sino_an.dtype == np.float32
     assert sino_an.shape == (angles_num, P)

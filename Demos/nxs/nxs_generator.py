@@ -18,6 +18,7 @@ https://github.com/DiamondLightSource/httomo
 Example to generate (128 x 256 x 362) data file from the model no. 13 using the command line: python nxs_generator.py -m 13 -s 128 256 362
 """
 
+
 def main(args: argparse.Namespace):
     model = args.model_number
     path = pathlib.Path(tomophantom.__file__).parent
@@ -85,7 +86,9 @@ def main(args: argparse.Namespace):
             )
 
             f_min, f_max = projData3D_analyt.min(), projData3D_analyt.max()
-            projData3D_analyt = ((projData3D_analyt - f_min) / (f_max - f_min) * 65535).astype(np.uint16)
+            projData3D_analyt = (
+                (projData3D_analyt - f_min) / (f_max - f_min) * 65535
+            ).astype(np.uint16)
 
             swapped_projData3D_analyt = np.swapaxes(projData3D_analyt, 0, 1)
             sinogram_dataset[:angles_num, chunk_start:chunk_end, :Horiz_det] = (

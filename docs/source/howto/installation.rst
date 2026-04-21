@@ -75,11 +75,10 @@ Second, build the Python part of the library:
 Install libtomophantom from sources
 ++++++++++++++++++++++++++++++++++++
 
-With `Cmake <https://cmake.org>`_ one can build the `libtomophantom` library, which is a set of C-modules. 
-On Unix systems you will need a C compiler (gcc) and VC compiler on Windows.
+With `Cmake <https://cmake.org>`_ one can build the :code:`libtomophantom` library, which is a set of C-modules. 
+On Unix systems you will need a C compiler (gcc) or a VC compiler on Windows.
 
-Here an example of the `libtomophantom` library build on Linux. The shared library object 
-will be installed into the conda lib location, check it with `echo $CONDA_PREFIX`.
+The shared library object will be installed into the conda lib location, check it with :code:`echo $CONDA_PREFIX`.
 
 .. code-block:: console
     
@@ -90,7 +89,7 @@ will be installed into the conda lib location, check it with `echo $CONDA_PREFIX
    $ cmake --build . # on Windows add a flag --config Release
    $ cmake --install .
 
-The library should now be installed in your conda environment, you can just `pip install` the Python part. 
+The library should be installed in your conda environment. Do :code:`pip install .` to install the Python part. 
 
 .. _ref_matlab:
 

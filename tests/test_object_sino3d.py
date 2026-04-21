@@ -40,6 +40,6 @@ def test_3d_object_sino():
     myObjects = [obj3D_1, obj3D_2]  # dictionary of objects
     ProjData3D = ObjectSino(N3D_size, Horiz_det, Vert_det, angles, myObjects)
 
-    assert 0.0 <= np.max(ProjData3D) <= 1000
+    assert 0.0 < np.max(ProjData3D) <= 1000
     assert ProjData3D.dtype == np.float32
     assert ProjData3D.shape == (Vert_det, angles_num, Horiz_det)

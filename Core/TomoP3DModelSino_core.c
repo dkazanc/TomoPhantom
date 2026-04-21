@@ -200,13 +200,10 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                     
                     /* A transform matrix from projection space to object space */
                     matmat3(bs,ai,bsai);
-                    vh1[0]=0.0f;
+                    vh1[0]=0.0f;                    
                     
-                    /* the object is an ellipsoid */
                     for(j=0; j<Horiz_det; j++) {
-                        // for(k=0; k<Vert_det; k++) {
                         for(k=Z1; k<Z2; k++) {
-                            //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
                             index = (size_t)tt*Horiz_det*AngTot*sub_vol_size + (size_t)ll*sub_vol_size*Horiz_det + (size_t)((k - Z1)*Horiz_det + j);                            
                             
                             vh1[2]=DetectorRange_Horiz_ar[j];
@@ -215,6 +212,7 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                             matvet3(bsai,vh1,al); /*matrix-vector multiplication */
                             
                             if (strcmp("ellipsoid",Object) == 0) {
+                                /* the object is an ellipsoid */
                                 a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) + powf((aa[2]/c),2);
                                 b_v = aa[0]*(al[0]-xh[0])*a2 + aa[1]*(al[1]-xh[1])*b2 + aa[2]*(al[2]-xh[2])*c2;
                                 c_v = powf(((al[0]-xh[0])/a),2) + powf(((al[1]-xh[1])/b), 2) + powf(((al[2]-xh[2])/c),2) - 1.0f;
@@ -292,7 +290,6 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                 for(j=0; j<Horiz_det; j++) {
                                     AA3 = powf((DetectorRange_Horiz_ar[j] - AA2),2);
                                     AA6 = (AA3)*delta1;
-                                    //index = tt*Vert_det*Horiz_det*AngTot + ll*Vert_det*Horiz_det + k*Horiz_det + j;
                                     index = tt*sub_vol_size*Horiz_det*AngTot + ll*sub_vol_size*Horiz_det + (k - Z1)*Horiz_det + j;
                                     if (AA6 < 1.0f) A[index] += first_dr*sqrtf(1.0f - AA6);
                                 }

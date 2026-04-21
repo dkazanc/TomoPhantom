@@ -35,7 +35,7 @@ def test_2d_object():
     myObjects = [pp, pp1]  # dictionary of objects
     Object1 = Object(N_size, myObjects)
 
-    assert 0.0 <= np.max(Object1) <= 3
+    assert 0.0 < np.max(Object1) <= 3
     assert Object1.dtype == np.float32
     assert Object1.shape == (N_size, N_size)
 
@@ -51,6 +51,6 @@ def test_2d_object_extraction():
     # This will generate a N_size x N_size phantom (2D)
     phantom_2D = Object(N_size, objlist)
 
-    assert 0.0 <= np.max(phantom_2D) <= 3
+    assert 0.0 < np.max(phantom_2D) <= 3
     assert phantom_2D.dtype == np.float32
     assert phantom_2D.shape == (N_size, N_size)

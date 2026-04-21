@@ -20,7 +20,6 @@ import numpy as np
 from numbers import Number
 from enum import Enum
 from typing import Union, Tuple
-from pathlib import Path
 
 import tomophantom.ctypes.external as external
 
@@ -49,12 +48,12 @@ class Objects3D(Enum):
     ELLIPCYLINDER = "elliptical_cylinder"
 
 
-def _check_params3d(model_no: int, models_library_path: Path) -> np.ndarray:
+def _check_params3d(model_no: int, models_library_path: str) -> np.ndarray:
     """Check parameters before executing the generation script.
 
     Args:
         model_no (int): Model number from the Phantom3DLibrary.dat library file.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         list: a list of integers
@@ -71,14 +70,14 @@ def _check_params3d(model_no: int, models_library_path: Path) -> np.ndarray:
 def Model(
     model_no: int,
     phantom_size: Union[int, Tuple[int, int, int]],
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a 3D phantom based on the model no. in the library file Phantom3DLibrary.dat.
 
     Args:
         model_no (int): Model number from the Phantom3DLibrary.dat library file.
         phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 3D phantom.
@@ -116,7 +115,7 @@ def ModelSub(
     model_no: int,
     phantom_size: Union[int, Tuple[int, int, int]],
     sub_index: Tuple[int, int],
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a subset of 3D phantom (vertical cutoff) based on the model no. in
     the library file Phantom3DLibrary.dat.
@@ -125,7 +124,7 @@ def ModelSub(
         model_no (int): Model number from the Phantom3DLibrary.dat library file.
         phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.
         sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 3D phantom.
@@ -176,7 +175,7 @@ def ModelSub(
 def ModelTemporal(
     model_no: int,
     phantom_size: Union[int, Tuple[int, int, int]],
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates 4D (3D+time) phantom based on the model no. in
     the library file Phantom3DLibrary.dat.
@@ -184,7 +183,7 @@ def ModelTemporal(
     Args:
         model_no (int): Model number from the Phantom3DLibrary.dat library file.
         phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 4D phantom.
@@ -222,7 +221,7 @@ def ModelTemporalSub(
     model_no: int,
     phantom_size: Union[int, Tuple[int, int, int]],
     sub_index: Tuple[int, int],
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a subset of 4D phantom (vertical cutoff) based on the model no. in
     the library file Phantom3DLibrary.dat.
@@ -231,7 +230,7 @@ def ModelTemporalSub(
         model_no (int): Model number from the Phantom3DLibrary.dat library file.
         phantom_size (int, Tuple(int)): A scalar or a tuple with phantom dimensions.
         sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 4D phantom.
@@ -285,7 +284,7 @@ def ModelSino(
     detector_horiz: int,
     detector_vert: int,
     angles: np.ndarray,
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a 3D analytical sinogram for corresponding models in
     the library file Phantom3DLibrary.dat.
@@ -296,7 +295,7 @@ def ModelSino(
         detector_horiz (int): Size of the horizontal detector in pixels.
         detector_vert (int): Size of the vertical detector in pixels.
         angles (np.ndarray): Angles vector in degrees.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].
@@ -343,7 +342,7 @@ def ModelSinoSub(
     detector_vert: int,
     sub_index: tuple,
     angles: np.ndarray,
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a 3D analytical sinogram with vertical cutoff using sub_index tuple for corresponding models in
     the library file Phantom3DLibrary.dat.
@@ -355,7 +354,7 @@ def ModelSinoSub(
         detector_vert (int): Size of the vertical detector in pixels.
         sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.
         angles (np.ndarray): Angles vector in degrees.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 3D projection data of the following shape [detector_vert, AngTot, detector_horiz].
@@ -415,7 +414,7 @@ def ModelSinoTemporal(
     detector_horiz: int,
     detector_vert: int,
     angles: np.ndarray,
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a 4D (3D+time) analytical sinogram for corresponding models in
     the library file Phantom3DLibrary.dat.
@@ -426,7 +425,7 @@ def ModelSinoTemporal(
         detector_horiz (int): Size of the horizontal detector in pixels.
         detector_vert (int): Size of the vertical detector in pixels.
         angles (np.ndarray): Angles vector in degrees.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 4D projection data of the following shape [time_frames, detector_vert, AngTot, detector_horiz].
@@ -476,7 +475,7 @@ def ModelSinoTemporalSub(
     detector_vert: int,
     sub_index: tuple,
     angles: np.ndarray,
-    models_library_path: Path,
+    models_library_path: str,
 ) -> np.ndarray:
     """Generates a 4D analytical sinogram with vertical cutoff using sub_index tuple for corresponding models in
     the library file Phantom3DLibrary.dat.
@@ -488,7 +487,7 @@ def ModelSinoTemporalSub(
         detector_vert (int): Size of the vertical detector in pixels.
         sub_index (Tuple[int, int]): a tuple containing 2 indeces (lower, upper) to select a vertical subset.
         angles (np.ndarray): Angles vector in degrees.
-        models_library_path (Path): A path to the library file.
+        models_library_path (str): A path to the library file.
 
     Returns:
         np.ndarray: The generated 3D projection data of the following shape [time, detector_vert, AngTot, detector_horiz].
