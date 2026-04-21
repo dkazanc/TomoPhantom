@@ -16,7 +16,6 @@ requirements:
     - cmake
 
   run:
-    - python >={{ python_min }}
     - libgcc-ng # [unix]
 
 about:
