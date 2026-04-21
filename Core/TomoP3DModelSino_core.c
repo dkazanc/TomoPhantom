@@ -239,6 +239,32 @@ float TomoP3DObjectSino_core(float *A, long Horiz_det, long Vert_det, long Z1, l
                                     A[index] += multiplier*(a_v/3.0f*(pow(p1,3.0f) - pow(p2,3.0f)) +  b_v*(pow(p1,2.0f) - pow(p2,2.0f)) + c_v*(p1-p2));
                                 }
                             }
+                            if (strcmp("cone",Object) == 0) {
+                                /* the object is a cone */
+                                float cone_min, cone_sqrt_a, cone_half_width, cone_sqrt_term, cone_integral;
+                                a_v = powf((aa[0]/a),2) + powf((aa[1]/b),2) + powf((aa[2]/c),2);
+                                b_v = aa[0]*(al[0]-xh[0])*a2 + aa[1]*(al[1]-xh[1])*b2 + aa[2]*(al[2]-xh[2])*c2;
+                                c_v = powf(((al[0]-xh[0])/a),2) + powf(((al[1]-xh[1])/b), 2) + powf(((al[2]-xh[2])/c),2) - 1.0f;
+                                d_v = b_v*b_v - a_v*c_v;
+
+                                if(d_v > 0) {
+                                    p1 = -(sqrtf(d_v)+b_v)/a_v;
+                                    p2 = (sqrtf(d_v)-b_v)/a_v;
+                                    cone_min = 1.0f - d_v/a_v;
+                                    if (cone_min < 0.0f) cone_min = 0.0f;
+                                    if (cone_min <= 1.0e-7f) {
+                                        cone_integral = 0.5f*(p2 - p1);
+                                    }
+                                    else {
+                                        cone_sqrt_a = sqrtf(a_v);
+                                        cone_half_width = sqrtf(d_v)/a_v;
+                                        cone_sqrt_term = sqrtf(cone_min);
+                                        cone_integral = (p2 - p1) - cone_half_width -
+                                                        (cone_min/cone_sqrt_a)*asinhf((cone_sqrt_a*cone_half_width)/cone_sqrt_term);
+                                    }
+                                    A[index] += multiplier*cone_integral;
+                                }
+                            }
                             if (strcmp("gaussian",Object) == 0) {
                                 /* The object is a volumetric gaussian */
                                 alh=alog2*a2;
@@ -433,7 +459,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                     break;
                                 }
                                 // printf("\nObject : %s \nC0 : %f \nx0 : %f \ny0 : %f \nz0 : %f \na : %f \nb : %f \nc : %f \n", tmpstr2, C0, x0, y0, z0, a, b, c);
-                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                                if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0) || (strcmp("cone",tmpstr2) == 0)) {
                                     TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2, N, Angl_vector, AngTot, tmpstr2, C0, y0, -z0, -x0, b, a, c, psi_gr3, psi_gr2, psi_gr1, 0l); //python
                                 }
                                 else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
@@ -518,7 +544,7 @@ float TomoP3DModelSino_core(float *A, int ModelSelected, long Horiz_det, long Ve
                                 /*loop over time frames*/
                                 for (tt = 0; tt < (long)steps; tt++) {
                                     
-                                    if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0)) {
+                                    if ((strcmp("gaussian",tmpstr2) == 0) || (strcmp("paraboloid",tmpstr2) == 0) || (strcmp("ellipsoid",tmpstr2) == 0) || (strcmp("cone",tmpstr2) == 0)) {
                                         TomoP3DObjectSino_core(A, Horiz_det, Vert_det, Z1, Z2,  N, Angl_vector, AngTot, tmpstr2, C_t, y_t, -z_t, -x_t, b_t, a_t, c_t, phi3_t, phi2_t, phi1_t, tt); //python
                                     }
                                     else if (strcmp("elliptical_cylinder",tmpstr2) == 0) {
