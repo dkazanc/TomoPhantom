@@ -5,7 +5,7 @@ on:
     branches:
       - master
     tags:
-      - v*      
+      - v*
   pull_request:
     branches: [master]
 
@@ -18,11 +18,11 @@ jobs:
 
     defaults:
       run:
-        shell: bash -l {0}
+        shell: bash -el {0}
 
     steps:
       - name: Checkout repository code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       # setup conda
       - name: setup conda
@@ -32,10 +32,10 @@ jobs:
 
       - name: Install dependencies with Conda
         run: |
-          $CONDA/bin/conda install -c conda-forge conda-build anaconda-client python=${{ matrix.python-version }}
-          $CONDA/bin/conda update conda
-          $CONDA/bin/conda update conda-build
-          $CONDA/bin/conda list
+          conda install -c conda-forge conda-build anaconda-client python=${{ matrix.python-version }}
+          conda update conda
+          conda update conda-build
+          conda list
 
       - name: Upload the tested package to conda cloud
         run: |
@@ -48,4 +48,4 @@ jobs:
             ./.scripts/conda_upload.sh
           fi
         env:
-          ANACONDA_API_TOKEN: ${{ secrets.HTTOMO_TOKEN_27 }}          
+          ANACONDA_API_TOKEN: ${{ secrets.HTTOMO_TOKEN_27 }}
