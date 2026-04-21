@@ -27,7 +27,7 @@ else
     find $CONDA_BLD_PATH/$OS -name *.conda | while read file
     do
         echo $file
-        $CONDA/bin/anaconda -v --show-traceback -t $ANACONDA_API_TOKEN upload $file --force
+        anaconda -v --show-traceback -t $ANACONDA_API_TOKEN upload $file --force
     done
 
 fi
