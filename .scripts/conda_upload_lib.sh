@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eo pipefail
 is_pr=0
 while getopts :p option; do
   case "${option}" in
@@ -8,7 +9,7 @@ while getopts :p option; do
 done
 
 PKG_NAME=libtomophantom
-USER=httomo-team
+CHANNEL=httomo
 OS=linux-64
 
 mkdir ~/conda-bld
@@ -16,8 +17,8 @@ conda config --set anaconda_upload no
 export CONDA_BLD_PATH=~/conda-bld
 
 export CIL_VERSION=3.1.0
-$CONDA/bin/conda build conda-recipe_library . -c httomo
-$CONDA/bin/conda install anaconda-client
+conda build conda-recipe_library . -c $CHANNEL
+conda install anaconda-client
 
 if [ $is_pr -eq 1 ]; then
     echo "Pull request detected, skipping conda upload."
