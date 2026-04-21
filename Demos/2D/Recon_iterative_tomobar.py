@@ -4,16 +4,13 @@
 GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts
-Sinograms then reconstructed using ASTRA TOOLBOX
+Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts 
+then reconstructed using ToMoBAR
 
 >>>>> Dependencies (reconstruction): <<<<<
-1. ASTRA toolbox: conda install -c astra-toolbox astra-toolbox
-2. tomobar: conda install -c httomo tomobar
-or install from https://github.com/dkazanc/ToMoBAR
-
-This demo demonstrates frequent inaccuracies which are accosiated with X-ray imaging:
-zingers, rings and noise
+1. ASTRA toolbox
+2. ToMoBAR
+3. CuPy
 
 @author: Daniil Kazantsev
 """
@@ -133,101 +130,93 @@ plt.imshow(abs(FBPrec_ideal - FBPrec_error), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("FBP reconsrtuction differences")
 # %%
-# initialise tomobar ITERATIVE reconstruction class ONCE
-from tomobar.methodsIR import RecToolsIR
+# ! you will need to have CuPy installed to be able to run iterative methods
+import cupy as cp 
+from tomobar.methodsIR_CuPy import RecToolsIRCuPy
+input_data_labels = ["angles", "detX"]
 
-RectoolsIR = RecToolsIR(
+Rectools = RecToolsIRCuPy(
     DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
     DetectorsDimH_pad=0,  # Padding size of horizontal detector
     DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
-    CenterRotOffset=None,  # Center of Rotation (CoR) scalar (for 3D case only)
+    CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
     AnglesVec=angles_rad,  # array of angles in radians
     ObjSize=N_size,  # a scalar to define reconstructed object dimensions
-    datafidelity="LS",  # data fidelity, choose LS, PWLS (wip), GH (wip), Student (wip)
-    device_projector="gpu",
+    device_projector=0,
+    OS_number=1,  # The number of ordered subsets
 )
+
 # %%
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print("Reconstructing analytical sinogram using SIRT (tomobar)...")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # prepare dictionaries with parameters:
-_data_ = {"projection_norm_data": sino_an}  # data dictionary
+_data_ = {"projection_data": cp.asarray(sino_an),
+          "data_axes_labels_order": input_data_labels}  # data dictionary
 _algorithm_ = {"iterations": 250}
-SIRTrec_ideal = RectoolsIR.SIRT(_data_, _algorithm_)  # ideal reconstruction
-_data_ = {"projection_norm_data": noisy_zing_stripe}  # data dictionary
-SIRTrec_error = RectoolsIR.SIRT(_data_, _algorithm_)  # error reconstruction
+
+SIRTrec_ideal = cp.asnumpy(Rectools.SIRT(_data_, _algorithm_))  # ideal reconstruction
+
+
+_data_ = {"projection_data": cp.asarray(noisy_zing_stripe),
+          "data_axes_labels_order": input_data_labels}  # data dictionary
+
+SIRTrec_error = cp.asnumpy(Rectools.SIRT(_data_, _algorithm_))  # error reconstruction
 
 plt.figure()
 plt.subplot(121)
-plt.imshow(SIRTrec_ideal, vmin=0, vmax=1, cmap="gray")
+plt.imshow(SIRTrec_ideal[0,:,:], vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("Ideal SIRT reconstruction (ASTRA)")
 plt.subplot(122)
-plt.imshow(SIRTrec_error, vmin=0, vmax=3, cmap="gray")
+plt.imshow(SIRTrec_error[0,:,:], vmin=0, vmax=3, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("Erroneous data SIRT Reconstruction (ASTRA)")
 plt.show()
 
 plt.figure()
-plt.imshow(abs(SIRTrec_ideal - SIRTrec_error), vmin=0, vmax=1, cmap="gray")
+plt.imshow(abs(SIRTrec_ideal[0,:,:] - SIRTrec_error[0,:,:]), vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("SIRT reconsrtuction differences")
 # %%
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print("Reconstructing using ADMM method (tomobar)")
+print("Reconstructing using FISTA-OS-TV method (tomobar)")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-# Run ADMM reconstrucion algorithm with regularisation
-_data_ = {"projection_norm_data": noisy_zing_stripe}  # data dictionary
-_algorithm_ = {"iterations": 15, "ADMM_rho_const": 5000.0}
+Rectools = RecToolsIRCuPy(
+    DetectorsDimH=P,  # DetectorsDimH # detector dimension (horizontal)
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
+    DetectorsDimV=None,  # DetectorsDimV # detector dimension (vertical) for 3D case only
+    CenterRotOffset=0.0,  # Center of Rotation (CoR) scalar (for 3D case only)
+    AnglesVec=angles_rad,  # array of angles in radians
+    ObjSize=N_size,  # a scalar to define reconstructed object dimensions
+    device_projector=0,
+    OS_number=10,  # The number of ordered subsets
+)
 
-# adding regularisation using the CCPi regularisation toolkit
-_regularisation_ = {
-    "method": "PD_TV",
-    "regul_param": 0.1,
-    "iterations": 150,
-    "device_regulariser": "gpu",
-}
-
-RecADMM_reg = RectoolsIR.ADMM(_data_, _algorithm_, _regularisation_)
-
-plt.figure()
-plt.imshow(RecADMM_reg, vmin=0, vmax=2, cmap="gray")
-plt.colorbar(ticks=[0, 0.5, 3], orientation="vertical")
-plt.title("ADMM reconstruction")
-plt.show()
-
-# calculate errors
-Qtools = QualityTools(phantom_2D, RecADMM_reg)
-RMSE_ADMM_reg = Qtools.rmse()
-print("RMSE for regularised ADMM is {}".format(RMSE_ADMM_reg))
-# %%
-print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-print("Reconstructing using FISTA method (tomobar)")
-print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # prepare dictionaries with parameters:
 _data_ = {
-    "projection_norm_data": noisy_zing_stripe,
-    "huber_threshold": 4.5,
-    "ring_weights_threshold": 10.0,
-    "ring_tuple_halfsizes": (9, 5, 0),
+    "projection_data": cp.asarray(noisy_zing_stripe),
+    "data_axes_labels_order": input_data_labels
 }  # data dictionary
 
-lc = RectoolsIR.powermethod(
+lc = Rectools.powermethod(
     _data_
 )  # calculate Lipschitz constant (run once to initialise)
-_algorithm_ = {"iterations": 350, "lipschitz_const": lc}
+_algorithm_ = {"iterations": 15, "lipschitz_const": lc}
 
-# adding regularisation using the CCPi regularisation toolkit
 _regularisation_ = {
-    "method": "PD_TV",
-    "regul_param": 0.001,
-    "iterations": 150,
-    "device_regulariser": "gpu",
+    "method": "PD_TV",  # Selected regularisation method
+    "regul_param": 0.0005,  # Regularisation parameter
+    "iterations": 40,  # The number of regularisation iterations
+    "half_precision": True,  # enabling half-precision calculation
 }
 
-# Run FISTA reconstrucion algorithm with regularisation
-RecFISTA_reg = RectoolsIR.FISTA(_data_, _algorithm_, _regularisation_)
 
+# Run FISTA reconstrucion algorithm with regularisation
+RecFISTA_reg = Rectools.FISTA(_data_, _algorithm_, _regularisation_)
+
+
+RecFISTA_reg = cp.asnumpy(RecFISTA_reg[0, :, :])
 plt.figure()
 plt.imshow(RecFISTA_reg, vmin=0, vmax=2, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 2], orientation="vertical")

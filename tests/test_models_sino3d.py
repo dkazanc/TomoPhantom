@@ -23,7 +23,7 @@ def test_3d_models_sino(model):
     Vert_det = N_size  # detector row count (vertical) (no reason for it to be > N)
     angles_num = int(0.5 * np.pi * N_size)
     # angles number
-    angles = np.linspace(0.0, 179.9, angles_num, dtype="float32")  # in degrees
+    angles = np.linspace(0.0, 180, angles_num, dtype="float32")  # in degrees
 
     # one can specify an exact path to the parameters file
     path = os.path.dirname(tomophantom.__file__)
@@ -31,7 +31,9 @@ def test_3d_models_sino(model):
 
     # Generatea 3d sino
     sino3d = ModelSino(model, N_size, Horiz_det, Vert_det, angles, path_library3D)
-    assert 0.0 <= np.max(sino3d) <= 1000
+
+    assert np.min(sino3d) >= -0.2
+    assert 0.0 < np.max(sino3d) <= 1000
     assert sino3d.dtype == np.float32
     assert sino3d.shape == (Vert_det, angles_num, Horiz_det)
 
@@ -54,7 +56,9 @@ def test_3d_models_sino_sub():
     sino3d = ModelSinoSub(
         11, N_size, Horiz_det, Vert_det, subset_tuple, angles, path_library3D
     )
-    assert 0.0 <= np.max(sino3d) <= 1000
+
+    assert np.min(sino3d) >= 0.0
+    assert 0.0 < np.max(sino3d) <= 1000
     assert sino3d.dtype == np.float32
     assert sino3d.shape == (15, angles_num, Horiz_det)
 
@@ -79,7 +83,9 @@ def test_3d_models_sino_temporal(model):
     sino4d = ModelSinoTemporal(
         model, N_size, Horiz_det, Vert_det, angles, path_library3D
     )
-    assert 0.0 <= np.max(sino4d) <= 1000
+
+    assert np.min(sino4d) >= 0.0
+    assert 0.0 < np.max(sino4d) <= 1000
     assert sino4d.dtype == np.float32
     assert sino4d.shape == (params[3], Vert_det, angles_num, Horiz_det)
 
@@ -104,6 +110,8 @@ def test_3d_models_sino_temporal_sub():
     sino4d = ModelSinoTemporalSub(
         model, N_size, Horiz_det, Vert_det, subset_tuple, angles, path_library3D
     )
-    assert 0.0 <= np.max(sino4d) <= 1000
+
+    assert np.min(sino4d) >= 0.0
+    assert 0.0 < np.max(sino4d) <= 1000
     assert sino4d.dtype == np.float32
     assert sino4d.shape == (params[3], 15, angles_num, Horiz_det)

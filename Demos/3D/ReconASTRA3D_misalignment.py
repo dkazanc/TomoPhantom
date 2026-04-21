@@ -123,6 +123,38 @@ plt.imshow(recon_nocorr[:, :, sliceSel])
 plt.title("3D Recon no correction, sagittal view")
 plt.show()
 
+#%%
+# perform reconstruction with EXACT shifts
+from tomobar.methodsDIR import RecToolsDIR
+
+RectoolsDIR = RecToolsDIR(
+    DetectorsDimH=Horiz_det,  # Horizontal detector dimension
+    DetectorsDimH_pad=0,  # Padding size of horizontal detector
+    DetectorsDimV=Vert_det,  # Vertical detector dimension (3D case)
+    CenterRotOffset=-shifts_exact,  # Center of Rotation scalar
+    AnglesVec=angles_rad,  # A vector of projection angles in radians
+    ObjSize=N_size,  # Reconstructed object dimensions (scalar)
+    device_projector="gpu",
+)
+
+FBPrec_exact = RectoolsDIR.FBP(prj)
+
+sliceSel = int(0.5 * N_size)
+plt.figure()
+plt.subplot(131)
+plt.imshow(FBPrec_exact[sliceSel, :, :])
+plt.title("3D exact Recon, axial view")
+
+plt.subplot(132)
+plt.imshow(FBPrec_exact[:, sliceSel, :])
+plt.title("3D exact Recon, coronal view")
+
+plt.subplot(133)
+plt.imshow(FBPrec_exact[:, :, sliceSel])
+plt.title("3D exact Recon, sagittal view")
+plt.show()
+# %%
+
 # %%
 ######################################################
 ############# Identify projection shifts #############
@@ -193,34 +225,4 @@ plt.show()
 # %%
 # scale back the data
 prj *= scl
-# %%
-# perform reconstruction with EXACT shifts
-from tomobar.methodsDIR import RecToolsDIR
-
-RectoolsDIR = RecToolsDIR(
-    DetectorsDimH=Horiz_det,  # Horizontal detector dimension
-    DetectorsDimH_pad=0,  # Padding size of horizontal detector
-    DetectorsDimV=Vert_det,  # Vertical detector dimension (3D case)
-    CenterRotOffset=-shifts_exact,  # Center of Rotation scalar
-    AnglesVec=angles_rad,  # A vector of projection angles in radians
-    ObjSize=N_size,  # Reconstructed object dimensions (scalar)
-    device_projector="gpu",
-)
-
-FBPrec_exact = RectoolsDIR.FBP(prj)
-
-sliceSel = int(0.5 * N_size)
-plt.figure()
-plt.subplot(131)
-plt.imshow(FBPrec_exact[sliceSel, :, :])
-plt.title("3D exact Recon, axial view")
-
-plt.subplot(132)
-plt.imshow(FBPrec_exact[:, sliceSel, :])
-plt.title("3D exact Recon, coronal view")
-
-plt.subplot(133)
-plt.imshow(FBPrec_exact[:, :, sliceSel])
-plt.title("3D exact Recon, sagittal view")
-plt.show()
 # %%
