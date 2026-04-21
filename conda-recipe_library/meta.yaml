@@ -1,4 +1,3 @@
-{% set python_min = "3.9" %}
 package:
   name: libtomophantom
   version: {{ environ.get('CIL_VERSION', '') }}
@@ -9,14 +8,13 @@ build:
   script_env:
     - CIL_VERSION
 
-
 requirements:
   build:
     - setuptools
     - cmake
 
   run:
-    - python >={{ python_min }}
+    - python
     - libgcc-ng # [unix]
 
 about:
