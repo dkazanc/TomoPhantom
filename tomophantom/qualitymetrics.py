@@ -5,6 +5,7 @@ A class for some standard image quality metrics
 
 @author: Daniil Kazantsev
 """
+
 import numpy as np
 
 

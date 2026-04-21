@@ -5,7 +5,6 @@ import numpy as np
 import tomophantom
 from tomophantom import TomoP3D
 
-
 print("Building 3D phantom using TomoPhantom software")
 tic = timeit.default_timer()
 model = 13  # select a model number from the library
@@ -123,7 +122,7 @@ plt.imshow(recon_nocorr[:, :, sliceSel])
 plt.title("3D Recon no correction, sagittal view")
 plt.show()
 
-#%%
+# %%
 # perform reconstruction with EXACT shifts
 from tomobar.methodsDIR import RecToolsDIR
 

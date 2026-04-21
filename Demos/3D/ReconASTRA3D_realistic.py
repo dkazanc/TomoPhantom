@@ -16,6 +16,7 @@ reconstruction.
 
 @author: Daniil Kazantsev
 """
+
 import timeit
 import os
 import matplotlib.pyplot as plt
@@ -113,9 +114,11 @@ print("Normalise projections using ToMoBAR software")
 from tomobar.supp.suppTools import normaliser
 
 # normalise the data, the required format is [detectorsX, Projections, detectorsY]
-projData3D_norm = np.float32(normaliser(
-    projData3D_raw, flats_combined3D, darks=None, log="true", method="mean", axis=1
-))
+projData3D_norm = np.float32(
+    normaliser(
+        projData3D_raw, flats_combined3D, darks=None, log="true", method="mean", axis=1
+    )
+)
 projData3D_norm *= intens_max_clean
 
 # del projData3D_noisy
@@ -173,8 +176,9 @@ print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print("Reconstructing with FISTA-OS-TV method using tomobar")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # ! you will need to have CuPy installed to be able to run iterative methods
-import cupy as cp 
+import cupy as cp
 from tomobar.methodsIR_CuPy import RecToolsIRCuPy
+
 input_data_labels = ["detY", "angles", "detX"]
 
 
@@ -192,9 +196,9 @@ Rectools = RecToolsIRCuPy(
 # prepare dictionaries with parameters:
 _data_ = {
     "data_fidelity": "LS",
-    "projection_data":  cp.asarray(projData3D_norm),  # Normalised projection data
+    "projection_data": cp.asarray(projData3D_norm),  # Normalised projection data
     "data_axes_labels_order": input_data_labels,
-}    
+}
 
 lc = Rectools.powermethod(
     _data_

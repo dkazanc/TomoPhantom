@@ -8,6 +8,7 @@ Recursively adding objects one can build a required model with the corresponding
 
 @author: Daniil Kazantsev
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP3D

@@ -9,6 +9,7 @@ Recursively adding objects and sinos one can build a required model
 
 @author: Daniil Kazantsev
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D

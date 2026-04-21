@@ -21,7 +21,7 @@ def test_2d_generator():
     ab_max = 0.25
 
     # 2D example
-    (Objfoam2D, myObjects) = foam2D(
+    Objfoam2D, myObjects = foam2D(
         x0min,
         x0max,
         y0min,
@@ -56,7 +56,7 @@ def test_3d_generator():
     ab_min = 0.01
     ab_max = 0.25
 
-    (Objfoam3D, myObjects) = foam3D(
+    Objfoam3D, myObjects = foam3D(
         x0min,
         x0max,
         y0min,

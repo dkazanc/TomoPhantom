@@ -66,14 +66,14 @@ def foam2D(
     AB = np.float32(np.zeros(tot_objects))
     C0_var = np.float32(np.zeros(tot_objects))
     for i in range(0, tot_objects):
-        (x0, y0, c0, ab) = _rand_init2D(
+        x0, y0, c0, ab = _rand_init2D(
             x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max
         )
         if i > 0:
             breakj = False
             for j in range(0, attemptsNo):
                 if breakj == True:
-                    (x0, y0, c0, ab) = _rand_init2D(
+                    x0, y0, c0, ab = _rand_init2D(
                         x0min, x0max, y0min, y0max, c0min, c0max, ab_min, ab_max
                     )
                     breakj = False
@@ -165,14 +165,14 @@ def foam3D(
     AB = np.float32(np.zeros(tot_objects))
     C0_var = np.float32(np.zeros(tot_objects))
     for i in range(0, tot_objects):
-        (x0, y0, z0, c0, ab) = _rand_init3D(
+        x0, y0, z0, c0, ab = _rand_init3D(
             x0min, x0max, y0min, y0max, z0min, z0max, c0min, c0max, ab_min, ab_max
         )
         if i > 0:
             breakj = False
             for j in range(0, attemptsNo):
                 if breakj:
-                    (x0, y0, z0, c0, ab) = _rand_init3D(
+                    x0, y0, z0, c0, ab = _rand_init3D(
                         x0min,
                         x0max,
                         y0min,

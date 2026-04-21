@@ -4,7 +4,7 @@
 GPLv3 license (ASTRA toolbox)
 Note that the TomoPhantom package is released under Apache License, Version 2.0
 
-Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts 
+Script to generate 2D analytical phantoms and their sinograms with added noise and artifacts
 then reconstructed using ToMoBAR
 
 >>>>> Dependencies (reconstruction): <<<<<
@@ -14,6 +14,7 @@ then reconstructed using ToMoBAR
 
 @author: Daniil Kazantsev
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from tomophantom import TomoP2D
@@ -131,8 +132,9 @@ plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("FBP reconsrtuction differences")
 # %%
 # ! you will need to have CuPy installed to be able to run iterative methods
-import cupy as cp 
+import cupy as cp
 from tomobar.methodsIR_CuPy import RecToolsIRCuPy
+
 input_data_labels = ["angles", "detX"]
 
 Rectools = RecToolsIRCuPy(
@@ -151,31 +153,37 @@ print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print("Reconstructing analytical sinogram using SIRT (tomobar)...")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # prepare dictionaries with parameters:
-_data_ = {"projection_data": cp.asarray(sino_an),
-          "data_axes_labels_order": input_data_labels}  # data dictionary
+_data_ = {
+    "projection_data": cp.asarray(sino_an),
+    "data_axes_labels_order": input_data_labels,
+}  # data dictionary
 _algorithm_ = {"iterations": 250}
 
 SIRTrec_ideal = cp.asnumpy(Rectools.SIRT(_data_, _algorithm_))  # ideal reconstruction
 
 
-_data_ = {"projection_data": cp.asarray(noisy_zing_stripe),
-          "data_axes_labels_order": input_data_labels}  # data dictionary
+_data_ = {
+    "projection_data": cp.asarray(noisy_zing_stripe),
+    "data_axes_labels_order": input_data_labels,
+}  # data dictionary
 
 SIRTrec_error = cp.asnumpy(Rectools.SIRT(_data_, _algorithm_))  # error reconstruction
 
 plt.figure()
 plt.subplot(121)
-plt.imshow(SIRTrec_ideal[0,:,:], vmin=0, vmax=1, cmap="gray")
+plt.imshow(SIRTrec_ideal[0, :, :], vmin=0, vmax=1, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("Ideal SIRT reconstruction (ASTRA)")
 plt.subplot(122)
-plt.imshow(SIRTrec_error[0,:,:], vmin=0, vmax=3, cmap="gray")
+plt.imshow(SIRTrec_error[0, :, :], vmin=0, vmax=3, cmap="gray")
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("Erroneous data SIRT Reconstruction (ASTRA)")
 plt.show()
 
 plt.figure()
-plt.imshow(abs(SIRTrec_ideal[0,:,:] - SIRTrec_error[0,:,:]), vmin=0, vmax=1, cmap="gray")
+plt.imshow(
+    abs(SIRTrec_ideal[0, :, :] - SIRTrec_error[0, :, :]), vmin=0, vmax=1, cmap="gray"
+)
 plt.colorbar(ticks=[0, 0.5, 1], orientation="vertical")
 plt.title("SIRT reconsrtuction differences")
 # %%
@@ -196,7 +204,7 @@ Rectools = RecToolsIRCuPy(
 # prepare dictionaries with parameters:
 _data_ = {
     "projection_data": cp.asarray(noisy_zing_stripe),
-    "data_axes_labels_order": input_data_labels
+    "data_axes_labels_order": input_data_labels,
 }  # data dictionary
 
 lc = Rectools.powermethod(

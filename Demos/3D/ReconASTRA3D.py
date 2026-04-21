@@ -14,6 +14,7 @@ Note that the TomoPhantom package is released under Apache License, Version 2.0
 
 @author: Daniil Kazantsev
 """
+
 import timeit
 import os
 import matplotlib.pyplot as plt
@@ -80,7 +81,6 @@ plt.show()
 print("Adding noise to projection data")
 from tomophantom.artefacts import artefacts_mix
 
-
 # forming dictionaries with artifact types
 _noise_ = {
     "noise_type": "Poisson",
@@ -145,8 +145,9 @@ print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 print("Reconstructing with FISTA-OS-TV method using tomobar")
 print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
 # ! you will need to have CuPy installed to be able to run iterative methods
-import cupy as cp 
+import cupy as cp
 from tomobar.methodsIR_CuPy import RecToolsIRCuPy
+
 input_data_labels = ["detY", "angles", "detX"]
 
 Rectools = RecToolsIRCuPy(
@@ -163,7 +164,9 @@ Rectools = RecToolsIRCuPy(
 # prepare dictionaries with parameters:
 _data_ = {
     "data_fidelity": "LS",
-    "projection_data":  cp.asarray(projData3D_analyt_noisy),  # Normalised projection data
+    "projection_data": cp.asarray(
+        projData3D_analyt_noisy
+    ),  # Normalised projection data
     "data_axes_labels_order": input_data_labels,
 }
 
