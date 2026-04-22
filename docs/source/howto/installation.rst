@@ -53,13 +53,15 @@ It installs the :code:`libtomophantom` library from the `httomo` conda channel. 
 Conda build
 +++++++++++
 
-First, one needs to build the :code:`libtomophantom` C-library, the recipes for which are located in the dedicated :code:`conda-recipe_library` folder:
+First, one needs to build the :code:`libtomophantom` C-library & :code:`tomophantom` Python package, the recipes for which are in `recipe.yaml`:
 
 .. code-block:: console
 
    $ git clone git@github.com/dkazanc/TomoPhantom.git # clone the repo
-   $ conda build recipe # conda-build the libtomophantom library
-   $ conda install path/to/the/tarball
+   $ cd TomoPhantom
+   $ conda install rattler-build -c conda-forge # install rattler-build
+   $ rattler-build build --experimental # build the library
+   $ conda install ./output/*/*.conda
    $ pytests tests/ # all tests should pass
 
 .. _ref_libtomophantom:
