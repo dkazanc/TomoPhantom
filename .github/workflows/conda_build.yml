@@ -1,0 +1,30 @@
+name: conda build
+on:
+  push:
+    branches: [master]
+    tags: [v*]
+  pull_request:
+    branches: [master]
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - uses: conda-incubator/setup-miniconda@v3
+        with: {python-version: '3.10'}
+      - name: Install dependencies with Conda
+        run: |
+          conda install conda-build
+          conda list
+      - run: conda build recipe --output-folder=./conda-bld
+      - if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        name: conda upload -c httomo
+        run: |
+          conda install anaconda-client
+          anaconda -v --show-traceback -t $ANACONDA_API_TOKEN upload ./conda-bld/*/*.conda --force -c httomo
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.HTTOMO_TOKEN_27 }}

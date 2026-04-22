@@ -15,13 +15,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 project(tomophantom)
-
-# The version number.
-set (CIL_VERSION_MAJOR 0)
-set (CIL_VERSION_MINOR 11)
-set (CIL_VERSION_PATCH 0)
-
-set (CIL_VERSION '${CIL_VERSION_MAJOR}.${CIL_VERSION_MINOR}.${CIL_VERSION_PATCH}' CACHE INTERNAL "Core Imaging Library version" FORCE)
+set(TOMOPHANTOM_VERSION "$ENV{TOMOPHANTOM_VERSION}" CACHE INTERNAL "TomoPhantom Library version" FORCE)
 
 set(CMAKE_BUILD_TYPE "Release")
 
@@ -30,4 +24,3 @@ option (BUILD_PYTHON_WRAPPER "Build Python Wrappers" OFF)
 option (CONDA_BUILD "Conda Build" OFF)
 
 add_subdirectory(Core)
-

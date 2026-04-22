@@ -14,7 +14,7 @@
 
 project(tomophantom)
 
-message("CIL_VERSION ${CIL_VERSION}")
+message("TOMOPHANTOM_VERSION ${TOMOPHANTOM_VERSION}")
 
 find_package(OpenMP REQUIRED)
 if (OPENMP_FOUND)
@@ -23,7 +23,7 @@ if (OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
    set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_SHARED_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
    set (CMAKE_STATIC_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_STATIC_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
-   
+
 endif()
 
 message("Building TomoPhantom core modules as a shared library")
@@ -39,20 +39,20 @@ if(WIN32)
   set (FLAGS "/DWIN32 /EHsc /DCCPi_EXPORTS /openmp:experimental")
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
   set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-  set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT.lib")  
-  set (EXTRA_LIBRARIES)		
-  message("library lib: ${LIBRARY_LIB}")  
+  set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT.lib")
+  set (EXTRA_LIBRARIES)
+  message("library lib: ${LIBRARY_LIB}")
 elseif(UNIX)
-   set (FLAGS "-O2 -funsigned-char -Wall -Wl,--no-undefined  -DCCPiReconstructionIterative_EXPORTS")  
+   set (FLAGS "-O2 -funsigned-char -Wall -Wl,--no-undefined  -DCCPiReconstructionIterative_EXPORTS")
    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
    set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
    if (OPENMP_FOUND)
-     set (EXTRA_LIBRARIES 
+     set (EXTRA_LIBRARIES
 		"gomp"
 		"m"
 		)
     else()
-       set (EXTRA_LIBRARIES 
+       set (EXTRA_LIBRARIES
 		"m"
 		)
     endif()
@@ -69,8 +69,8 @@ add_library(tomophantom "SHARED"
 	    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
 		)
 target_link_libraries(tomophantom ${EXTRA_LIBRARIES} )
-include_directories(tomophantom PUBLIC 
-                      ${LIBRARY_INC}/include 
+include_directories(tomophantom PUBLIC
+                      ${LIBRARY_INC}/include
            	      ${CMAKE_CURRENT_SOURCE_DIR}
 		              )
 
@@ -87,13 +87,13 @@ if (UNIX)
 message ("I'd install into ${CMAKE_INSTALL_PREFIX}/lib")
 install(TARGETS tomophantom
 	LIBRARY DESTINATION lib
-	CONFIGURATIONS ${CMAKE_BUILD_TYPE} 
+	CONFIGURATIONS ${CMAKE_BUILD_TYPE}
 	)
 elseif(WIN32)
 message ("I'd install into ${CMAKE_INSTALL_PREFIX} lib bin")
-  install(TARGETS tomophantom 
+  install(TARGETS tomophantom
 	RUNTIME DESTINATION bin
 	ARCHIVE DESTINATION lib
-	CONFIGURATIONS ${CMAKE_BUILD_TYPE} 
+	CONFIGURATIONS ${CMAKE_BUILD_TYPE}
 	)
 endif()
