@@ -19,6 +19,8 @@ outputs:
     build:
       script_env:
         - TOMOPHANTOM_VERSION={{ PKG_VERSION }}
+        - CMAKE_GENERATOR=NMake Makefiles  # [win]
+        - CMAKE_GENERATOR=Ninja        # [not win]
       run_exports:
         - {{ pin_subpackage('lib' + name, max_pin='x.x') }}
 
@@ -26,7 +28,7 @@ outputs:
       build:
         - {{ compiler('cxx') }}
         - cmake
-        - ninja
+        - ninja        # [not win]
       host:
         - libgomp      # [linux]
         - llvm-openmp  # [osx]
@@ -34,6 +36,7 @@ outputs:
   - name: {{ name }}
     script: build-python.sh
     build:
+      skip: true  # [not linux64]
       noarch: python
     requirements:
       build:

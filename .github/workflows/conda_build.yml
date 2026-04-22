@@ -1,4 +1,4 @@
-name: conda build
+name: conda
 on:
   push:
     branches: [master]
@@ -10,13 +10,15 @@ jobs:
     runs-on: ${{ matrix.os == 'macos-intel' && 'macos' || matrix.os }}-${{ matrix.os == 'macos-intel' && '15-intel' || 'latest' }}
     strategy:
       matrix:
-        os: [ubuntu, macos, macos-intel]
+        os: [ubuntu, windows, macos, macos-intel]
     defaults:
       run:
-        shell: bash -el {0}
+        shell: ${{ matrix.os == 'windows' && 'pwsh' || 'bash -el {0}' }}
     steps:
       - uses: actions/checkout@v6
         with: {fetch-depth: 0}
+      - if: matrix.os == 'windows'
+        uses: ilammy/msvc-dev-cmd@v1
       - uses: conda-incubator/setup-miniconda@v3
         with: {python-version: '3.10'}
       - name: Install dependencies with Conda

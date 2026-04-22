@@ -65,7 +65,10 @@ if(OpenMP_CXX_FOUND)
 else()
   set(EXTRA_LIBRARIES "")
 endif()
-target_link_libraries(tomophantom $<IF:${UNIX},m,> ${EXTRA_LIBRARIES})
+if(UNIX)
+  set(EXTRA_LIBRARIES ${EXTRA_LIBRARIES} m)
+endif()
+target_link_libraries(tomophantom ${EXTRA_LIBRARIES})
 include_directories(tomophantom PUBLIC
                       ${LIBRARY_INC}/include
            	      ${CMAKE_CURRENT_SOURCE_DIR}
