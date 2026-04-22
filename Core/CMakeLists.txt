@@ -23,7 +23,6 @@ if (OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
    set (CMAKE_SHARED_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_SHARED_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
    set (CMAKE_STATIC_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_STATIC_LINKER_FLAGS} ${OpenMP_CXX_FLAGS}")
-
 endif()
 
 message("Building TomoPhantom core modules as a shared library")
@@ -40,22 +39,15 @@ if(WIN32)
   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
   set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
   set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:MSVCRT.lib")
-  set (EXTRA_LIBRARIES)
   message("library lib: ${LIBRARY_LIB}")
 elseif(UNIX)
-   set (FLAGS "-O2 -funsigned-char -Wall -Wl,--no-undefined  -DCCPiReconstructionIterative_EXPORTS")
-   set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-   set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
-   if (OPENMP_FOUND)
-     set (EXTRA_LIBRARIES
-		"gomp"
-		"m"
-		)
-    else()
-       set (EXTRA_LIBRARIES
-		"m"
-		)
-    endif()
+  if(APPLE)
+    set (FLAGS "-O2 -funsigned-char -Wall -Wl,-undefined,error -DCCPiReconstructionIterative_EXPORTS")
+  else()
+    set (FLAGS "-O2 -funsigned-char -Wall -Wl,--no-undefined   -DCCPiReconstructionIterative_EXPORTS")
+  endif()
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
+  set (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} ${FLAGS}")
 endif()
 message("CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}")
 
@@ -68,7 +60,12 @@ add_library(tomophantom "SHARED"
 	    ${CMAKE_CURRENT_SOURCE_DIR}/TomoP2DSinoNum_core.c
 	    ${CMAKE_CURRENT_SOURCE_DIR}/utils.c
 		)
-target_link_libraries(tomophantom ${EXTRA_LIBRARIES} )
+if(OpenMP_CXX_FOUND)
+  set(EXTRA_LIBRARIES OpenMP::OpenMP_CXX)
+else()
+  set(EXTRA_LIBRARIES "")
+endif()
+target_link_libraries(tomophantom $<IF:${UNIX},m,> ${EXTRA_LIBRARIES})
 include_directories(tomophantom PUBLIC
                       ${LIBRARY_INC}/include
            	      ${CMAKE_CURRENT_SOURCE_DIR}

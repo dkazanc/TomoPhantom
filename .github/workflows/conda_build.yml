@@ -6,8 +6,11 @@ on:
   pull_request:
     branches: [master]
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os == 'macos-intel' && 'macos' || matrix.os }}-${{ matrix.os == 'macos-intel' && '15-intel' || 'latest' }}
+    strategy:
+      matrix:
+        os: [ubuntu, macos, macos-intel]
     defaults:
       run:
         shell: bash -el {0}
