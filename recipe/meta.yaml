@@ -19,6 +19,7 @@ outputs:
     build:
       script_env:
         - TOMOPHANTOM_VERSION={{ PKG_VERSION }}
+        - CMAKE_BUILD_TYPE=Release
         - CMAKE_GENERATOR=NMake Makefiles  # [win]
         - CMAKE_GENERATOR=Ninja        # [not win]
       run_exports:
