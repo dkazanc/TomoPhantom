@@ -20,8 +20,9 @@ def modelfile2Dtolist(filepath, model):
     #    timesteps = 1
     while True:
         if f[i] == "Model : {0:02};\n".format(model):
-            components = int(re.search("^Components : (\d+);$", f[i + 1]).groups()[0])
-            #            timesteps = int( re.search('^TimeSteps : (\d+);$',f[i+2]).groups()[0] )
+            components = int(
+                re.search(r"^Components : (\d+);$", f[i + 1]).groups()[0])
+            #            timesteps = int( re.search(r'^TimeSteps : (\d+);$',f[i+2]).groups()[0] )
             #            print (i)
             i += 3
             #            print (i)

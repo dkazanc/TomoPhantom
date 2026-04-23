@@ -4,10 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 include-package-data = true
-packages = ["tomophantom",
-            "tomophantom.ctypes",
-            "tomophantom.supp",
-            ]
+packages = [
+    "tomophantom",
+    "tomophantom.phantomlib",
+    "tomophantom.ctypes",
+    "tomophantom.supp",
+]
+[tool.setuptools.package-data]
+"*" = ["*.dat"]
 
 [tool.setuptools-git-versioning]
 enabled = true

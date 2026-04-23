@@ -71,7 +71,6 @@ outputs:
          - pytest tests -vs
         files:
           recipe:
-            - tomophantom/phantomlib/
             - tests/
         requirements:
           run:
@@ -79,7 +78,6 @@ outputs:
             - pytest
 
 about:
-  license_file: LICENSE
   license: Apache-2.0
   summary: Tomography Phantom Data generator
   homepage: https://github.com/dkazanc/TomoPhantom
