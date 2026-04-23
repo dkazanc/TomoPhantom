@@ -1,0 +1,32 @@
+name: conda
+on:
+  push:
+    branches: [master]
+    tags: [v*]
+  pull_request:
+    branches: [master]
+jobs:
+  build:
+    runs-on: ${{ matrix.os == 'macos-intel' && 'macos' || matrix.os }}-${{ matrix.os == 'macos-intel' && '15-intel' || 'latest' }}
+    strategy:
+      matrix:
+        os: [ubuntu, windows, macos, macos-intel]
+    steps:
+      - uses: actions/checkout@v6
+        with: {fetch-depth: 0}
+      - if: matrix.os == 'windows'
+        uses: ilammy/msvc-dev-cmd@v1
+      - uses: prefix-dev/rattler-build-action@v0.2.37
+        with:
+          recipe-path: recipe.yaml
+          build-args: --experimental
+          artifact-name: package-${{ matrix.os }}
+      - if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        name: conda upload -c httomo
+        run: |
+          rattler-build upload anaconda -o httomo -f ./output/*/lib*.conda     # library
+          if test ${{ matrix.os }} = ubuntu ; then
+            rattler-build upload anaconda -o httomo -f ./output/noarch/*.conda # noarch: python
+          fi
+        env:
+          ANACONDA_API_KEY: ${{ secrets.HTTOMO_TOKEN_27 }}

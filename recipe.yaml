@@ -1,0 +1,83 @@
+schema_version: 1
+
+context:
+  name: tomophantom
+  version: ${{ git.latest_tag(".") | replace("v", "") }} # ratter-build --experimental
+  python_min: '3.10'
+
+recipe:
+  name: ${{ name }}-split
+  version: ${{ version }}
+
+source:
+  git: .
+
+build:
+  number: 0
+
+outputs:
+  - package:
+      name: ${{ 'lib' + name }}
+    build:
+      script:
+        content:
+          - if: win
+            then: cmake %SRC_DIR% -DLIBRARY_INC="%CONDA_PREFIX%" -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"
+            else: cmake $SRC_DIR -DLIBRARY_INC=$CONDA_PREFIX -DCMAKE_INSTALL_PREFIX=$PREFIX
+          - cmake --build .
+          - cmake --build . --target install
+        env:
+          TOMOPHANTOM_VERSION: ${{ version }}
+          CMAKE_BUILD_TYPE: Release
+          CMAKE_GENERATOR: Ninja
+    requirements:
+      build:
+        - ${{ compiler('cxx') }}
+        - cmake
+        - ninja
+      host:
+        - if: linux
+          then: libgomp
+        - if: osx
+          then: llvm-openmp
+      run_exports:
+        - ${{ pin_subpackage('lib' + name, upper_bound='x.x') }}
+  - package:
+      name: ${{ name }}
+    build:
+      noarch: python
+      script:
+        - if: win
+          then: python -m pip install . -vv --no-deps --no-build-isolation --prefix=%PREFIX%
+          else: python -m pip install . -vv --no-deps --no-build-isolation --prefix=$PREFIX
+    requirements:
+      build:
+        - python ${{ python_min }}.*
+        - pip
+        - setuptools
+        - setuptools-git-versioning
+      run:
+        - ${{ pin_subpackage('lib' + name) }}
+        - python >=${{ python_min }}
+        - numpy
+        - scipy
+        - pillow
+        - scikit-image
+    tests:
+      - python:
+          imports:
+            - ${{ name }}
+      - script:
+         - pytest tests -vs
+        files:
+          recipe:
+            - tests/
+        requirements:
+          run:
+            - python ${{ python_min }}.*
+            - pytest
+
+about:
+  license: Apache-2.0
+  summary: Tomography Phantom Data generator
+  homepage: https://github.com/dkazanc/TomoPhantom
