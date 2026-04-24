@@ -25,7 +25,7 @@ jobs:
         name: conda upload -c httomo
         run: |
           rattler-build upload anaconda -o httomo -f ./output/*/lib*.conda     # library
-          if test ${{ matrix.os }} = ubuntu ; then
+          if [[ test ${{ matrix.os }} = ubuntu ]]; then
             rattler-build upload anaconda -o httomo -f ./output/noarch/*.conda # noarch: python
           fi
         env:
