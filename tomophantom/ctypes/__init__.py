@@ -33,23 +33,10 @@ def c_shared_lib(lib_name, error=True):
         try:
             # No error if mylib_path is None; error if library name wrong
             return load_dll(mylib_path)
-        except OSError:
-            pass
-
-    explanation = (
-        "TomoPhantom links to compiled components which are installed separately"
-        " and loaded using ctypes.util.find_library()."
-    )
-    if error:
-        raise ModuleNotFoundError(
-            explanation + f" A required library, {lib_name}, was not found."
-        )
-    warnings.warn(
-        explanation + "Some functionality is unavailable because an optional shared"
-        f" library, {lib_name}, is missing.",
-        ImportWarning,
-    )
-    return None
+        except Exception as exc:
+            if error:
+                raise ModuleNotFoundError(lib_name) from exc
+    warnings.warn(lib_name, ImportWarning, stacklevel=2)
 
 
 from tomophantom.TomoP2D import *
