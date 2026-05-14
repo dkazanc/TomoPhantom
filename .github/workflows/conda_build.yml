@@ -7,14 +7,16 @@ on:
     branches: [master]
 jobs:
   build:
-    runs-on: ${{ matrix.os == 'macos-intel' && 'macos' || matrix.os }}-${{ matrix.os == 'macos-intel' && '15-intel' || 'latest' }}
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu, windows, macos, macos-intel]
+        # use oldest ubuntu/macos images for max glibc compat:
+        # https://stackoverflow.com/q/70019660
+        os: [ubuntu-22.04, windows-latest, macos-14, macos-15-intel]
     steps:
       - uses: actions/checkout@v6
         with: {fetch-depth: 0}
-      - if: matrix.os == 'windows'
+      - if: startsWith(matrix.os, 'windows')
         uses: ilammy/msvc-dev-cmd@v1
       - uses: prefix-dev/rattler-build-action@v0.2.37
         with:
