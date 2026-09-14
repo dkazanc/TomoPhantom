@@ -1,7 +1,7 @@
 {
-  "zingers_percentage": 1.0,
+  "zingers_percentage": 0.1,
   "zingers_modulus": 10,
-  "stripes_percentage": 1.0,
+  "stripes_percentage": 3.0,
   "stripes_maxthickness": 3,
   "stripes_intensity": 0.05,
   "stripes_type": "full",
