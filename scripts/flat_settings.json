@@ -1,0 +1,9 @@
+{
+  "detectors_miscallibration": 0.05,
+  "variations_number": 3,
+  "arguments_Bessel": [1, 25],
+  "specklesize": 2,
+  "kbar": 2,
+  "sigmasmooth": 3,
+  "jitter_projections": 0.0
+}
