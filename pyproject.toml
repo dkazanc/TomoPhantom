@@ -9,6 +9,7 @@ packages = [
     "tomophantom.phantomlib",
     "tomophantom.ctypes",
     "tomophantom.supp",
+    "tomophantom.scripts",
 ]
 [tool.setuptools.package-data]
 "*" = ["*.dat"]
