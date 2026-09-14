@@ -143,7 +143,6 @@ enabling line-integral noise adds another noise contribution.
   is not guaranteed.
 
 Sources:
-- [Original generator](https://github.com/dkazanc/TomoPhantom/blob/master/Demos/nxs/nxs_generator.py)
 - [Realistic example](https://github.com/dkazanc/TomoPhantom/blob/afadc7c522919e08cdae5aeef6db41cded0fc213/Demos/3D/ReconASTRA3D_realistic.py)
 - [synth_flats](https://github.com/dkazanc/TomoPhantom/blob/afadc7c522919e08cdae5aeef6db41cded0fc213/tomophantom/flatsgen.py)
 - [artefacts_mix](https://github.com/dkazanc/TomoPhantom/blob/afadc7c522919e08cdae5aeef6db41cded0fc213/tomophantom/artefacts.py)
