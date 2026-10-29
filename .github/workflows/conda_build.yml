@@ -10,9 +10,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # use oldest ubuntu/macos images for max glibc compat:
-        # https://stackoverflow.com/q/70019660
-        os: [ubuntu-22.04, windows-latest, macos-14, macos-15-intel]
+        os: [ubuntu-latest, windows-latest, macos-latest, macos-15-intel]
     steps:
       - uses: actions/checkout@v6
         with: {fetch-depth: 0}
@@ -23,6 +21,45 @@ jobs:
           recipe-path: recipe.yaml
           build-args: --experimental
           artifact-name: package-${{ matrix.os }}
+      - if: startsWith(matrix.os, 'ubuntu')
+        name: check glibc support
+        env:
+          GLIBC_MAX: '2.28' # see recipe.yaml
+        run: |
+          set -euo pipefail
+          d=$(mktemp -d)
+          unzip -q output/*/lib*.conda 'pkg-*' -d "$d"
+          tar --zstd -xf "$d"/pkg-*.tar.zst -C "$d"
+          max=$(objdump -T "$d"/lib/libtomophantom.so | grep -oE 'GLIBC_[0-9.]+' | sort -Vu | tail -1)
+          echo "expected max glibc symbol: GLIBC_${GLIBC_MAX} ; found: $max"
+          if [[ $(printf '%s\n%s\n' "$GLIBC_MAX" "${max#GLIBC_}" | sort -V | tail -1) != "$GLIBC_MAX" ]] ; then
+            echo "FAIL: $max > GLIBC_${GLIBC_MAX}" >&2
+            exit 1
+          fi
+      - if: startsWith(matrix.os, 'macos')
+        name: check OS support
+        env:
+          MINOS_MAX: '11.0' # conda-forge floor; deployment target is set by the toolchain, not the runner
+        run: |
+          set -euo pipefail
+          d=$(mktemp -d)
+          unzip -q output/osx-*/*.conda 'pkg-*' -d "$d"
+          tar --zstd -xf "$d"/pkg-*.tar.zst -C "$d"
+          f=$(find "$d" -name 'libtomophantom*' -type f | head -1)
+          [[ -n "$f" ]] || { echo "FAIL: no libtomophantom binary in package" >&2; exit 1; }
+          minos=$(otool -l "$f" | awk '
+            /LC_BUILD_VERSION/      {inb=1; next}
+            /LC_VERSION_MIN_MACOSX/ {inb=1; next}
+            inb && $1=="minos"   {print $2; exit}
+            inb && $1=="version" {print $2; exit}
+          ')
+          [[ -n "$minos" ]] || { echo "FAIL: no macOS version load command in $f" >&2; exit 1; }
+          minos=${minos%.*} # drop patch component for comparison
+          echo "expected max min-os: ${MINOS_MAX} ; found: $minos"
+          if [[ $(printf '%s\n%s\n' "$MINOS_MAX" "$minos" | sort -V | tail -1) != "$MINOS_MAX" ]] ; then
+            echo "FAIL: min-os $minos > ${MINOS_MAX}" >&2
+            exit 1
+          fi
       - if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         name: conda upload -c httomo
         run: |
